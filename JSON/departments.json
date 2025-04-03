@@ -1,0 +1,11 @@
+{
+  "departments": [
+    {"id": 1, "name": "CollRevenue Department"},
+    {"id": 2, "name": "Election Department"},
+    {"id": 3, "name": "Disaster Management Department"},
+    {"id": 4, "name": "District Road Safety Committee"},
+    {"id": 5, "name": "Census Department"},
+    {"id": 6, "name": "Citizen Charter Department"},
+    {"id": 7, "name": "National Informatics Centre (NIC)"}
+  ]
+}

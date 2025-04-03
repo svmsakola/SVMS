@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>इनऑफिस एसव्हीएमएस</title>
+    <style>
+        :root {
+            --primary-blue: #2c3e90;
+            --secondary-blue: #3498db;
+            --light-blue: #e6f2ff;
+            --white: #ffffff;
+            --text-dark: #2c3e50;
+            --text-gray: #94a3b8;
+            --new-visitor-green: #10b981;
+            --returning-visitor-blue: #3b82f6;
+            --complete-red-start: #e74c3c;
+            --complete-red-end: #c0392b;
+            --action-confirm-start: var(--new-visitor-green);
+            --action-confirm-end: #34d399;
+            --pending-action-orange-start: #f39c12; /* Added for pending */
+            --pending-action-orange-end: #e67e22; /* Added for pending */
+            --border-radius: 12px;
+            --box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            --box-shadow-hover: 0 12px 30px rgba(0,0,0,0.12);
+            --transition: all 0.3s ease;
+            --card-hover-transform: translateY(-4px);
+            --placeholder-bg: #e2e8f0;
+            --placeholder-text: #64748b;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-blue);
+            color: var(--text-dark);
+            line-height: 1.6;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: var(--light-blue);
+        }
+        .header {
+            background: linear-gradient(100deg, var(--primary-blue), var(--secondary-blue));
+            color: var(--white);
+            padding: 15px 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            font-weight: 600;
+            font-size: 26px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 22px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: var(--transition);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            gap: 15px;
+            max-width: 1500px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .content-section {
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            transition: var(--transition);
+            position: relative;
+        }
+        .content-section:hover { box-shadow: var(--box-shadow-hover); }
+        .section-title {
+            color: var(--primary-blue);
+            font-size: 22px;
+            font-weight: 600;
+            padding-bottom: 1px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            position: relative;
+            text-align: left;
+             padding-right: 5px;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            border-radius: 3px;
+        }
+        .positioned-top-right {
+             position: absolute;
+             top: 15px;
+             right: 15px;
+             padding: 10px 20px;
+             font-size: 14px;
+             z-index: 10;
+        }
+        #current-visitor-section > #completed-meeting-btn {
+            margin-top: 20px;
+            align-self: center;
+            width: auto;
+            min-width: 200px;
+        }
+
+        .horizontal-scroll-container {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px 0 15px 0;
+            gap: 15px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--secondary-blue) var(--light-blue);
+            min-height: 200px; /* Adjusted min-height */
+            -webkit-overflow-scrolling: touch;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar { height: 8px; }
+        .horizontal-scroll-container::-webkit-scrollbar-track { background: #edf2f7; border-radius: 10px; }
+        .horizontal-scroll-container::-webkit-scrollbar-thumb { background-color: var(--secondary-blue); border-radius: 10px; border: 2px solid #edf2f7; }
+        .horizontal-scroll-container::-webkit-scrollbar-thumb:hover { background-color: var(--primary-blue); }
+
+        .visitor-card-horizontal {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: var(--light-blue);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            width: 160px;
+            flex-shrink: 0;
+            text-align: center;
+            transition: var(--transition);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+            border: 1px solid #e2e8f0;
+            gap: 8px;
+            position: relative; /* Needed for status badge */
+        }
+        .visitor-card-horizontal:hover {
+            transform: var(--card-hover-transform);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            border-color: var(--secondary-blue);
+        }
+        .visitor-card-horizontal.selectable-visitor {
+            cursor: pointer;
+        }
+        .visitor-card-horizontal.selectable-visitor:hover {
+            border-color: var(--primary-blue);
+            background-color: #dbeafe;
+        }
+        .visitor-card-horizontal .profile-image-container { width: 100px; height: 100px; position: relative; margin-bottom: 5px; }
+        .visitor-card-horizontal .profile-image,
+        .visitor-card-horizontal .profile-placeholder {
+            width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+            border: 2px solid var(--white); box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .visitor-card-horizontal .profile-placeholder {
+            background-color: var(--placeholder-bg); color: var(--placeholder-text);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 2.0rem;
+        }
+        .visitor-card-horizontal strong {
+            font-size: 14px; color: var(--primary-blue); font-weight: 600;
+            line-height: 1.3; width: 100%; overflow: hidden; text-overflow: ellipsis;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+            margin-top: 5px; /* Adjust spacing */
+        }
+        .visitor-card-horizontal .visitor-badge-small {
+            padding: 3px 10px; border-radius: 15px; font-size: 0.7rem;
+            font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;
+            margin-top: auto; /* Pushes badge down if space allows */
+        }
+        .visitor-badge-small.new-visitor { background-color: var(--new-visitor-green); color: white; }
+        .visitor-badge-small.returning-visitor { background-color: var(--returning-visitor-blue); color: white; }
+
+        .visitor-status-badge { /* New badge for pending/completed status on cards */
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: white;
+            z-index: 5;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+        }
+        .visitor-status-badge.pending { background: linear-gradient(100deg, var(--pending-action-orange-start), var(--pending-action-orange-end)); }
+        .visitor-status-badge.completed { background: linear-gradient(100deg, var(--complete-red-start), var(--complete-red-end)); }
+
+
+        .nav-btn {
+            background: linear-gradient(100deg, var(--primary-blue), var(--secondary-blue));
+            color: var(--white); border: none; padding: 12px 28px; border-radius: 50px;
+            cursor: pointer; font-weight: 600; font-size: 15px; letter-spacing: 0.5px;
+            transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+        }
+        .nav-btn:disabled {
+            background: #e2e8f0; color: var(--text-gray); cursor: not-allowed;
+            transform: none; box-shadow: none;
+        }
+        .nav-btn.action-btn {
+            background: linear-gradient(100deg, var(--action-confirm-start), var(--action-confirm-end));
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+        }
+         .nav-btn.complete-btn {
+            background: linear-gradient(100deg, var(--complete-red-start), var(--complete-red-end));
+            box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
+         }
+        .nav-btn.action-btn:hover {
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4);
+            transform: translateY(-2px);
+        }
+         .nav-btn.complete-btn:hover {
+             box-shadow: 0 6px 15px rgba(231, 76, 60, 0.4);
+             transform: translateY(-2px);
+         }
+
+
+        .visitor-profile {
+            width: 100%; background-color: var(--white); border-radius: var(--border-radius);
+            padding: 0; display: flex; flex-direction: column; align-items: flex-start;
+            position: relative; overflow: hidden;
+            border: 1px solid #e2e8f0;
+            margin-top: 5px;
+        }
+        .visitor-header {
+            width: 100%; display: flex; align-items: center;
+            padding: 25px;
+            background: linear-gradient(to right, rgba(44, 62, 144, 0.05), rgba(52, 152, 219, 0.05));
+            border-bottom: 1px solid #e2e8f0; gap: 25px;
+        }
+        .visitor-header .main-profile-image-container {
+             width: 180px; height: 180px;
+             flex-shrink: 0; position: relative;
+        }
+        .visitor-header .main-profile-image,
+        .visitor-header .main-profile-placeholder {
+            width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+            border: 4px solid var(--white); box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        }
+        .visitor-header .main-profile-placeholder {
+            background-color: var(--placeholder-bg); color: var(--placeholder-text);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 4rem;
+        }
+        .profile-dvn-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            border: 2px solid var(--white);
+            z-index: 10;
+        }
+        .visitor-name-type {
+            display: flex; flex-direction: column; align-items: flex-start;
+            flex-grow: 1; gap: 5px;
+        }
+         .visitor-id-header {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-gray);
+            margin-bottom: 2px;
+        }
+        .visitor-header h2 {
+            color: var(--primary-blue); font-size: 28px; letter-spacing: 0.5px;
+            font-weight: 600; line-height: 1.3;
+            margin-bottom: 2px;
+        }
+        .visitor-phone-header, .visitor-address-header, .visitor-tahasil-header { /* Added address and tahasil classes */
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        .visitor-address-header strong, .visitor-tahasil-header strong { /* Style for labels */
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-right: 5px;
+            opacity: 1;
+        }
+        .visitor-type {
+            padding: 6px 18px; border-radius: 50px; font-weight: 600; font-size: 0.8rem;
+            display: inline-block; text-transform: uppercase; letter-spacing: 0.5px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            margin-top: 5px;
+        }
+        .visitor-type.new-visitor { background-color: var(--new-visitor-green); color: white; }
+        .visitor-type.returning-visitor { background-color: var(--returning-visitor-blue); color: white; }
+
+        .visit-summary {
+            width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            padding: 25px; gap: 25px;
+        }
+        .current-visit-details, .previous-visit-details {
+            background-color: #f8fafc; padding: 25px;
+            border-radius: var(--border-radius);
+            border: 1px solid #e2e8f0;
+            transition: var(--transition);
+        }
+        .current-visit-details:hover, .previous-visit-details:hover {
+            transform: var(--card-hover-transform);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+            border-color: var(--secondary-blue);
+        }
+        .current-visit-details h4, .previous-visit-details h4 {
+            color: var(--primary-blue); font-size: 18px; position: relative;
+            padding-bottom: 10px; margin-bottom: 20px; display: block;
+            border-bottom: 1px solid #e2e8f0; font-weight: 600;
+        }
+         .visit-summary p {
+            margin-bottom: 18px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+        }
+        .visit-summary strong {
+            color: var(--text-dark); font-size: 13px; text-transform: uppercase;
+            letter-spacing: 0.5px; opacity: 0.7; font-weight: 600;
+        }
+        .visit-summary .detail-value {
+            text-align: left; color: var(--text-dark); width: 100%;
+            padding: 12px 15px; background-color: var(--white);
+            border-radius: 8px; font-size: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+            border-left: 3px solid var(--secondary-blue);
+            line-height: 1.5;
+        }
+
+         .additional-actions {
+             width: 100%;
+             padding: 0 25px 25px 25px;
+             display: flex;
+             flex-direction: column;
+             gap: 20px;
+         }
+
+         .form-group {
+             display: flex;
+             flex-direction: column;
+             gap: 5px;
+         }
+
+         .form-group label {
+             font-weight: 600;
+             font-size: 14px;
+             color: var(--text-dark);
+             opacity: 0.8;
+         }
+
+         .form-group textarea,
+         .form-group select {
+             width: 100%;
+             padding: 10px 12px;
+             border-radius: 8px;
+             border: 1px solid #cbd5e1;
+             font-size: 15px;
+             background-color: var(--white);
+             box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+             transition: border-color 0.2s ease;
+             color: var(--text-dark);
+         }
+         .form-group textarea::placeholder {
+             color: var(--text-gray);
+             opacity: 0.7;
+         }
+         .form-group select {
+             appearance: none;
+             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
+             background-position: right 0.5rem center;
+             background-repeat: no-repeat;
+             background-size: 1.5em 1.5em;
+             padding-right: 2.5rem;
+         }
+         .form-group textarea:focus,
+         .form-group select:focus {
+             outline: none;
+             border-color: var(--secondary-blue);
+             box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+         }
+         #save-details-btn {
+             margin-top: 10px;
+             align-self: center;
+             width: auto;
+             min-width: 200px;
+         }
+
+        .no-visitor-message, .no-items-message {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            width: 100%; padding: 30px 20px; text-align: center; color: var(--text-gray);
+            min-height: 120px; font-size: 16px; font-weight: 500;
+        }
+        .popup-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); display: flex; justify-content: center;
+            align-items: center; z-index: 1000; visibility: hidden; opacity: 0;
+            transition: opacity 0.3s ease, visibility 0s 0.3s linear; backdrop-filter: blur(3px);
+        }
+        .popup-overlay.active { visibility: visible; opacity: 1; transition: opacity 0.3s ease, visibility 0s linear; backdrop-filter: blur(3px);}
+        .popup-content {
+            background-color: var(--white); padding: 35px; border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); text-align: center; max-width: 420px; width: 90%;
+            transform: translateY(-20px) scale(0.95); transition: transform 0.3s ease, opacity 0.3s ease; opacity: 0;
+        }
+        .popup-overlay.active .popup-content { transform: translateY(0) scale(1); opacity: 1; }
+        .popup-title { color: var(--primary-blue); margin-bottom: 15px; font-size: 22px; font-weight: 600; }
+        .popup-content p { margin-bottom: 25px; color: var(--text-dark); opacity: 0.9; }
+        .popup-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
+        .popup-btn { padding: 10px 30px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: var(--transition); font-size: 14px; }
+        .popup-btn-confirm { background: linear-gradient(100deg, var(--primary-blue), var(--secondary-blue)); color: var(--white); border: none; box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3); }
+        .popup-btn-cancel { background-color: #e2e8f0; color: var(--text-dark); border: none; }
+        .popup-btn:hover { transform: translateY(-2px); }
+        .popup-btn-confirm:hover { box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4); }
+        .popup-btn-cancel:hover { background-color: #cbd5e1; }
+        .popup-btn-confirm.complete-confirm { background: linear-gradient(100deg, var(--complete-red-start), var(--complete-red-end)); box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3); }
+        .popup-btn-confirm.complete-confirm:hover { box-shadow: 0 6px 15px rgba(231, 76, 60, 0.4); }
+        .popup-btn-confirm.action-confirm { background: linear-gradient(100deg, var(--action-confirm-start), var(--action-confirm-end)); box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
+        .popup-btn-confirm.action-confirm:hover { box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4); }
+
+        #action-confirm-summary {
+            text-align: left;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            font-size: 14px;
+        }
+         #action-confirm-summary p {
+             margin-bottom: 8px;
+             color: var(--text-dark);
+             opacity: 1.0;
+             line-height: 1.5;
+         }
+         #action-confirm-summary strong {
+             color: var(--primary-blue);
+             margin-right: 5px;
+             font-weight: 600;
+         }
+         #action-confirm-summary span {
+             word-break: break-word;
+         }
+
+
+        @media (max-width: 992px) {
+             .visit-summary { grid-template-columns: 1fr; }
+             .visitor-header { flex-direction: column; align-items: center; text-align: center; }
+             .visitor-name-type { align-items: center; }
+             .section-title { padding-right: 5px; }
+             .visitor-id-header, .visitor-phone-header, .visitor-address-header, .visitor-tahasil-header { text-align: center; }
+             .additional-actions { padding: 0 20px 20px 20px; }
+             #current-visitor-section > #completed-meeting-btn {
+                 min-width: 180px;
+                 padding: 11px 24px;
+             }
+             .horizontal-scroll-container { min-height: 180px; } /* Adjust */
+             .visitor-card-horizontal { width: 150px; }
+             .visitor-card-horizontal .profile-image-container { width: 90px; height: 90px; }
+
+        }
+        @media (max-width: 768px) {
+            .header { padding: 12px 20px; }
+            .header h1 { font-size: 22px; }
+            .logout-btn { padding: 7px 18px; font-size: 13px; }
+            .main-content { padding: 20px; gap: 20px; }
+            .content-section { padding: 10px; }
+            .section-title { font-size: 20px; margin-bottom: 10px; }
+            .visitor-header { padding: 20px; gap: 20px; }
+            .visitor-header .main-profile-image-container { width: 120px; height: 120px; }
+            .visitor-header .main-profile-placeholder { font-size: 3.5rem; }
+            .profile-dvn-badge { width: 30px; height: 30px; font-size: 12px; top: 3px; right: 3px; border-width: 1px;}
+             .visitor-header h2 { font-size: 24px; }
+             .visitor-id-header { font-size: 0.85rem; }
+             .visitor-phone-header, .visitor-address-header, .visitor-tahasil-header { font-size: 0.95rem; }
+            .visit-summary { padding: 20px; gap: 20px; }
+
+            .nav-btn { padding: 11px 24px; font-size: 14px; }
+            .visitor-card-horizontal { width: 135px; padding: 12px; gap: 6px;}
+            .visitor-card-horizontal .profile-image-container { width: 80px; height: 80px; }
+            .visitor-card-horizontal .profile-placeholder { font-size: 1.8rem; }
+             .visitor-card-horizontal strong { font-size: 13px; }
+            .additional-actions { padding: 0 15px 15px 15px; gap: 15px; }
+             #current-visitor-section > #completed-meeting-btn,
+             #save-details-btn {
+                width: 90%;
+                max-width: 300px;
+             }
+             .horizontal-scroll-container { min-height: 170px; }
+        }
+        @media (max-width: 480px) {
+            .header { padding: 10px 15px; }
+            .header h1 { font-size: 19px; }
+            .main-content { padding: 15px; gap: 15px; }
+            .content-section { padding: 10px; }
+            .section-title { font-size: 18px; }
+            .visitor-header { padding: 15px; gap: 15px; }
+            .visitor-header .main-profile-image-container { width: 100px; height: 100px; }
+            .visitor-header .main-profile-placeholder { font-size: 3rem; }
+            .profile-dvn-badge { width: 28px; height: 28px; font-size: 11px; top: 2px; right: 2px;}
+            .visitor-header h2 { font-size: 21px; }
+             .visitor-id-header { font-size: 0.8rem; }
+             .visitor-phone-header, .visitor-address-header, .visitor-tahasil-header { font-size: 0.9rem; }
+            .visit-summary { padding: 15px; gap: 15px; }
+            .current-visit-details, .previous-visit-details { padding: 20px; }
+             .visit-summary .detail-value { padding: 10px 12px; font-size: 14px; }
+
+            .nav-btn { width: 100%; justify-content: center; }
+             #current-visitor-section > #completed-meeting-btn,
+             #save-details-btn {
+                 width: 100%;
+                 min-width: unset;
+                 padding: 10px 20px;
+                 font-size: 13px;
+             }
+            .visitor-card-horizontal { width: 120px; padding: 10px;}
+            .visitor-card-horizontal .profile-image-container { width: 70px; height: 70px; }
+            .visitor-card-horizontal .profile-placeholder { font-size: 1.6rem; }
+            .visitor-card-horizontal strong { font-size: 12px; }
+            .additional-actions { padding: 0 10px 10px 10px; gap: 15px; }
+            .popup-content { padding: 25px; }
+            #action-confirm-summary { padding: 10px; font-size: 13px; }
+            .horizontal-scroll-container { min-height: 160px; }
+            .visitor-status-badge { font-size: 0.6rem; padding: 2px 6px; top: 5px; right: 5px;}
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="header">
+          <h1>इनऑफिस एसव्हीएमएस</h1>
+          <button id="logout-btn" class="logout-btn">लॉगआऊट</button>
+        </header>
+
+        <div id="logout-popup" class="popup-overlay">
+            <div class="popup-content">
+                <h3 class="popup-title">लॉगआऊटची पुष्टी करा</h3>
+                <p>तुम्हाला खात्री आहे की तुम्हाला लॉगआउट करायचे आहे?</p>
+                <div class="popup-buttons">
+                    <button id="logout-cancel" class="popup-btn popup-btn-cancel">रद्द करा</button>
+                    <button id="logout-confirm" class="popup-btn popup-btn-confirm">लॉगआऊट</button>
+                </div>
+            </div>
+        </div>
+         <div id="complete-visit-popup" class="popup-overlay">
+            <div class="popup-content">
+                <h3 class="popup-title">भेटीच्या समाप्तीची पुष्टी करा</h3>
+                <p>तुम्हाला खात्री आहे की ही भेट पूर्ण झाली म्हणून चिन्हांकित करायची आहे?</p>
+                <div class="popup-buttons">
+                    <button id="complete-visit-cancel" class="popup-btn popup-btn-cancel">रद्द करा</button>
+                    <button id="complete-visit-confirm" class="popup-btn popup-btn-confirm complete-confirm">भेट पूर्ण करा</button>
+                </div>
+            </div>
+        </div>
+         <div id="action-confirm-popup" class="popup-overlay">
+            <div class="popup-content">
+                <h3 class="popup-title">अभ्यागत कृतीची पुष्टी करा</h3>
+                <div id="action-confirm-summary"></div>
+                <p>तुम्हाला खात्री आहे की तुम्हाला हे तपशील कृतीसाठी पाठवायचे आहेत?</p>
+                <div class="popup-buttons">
+                    <button id="action-cancel-btn" class="popup-btn popup-btn-cancel">रद्द करा</button>
+                    <button id="action-confirm-btn" class="popup-btn popup-btn-confirm action-confirm">पुष्टी करा आणि पाठवा</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="content-section">
+                <h2 class="section-title">आगामी अभ्यागत</h2>
+                <div id="upcoming-visitors-container" class="horizontal-scroll-container">
+                    <div class="no-items-message"><p>DVN नियुक्त असलेले आगामी अभ्यागत नाहीत</p></div>
+                </div>
+            </div>
+
+            <div id="current-visitor-section" class="content-section">
+                <h2 class="section-title">सध्याच्या अभ्यागताचा तपशील</h2>
+                <div id="current-visitor-details-container">
+                    <div class="no-visitor-message"><p>सध्या कोणताही अभ्यागत निवडलेला नाही</p></div>
+                </div>
+                <button id="completed-meeting-btn" class="nav-btn complete-btn" disabled>अभ्यागताची भेट पूर्ण करा</button>
+            </div>
+
+            <div id="action-visitors-section" class="content-section">
+                <h2 class="section-title">अभ्यागत कृती प्रोफाइल</h2>
+                <div id="action-visitors-container" class="horizontal-scroll-container">
+                     <div class="no-items-message"><p>कृती प्रलंबित असलेले अभ्यागत नाहीत</p></div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">पूर्ण झालेले अभ्यागत</h2>
+                <div id="completed-visitors-container" class="horizontal-scroll-container">
+                     <div class="no-items-message"><p>पूर्ण झालेले अभ्यागत नाहीत</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+       document.addEventListener('DOMContentLoaded', function() {
+            let globalVisitorsList = [];
+            let actionVisitorsList = [];
+            let completedVisitorsList = [];
+            let otherUpcomingVisitors = [];
+            let departmentList = [];
+            let currentVisitorIndex = -1;
+            let currentSelectedVisitId = null;
+            let visitorDetailsCache = {};
+            const MAX_UPCOMING_VISITORS = 30;
+            const MAX_ACTION_VISITORS_DISPLAY = 15;
+            const MAX_COMPLETED_VISITORS_DISPLAY = 10;
+            const POLLING_INTERVAL = 15000;
+            let pollingIntervalId = null;
+            let isFetching = false;
+
+            const today = new Date().toISOString().split('T')[0];
+            const completedMeetingBtn = document.getElementById('completed-meeting-btn');
+            let saveDetailsBtn = null;
+            const logoutBtn = document.getElementById('logout-btn');
+            const logoutPopup = document.getElementById('logout-popup');
+            const logoutCancel = document.getElementById('logout-cancel');
+            const logoutConfirm = document.getElementById('logout-confirm');
+            const completeVisitPopup = document.getElementById('complete-visit-popup');
+            const completeVisitCancel = document.getElementById('complete-visit-cancel');
+            const completeVisitConfirm = document.getElementById('complete-visit-confirm');
+            const actionConfirmPopup = document.getElementById('action-confirm-popup');
+            const actionConfirmSummary = document.getElementById('action-confirm-summary');
+            const actionConfirmBtn = document.getElementById('action-confirm-btn');
+            const actionCancelBtn = document.getElementById('action-cancel-btn');
+            const upcomingVisitorsContainer = document.getElementById('upcoming-visitors-container');
+            const currentVisitorDetailsContainer = document.getElementById('current-visitor-details-container');
+            const actionVisitorsContainer = document.getElementById('action-visitors-container');
+            const completedVisitorsContainer = document.getElementById('completed-visitors-container');
+
+            let lastTapTime = 0;
+            let lastTapTarget = null;
+            const doubleTapDelay = 300;
+
+            let currentActionData = null;
+
+            logoutBtn.addEventListener('click', () => logoutPopup.classList.add('active'));
+            logoutCancel.addEventListener('click', () => logoutPopup.classList.remove('active'));
+            logoutConfirm.addEventListener('click', logout);
+            completedMeetingBtn.addEventListener('click', showCompleteVisitPopup);
+            completeVisitCancel.addEventListener('click', () => completeVisitPopup.classList.remove('active'));
+            completeVisitConfirm.addEventListener('click', executeVisitCompletion);
+
+            actionCancelBtn.addEventListener('click', () => {
+                actionConfirmPopup.classList.remove('active');
+                if (saveDetailsBtn) {
+                    saveDetailsBtn.disabled = false;
+                    saveDetailsBtn.textContent = 'संबंधित विभागाला कृतीसाठी पाठवा';
+                }
+                actionConfirmBtn.disabled = false;
+                actionConfirmBtn.textContent = 'पुष्टी करा आणि पाठवा';
+                currentActionData = null;
+                updateButtonStates();
+            });
+
+            function logout() {
+                if (pollingIntervalId) {
+                    clearInterval(pollingIntervalId);
+                }
+                fetch("/logout")
+                    .then(() => { localStorage.removeItem("user"); window.location.href = "/"; })
+                    .catch(error => { console.error("Logout failed:", error); localStorage.removeItem("user"); window.location.href = "/"; });
+            }
+
+             async function fetchDepartments() {
+                 try {
+                     const response = await fetch('/departments');
+                     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                     const data = await response.json();
+                     departmentList = data.departments || [];
+                     console.log("Departments loaded:", departmentList);
+                 } catch (error) {
+                     console.error('Error fetching departments:', error);
+                     departmentList = [];
+                 }
+             }
+
+             function isValidDvn(dvn) {
+                 const dvnString = String(dvn).trim();
+                 return dvn != null && dvnString !== '' && !isNaN(parseInt(dvnString, 10));
+             }
+
+
+            async function fetchAndProcessVisitors(isInitialLoad = false) {
+                if (isFetching) {
+                    console.log("Fetch already in progress. Skipping.");
+                    return;
+                }
+                isFetching = true;
+                console.log("Fetching visitor data...");
+
+                try {
+                    const response = await fetch('/get_today_visitors');
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                    const data = await response.json();
+
+                    const allTodayVisits = Object.entries(data.visitors || {})
+                        .flatMap(([uid, userData]) =>
+                            (userData.visitor || [])
+                                .filter(visit => visit.datetime?.startsWith(today))
+                                .map(visit => ({ ...visit, uid: uid, name: userData.name }))
+                        );
+
+                    let newUpcomingVisitorsWithDvn = [];
+                    let newActionVisitors = [];
+                    let newCompletedVisitors = [];
+                    let newOtherUpcomingVisitors = [];
+
+                    allTodayVisits.forEach(visit => {
+                        if (visit.status === 'completed') {
+                            newCompletedVisitors.push(visit);
+                        } else if (visit.status === 'pending') {
+                            newActionVisitors.push(visit);
+                        } else {
+                            if (isValidDvn(visit.dvn)) {
+                                newUpcomingVisitorsWithDvn.push(visit);
+                            } else {
+                                newOtherUpcomingVisitors.push(visit);
+                            }
+                        }
+                    });
+
+                    newUpcomingVisitorsWithDvn.sort((a, b) => {
+                        const numA = parseInt(String(a.dvn).trim(), 10);
+                        const numB = parseInt(String(b.dvn).trim(), 10);
+                        return numA - numB;
+                    });
+
+                    newActionVisitors.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
+                    newCompletedVisitors.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
+
+                    const upcomingChanged = !areArraysEqual(globalVisitorsList, newUpcomingVisitorsWithDvn, 'visit_id');
+                    const actionChanged = !areArraysEqual(actionVisitorsList, newActionVisitors, 'visit_id');
+                    const completedChanged = !areArraysEqual(completedVisitorsList, newCompletedVisitors, 'visit_id');
+                    const otherUpcomingChanged = !areArraysEqual(otherUpcomingVisitors, newOtherUpcomingVisitors, 'visit_id');
+
+                    globalVisitorsList = newUpcomingVisitorsWithDvn;
+                    actionVisitorsList = newActionVisitors;
+                    completedVisitorsList = newCompletedVisitors;
+                    otherUpcomingVisitors = newOtherUpcomingVisitors;
+
+                    let needsCurrentVisitorRender = false;
+                    let previousIndex = currentVisitorIndex;
+                    let previousSelectedVisitId = currentSelectedVisitId;
+
+                    if (currentSelectedVisitId) {
+                        currentVisitorIndex = globalVisitorsList.findIndex(v => v.visit_id === currentSelectedVisitId);
+
+                        if (currentVisitorIndex === -1) {
+                             console.log(`Visitor ${previousSelectedVisitId} no longer in DVN-based upcoming list.`);
+                             currentSelectedVisitId = null;
+                             if (globalVisitorsList.length > 0) {
+                                 currentVisitorIndex = 0;
+                                 currentSelectedVisitId = globalVisitorsList[0].visit_id;
+                                 console.log(`Auto-selecting first DVN upcoming visitor: ${currentSelectedVisitId}`);
+                             } else {
+                                 currentVisitorIndex = -1;
+                             }
+                             needsCurrentVisitorRender = true;
+                        } else {
+                             if (currentVisitorIndex !== previousIndex || upcomingChanged) {
+                                 needsCurrentVisitorRender = true;
+                             }
+                        }
+                    } else {
+                        if (globalVisitorsList.length > 0) {
+                            currentVisitorIndex = 0;
+                            currentSelectedVisitId = globalVisitorsList[0].visit_id;
+                            console.log(`Auto-selecting first DVN upcoming visitor: ${currentSelectedVisitId}`);
+                            needsCurrentVisitorRender = true;
+                        } else {
+                            currentVisitorIndex = -1;
+                            if (previousSelectedVisitId !== null) {
+                               needsCurrentVisitorRender = true;
+                            }
+                        }
+                    }
+
+                    if (isInitialLoad || upcomingChanged) {
+                        console.log("Rendering Upcoming Visitors (DVN only)");
+                        await renderHorizontalVisitors(upcomingVisitorsContainer, globalVisitorsList.slice(0, MAX_UPCOMING_VISITORS), 'DVN नियुक्त असलेले आगामी अभ्यागत नाहीत', true);
+                    }
+                    if (isInitialLoad || actionChanged) {
+                        console.log("Rendering Action Visitors");
+                        await renderHorizontalVisitors(actionVisitorsContainer, actionVisitorsList.slice(0, MAX_ACTION_VISITORS_DISPLAY), 'कृती प्रलंबित असलेले अभ्यागत नाहीत', false, 'pending');
+                    }
+                    if (isInitialLoad || completedChanged) {
+                        console.log("Rendering Completed Visitors");
+                        await renderHorizontalVisitors(completedVisitorsContainer, completedVisitorsList.slice(0, MAX_COMPLETED_VISITORS_DISPLAY), 'पूर्ण झालेले अभ्यागत नाहीत', false, 'completed');
+                    }
+
+                    if (isInitialLoad || needsCurrentVisitorRender) {
+                         console.log("Rendering Current Visitor");
+                         await renderCurrentVisitor();
+                    } else {
+                         updateButtonStates();
+                    }
+
+                } catch (error) {
+                    console.error('Error fetching or processing visitors:', error);
+                     if (isInitialLoad) {
+                         upcomingVisitorsContainer.innerHTML = `<div class="no-items-message"><p>आगामी अभ्यागत लोड करताना त्रुटी.</p></div>`;
+                         actionVisitorsContainer.innerHTML = `<div class="no-items-message"><p>कृती अभ्यागत लोड करताना त्रुटी.</p></div>`;
+                         currentVisitorDetailsContainer.innerHTML = `<div class="no-visitor-message"><p>डेटा लोड करताना त्रुटी.</p></div>`;
+                         completedVisitorsContainer.innerHTML = `<div class="no-items-message"><p>पूर्ण झालेले अभ्यागत लोड करताना त्रुटी.</p></div>`;
+                     }
+                     updateButtonStates();
+                } finally {
+                     isFetching = false;
+                     console.log("Fetch cycle complete.");
+                }
+            }
+
+
+            function areArraysEqual(arr1, arr2, key) {
+                if (!arr1 || !arr2) return false;
+                if (arr1.length !== arr2.length) return false;
+                const ids1 = new Set(arr1.map(item => item[key]));
+                for (let i = 0; i < arr2.length; i++) {
+                    if (!ids1.has(arr2[i][key])) return false;
+                }
+                return true;
+            }
+
+            async function getVisitorDetails(uid) {
+                if (visitorDetailsCache[uid]) {
+                    return visitorDetailsCache[uid];
+                }
+                try {
+                    const response = await fetch(`/get_visitor_details?uid=${uid}`);
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                    const data = await response.json();
+                    if (data.success && data.visitor_data) {
+                        visitorDetailsCache[uid] = data.visitor_data;
+                        return data.visitor_data;
+                    }
+                    console.error(`Failed to fetch details for UID: ${uid}`, data.message || 'No visitor_data found');
+                    return null;
+                } catch (error) {
+                    console.error(`Error fetching details for UID: ${uid}`, error);
+                    return null;
+                }
+            }
+
+
+            function getProfileImageHtml(visitorData, visitInfo, cssClassPrefix = 'profile') {
+                let imageUrl = visitorData?.profile_img?.[0] || visitorData?.images?.[0] || null;
+                const timestamp = Date.now();
+                const finalImageUrl = imageUrl ? `${imageUrl}?t=${timestamp}` : null;
+                const initials = generateInitials(visitorData);
+                const altText = visitorData?.name || 'अभ्यागत';
+                const placeholderHtml = `<div class="${cssClassPrefix}-placeholder">${initials}</div>`;
+                const imageHtml = finalImageUrl
+                    ? `<img src="${finalImageUrl}" alt="${altText}" class="${cssClassPrefix}-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">`
+                    : '';
+                 const displayDvn = cssClassPrefix === 'main-profile' && isValidDvn(visitInfo?.dvn);
+                 const dvnBadgeHtml = displayDvn
+                     ? `<div class="profile-dvn-badge">${visitInfo.dvn}</div>`
+                     : '';
+
+                 return `<div class="${cssClassPrefix}-image-container">
+                            ${imageHtml}
+                            <div class="${cssClassPrefix}-placeholder" ${imageHtml ? 'style="display: none;"' : 'style="display: flex;"'}>${initials}</div>
+                            ${dvnBadgeHtml}
+                         </div>`;
+            }
+
+
+            function generateInitials(visitorData) {
+                 return visitorData?.name?.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || '?';
+            }
+
+            function isReturningVisitorCheck(visitorData) {
+                 return visitorData && Array.isArray(visitorData.visitor) && visitorData.visitor.length > 1;
+            }
+
+            function updateButtonStates() {
+                const isValidSelection = currentVisitorIndex >= 0 && currentVisitorIndex < globalVisitorsList.length;
+                completedMeetingBtn.disabled = !isValidSelection;
+
+                saveDetailsBtn = document.getElementById('save-details-btn');
+
+                if (saveDetailsBtn) {
+                    saveDetailsBtn.disabled = !isValidSelection || saveDetailsBtn.textContent === 'पाठवत आहे...';
+                    if (!isValidSelection && saveDetailsBtn.textContent === 'पाठवत आहे...') {
+                         saveDetailsBtn.textContent = 'संबंधित विभागाला कृतीसाठी पाठवा';
+                    }
+                }
+
+                if (completedMeetingBtn.textContent === 'पूर्ण होत आहे...') {
+                     if (!isValidSelection) {
+                        completedMeetingBtn.textContent = 'अभ्यागताची भेट पूर्ण करा';
+                     }
+                }
+
+                 if (!actionConfirmPopup.classList.contains('active')) {
+                     actionConfirmBtn.disabled = false;
+                     actionConfirmBtn.textContent = 'पुष्टी करा आणि पाठवा';
+                 }
+            }
+
+
+            async function renderHorizontalVisitors(container, visitorsToShow, emptyMessage, isSelectable = false, status = null) {
+                if (!container) {
+                    console.error("Container not found for rendering horizontal visitors.");
+                    return;
+                }
+                if (!Array.isArray(visitorsToShow)) {
+                    console.error("Invalid data provided for visitorsToShow (expected array):", visitorsToShow);
+                     container.innerHTML = `<div class="no-items-message"><p>त्रुटी: अवैध अभ्यागत डेटा.</p></div>`;
+                    return;
+                }
+
+                if (visitorsToShow.length === 0) {
+                    container.innerHTML = `<div class="no-items-message"><p>${emptyMessage}</p></div>`;
+                    return;
+                }
+
+                const cardPromises = visitorsToShow.map(async (visitInfo) => {
+                    if (!visitInfo || !visitInfo.uid) {
+                        console.warn("Skipping card render due to missing visitInfo or uid:", visitInfo);
+                        return createHorizontalVisitorCard(null, null, false, 'error');
+                    }
+                    const visitorData = await getVisitorDetails(visitInfo.uid);
+                    return createHorizontalVisitorCard(visitInfo, visitorData, isSelectable, visitInfo.status);
+                });
+
+                 try {
+                     const cardsHtml = await Promise.all(cardPromises);
+                     if (document.body.contains(container)) {
+                         container.innerHTML = cardsHtml.join('');
+                     }
+                 } catch (error) {
+                     console.error("Error rendering horizontal visitors:", error);
+                     if (document.body.contains(container)) {
+                         container.innerHTML = `<div class="no-items-message"><p>अभ्यागत दाखवण्यात त्रुटी.</p></div>`;
+                     }
+                 }
+            }
+
+
+            function createHorizontalVisitorCard(visitInfo, visitorData, selectable = false, status = null) {
+                if (status === 'error' || !visitorData || !visitInfo) {
+                    const errorUid = visitInfo ? ` (UID: ${visitInfo.uid})` : '';
+                     return `<div class="visitor-card-horizontal">
+                                <div class="profile-placeholder">!</div>
+                                <strong>लोड करताना त्रुटी</strong>
+                                <span style="font-size: 0.8em; color: var(--text-gray);">तपशील उपलब्ध नाहीत${errorUid}</span>
+                            </div>`;
+                }
+
+                const isReturning = isReturningVisitorCheck(visitorData);
+                const typeBadgeClass = isReturning ? 'returning-visitor' : 'new-visitor';
+                const typeBadgeText = isReturning ? 'परत आलेले' : 'नवीन';
+                const profileImageHtml = getProfileImageHtml(visitorData, null, 'profile');
+                const displayName = visitorData?.name || visitInfo.name || 'अज्ञात अभ्यागत';
+                const selectableClass = selectable ? ' selectable-visitor' : '';
+                const dataAttributes = selectable ? `data-uid="${visitInfo.uid}" data-visit-id="${visitInfo.visit_id}"` : '';
+
+                 const statusMap = { 'pending': 'प्रलंबित', 'completed': 'पूर्ण' };
+                 const displayStatus = statusMap[status] || status;
+
+                 let statusBadgeHtml = '';
+                if (status === 'pending' || status === 'completed') {
+                    statusBadgeHtml = `<span class="visitor-status-badge ${status}">${displayStatus}</span>`;
+                }
+
+                return `
+                    <div class="visitor-card-horizontal${selectableClass}" ${dataAttributes}>
+                        ${statusBadgeHtml}
+                        ${profileImageHtml}
+                        <strong>${displayName}</strong>
+                        <span class="visitor-badge-small ${typeBadgeClass}">${typeBadgeText}</span>
+                    </div>`;
+            }
+
+            async function renderCurrentVisitor() {
+                 const oldSaveBtn = document.getElementById('save-details-btn');
+                 if (oldSaveBtn) {
+                     oldSaveBtn.removeEventListener('click', showActionConfirmPopup);
+                 }
+                 saveDetailsBtn = null;
+
+                 if (currentVisitorIndex < 0 || currentVisitorIndex >= globalVisitorsList.length) {
+                    currentVisitorDetailsContainer.innerHTML = `<div class="no-visitor-message"><p>सध्या कोणताही अभ्यागत निवडलेला नाही</p></div>`;
+                    updateButtonStates();
+                    return;
+                 }
+                const currentVisitInfo = globalVisitorsList[currentVisitorIndex];
+                 currentSelectedVisitId = currentVisitInfo.visit_id;
+
+                const currentVisitorData = await getVisitorDetails(currentVisitInfo.uid);
+
+                if (!currentVisitorData) {
+                    currentVisitorDetailsContainer.innerHTML = `
+                        <div class="no-visitor-message">
+                            <p>${currentVisitInfo.name || ' निवडलेल्या अभ्यागतासाठी'} तपशील लोड करताना त्रुटी.</p>
+                            <p><small>(UID: ${currentVisitInfo.uid}, भेट आयडी: ${currentVisitInfo.visit_id})</small></p>
+                        </div>`;
+                    updateButtonStates();
+                    return;
+                }
+
+                const isReturning = isReturningVisitorCheck(currentVisitorData);
+                 const allVisits = [...(currentVisitorData.visitor || [])]
+                     .sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
+
+                const profileImageHtml = getProfileImageHtml(currentVisitorData, currentVisitInfo, 'main-profile');
+                let previousVisitHtml = '';
+
+                const previousVisits = allVisits.filter(v => v.visit_id !== currentVisitInfo.visit_id);
+                 const actualPreviousVisit = previousVisits.find(v => v.status === 'completed' || v.status === 'pending') || (previousVisits.length > 0 ? previousVisits[0] : null);
+
+                  const statusMap = { 'pending': 'प्रलंबित', 'completed': 'पूर्ण', 'unknown': 'अज्ञात' };
+                  const previousStatusDisplay = statusMap[actualPreviousVisit?.status] || actualPreviousVisit?.status || 'अज्ञात';
+
+
+                if (actualPreviousVisit) {
+                    previousVisitHtml = `
+                        <div class="previous-visit-details">
+                            <h4>मागील भेटीची माहिती</h4>
+                            <p><strong>मागील भेटीची तारीख</strong><span class="detail-value">${new Date(actualPreviousVisit.datetime).toLocaleString('mr-IN') || 'N/A'}</span></p>
+                            <p><strong>मागील उद्देश</strong><span class="detail-value">${actualPreviousVisit.purpose || 'N/A'}</span></p>
+                             <p><strong>मागील स्थिती</strong><span class="detail-value">${previousStatusDisplay}</span></p>
+                        </div>`;
+                } else if (isReturning) {
+                     previousVisitHtml = `
+                        <div class="previous-visit-details">
+                             <h4>मागील भेटीची माहिती</h4>
+                             <p>हे परत आलेले अभ्यागत आहेत, परंतु मागील भेटीचे विशिष्ट तपशील सध्याच्या रेकॉर्डमध्ये उपलब्ध नाहीत.</p>
+                        </div>`;
+                }
+
+
+                 let departmentOptionsHtml = '<option value="">-- विभाग निवडा --</option>';
+                 if (departmentList && departmentList.length > 0) {
+                     departmentOptionsHtml += departmentList.map(dept =>
+                         `<option value="${dept.name}">${dept.name}</option>`
+                     ).join('');
+                 } else {
+                     departmentOptionsHtml += '<option value="" disabled>विभाग लोड होत आहेत...</option>';
+                 }
+
+
+                currentVisitorDetailsContainer.innerHTML = `
+                    <div class="visitor-profile">
+                        <div class="visitor-header">
+                            ${profileImageHtml}
+                            <div class="visitor-name-type">
+                                <div class="visitor-id-header">भेट आयडी: ${currentVisitInfo.visit_id || 'N/A'}</div>
+                                <h2>${currentVisitorData.name || 'अज्ञात अभ्यागत'}</h2>
+                                <div class="visitor-phone-header"><strong>फोन:</strong> ${currentVisitorData.phone || 'N/A'}</div>
+                                <div class="visitor-address-header"><strong>पत्ता:</strong> ${currentVisitorData.address || 'N/A'}</div>
+                                <div class="visitor-tahasil-header"><strong>तहसील:</strong> ${currentVisitorData.tahasil || 'N/A'}</div>
+                                <span class="visitor-type ${isReturning ? 'returning-visitor' : 'new-visitor'}">
+                                    ${isReturning ? 'परत आलेले अभ्यागत' : 'नवीन अभ्यागत'}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visit-summary">
+                            <div class="current-visit-details">
+                                <h4>सध्याच्या भेटीचा तपशील</h4>
+                                 <p><strong>भेटीची वेळ</strong><span class="detail-value">${new Date(currentVisitInfo.datetime).toLocaleString('mr-IN') || 'N/A'}</span></p>
+                                <p><strong>भेटीचा उद्देश</strong><span class="detail-value">${currentVisitInfo.purpose || 'N/A'}</span></p>
+                                <p><strong>यांना फॉरवर्ड केले</strong><span class="detail-value">${currentVisitInfo.forwarding_department || 'अद्याप फॉरवर्ड केलेले नाही'}</span></p>
+                                <p><strong>शेरा</strong><span class="detail-value">${currentVisitInfo.remark || 'काही नाही'}</span></p>
+                            </div>
+                            ${previousVisitHtml}
+                        </div>
+                         <div class="additional-actions">
+                            <div class="form-group">
+                                <label for="remark-input">शेरा (ऐच्छिक)</label>
+                                <textarea id="remark-input" name="remark" rows="3" placeholder="काही शेरा लिहा..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="forward-dept-select">यांना फॉरवर्ड करा</label>
+                                <select id="forward-dept-select" name="forward_department">
+                                     ${departmentOptionsHtml}
+                                </select>
+                            </div>
+                             <button id="save-details-btn" class="nav-btn action-btn">संबंधित विभागाला कृतीसाठी पाठवा</button>
+                        </div>
+                    </div>`;
+
+                 saveDetailsBtn = document.getElementById('save-details-btn');
+                 if (saveDetailsBtn) {
+                     saveDetailsBtn.addEventListener('click', showActionConfirmPopup);
+                 } else {
+                     console.error("Failed to find #save-details-btn after render.");
+                 }
+                 updateButtonStates();
+            }
+
+             function showCompleteVisitPopup() {
+                 if (currentVisitorIndex < 0 || currentVisitorIndex >= globalVisitorsList.length) {
+                    console.warn("Attempted to show complete popup with no valid visitor selected.");
+                    return;
+                 }
+                 completeVisitPopup.classList.add('active');
+             }
+
+
+            async function executeVisitCompletion() {
+                 if (currentVisitorIndex < 0 || currentVisitorIndex >= globalVisitorsList.length) {
+                    console.warn("Complete button clicked with no valid current visitor selected.");
+                    updateButtonStates();
+                    completeVisitPopup.classList.remove('active');
+                    return;
+                }
+
+                const currentVisitInfo = globalVisitorsList[currentVisitorIndex];
+                completedMeetingBtn.disabled = true;
+                completedMeetingBtn.textContent = 'पूर्ण होत आहे...';
+                if (saveDetailsBtn) saveDetailsBtn.disabled = true;
+                completeVisitPopup.classList.remove('active');
+
+                try {
+                    const response = await fetch(`/complete_meeting?visit_id=${currentVisitInfo.visit_id}&uid=${currentVisitInfo.uid}`, { method: 'POST' });
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                    const data = await response.json();
+                    if (!data.success) throw new Error(data.message || 'Failed to mark meeting as completed');
+
+                     console.log(`Visit ${currentVisitInfo.visit_id} marked as completed.`);
+                     delete visitorDetailsCache[currentVisitInfo.uid];
+                     currentSelectedVisitId = null;
+                     currentVisitorIndex = -1;
+                     await fetchAndProcessVisitors();
+
+                } catch (error) {
+                    console.error('Error completing visit:', error);
+                    alert('भेट पूर्ण करताना त्रुटी: ' + error.message);
+                    updateButtonStates();
+                } finally {
+                    if (completedMeetingBtn.textContent === 'पूर्ण होत आहे...') {
+                         completedMeetingBtn.textContent = 'अभ्यागताची भेट पूर्ण करा';
+                         updateButtonStates();
+                    }
+                }
+            }
+
+
+             async function showActionConfirmPopup() {
+                 if (currentVisitorIndex < 0 || currentVisitorIndex >= globalVisitorsList.length) {
+                    console.warn("Action button clicked with no valid current visitor selected.");
+                    updateButtonStates();
+                    return;
+                }
+                if (!saveDetailsBtn) {
+                    console.error("Save button reference is missing.");
+                    return;
+                }
+
+                 const currentVisitInfo = globalVisitorsList[currentVisitorIndex];
+                 const currentVisitorData = await getVisitorDetails(currentVisitInfo.uid);
+                 const remarkInput = document.getElementById('remark-input');
+                 const forwardDeptSelect = document.getElementById('forward-dept-select');
+
+                 const remark = remarkInput ? remarkInput.value.trim() : '';
+                 const forwardingDepartment = forwardDeptSelect ? forwardDeptSelect.value : '';
+                 const visitorName = currentVisitorData?.name || 'अज्ञात अभ्यागत';
+
+                 if (!forwardingDepartment) {
+                     alert('कृपया फॉरवर्ड करण्यासाठी विभाग निवडा.');
+                     return;
+                 }
+
+                 currentActionData = {
+                     visitInfo: currentVisitInfo,
+                     remark: remark,
+                     forwardingDepartment: forwardingDepartment
+                 };
+
+                 actionConfirmSummary.innerHTML = `
+                    <p><strong>अभ्यागत:</strong> <span>${visitorName} (भेट आयडी: ${currentVisitInfo.visit_id})</span></p>
+                    <p><strong>यांना फॉरवर्ड करा:</strong> <span>${forwardingDepartment}</span></p>
+                    <p><strong>शेरा:</strong> <span>${remark || 'काही नाही'}</span></p>
+                 `;
+
+                 saveDetailsBtn.disabled = true;
+                 saveDetailsBtn.textContent = 'पाठवत आहे...';
+                 completedMeetingBtn.disabled = true;
+
+                 actionConfirmBtn.disabled = false;
+                 actionConfirmBtn.textContent = 'पुष्टी करा आणि पाठवा';
+                 const newConfirmBtn = actionConfirmBtn.cloneNode(true);
+                 actionConfirmBtn.parentNode.replaceChild(newConfirmBtn, actionConfirmBtn);
+                 newConfirmBtn.addEventListener('click', executeActionSubmission);
+
+                 actionConfirmPopup.classList.add('active');
+            }
+
+             async function executeActionSubmission() {
+                 if (!currentActionData) {
+                     console.error("No action data available for submission.");
+                     actionConfirmPopup.classList.remove('active');
+                     updateButtonStates();
+                     return;
+                 }
+
+                 const { visitInfo, remark, forwardingDepartment } = currentActionData;
+                 const localActionConfirmBtn = document.getElementById('action-confirm-btn');
+                 const localActionCancelBtn = document.getElementById('action-cancel-btn');
+
+                 localActionConfirmBtn.disabled = true;
+                 localActionConfirmBtn.textContent = 'पाठवत आहे...';
+                 localActionCancelBtn.disabled = true;
+
+                 try {
+                     const response = await fetch(`/visitor_action`, {
+                          method: 'POST',
+                          headers: {
+                              'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify({
+                              visit_id: visitInfo.visit_id,
+                              uid: visitInfo.uid,
+                              remark: remark,
+                              forwarding_department: forwardingDepartment
+                          })
+                      });
+
+                     if (!response.ok) {
+                          const errorData = await response.json().catch(() => ({ message: `HTTP error! Status: ${response.status}` }));
+                          throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+                      }
+
+                     const data = await response.json();
+
+                     if (data.success) {
+                         console.log(`Action sent for visit ${visitInfo.visit_id}, status should be pending.`);
+                         delete visitorDetailsCache[visitInfo.uid];
+                         currentSelectedVisitId = null;
+                         currentVisitorIndex = -1;
+                         actionConfirmPopup.classList.remove('active');
+                         await fetchAndProcessVisitors();
+                     } else {
+                         throw new Error(data.message || 'Failed to send action');
+                     }
+                 } catch (error) {
+                     console.error('Error sending visitor action:', error);
+                     alert('कृती पाठवताना त्रुटी: ' + error.message);
+                     actionConfirmPopup.classList.remove('active');
+                     updateButtonStates();
+                 } finally {
+                     if (actionConfirmPopup.classList.contains('active')) {
+                        localActionConfirmBtn.disabled = false;
+                        localActionConfirmBtn.textContent = 'पुष्टी करा आणि पाठवा';
+                        localActionCancelBtn.disabled = false;
+                     }
+                     if (saveDetailsBtn && saveDetailsBtn.textContent === 'पाठवत आहे...') {
+                         saveDetailsBtn.textContent = 'संबंधित विभागाला कृतीसाठी पाठवा';
+                         updateButtonStates();
+                     }
+                     currentActionData = null;
+                 }
+             }
+
+            function selectVisitor(card) {
+                if (!card || !card.classList.contains('selectable-visitor')) return;
+
+                const uid = card.dataset.uid;
+                const visitId = card.dataset.visitId;
+
+                if (!uid || !visitId) {
+                    console.error("Missing UID or Visit ID on selected card element:", card);
+                    return;
+                }
+
+                const newIndex = globalVisitorsList.findIndex(visitor => visitor.uid === uid && visitor.visit_id === visitId);
+
+                if (newIndex !== -1) {
+                     if(visitId !== currentSelectedVisitId) {
+                         console.log(`Selected visitor index: ${newIndex}, visit_id: ${visitId}`);
+                         currentVisitorIndex = newIndex;
+                         currentSelectedVisitId = visitId;
+                         renderCurrentVisitor();
+                     } else {
+                         console.log(`Visitor ${visitId} already selected.`);
+                     }
+                } else {
+                     console.warn(`Clicked card (UID: ${uid}, VisitID: ${visitId}) is not in the currently selectable upcoming (DVN) list.`);
+                     const actionIndex = actionVisitorsList.findIndex(visitor => visitor.uid === uid && visitor.visit_id === visitId);
+                     const completedIndex = completedVisitorsList.findIndex(visitor => visitor.uid === uid && visitor.visit_id === visitId);
+                     if(actionIndex !== -1) console.log("-> Found in Action Pending list.");
+                     if(completedIndex !== -1) console.log("-> Found in Completed list.");
+                }
+            }
+
+            function handleDoubleClickSelection(event) {
+                 const card = event.target.closest('.selectable-visitor');
+                 if (card) {
+                    selectVisitor(card);
+                 }
+            }
+
+            function handleDoubleTapSelection(event) {
+                const card = event.target.closest('.selectable-visitor');
+                if (!card) return;
+
+                const currentTime = new Date().getTime();
+                if (currentTime - lastTapTime < doubleTapDelay && card === lastTapTarget) {
+                    event.preventDefault();
+                    selectVisitor(card);
+                    lastTapTime = 0;
+                    lastTapTarget = null;
+                } else {
+                    lastTapTime = currentTime;
+                    lastTapTarget = card;
+                }
+            }
+
+            function startPolling() {
+                if (pollingIntervalId) {
+                    clearInterval(pollingIntervalId);
+                }
+                 console.log(`Starting polling with interval: ${POLLING_INTERVAL}ms`);
+                 pollingIntervalId = setInterval(() => {
+                    if (!isFetching && !actionConfirmPopup.classList.contains('active') && !completeVisitPopup.classList.contains('active') && !logoutPopup.classList.contains('active')) {
+                       fetchAndProcessVisitors(false);
+                    } else {
+                       console.log("Skipping poll cycle due to active fetch or popup.");
+                    }
+                 }, POLLING_INTERVAL);
+            }
+
+
+            async function initializeApp() {
+                 console.log("Initializing App...");
+                 upcomingVisitorsContainer.innerHTML = `<div class="no-items-message"><p>लोड होत आहे...</p></div>`;
+                 actionVisitorsContainer.innerHTML = `<div class="no-items-message"><p>लोड होत आहे...</p></div>`;
+                 currentVisitorDetailsContainer.innerHTML = `<div class="no-visitor-message"><p>लोड होत आहे...</p></div>`;
+                 completedVisitorsContainer.innerHTML = `<div class="no-items-message"><p>लोड होत आहे...</p></div>`;
+
+                 await fetchDepartments();
+                 await fetchAndProcessVisitors(true);
+
+                 upcomingVisitorsContainer.addEventListener('dblclick', handleDoubleClickSelection);
+                 upcomingVisitorsContainer.addEventListener('touchend', handleDoubleTapSelection, {passive: false});
+
+                 startPolling();
+                 console.log("Initialization complete.");
+            }
+
+            initializeApp();
+        });
+    </script>
+</body>
+</html>

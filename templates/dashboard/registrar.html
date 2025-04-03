@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVMS REGISTRATION</title>
+    <style>
+        :root {
+            --primary-blue: #2c3e90;
+            --secondary-blue: #3498db;
+            --light-blue: #e6f2ff;
+            --white: #ffffff;
+            --text-dark: #2c3e50;
+            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            --hover-shadow: 0 15px 30px rgba(52, 152, 219, 0.15);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--light-blue) 0%, #f8fbff 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            color: var(--white);
+            padding: 10px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 60px;
+        }
+
+        .header h1 {
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 1.6rem;
+            margin: 0;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px; /* Spacing between language switcher and profile */
+        }
+
+        .language-switcher select {
+            padding: 5px 8px;
+            border-radius: 4px;
+            border: 1px solid var(--white);
+            background-color: rgba(255, 255, 255, 0.9);
+            color: var(--primary-blue);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+         .language-switcher select:focus {
+             outline: none;
+             border-color: var(--secondary-blue);
+             box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+         }
+
+
+        .profile-container {
+            position: relative;
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--white);
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease;
+        }
+
+        .profile-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 50px;
+            background-color: var(--white);
+            color: var(--text-dark);
+            min-width: 150px;
+            box-shadow: var(--card-shadow);
+            border-radius: 8px;
+            z-index: 101;
+            overflow: hidden;
+        }
+
+        .profile-dropdown.active {
+            display: block;
+        }
+
+        .profile-dropdown ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .profile-dropdown li {
+            padding: 12px 18px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-dropdown li:hover {
+            background-color: var(--light-blue);
+        }
+
+        .main {
+            display: flex;
+            flex: 1;
+            overflow-y: auto;
+            padding-top: 15px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+        }
+
+        .webcam-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            align-self: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .webcam-container:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .registration-form, .existing-visitor-form {
+            flex: 1;
+            min-width: 300px;
+            max-width: 450px;
+            padding: 25px;
+            background-color: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            align-self: flex-start;
+        }
+
+        .registration-form:hover, .existing-visitor-form:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .registration-form::after, .existing-visitor-form::after, .webcam-container::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .registration-form:hover::after, .existing-visitor-form:hover::after, .webcam-container:hover::after {
+            transform: scaleX(1);
+        }
+
+        video {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            border: 1px solid var(--secondary-blue);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+
+        /* Specific style override for language select inside form */
+        #tahasil {
+             color: var(--text-dark); /* Ensure form selects have standard text color */
+             background-color: var(--white);
+         }
+
+        button {
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            color: var(--white);
+            border: none;
+            padding: 14px 28px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
+            transition: left 0.7s ease;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        .captured-images {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .captured-images img {
+            width: 100%;
+            max-width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .visitor-details {
+            background: var(--light-blue);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .last-visit-details {
+            background: #f0f7ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid var(--secondary-blue);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.85em;
+            margin-top: -5px;
+            margin-bottom: 10px;
+        }
+
+        .registration-form h2, .existing-visitor-form h2 {
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+
+        .visitor-profile-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .profile-image-container {
+            margin-right: 20px;
+            flex-shrink: 0;
+            margin-bottom: 10px;
+        }
+
+        .profile-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--secondary-blue);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-placeholder {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: bold;
+        }
+
+        .visitor-info-container {
+            flex-grow: 1;
+        }
+
+        .visitor-info-container p {
+            margin: 5px 0;
+        }
+         /* Style for data-translate-key labels */
+         .visitor-info-container p strong[data-translate-key] { /* Target only strong tags with the attribute */
+             margin-right: 5px;
+         }
+         .last-visit-details p strong[data-translate-key] { /* Target only strong tags with the attribute */
+            margin-right: 5px;
+         }
+
+
+        @media (max-width: 992px) {
+             .content {
+                 flex-direction: column;
+                 align-items: center;
+             }
+             .webcam-container,
+             .registration-form,
+             .existing-visitor-form {
+                 max-width: 500px;
+                 width: 100%;
+                 align-self: center;
+             }
+        }
+
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 10px 15px;
+                height: auto; /* Allow header to adjust height */
+                flex-wrap: wrap; /* Allow items to wrap */
+                justify-content: space-around; /* Adjust spacing on smaller screens */
+            }
+
+             .header h1 {
+                 font-size: 1.3rem;
+                 width: 100%; /* Take full width */
+                 text-align: center; /* Center title */
+                 margin-bottom: 10px; /* Add space below title */
+            }
+
+            .header-controls {
+                 width: 100%;
+                 justify-content: space-between; /* Space out controls */
+             }
+
+            .profile-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .profile-dropdown {
+                top: 45px;
+            }
+
+            .content {
+                padding: 15px;
+                gap: 20px;
+            }
+
+
+            .visitor-profile-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-image-container {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+         @media (max-width: 480px) {
+             .header h1 {
+                font-size: 1.1rem;
+                letter-spacing: 1px;
+            }
+             .registration-form h2, .existing-visitor-form h2 {
+                font-size: 1.3rem;
+            }
+            button {
+                padding: 12px 24px;
+                font-size: 0.9rem;
+            }
+            input, select, textarea {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+              .language-switcher select {
+                  font-size: 0.85rem;
+                  padding: 4px 6px;
+              }
+         }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 data-translate-key="svms_registration_title">SVMS Registration</h1>
+        <div class="header-controls">
+             <div class="language-switcher">
+                <select id="language-select">
+                    <option value="mr" selected>मराठी</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+            <div class="profile-container">
+                <div class="profile-icon" id="profile-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                      </svg>
+                </div>
+                <div class="profile-dropdown" id="profile-dropdown">
+                    <ul>
+                        <li id="logout-button" data-translate-key="logout_button">Logout</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main">
+        <div class="content">
+            <div class="webcam-container">
+                <video id="webcam" autoplay></video>
+                <div id="recognition-actions">
+                    <button id="start-recognition" onclick="startFaceRecognition()" data-translate-key="start_face_recognition_button">Start Face Recognition</button>
+                </div>
+                <p id="recognition-result"></p>
+                <div id="captured-images" class="captured-images"></div>
+            </div>
+
+            <div class="existing-visitor-form" id="existing-visitor-form" style="display:none;">
+                <h2 data-translate-key="existing_visitor_title">Existing Visitor</h2>
+                <div id="existing-visitor-details" class="visitor-details">
+                     <!-- Content dynamically generated by displayExistingVisitorDetails -->
+                </div>
+                <div id="last-visit-section" class="last-visit-details">
+                    <h3 data-translate-key="last_visit_title">Last Visit</h3>
+                    <p id="last-visit-info">
+                         <!-- Content dynamically generated by formatLastVisit -->
+                        <span data-translate-key="no_previous_visits">No previous visits</span>
+                    </p>
+                </div>
+                <h3 data-translate-key="current_visit_details_title">Current Visit Details</h3>
+                <input type="text" id="new-purpose" placeholder="Purpose of Current Visit" data-translate-key="purpose_current_visit_placeholder" required>
+                <button onclick="addNewVisitForExistingVisitor()" data-translate-key="add_new_visit_button">Add New Visit</button>
+                <button onclick="continueExistingVisit()" data-translate-key="continue_previous_visit_button">Continue Previous Visit</button>
+            </div>
+
+            <div class="registration-form" id="registration-form" style="display:none;">
+                <h2 data-translate-key="visitor_registration_title">Visitor Registration</h2>
+                <input type="text" id="name" placeholder="Full Name" data-translate-key="full_name_placeholder" required>
+                <input type="tel" id="phone" placeholder="Phone Number" data-translate-key="phone_number_placeholder" required>
+                <div id="phone-error" class="error-message"></div>
+                <input type="email" id="email" placeholder="Email (Optional)" data-translate-key="email_optional_placeholder">
+                <textarea id="address" placeholder="Address (Required)" data-translate-key="address_required_placeholder" required></textarea>
+                <select id="tahasil" required>
+                    <option value="" disabled selected data-translate-key="select_tahasil_option">Select Tahasil</option>
+                    <option value="AKOLA">AKOLA</option>
+                    <option value="AKOT">AKOT</option>
+                    <option value="TELAHARA">TELAHARA</option>
+                    <option value="BALAPUR">BALAPUR</option>
+                    <option value="PATUR">PATUR</option>
+                    <option value="MURTIZAPUR">MURTIZAPUR</option>
+                    <option value="BARSHITAKLI">BARSHITAKLI</option>
+                     <!-- Note: Tahasil names themselves are usually not translated -->
+                </select>
+                <input type="text" id="purpose" placeholder="Purpose of Visit" data-translate-key="purpose_of_visit_placeholder" required>
+                <button onclick="saveVisitorData()" data-translate-key="save_visitor_data_button">Save Visitor Data</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const domElements = {};
+        const requiredFields = [
+            { id: 'name', label: 'Full Name', translateKey: 'full_name_label' }, // Added translateKey for alert messages
+            { id: 'phone', label: 'Phone Number', translateKey: 'phone_number_label' },
+            { id: 'address', label: 'Address', translateKey: 'address_label' },
+            { id: 'tahasil', label: 'Tahasil', translateKey: 'tahasil_label' },
+            { id: 'purpose', label: 'Purpose of Visit', translateKey: 'purpose_of_visit_label' }
+        ];
+
+        let capturedFrames = [];
+        let currentVisitorData = null;
+        let recognizedVisitorData = null;
+        let webcamStream = null;
+        let currentLanguage = 'mr'; // Default language
+        const originalTexts = {}; // Store original English texts
+
+        // --- Translation Function ---
+        async function translateText(text, lang) {
+            if (!text || lang === 'en') { // No need to translate empty strings or to English
+                 return text;
+            }
+            try {
+                const response = await fetch("/translate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ text: text, lang: lang }),
+                });
+                 if (!response.ok) {
+                     console.error("Translation API error:", response.status, await response.text());
+                     return text; // Return original text on error
+                 }
+                 const result = await response.json();
+                 return result.translated_text || text; // Return original if translation missing
+            } catch (error) {
+                console.error("Error calling translation API:", error);
+                return text; // Return original text on fetch error
+            }
+        }
+
+         // --- Function to translate the whole page ---
+         async function translatePage(lang) {
+             currentLanguage = lang;
+             const elementsToTranslate = document.querySelectorAll('[data-translate-key]');
+
+             for (const element of elementsToTranslate) {
+                 const key = element.getAttribute('data-translate-key');
+                 const originalText = originalTexts[key];
+
+                 if (originalText === undefined) {
+                      console.warn(`Original text not found for key: ${key}`);
+                      continue; // Skip if original text wasn't stored
+                  }
+
+                 try {
+                     const translatedText = await translateText(originalText, lang);
+
+                     // Update based on element type
+                     if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                          if (element.placeholder) {
+                              element.placeholder = translatedText;
+                          }
+                      } else if (element.tagName === 'OPTION' && element.disabled && element.selected) {
+                          // Handle the default disabled select option separately
+                          element.textContent = translatedText;
+                      }
+                      // Handle specific SPAN inside P for last visit info default text
+                      else if (element.tagName === 'SPAN' && element.parentElement.id === 'last-visit-info') {
+                          element.textContent = translatedText;
+                      }
+                      else {
+                          // For buttons, h1, h2, h3, p, li, strong etc.
+                          element.textContent = translatedText;
+                      }
+                 } catch (error) {
+                     console.error(`Error translating key ${key}:`, error);
+                      // Optionally restore original text on error
+                      if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                          if(element.placeholder) element.placeholder = originalText;
+                      } else {
+                          element.textContent = originalText;
+                      }
+                 }
+             }
+
+              // Re-render dynamic sections if they are currently visible
+              if (currentVisitorData) {
+                  await displayExistingVisitorDetails(currentVisitorData); // Re-render with new language
+              } else {
+                   // Ensure the default "No previous visits" text is correctly set if no visitor is loaded
+                   const noVisitsElement = document.querySelector('#last-visit-info span[data-translate-key="no_previous_visits"]');
+                   if(noVisitsElement) {
+                       noVisitsElement.textContent = await translateText(originalTexts['no_previous_visits'], currentLanguage);
+                   }
+              }
+         }
+
+         // --- Store Original Texts ---
+         function storeOriginalTexts() {
+              const elements = document.querySelectorAll('[data-translate-key]');
+              elements.forEach(element => {
+                  const key = element.getAttribute('data-translate-key');
+                  let text = '';
+                  if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                       text = element.placeholder || '';
+                   } else {
+                       text = element.textContent.trim();
+                   }
+                   if (key && text) { // Only store if key and text are valid
+                       originalTexts[key] = text;
+                   }
+               });
+               // Add/ensure original texts for dynamic content/alerts
+               originalTexts['phone_validation_error'] = "Please enter a valid 10-digit phone number starting with 6-9";
+               originalTexts['alert_fill_field'] = "Please fill in the {fieldName} field"; // Placeholder for field name
+               originalTexts['alert_capture_image'] = "Please capture an image before registering";
+               originalTexts['alert_save_confirmation'] = "Are you sure you want to save this visitor data?";
+               originalTexts['alert_save_cancelled'] = "Visitor data saving cancelled by user.";
+               originalTexts['alert_purpose_required'] = "Please enter a purpose for the current visit";
+               originalTexts['alert_visitor_not_found'] = "Visitor data not found. Please recognize the visitor first.";
+               originalTexts['alert_no_existing_visit'] = "No existing visit found";
+               originalTexts['alert_continue_visit_prefix'] = "Continuing visit with purpose: ";
+               originalTexts['alert_registration_success'] = "Visitor Registered Successfully!\n\nVisitor Details:\n- Visitor ID: {visit_id}\n- Unique User ID: {uid}\n- Name: {name}\n- Purpose: {purpose}"; // Placeholders
+               originalTexts['alert_registration_failed_prefix'] = "Registration failed: ";
+               originalTexts['logout_confirm'] = "Are you sure you want to logout?";
+               originalTexts['webcam_not_ready_error'] = "Webcam not ready. Please wait and try again.";
+               originalTexts['image_capture_error'] = "Error capturing image. Please try again.";
+               originalTexts['recognition_error_prefix'] = "Error during recognition. Please try again.";
+               originalTexts['face_not_recognized'] = "Face not recognized. Proceed with registration.";
+               originalTexts['recognized_prefix'] = "Recognized: ";
+               originalTexts['last_visit_date_label'] = "Last Visit Date:";
+               originalTexts['last_visit_purpose_label'] = "Last Visit Purpose:";
+               originalTexts['name_label'] = "Name:";
+               originalTexts['phone_label'] = "Phone:";
+               originalTexts['address_label'] = "Address:";
+               originalTexts['tahasil_label'] = "Tahasil:";
+               originalTexts['no_previous_visits'] = "No previous visits"; // Make sure this key exists
+          }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            ['webcam', 'recognition-result', 'captured-images', 'registration-form',
+             'existing-visitor-form', 'name', 'phone', 'email',
+             'address', 'purpose', 'new-purpose', 'phone-error', 'existing-visitor-details',
+             'last-visit-info', 'profile-icon', 'profile-dropdown', 'logout-button', 'tahasil',
+             'language-select' // Add language select ID
+            ].forEach(id => {
+                domElements[id] = document.getElementById(id);
+            });
+
+             // Store original texts first
+             storeOriginalTexts();
+
+            domElements['profile-icon'].addEventListener('click', (event) => {
+                event.stopPropagation();
+                domElements['profile-dropdown'].classList.toggle('active');
+            });
+
+            document.addEventListener('click', (event) => {
+                 if (!domElements['profile-container']?.contains(event.target)) {
+                    domElements['profile-dropdown']?.classList.remove('active');
+                }
+            });
+
+
+            domElements['logout-button'].addEventListener('click', confirmLogout);
+
+             // Language Switcher Event Listener
+             domElements['language-select'].addEventListener('change', (event) => {
+                 translatePage(event.target.value);
+             });
+
+            startWebcam();
+
+             // Initial translation to default language (Marathi)
+            translatePage(currentLanguage);
+        });
+
+        async function startWebcam() {
+            try {
+                if (webcamStream) {
+                    const tracks = webcamStream.getTracks();
+                    tracks.forEach(track => track.stop());
+                }
+
+                const constraints = {
+                    video: {
+                        width: { ideal: 640 },
+                        height: { ideal: 480 },
+                        facingMode: "user"
+                    }
+                };
+
+                webcamStream = await navigator.mediaDevices.getUserMedia(constraints);
+                domElements['webcam'].srcObject = webcamStream;
+
+                domElements['webcam'].onloadedmetadata = () => {
+                    domElements['webcam'].play();
+                };
+            } catch (error) {
+                console.error("Error accessing webcam:", error);
+                const errorMsg = document.createElement('p');
+                const errorText = await translateText(originalTexts['webcam_error'] || 'Could not access camera. Please check permissions.', currentLanguage); // Added key for webcam error
+                errorMsg.textContent = errorText;
+                errorMsg.style.color = "red";
+                if (domElements['webcam'] && domElements['webcam'].parentNode) {
+                     domElements['webcam'].parentNode.appendChild(errorMsg);
+                }
+            }
+        }
+
+        async function validatePhoneNumber(phone) {
+             const phoneRegex = /^[6-9]\d{9}$/;
+             const isValid = phoneRegex.test(phone);
+             const errorMsg = isValid ? "" : await translateText(originalTexts['phone_validation_error'], currentLanguage);
+             domElements['phone-error'].textContent = errorMsg;
+             return isValid;
+         }
+
+         async function formatLastVisit(visitorData) {
+             const noVisitsText = await translateText(originalTexts['no_previous_visits'], currentLanguage);
+              if (!visitorData || !visitorData.visitor || visitorData.visitor.length === 0) {
+                   // Return the translated "No previous visits" text within the p tag structure
+                   return `<span data-translate-key="no_previous_visits">${noVisitsText}</span>`;
+               }
+
+
+              const lastVisit = visitorData.visitor.reduce((latest, current) =>
+                  (new Date(current.datetime) > new Date(latest.datetime)) ? current : latest
+              );
+
+              const visitDate = new Date(lastVisit.datetime);
+              // Format date/time according to locale if possible, otherwise default
+              const formattedDate = visitDate.toLocaleString(currentLanguage + '-IN', { dateStyle: 'short', timeStyle: 'short' })
+                                      || `${visitDate.toLocaleDateString()} ${visitDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+
+
+              const dateLabel = await translateText(originalTexts['last_visit_date_label'], currentLanguage);
+              const purposeLabel = await translateText(originalTexts['last_visit_purpose_label'], currentLanguage);
+
+              // IMPORTANT: Do NOT translate lastVisit.purpose (it's user data)
+              return `
+                  <strong data-translate-key="last_visit_date_label">${dateLabel}</strong> ${formattedDate}<br>
+                  <strong data-translate-key="last_visit_purpose_label">${purposeLabel}</strong> ${lastVisit.purpose || 'N/A'}
+              `;
+          }
+
+        function resetRecognitionData() {
+            capturedFrames = [];
+            currentVisitorData = null;
+            recognizedVisitorData = null;
+
+            if(domElements['recognition-result']) domElements['recognition-result'].textContent = "";
+            if(domElements['captured-images']) domElements['captured-images'].innerHTML = "";
+
+            if(domElements['registration-form']) domElements['registration-form'].style.display = "none";
+            if(domElements['existing-visitor-form']) {
+                 domElements['existing-visitor-form'].style.display = "none";
+                  // Clear dynamic content areas when hiding
+                  if(domElements['existing-visitor-details']) domElements['existing-visitor-details'].innerHTML = '';
+                  if(domElements['last-visit-info']) {
+                      // Reset to default text (will be translated by translatePage if needed)
+                      domElements['last-visit-info'].innerHTML = `<span data-translate-key="no_previous_visits">${originalTexts['no_previous_visits']}</span>`;
+                  }
+            }
+
+
+            ['name', 'phone', 'email', 'address', 'purpose', 'new-purpose'].forEach(id => {
+                if (domElements[id]) domElements[id].value = "";
+            });
+             // Reset tahasil dropdown to default selection
+             if(domElements['tahasil']) domElements['tahasil'].selectedIndex = 0;
+
+            if(domElements['phone-error']) domElements['phone-error'].textContent = "";
+        }
+
+        async function startFaceRecognition() {
+             resetRecognitionData();
+
+             const video = domElements['webcam'];
+             if (!video || !video.videoWidth || !video.videoHeight) {
+                  console.error("Webcam not ready or dimensions are zero.");
+                  const errorText = await translateText(originalTexts['webcam_not_ready_error'], currentLanguage);
+                  if(domElements['recognition-result']) domElements['recognition-result'].textContent = errorText;
+                  return;
+             }
+
+             if (!window.recognitionCanvas) {
+                  window.recognitionCanvas = document.createElement("canvas");
+             }
+             const canvas = window.recognitionCanvas;
+             canvas.width = video.videoWidth;
+             canvas.height = video.videoHeight;
+             const ctx = canvas.getContext("2d");
+             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+             canvas.toBlob(async (blob) => {
+                  if (!blob) {
+                      console.error("Canvas to Blob conversion failed.");
+                      const errorText = await translateText(originalTexts['image_capture_error'], currentLanguage);
+                      if(domElements['recognition-result']) domElements['recognition-result'].textContent = errorText;
+                      return;
+                  }
+                  const formData = new FormData();
+                  formData.append("frame", blob, "frame.jpg");
+                  try {
+                      const response = await fetch("/detect_face", {
+                          method: "POST",
+                          body: formData
+                      });
+
+                      if (!response.ok) {
+                           // Try parsing error response
+                            try {
+                                const errData = await response.json();
+                                throw new Error(errData.message || `Server error: ${response.status}`);
+                            } catch {
+                                throw new Error(`Server error: ${response.status}`);
+                            }
+                      }
+
+                      const result = await response.json();
+
+                      if (result.recognized) {
+                           const recognizedPrefix = await translateText(originalTexts['recognized_prefix'], currentLanguage);
+                           if(domElements['recognition-result']) domElements['recognition-result'].textContent = `${recognizedPrefix}${result.user_data.name}`;
+                           recognizedVisitorData = result.user_data;
+                           await displayExistingVisitorDetails(result.user_data); // Make async call
+                       } else {
+                           const notRecognizedText = await translateText(originalTexts['face_not_recognized'], currentLanguage);
+                           if(domElements['recognition-result']) domElements['recognition-result'].textContent = notRecognizedText;
+                           showRegistrationForm(canvas.toDataURL('image/jpeg', 0.8));
+                       }
+                  } catch (error) {
+                      console.error("Recognition error:", error);
+                       const errorPrefix = await translateText(originalTexts['recognition_error_prefix'], currentLanguage);
+                       if(domElements['recognition-result']) domElements['recognition-result'].textContent = `${errorPrefix}${error.message}`;
+                  }
+              }, "image/jpeg", 0.8);
+          }
+
+         async function displayExistingVisitorDetails(visitorData) {
+             currentVisitorData = visitorData; // Store the data for potential re-renders
+             if(domElements['registration-form']) domElements['registration-form'].style.display = "none";
+             if(domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "block";
+
+             let profileImgHtml = '';
+             // Profile image logic remains the same (URLs are not translated)
+             if (visitorData.profile_img && visitorData.profile_img.length > 0) {
+                 profileImgHtml = `<img src="${visitorData.profile_img[0]}?t=${Date.now()}" alt="${visitorData.name}" class="profile-circle">`; // Cache buster
+             } else if (visitorData.images && visitorData.images.length > 0) {
+                 profileImgHtml = `<img src="${visitorData.images[0]}?t=${Date.now()}" alt="${visitorData.name}" class="profile-circle">`; // Cache buster
+             } else {
+                 profileImgHtml = `<div class="profile-circle profile-placeholder">${visitorData.name ? visitorData.name.charAt(0).toUpperCase() : '?'}</div>`;
+             }
+
+             // Translate labels async
+             const nameLabel = await translateText(originalTexts['name_label'], currentLanguage);
+             const phoneLabel = await translateText(originalTexts['phone_label'], currentLanguage);
+             const addressLabel = await translateText(originalTexts['address_label'], currentLanguage);
+             const tahasilLabel = await translateText(originalTexts['tahasil_label'], currentLanguage);
+
+             // Update visitor details section
+             if(domElements['existing-visitor-details']) {
+                 // IMPORTANT: Do NOT translate visitorData.name, .phone, .address, .tahasil (these are user data)
+                 domElements['existing-visitor-details'].innerHTML = `
+                     <div class="visitor-profile-container">
+                         <div class="profile-image-container">
+                             ${profileImgHtml}
+                         </div>
+                         <div class="visitor-info-container">
+                             <p><strong data-translate-key="name_label">${nameLabel}</strong> ${visitorData.name || 'N/A'}</p>
+                             <p><strong data-translate-key="phone_label">${phoneLabel}</strong> ${visitorData.phone || 'N/A'}</p>
+                             <p><strong data-translate-key="address_label">${addressLabel}</strong> ${visitorData.address || 'N/A'}</p>
+                             <p><strong data-translate-key="tahasil_label">${tahasilLabel}</strong> ${visitorData.tahasil || 'N/A'}</p>
+                         </div>
+                     </div>
+                 `;
+             }
+
+             // Update last visit section (async)
+             const lastVisitFormatted = await formatLastVisit(visitorData);
+             if(domElements['last-visit-info']) domElements['last-visit-info'].innerHTML = lastVisitFormatted;
+         }
+
+        function showRegistrationForm(capturedFrame) {
+            if(domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "none";
+            if(domElements['registration-form']) domElements['registration-form'].style.display = "block";
+
+            const capturedImagesDiv = domElements['captured-images'];
+            if (capturedImagesDiv) {
+                capturedImagesDiv.innerHTML = '';
+                const img = document.createElement("img");
+                img.src = capturedFrame;
+                capturedImagesDiv.appendChild(img);
+            }
+
+            capturedFrames = [capturedFrame];
+             // Clear current visitor data when showing registration form
+             currentVisitorData = null;
+             recognizedVisitorData = null;
+        }
+
+       async function saveVisitorData() {
+             // Validation loop
+             for (let field of requiredFields) {
+                 const element = domElements[field.id];
+                 if (!element) continue;
+                 const value = element.value.trim();
+
+                 if (!value || (field.id === 'tahasil' && element.selectedIndex === 0)) { // Check default selection for dropdown
+                      const fieldLabelText = await translateText(originalTexts[field.translateKey] || field.label, currentLanguage);
+                      const alertMsgTemplate = await translateText(originalTexts['alert_fill_field'], currentLanguage);
+                      alert(alertMsgTemplate.replace('{fieldName}', fieldLabelText));
+                      element.focus();
+                      return false; // Stop if validation fails
+                  }
+
+                 switch (field.id) {
+                     case 'phone':
+                         // validatePhoneNumber is already async and handles translation
+                         if (!await validatePhoneNumber(value)) {
+                             element.focus();
+                             return false; // Stop if phone validation fails
+                         }
+                         break;
+                 }
+             }
+
+             // Check if an image is captured
+             if (!capturedFrames || capturedFrames.length === 0 || !capturedFrames[0]) {
+                  const alertMsg = await translateText(originalTexts['alert_capture_image'], currentLanguage);
+                  alert(alertMsg);
+                  return false; // Stop if no image
+              }
+
+             // Prepare visitor data *after* successful validation
+             const visitorData = {
+                 name: domElements['name']?.value.trim() ?? '',
+                 phone: domElements['phone']?.value.trim() ?? '',
+                 email: domElements['email']?.value.trim() || null,
+                 address: domElements['address']?.value.trim() ?? '',
+                 tahasil: domElements['tahasil']?.value ?? '',
+                 purpose: domElements['purpose']?.value.trim() ?? '',
+                 frame: capturedFrames[0] // Already checked it exists
+             };
+
+             // Confirmation Dialog
+             const confirmMsg = await translateText(originalTexts['alert_save_confirmation'], currentLanguage);
+             if (confirm(confirmMsg)) {
+                 // If user confirms, proceed with registration
+                 registerVisitor(visitorData); // registerVisitor should handle its own translations for success/error messages
+             } else {
+                 // If user cancels, do nothing (or provide feedback)
+                 const cancelMsg = await translateText(originalTexts['alert_save_cancelled'], currentLanguage);
+                 console.log(cancelMsg);
+                 // Optionally: alert(cancelMsg);
+             }
+         }
+
+
+        async function addNewVisitForExistingVisitor() {
+            const newPurpose = domElements['new-purpose']?.value.trim();
+            if (!newPurpose) {
+                 const alertMsg = await translateText(originalTexts['alert_purpose_required'], currentLanguage);
+                 alert(alertMsg);
+                 domElements['new-purpose']?.focus();
+                 return;
+             }
+            if (!currentVisitorData) {
+                 const alertMsg = await translateText(originalTexts['alert_visitor_not_found'], currentLanguage);
+                 alert(alertMsg);
+                 return;
+             }
+            const newVisitorData = {
+                ...currentVisitorData,
+                purpose: newPurpose,
+                frame: capturedFrames[0] || currentVisitorData.frame || null // Use new frame if available, else existing one
+            };
+
+            registerVisitor(newVisitorData); // registerVisitor handles alerts
+        }
+
+       async function continueExistingVisit() {
+            if (!currentVisitorData || !currentVisitorData.visitor || !currentVisitorData.visitor.length) {
+                 const alertMsg = await translateText(originalTexts['alert_no_existing_visit'], currentLanguage);
+                 alert(alertMsg);
+                 return;
+             }
+
+            const lastVisit = currentVisitorData.visitor.reduce((latest, current) =>
+                (new Date(current.datetime) > new Date(latest.datetime)) ? current : latest
+            );
+
+            const newVisitorData = {
+                ...currentVisitorData,
+                purpose: lastVisit.purpose,
+                frame: capturedFrames[0] || currentVisitorData.frame || null // Use new frame if available, else existing one
+            };
+
+            const alertPrefix = await translateText(originalTexts['alert_continue_visit_prefix'], currentLanguage);
+            // IMPORTANT: Do not translate lastVisit.purpose here
+            alert(`${alertPrefix}${lastVisit.purpose}`);
+
+            registerVisitor(newVisitorData); // registerVisitor handles alerts
+        }
+
+         function registerVisitor(visitorData) { // Made non-async, alerts inside fetch handlers
+             let finalVisitorData = { ...visitorData };
+
+             // Determine if it's an update for a recognized visitor or a new registration
+             const isUpdate = recognizedVisitorData && finalVisitorData.uid && finalVisitorData.uid === recognizedVisitorData.uid;
+
+             if (isUpdate) {
+                 finalVisitorData = {
+                     ...recognizedVisitorData, // Start with recognized data
+                     purpose: visitorData.purpose, // Update purpose
+                     frame: visitorData.frame || recognizedVisitorData.frame || null, // Use new frame if provided, else existing
+                     visitor: recognizedVisitorData.visitor || [] // Keep visitor history
+                 };
+             } else if (!finalVisitorData.uid) { // It's a new visitor (no UID yet)
+                  finalVisitorData = {
+                     ...visitorData, // Use the form data
+                     visitor: [] // Initialize visitor array for new users
+                 };
+             }
+             // Ensure frame is included if available (handles cases where visitorData might not have it but finalVisitorData should)
+             finalVisitorData.frame = visitorData.frame || finalVisitorData.frame || null;
+
+
+             fetch("/register_visitor", {
+                 method: "POST",
+                 headers: {
+                     "Content-Type": "application/json"
+                 },
+                 body: JSON.stringify(finalVisitorData)
+             })
+             .then(response => {
+                 if (!response.ok) {
+                      // Try to get error message from response body
+                      return response.json().then(errData => {
+                           throw new Error(errData.message || `HTTP error! Status: ${response.status}`);
+                       }).catch(() => {
+                           // If parsing fails, throw generic error
+                           throw new Error(`HTTP error! Status: ${response.status}`);
+                       });
+                 }
+                 return response.json();
+             })
+             .then(async result => { // Make inner part async for translateText
+                 if (result.success) {
+                     const uid = result.uid;
+                     // Prepare success message parts
+                     let successMsgTemplate = await translateText(originalTexts['alert_registration_success'], currentLanguage);
+                     // IMPORTANT: Use finalVisitorData.name/purpose which reflect the *saved* data
+                     successMsgTemplate = successMsgTemplate
+                         .replace('{visit_id}', result.visit_id)
+                         .replace('{uid}', uid)
+                         .replace('{name}', finalVisitorData.name)
+                         .replace('{purpose}', finalVisitorData.purpose);
+                     alert(successMsgTemplate);
+
+
+                     setTimeout(() => {
+                         // Use the frame that was actually sent to the server
+                         if(finalVisitorData.frame && uid) {
+                            processProfileImage(finalVisitorData.frame, uid);
+                         }
+                     }, 500);
+
+                     // Fetch updated details after registration/update
+                     return fetch(`/get_visitor_details?uid=${uid}`, {
+                         cache: "no-store" // Prevent caching issues
+                     });
+                 } else {
+                      // Use error message from API if available
+                      throw new Error(result.message || "Registration failed (unknown reason)");
+                 }
+             })
+             .then(response => {
+                  if (!response) return; // If previous step didn't return fetch promise
+                 if (!response.ok) {
+                      // Try to get error message from response body
+                      return response.json().then(errData => {
+                           throw new Error(errData.message || `Details fetch failed: ${response.status}`);
+                       }).catch(() => {
+                           throw new Error(`Details fetch failed: ${response.status}`);
+                       });
+                 }
+                 return response.json();
+             })
+             .then(async visitorDetails => { // Make inner part async
+                  if (!visitorDetails) return;
+                 if (visitorDetails.success && visitorDetails.visitor_data) {
+                      recognizedVisitorData = visitorDetails.visitor_data; // Update recognized data with latest from DB
+                     await displayExistingVisitorDetails(visitorDetails.visitor_data); // await display update
+                     if(domElements['registration-form']) domElements['registration-form'].style.display = "none";
+                     if(domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "block";
+                     if (domElements['new-purpose']) domElements['new-purpose'].value = ""; // Clear purpose field
+                     capturedFrames = []; // Clear captured frame after successful save
+                     if(domElements['captured-images']) domElements['captured-images'].innerHTML = ""; // Clear image display
+                     setTimeout(resetForms, 5000); // Reset after showing details for a while
+                 } else {
+                      throw new Error(visitorDetails.message || "Failed to fetch updated visitor details.");
+                  }
+             })
+             .catch(async error => { // Make catch async
+                 console.error("Registration process error:", error);
+                 const errorPrefix = await translateText(originalTexts['alert_registration_failed_prefix'], currentLanguage);
+                 alert(`${errorPrefix}${error.message}`);
+                 // Optionally reset forms immediately on failure
+                 // resetForms();
+             });
+         }
+
+        function processProfileImage(imageDataUrl, uid) {
+             if (!imageDataUrl || !uid) {
+                console.error("Missing image data or UID for profile processing.");
+                return;
+            }
+            fetch(imageDataUrl)
+                .then(res => res.blob())
+                .then(blob => {
+                     if (!blob) {
+                        throw new Error("Failed to convert data URL to blob.");
+                    }
+                    const formData = new FormData();
+                    formData.append('image', blob, 'profile.jpg');
+                    formData.append('uid', uid);
+
+                    return fetch('/process_profile_image', {
+                        method: 'POST',
+                        body: formData
+                    });
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        // Try to get error message from response body
+                         return response.json().then(errData => {
+                              throw new Error(errData.message || `Profile processing failed: ${response.status}`);
+                          }).catch(() => {
+                              throw new Error(`Profile processing failed: ${response.status}`);
+                          });
+                    }
+                    return response.json();
+                })
+                .then(result => {
+                    if (result.success) {
+                        console.log('Profile image processed successfully:', result);
+                        const capturedImagesDiv = domElements['captured-images'];
+                         // We don't display the processed image here anymore,
+                         // because registerVisitor fetches details which triggers displayExistingVisitorDetails
+                         // which uses the new profile_img URL from the database.
+
+                         // Refresh displayed visitor details to show new profile image
+                         if (currentVisitorData && currentVisitorData.uid === uid) {
+                              fetch(`/get_visitor_details?uid=${uid}`, { cache: "no-store" })
+                                .then(res => res.ok ? res.json() : Promise.reject(`Failed to refetch details: ${res.status}`))
+                                .then(async details => { // Make async
+                                    if (details.success && details.visitor_data) {
+                                         recognizedVisitorData = details.visitor_data; // Update cache
+                                        await displayExistingVisitorDetails(details.visitor_data); // Update display
+                                    } else {
+                                         console.error("Failed to parse refetched details:", details.message);
+                                     }
+                                }).catch(err => console.error("Error refetching details after profile processing:", err));
+                         }
+                    } else {
+                        console.error('Profile image processing failed on server:', result.message);
+                         // Optionally inform the user
+                    }
+                })
+                .catch(error => {
+                    console.error('Error in processProfileImage function:', error);
+                     // Optionally inform the user about the profile image processing failure
+                });
+        }
+
+        function resetForms() {
+             if(domElements['registration-form']) domElements['registration-form'].style.display = "none";
+             if(domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "none";
+             if(domElements['recognition-result']) domElements['recognition-result'].textContent = "";
+             if(domElements['captured-images']) domElements['captured-images'].innerHTML = "";
+             if(domElements['phone-error']) domElements['phone-error'].textContent = "";
+              if(domElements['existing-visitor-details']) domElements['existing-visitor-details'].innerHTML = '';
+              if(domElements['last-visit-info']) {
+                    // Reset to default text structure
+                    domElements['last-visit-info'].innerHTML = `<span data-translate-key="no_previous_visits">${originalTexts['no_previous_visits']}</span>`;
+                     // Immediately translate the default text
+                     translatePage(currentLanguage);
+               }
+
+
+            ['name', 'phone', 'email', 'address', 'tahasil', 'purpose', 'new-purpose'].forEach(id => {
+                if (domElements[id]) {
+                     domElements[id].value = "";
+                      if (id === 'tahasil') {
+                          domElements[id].selectedIndex = 0; // Reset dropdown selection
+                      }
+                 }
+            });
+
+            capturedFrames = [];
+            currentVisitorData = null;
+            recognizedVisitorData = null;
+             // Re-translate static elements like placeholders if needed after reset
+             // translatePage(currentLanguage); // Might be redundant if translatePage is called elsewhere
+        }
+
+       async function confirmLogout() {
+            const confirmMsg = await translateText(originalTexts['logout_confirm'], currentLanguage);
+            if (confirm(confirmMsg)) {
+                logout();
+            }
+        }
+
+        function logout() {
+            fetch("/logout").then(() => {
+                localStorage.removeItem("user");
+                window.location.href = "/";
+            }).catch(error => {
+                 console.error("Logout failed:", error);
+                 // Still attempt to redirect even if fetch fails
+                 localStorage.removeItem("user");
+                 window.location.href = "/";
+            });
+        }
+    </script>
+</body>
+</html>

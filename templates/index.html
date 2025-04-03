@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Visitor Management System - Login</title>
+    <style>
+        :root {
+            --primary-blue: #2c3e90;
+            --secondary-blue: #3498db;
+            --light-blue: #e6f2ff;
+            --white: #ffffff;
+            --text-dark: #2c3e50;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--white) 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            width: 450px;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .login-header {
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            color: var(--white);
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .login-header h2 {
+            font-weight: 300;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .login-form {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: var(--light-blue);
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 8px;
+            font-size: 16px;
+            color: var(--text-dark);
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            color: var(--white);
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .register-link a {
+            color: var(--secondary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .register-link a:hover {
+            color: var(--primary-blue);
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h2>Smart Visitor Management System</h2>
+        </div>
+        <div class="login-form">
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" class="form-control" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="login-btn">Login</button>
+                <p id="error-message" class="error-message"></p>
+            </form>
+            <p class="register-link">Don't have an account? <a href="/register">Register Here</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("login-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    document.getElementById("error-message").textContent = "Invalid credentials. Please try again.";
+                }
+            })
+            .catch(error => {
+                document.getElementById("error-message").textContent = "An error occurred. Please try again later.";
+            });
+        });
+    </script>
+</body>
+</html>
