@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SVMS REGISTRATION</title>
+    <title>एसव्हीएमएस नोंदणी</title>
     <style>
         :root {
             --primary-blue: #2c3e90;
@@ -55,24 +55,8 @@
         .header-controls {
             display: flex;
             align-items: center;
-            gap: 20px; /* Spacing between language switcher and profile */
+            gap: 20px;
         }
-
-        .language-switcher select {
-            padding: 5px 8px;
-            border-radius: 4px;
-            border: 1px solid var(--white);
-            background-color: rgba(255, 255, 255, 0.9);
-            color: var(--primary-blue);
-            font-size: 0.9rem;
-            cursor: pointer;
-        }
-         .language-switcher select:focus {
-             outline: none;
-             border-color: var(--secondary-blue);
-             box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-         }
-
 
         .profile-container {
             position: relative;
@@ -130,10 +114,14 @@
             display: flex;
             align-items: center;
         }
-
-        .profile-dropdown li:hover {
-            background-color: var(--light-blue);
-        }
+         .profile-dropdown li:hover {
+             background-color: var(--light-blue);
+         }
+         .profile-dropdown li[disabled] {
+             cursor: not-allowed;
+             opacity: 0.7;
+             background-color: #eee;
+         }
 
         .main {
             display: flex;
@@ -233,9 +221,9 @@
             box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
         }
 
-        /* Specific style override for language select inside form */
+
         #tahasil {
-             color: var(--text-dark); /* Ensure form selects have standard text color */
+             color: var(--text-dark);
              background-color: var(--white);
          }
 
@@ -277,6 +265,17 @@
         button:hover::before {
             left: 100%;
         }
+
+        button:disabled {
+             cursor: not-allowed;
+             opacity: 0.7;
+             background: linear-gradient(to right, #a9b4d4, #a0c4e0);
+             box-shadow: none;
+             transform: none;
+         }
+         button:disabled::before {
+              display: none;
+          }
 
         .captured-images {
             display: flex;
@@ -364,11 +363,11 @@
         .visitor-info-container p {
             margin: 5px 0;
         }
-         /* Style for data-translate-key labels */
-         .visitor-info-container p strong[data-translate-key] { /* Target only strong tags with the attribute */
+
+         .visitor-info-container p strong {
              margin-right: 5px;
          }
-         .last-visit-details p strong[data-translate-key] { /* Target only strong tags with the attribute */
+         .last-visit-details p strong {
             margin-right: 5px;
          }
 
@@ -391,21 +390,21 @@
         @media (max-width: 768px) {
             .header {
                 padding: 10px 15px;
-                height: auto; /* Allow header to adjust height */
-                flex-wrap: wrap; /* Allow items to wrap */
-                justify-content: space-around; /* Adjust spacing on smaller screens */
+                height: auto;
+                flex-wrap: wrap;
+                justify-content: space-around;
             }
 
              .header h1 {
                  font-size: 1.3rem;
-                 width: 100%; /* Take full width */
-                 text-align: center; /* Center title */
-                 margin-bottom: 10px; /* Add space below title */
+                 width: 100%;
+                 text-align: center;
+                 margin-bottom: 10px;
             }
 
             .header-controls {
                  width: 100%;
-                 justify-content: space-between; /* Space out controls */
+                 justify-content: flex-end;
              }
 
             .profile-icon {
@@ -450,23 +449,13 @@
                 padding: 12px;
                 font-size: 0.95rem;
             }
-              .language-switcher select {
-                  font-size: 0.85rem;
-                  padding: 4px 6px;
-              }
          }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1 data-translate-key="svms_registration_title">SVMS Registration</h1>
+        <h1>एस व्ही एम एस नोंदणी</h1>
         <div class="header-controls">
-             <div class="language-switcher">
-                <select id="language-select">
-                    <option value="mr" selected>मराठी</option>
-                    <option value="en">English</option>
-                </select>
-            </div>
             <div class="profile-container">
                 <div class="profile-icon" id="profile-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
@@ -475,7 +464,7 @@
                 </div>
                 <div class="profile-dropdown" id="profile-dropdown">
                     <ul>
-                        <li id="logout-button" data-translate-key="logout_button">Logout</li>
+                        <li id="logout-button">लॉगआऊट</li>
                     </ul>
                 </div>
             </div>
@@ -486,50 +475,48 @@
             <div class="webcam-container">
                 <video id="webcam" autoplay></video>
                 <div id="recognition-actions">
-                    <button id="start-recognition" onclick="startFaceRecognition()" data-translate-key="start_face_recognition_button">Start Face Recognition</button>
+                    <button id="start-recognition" onclick="startFaceRecognition(this)">चेहरा ओळखणे सुरू करा</button>
                 </div>
                 <p id="recognition-result"></p>
                 <div id="captured-images" class="captured-images"></div>
             </div>
 
             <div class="existing-visitor-form" id="existing-visitor-form" style="display:none;">
-                <h2 data-translate-key="existing_visitor_title">Existing Visitor</h2>
+                <h2>विद्यमान अभ्यागत</h2>
                 <div id="existing-visitor-details" class="visitor-details">
-                     <!-- Content dynamically generated by displayExistingVisitorDetails -->
+
                 </div>
                 <div id="last-visit-section" class="last-visit-details">
-                    <h3 data-translate-key="last_visit_title">Last Visit</h3>
+                    <h3>शेवटची भेट</h3>
                     <p id="last-visit-info">
-                         <!-- Content dynamically generated by formatLastVisit -->
-                        <span data-translate-key="no_previous_visits">No previous visits</span>
+                        <span>मागील भेटी नाहीत</span>
                     </p>
                 </div>
-                <h3 data-translate-key="current_visit_details_title">Current Visit Details</h3>
-                <input type="text" id="new-purpose" placeholder="Purpose of Current Visit" data-translate-key="purpose_current_visit_placeholder" required>
-                <button onclick="addNewVisitForExistingVisitor()" data-translate-key="add_new_visit_button">Add New Visit</button>
-                <button onclick="continueExistingVisit()" data-translate-key="continue_previous_visit_button">Continue Previous Visit</button>
+                <h3>सध्याच्या भेटीचा तपशील</h3>
+                <input type="text" id="new-purpose" placeholder="सध्याच्या भेटीचे कारण" required>
+                <button onclick="addNewVisitForExistingVisitor(this)">नवीन भेट जोडा</button>
+                <button onclick="continueExistingVisit(this)">मागील भेट सुरू ठेवा</button>
             </div>
 
             <div class="registration-form" id="registration-form" style="display:none;">
-                <h2 data-translate-key="visitor_registration_title">Visitor Registration</h2>
-                <input type="text" id="name" placeholder="Full Name" data-translate-key="full_name_placeholder" required>
-                <input type="tel" id="phone" placeholder="Phone Number" data-translate-key="phone_number_placeholder" required>
+                <h2>अभ्यागत नोंदणी</h2>
+                <input type="text" id="name" placeholder="पूर्ण नाव" required>
+                <input type="tel" id="phone" placeholder="फोन नंबर" required>
                 <div id="phone-error" class="error-message"></div>
-                <input type="email" id="email" placeholder="Email (Optional)" data-translate-key="email_optional_placeholder">
-                <textarea id="address" placeholder="Address (Required)" data-translate-key="address_required_placeholder" required></textarea>
+                <input type="email" id="email" placeholder="ईमेल (पर्यायी)">
+                <textarea id="address" placeholder="पत्ता (आवश्यक)" required></textarea>
                 <select id="tahasil" required>
-                    <option value="" disabled selected data-translate-key="select_tahasil_option">Select Tahasil</option>
-                    <option value="AKOLA">AKOLA</option>
-                    <option value="AKOT">AKOT</option>
-                    <option value="TELAHARA">TELAHARA</option>
-                    <option value="BALAPUR">BALAPUR</option>
-                    <option value="PATUR">PATUR</option>
-                    <option value="MURTIZAPUR">MURTIZAPUR</option>
-                    <option value="BARSHITAKLI">BARSHITAKLI</option>
-                     <!-- Note: Tahasil names themselves are usually not translated -->
+                    <option value="" disabled selected>तहसील निवडा</option>
+                    <option value="AKOLA">अकोला</option>
+                    <option value="AKOT">अकोट</option>
+                    <option value="TELAHARA">तेल्हारा</option>
+                    <option value="BALAPUR">बाळापूर</option>
+                    <option value="PATUR">पातूर</option>
+                    <option value="MURTIZAPUR">मुर्तिजापूर</option>
+                    <option value="BARSHITAKLI">बार्शीटाकळी</option>
                 </select>
-                <input type="text" id="purpose" placeholder="Purpose of Visit" data-translate-key="purpose_of_visit_placeholder" required>
-                <button onclick="saveVisitorData()" data-translate-key="save_visitor_data_button">Save Visitor Data</button>
+                <input type="text" id="purpose" placeholder="भेटीचे कारण" required>
+                <button onclick="saveVisitorData(this)">अभ्यागताचा डेटा जतन करा</button>
             </div>
         </div>
     </div>
@@ -537,155 +524,48 @@
     <script>
         const domElements = {};
         const requiredFields = [
-            { id: 'name', label: 'Full Name', translateKey: 'full_name_label' }, // Added translateKey for alert messages
-            { id: 'phone', label: 'Phone Number', translateKey: 'phone_number_label' },
-            { id: 'address', label: 'Address', translateKey: 'address_label' },
-            { id: 'tahasil', label: 'Tahasil', translateKey: 'tahasil_label' },
-            { id: 'purpose', label: 'Purpose of Visit', translateKey: 'purpose_of_visit_label' }
+            { id: 'name', label: 'पूर्ण नाव' },
+            { id: 'phone', label: 'फोन नंबर' },
+            { id: 'address', label: 'पत्ता' },
+            { id: 'tahasil', label: 'तहसील' },
+            { id: 'purpose', label: 'भेटीचे कारण' }
         ];
 
         let capturedFrames = [];
         let currentVisitorData = null;
         let recognizedVisitorData = null;
         let webcamStream = null;
-        let currentLanguage = 'mr'; // Default language
-        const originalTexts = {}; // Store original English texts
 
-        // --- Translation Function ---
-        async function translateText(text, lang) {
-            if (!text || lang === 'en') { // No need to translate empty strings or to English
-                 return text;
-            }
-            try {
-                const response = await fetch("/translate", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ text: text, lang: lang }),
-                });
-                 if (!response.ok) {
-                     console.error("Translation API error:", response.status, await response.text());
-                     return text; // Return original text on error
-                 }
-                 const result = await response.json();
-                 return result.translated_text || text; // Return original if translation missing
-            } catch (error) {
-                console.error("Error calling translation API:", error);
-                return text; // Return original text on fetch error
-            }
+        function showLoading(button, loadingText = "लोड करत आहे...") {
+            if (!button) return;
+            button.dataset.originalText = button.innerHTML;
+            button.innerHTML = loadingText;
+            button.disabled = true;
+            if (button.tagName === 'LI') {
+                 button.style.cursor = 'not-allowed';
+                 button.style.opacity = '0.7';
+             }
         }
 
-         // --- Function to translate the whole page ---
-         async function translatePage(lang) {
-             currentLanguage = lang;
-             const elementsToTranslate = document.querySelectorAll('[data-translate-key]');
-
-             for (const element of elementsToTranslate) {
-                 const key = element.getAttribute('data-translate-key');
-                 const originalText = originalTexts[key];
-
-                 if (originalText === undefined) {
-                      console.warn(`Original text not found for key: ${key}`);
-                      continue; // Skip if original text wasn't stored
-                  }
-
-                 try {
-                     const translatedText = await translateText(originalText, lang);
-
-                     // Update based on element type
-                     if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-                          if (element.placeholder) {
-                              element.placeholder = translatedText;
-                          }
-                      } else if (element.tagName === 'OPTION' && element.disabled && element.selected) {
-                          // Handle the default disabled select option separately
-                          element.textContent = translatedText;
-                      }
-                      // Handle specific SPAN inside P for last visit info default text
-                      else if (element.tagName === 'SPAN' && element.parentElement.id === 'last-visit-info') {
-                          element.textContent = translatedText;
-                      }
-                      else {
-                          // For buttons, h1, h2, h3, p, li, strong etc.
-                          element.textContent = translatedText;
-                      }
-                 } catch (error) {
-                     console.error(`Error translating key ${key}:`, error);
-                      // Optionally restore original text on error
-                      if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-                          if(element.placeholder) element.placeholder = originalText;
-                      } else {
-                          element.textContent = originalText;
-                      }
-                 }
-             }
-
-              // Re-render dynamic sections if they are currently visible
-              if (currentVisitorData) {
-                  await displayExistingVisitorDetails(currentVisitorData); // Re-render with new language
-              } else {
-                   // Ensure the default "No previous visits" text is correctly set if no visitor is loaded
-                   const noVisitsElement = document.querySelector('#last-visit-info span[data-translate-key="no_previous_visits"]');
-                   if(noVisitsElement) {
-                       noVisitsElement.textContent = await translateText(originalTexts['no_previous_visits'], currentLanguage);
-                   }
+        function hideLoading(button) {
+            if (!button || typeof button.dataset?.originalText === 'undefined') return;
+             button.innerHTML = button.dataset.originalText;
+             button.disabled = false;
+             if (button.tagName === 'LI') {
+                  button.style.cursor = 'pointer';
+                  button.style.opacity = '1';
               }
-         }
-
-         // --- Store Original Texts ---
-         function storeOriginalTexts() {
-              const elements = document.querySelectorAll('[data-translate-key]');
-              elements.forEach(element => {
-                  const key = element.getAttribute('data-translate-key');
-                  let text = '';
-                  if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-                       text = element.placeholder || '';
-                   } else {
-                       text = element.textContent.trim();
-                   }
-                   if (key && text) { // Only store if key and text are valid
-                       originalTexts[key] = text;
-                   }
-               });
-               // Add/ensure original texts for dynamic content/alerts
-               originalTexts['phone_validation_error'] = "Please enter a valid 10-digit phone number starting with 6-9";
-               originalTexts['alert_fill_field'] = "Please fill in the {fieldName} field"; // Placeholder for field name
-               originalTexts['alert_capture_image'] = "Please capture an image before registering";
-               originalTexts['alert_save_confirmation'] = "Are you sure you want to save this visitor data?";
-               originalTexts['alert_save_cancelled'] = "Visitor data saving cancelled by user.";
-               originalTexts['alert_purpose_required'] = "Please enter a purpose for the current visit";
-               originalTexts['alert_visitor_not_found'] = "Visitor data not found. Please recognize the visitor first.";
-               originalTexts['alert_no_existing_visit'] = "No existing visit found";
-               originalTexts['alert_continue_visit_prefix'] = "Continuing visit with purpose: ";
-               originalTexts['alert_registration_success'] = "Visitor Registered Successfully!\n\nVisitor Details:\n- Visitor ID: {visit_id}\n- Unique User ID: {uid}\n- Name: {name}\n- Purpose: {purpose}"; // Placeholders
-               originalTexts['alert_registration_failed_prefix'] = "Registration failed: ";
-               originalTexts['logout_confirm'] = "Are you sure you want to logout?";
-               originalTexts['webcam_not_ready_error'] = "Webcam not ready. Please wait and try again.";
-               originalTexts['image_capture_error'] = "Error capturing image. Please try again.";
-               originalTexts['recognition_error_prefix'] = "Error during recognition. Please try again.";
-               originalTexts['face_not_recognized'] = "Face not recognized. Proceed with registration.";
-               originalTexts['recognized_prefix'] = "Recognized: ";
-               originalTexts['last_visit_date_label'] = "Last Visit Date:";
-               originalTexts['last_visit_purpose_label'] = "Last Visit Purpose:";
-               originalTexts['name_label'] = "Name:";
-               originalTexts['phone_label'] = "Phone:";
-               originalTexts['address_label'] = "Address:";
-               originalTexts['tahasil_label'] = "Tahasil:";
-               originalTexts['no_previous_visits'] = "No previous visits"; // Make sure this key exists
-          }
-
+             delete button.dataset.originalText;
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             ['webcam', 'recognition-result', 'captured-images', 'registration-form',
              'existing-visitor-form', 'name', 'phone', 'email',
              'address', 'purpose', 'new-purpose', 'phone-error', 'existing-visitor-details',
-             'last-visit-info', 'profile-icon', 'profile-dropdown', 'logout-button', 'tahasil',
-             'language-select' // Add language select ID
+             'last-visit-info', 'profile-icon', 'profile-dropdown', 'logout-button', 'tahasil'
             ].forEach(id => {
                 domElements[id] = document.getElementById(id);
             });
-
-             // Store original texts first
-             storeOriginalTexts();
 
             domElements['profile-icon'].addEventListener('click', (event) => {
                 event.stopPropagation();
@@ -698,18 +578,9 @@
                 }
             });
 
-
-            domElements['logout-button'].addEventListener('click', confirmLogout);
-
-             // Language Switcher Event Listener
-             domElements['language-select'].addEventListener('change', (event) => {
-                 translatePage(event.target.value);
-             });
+            domElements['logout-button'].addEventListener('click', (event) => confirmLogout(event.currentTarget));
 
             startWebcam();
-
-             // Initial translation to default language (Marathi)
-            translatePage(currentLanguage);
         });
 
         async function startWebcam() {
@@ -736,8 +607,7 @@
             } catch (error) {
                 console.error("Error accessing webcam:", error);
                 const errorMsg = document.createElement('p');
-                const errorText = await translateText(originalTexts['webcam_error'] || 'Could not access camera. Please check permissions.', currentLanguage); // Added key for webcam error
-                errorMsg.textContent = errorText;
+                errorMsg.textContent = 'कॅमेरामध्ये प्रवेश करू शकलो नाही. कृपया परवानग्या तपासा.';
                 errorMsg.style.color = "red";
                 if (domElements['webcam'] && domElements['webcam'].parentNode) {
                      domElements['webcam'].parentNode.appendChild(errorMsg);
@@ -748,36 +618,30 @@
         async function validatePhoneNumber(phone) {
              const phoneRegex = /^[6-9]\d{9}$/;
              const isValid = phoneRegex.test(phone);
-             const errorMsg = isValid ? "" : await translateText(originalTexts['phone_validation_error'], currentLanguage);
+             const errorMsg = isValid ? "" : "कृपया योग्य १० अंकी फोन नंबर प्रविष्ट करा जो ६-९ ने सुरू होतो";
              domElements['phone-error'].textContent = errorMsg;
              return isValid;
          }
 
-         async function formatLastVisit(visitorData) {
-             const noVisitsText = await translateText(originalTexts['no_previous_visits'], currentLanguage);
+         function formatLastVisit(visitorData) {
               if (!visitorData || !visitorData.visitor || visitorData.visitor.length === 0) {
-                   // Return the translated "No previous visits" text within the p tag structure
-                   return `<span data-translate-key="no_previous_visits">${noVisitsText}</span>`;
+                   return `<span>मागील भेटी नाहीत</span>`;
                }
-
 
               const lastVisit = visitorData.visitor.reduce((latest, current) =>
                   (new Date(current.datetime) > new Date(latest.datetime)) ? current : latest
               );
 
               const visitDate = new Date(lastVisit.datetime);
-              // Format date/time according to locale if possible, otherwise default
-              const formattedDate = visitDate.toLocaleString(currentLanguage + '-IN', { dateStyle: 'short', timeStyle: 'short' })
+              const formattedDate = visitDate.toLocaleString('mr-IN', { dateStyle: 'short', timeStyle: 'short' })
                                       || `${visitDate.toLocaleDateString()} ${visitDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
 
+              const dateLabel = "शेवटची भेट तारीख:";
+              const purposeLabel = "शेवटच्या भेटीचे कारण:";
 
-              const dateLabel = await translateText(originalTexts['last_visit_date_label'], currentLanguage);
-              const purposeLabel = await translateText(originalTexts['last_visit_purpose_label'], currentLanguage);
-
-              // IMPORTANT: Do NOT translate lastVisit.purpose (it's user data)
               return `
-                  <strong data-translate-key="last_visit_date_label">${dateLabel}</strong> ${formattedDate}<br>
-                  <strong data-translate-key="last_visit_purpose_label">${purposeLabel}</strong> ${lastVisit.purpose || 'N/A'}
+                  <strong>${dateLabel}</strong> ${formattedDate}<br>
+                  <strong>${purposeLabel}</strong> ${lastVisit.purpose || 'N/A'}
               `;
           }
 
@@ -792,32 +656,30 @@
             if(domElements['registration-form']) domElements['registration-form'].style.display = "none";
             if(domElements['existing-visitor-form']) {
                  domElements['existing-visitor-form'].style.display = "none";
-                  // Clear dynamic content areas when hiding
                   if(domElements['existing-visitor-details']) domElements['existing-visitor-details'].innerHTML = '';
                   if(domElements['last-visit-info']) {
-                      // Reset to default text (will be translated by translatePage if needed)
-                      domElements['last-visit-info'].innerHTML = `<span data-translate-key="no_previous_visits">${originalTexts['no_previous_visits']}</span>`;
+                      domElements['last-visit-info'].innerHTML = `<span>मागील भेटी नाहीत</span>`;
                   }
             }
-
 
             ['name', 'phone', 'email', 'address', 'purpose', 'new-purpose'].forEach(id => {
                 if (domElements[id]) domElements[id].value = "";
             });
-             // Reset tahasil dropdown to default selection
              if(domElements['tahasil']) domElements['tahasil'].selectedIndex = 0;
 
             if(domElements['phone-error']) domElements['phone-error'].textContent = "";
         }
 
-        async function startFaceRecognition() {
+        async function startFaceRecognition(button) {
              resetRecognitionData();
+             showLoading(button, "ओळखत आहे...");
 
              const video = domElements['webcam'];
              if (!video || !video.videoWidth || !video.videoHeight) {
                   console.error("Webcam not ready or dimensions are zero.");
-                  const errorText = await translateText(originalTexts['webcam_not_ready_error'], currentLanguage);
+                  const errorText = "वेबकॅम तयार नाही. कृपया प्रतीक्षा करा आणि पुन्हा प्रयत्न करा.";
                   if(domElements['recognition-result']) domElements['recognition-result'].textContent = errorText;
+                  hideLoading(button);
                   return;
              }
 
@@ -833,8 +695,9 @@
              canvas.toBlob(async (blob) => {
                   if (!blob) {
                       console.error("Canvas to Blob conversion failed.");
-                      const errorText = await translateText(originalTexts['image_capture_error'], currentLanguage);
+                      const errorText = "प्रतिमा कॅप्चर करण्यात त्रुटी. कृपया पुन्हा प्रयत्न करा.";
                       if(domElements['recognition-result']) domElements['recognition-result'].textContent = errorText;
+                      hideLoading(button);
                       return;
                   }
                   const formData = new FormData();
@@ -846,7 +709,6 @@
                       });
 
                       if (!response.ok) {
-                           // Try parsing error response
                             try {
                                 const errData = await response.json();
                                 throw new Error(errData.message || `Server error: ${response.status}`);
@@ -858,64 +720,61 @@
                       const result = await response.json();
 
                       if (result.recognized) {
-                           const recognizedPrefix = await translateText(originalTexts['recognized_prefix'], currentLanguage);
+                           const recognizedPrefix = "ओळखले: ";
                            if(domElements['recognition-result']) domElements['recognition-result'].textContent = `${recognizedPrefix}${result.user_data.name}`;
                            recognizedVisitorData = result.user_data;
-                           await displayExistingVisitorDetails(result.user_data); // Make async call
+                           displayExistingVisitorDetails(result.user_data);
                        } else {
-                           const notRecognizedText = await translateText(originalTexts['face_not_recognized'], currentLanguage);
+                           const notRecognizedText = "चेहरा ओळखला नाही. नोंदणीसह पुढे जा.";
                            if(domElements['recognition-result']) domElements['recognition-result'].textContent = notRecognizedText;
                            showRegistrationForm(canvas.toDataURL('image/jpeg', 0.8));
                        }
                   } catch (error) {
                       console.error("Recognition error:", error);
-                       const errorPrefix = await translateText(originalTexts['recognition_error_prefix'], currentLanguage);
+                       const errorPrefix = "ओळखण्यात त्रुटी. कृपया पुन्हा प्रयत्न करा.";
                        if(domElements['recognition-result']) domElements['recognition-result'].textContent = `${errorPrefix}${error.message}`;
+                  } finally {
+                     hideLoading(button);
                   }
               }, "image/jpeg", 0.8);
           }
 
-         async function displayExistingVisitorDetails(visitorData) {
-             currentVisitorData = visitorData; // Store the data for potential re-renders
+         function displayExistingVisitorDetails(visitorData) {
+             currentVisitorData = visitorData;
              if(domElements['registration-form']) domElements['registration-form'].style.display = "none";
              if(domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "block";
 
              let profileImgHtml = '';
-             // Profile image logic remains the same (URLs are not translated)
              if (visitorData.profile_img && visitorData.profile_img.length > 0) {
-                 profileImgHtml = `<img src="${visitorData.profile_img[0]}?t=${Date.now()}" alt="${visitorData.name}" class="profile-circle">`; // Cache buster
+                 profileImgHtml = `<img src="${visitorData.profile_img[0]}?t=${Date.now()}" alt="${visitorData.name}" class="profile-circle">`;
              } else if (visitorData.images && visitorData.images.length > 0) {
-                 profileImgHtml = `<img src="${visitorData.images[0]}?t=${Date.now()}" alt="${visitorData.name}" class="profile-circle">`; // Cache buster
+                 profileImgHtml = `<img src="${visitorData.images[0]}?t=${Date.now()}" alt="${visitorData.name}" class="profile-circle">`;
              } else {
                  profileImgHtml = `<div class="profile-circle profile-placeholder">${visitorData.name ? visitorData.name.charAt(0).toUpperCase() : '?'}</div>`;
              }
 
-             // Translate labels async
-             const nameLabel = await translateText(originalTexts['name_label'], currentLanguage);
-             const phoneLabel = await translateText(originalTexts['phone_label'], currentLanguage);
-             const addressLabel = await translateText(originalTexts['address_label'], currentLanguage);
-             const tahasilLabel = await translateText(originalTexts['tahasil_label'], currentLanguage);
+             const nameLabel = "नाव:";
+             const phoneLabel = "फोन:";
+             const addressLabel = "पत्ता:";
+             const tahasilLabel = "तहसील:";
 
-             // Update visitor details section
              if(domElements['existing-visitor-details']) {
-                 // IMPORTANT: Do NOT translate visitorData.name, .phone, .address, .tahasil (these are user data)
                  domElements['existing-visitor-details'].innerHTML = `
                      <div class="visitor-profile-container">
                          <div class="profile-image-container">
                              ${profileImgHtml}
                          </div>
                          <div class="visitor-info-container">
-                             <p><strong data-translate-key="name_label">${nameLabel}</strong> ${visitorData.name || 'N/A'}</p>
-                             <p><strong data-translate-key="phone_label">${phoneLabel}</strong> ${visitorData.phone || 'N/A'}</p>
-                             <p><strong data-translate-key="address_label">${addressLabel}</strong> ${visitorData.address || 'N/A'}</p>
-                             <p><strong data-translate-key="tahasil_label">${tahasilLabel}</strong> ${visitorData.tahasil || 'N/A'}</p>
+                             <p><strong>${nameLabel}</strong> ${visitorData.name || 'N/A'}</p>
+                             <p><strong>${phoneLabel}</strong> ${visitorData.phone || 'N/A'}</p>
+                             <p><strong>${addressLabel}</strong> ${visitorData.address || 'N/A'}</p>
+                             <p><strong>${tahasilLabel}</strong> ${visitorData.tahasil || 'N/A'}</p>
                          </div>
                      </div>
                  `;
              }
 
-             // Update last visit section (async)
-             const lastVisitFormatted = await formatLastVisit(visitorData);
+             const lastVisitFormatted = formatLastVisit(visitorData);
              if(domElements['last-visit-info']) domElements['last-visit-info'].innerHTML = lastVisitFormatted;
          }
 
@@ -932,45 +791,42 @@
             }
 
             capturedFrames = [capturedFrame];
-             // Clear current visitor data when showing registration form
              currentVisitorData = null;
              recognizedVisitorData = null;
         }
 
-       async function saveVisitorData() {
-             // Validation loop
+       async function saveVisitorData(button) {
+             let isValidForm = true;
              for (let field of requiredFields) {
                  const element = domElements[field.id];
                  if (!element) continue;
                  const value = element.value.trim();
 
-                 if (!value || (field.id === 'tahasil' && element.selectedIndex === 0)) { // Check default selection for dropdown
-                      const fieldLabelText = await translateText(originalTexts[field.translateKey] || field.label, currentLanguage);
-                      const alertMsgTemplate = await translateText(originalTexts['alert_fill_field'], currentLanguage);
-                      alert(alertMsgTemplate.replace('{fieldName}', fieldLabelText));
+                 if (!value || (field.id === 'tahasil' && element.selectedIndex === 0)) {
+                      const alertMsgTemplate = "कृपया {fieldName} फील्ड भरा";
+                      alert(alertMsgTemplate.replace('{fieldName}', field.label));
                       element.focus();
-                      return false; // Stop if validation fails
+                      isValidForm = false;
+                      break;
                   }
 
-                 switch (field.id) {
-                     case 'phone':
-                         // validatePhoneNumber is already async and handles translation
-                         if (!await validatePhoneNumber(value)) {
-                             element.focus();
-                             return false; // Stop if phone validation fails
-                         }
-                         break;
-                 }
+                 if (field.id === 'phone') {
+                      if (!await validatePhoneNumber(value)) {
+                          element.focus();
+                          isValidForm = false;
+                          break;
+                      }
+                  }
              }
 
-             // Check if an image is captured
+             if (!isValidForm) return;
+
              if (!capturedFrames || capturedFrames.length === 0 || !capturedFrames[0]) {
-                  const alertMsg = await translateText(originalTexts['alert_capture_image'], currentLanguage);
+                  const alertMsg = "कृपया नोंदणी करण्यापूर्वी एक प्रतिमा कॅप्चर करा";
                   alert(alertMsg);
-                  return false; // Stop if no image
+                  return;
               }
 
-             // Prepare visitor data *after* successful validation
              const visitorData = {
                  name: domElements['name']?.value.trim() ?? '',
                  phone: domElements['phone']?.value.trim() ?? '',
@@ -978,48 +834,64 @@
                  address: domElements['address']?.value.trim() ?? '',
                  tahasil: domElements['tahasil']?.value ?? '',
                  purpose: domElements['purpose']?.value.trim() ?? '',
-                 frame: capturedFrames[0] // Already checked it exists
+                 frame: capturedFrames[0]
              };
 
-             // Confirmation Dialog
-             const confirmMsg = await translateText(originalTexts['alert_save_confirmation'], currentLanguage);
+             const confirmMsg = "तुम्हाला खात्री आहे की हा अभ्यागत डेटा जतन करायचा आहे?";
              if (confirm(confirmMsg)) {
-                 // If user confirms, proceed with registration
-                 registerVisitor(visitorData); // registerVisitor should handle its own translations for success/error messages
+                 showLoading(button, "जतन करत आहे...");
+                 try {
+                     await registerVisitor(visitorData);
+                 } catch (error) {
+                    console.error("Error during saveVisitorData registration:", error);
+                 } finally {
+                     hideLoading(button);
+                 }
              } else {
-                 // If user cancels, do nothing (or provide feedback)
-                 const cancelMsg = await translateText(originalTexts['alert_save_cancelled'], currentLanguage);
+                 const cancelMsg = "वापरकर्त्याने अभ्यागत डेटा जतन करणे रद्द केले.";
                  console.log(cancelMsg);
-                 // Optionally: alert(cancelMsg);
              }
          }
 
 
-        async function addNewVisitForExistingVisitor() {
+        async function addNewVisitForExistingVisitor(button) {
             const newPurpose = domElements['new-purpose']?.value.trim();
             if (!newPurpose) {
-                 const alertMsg = await translateText(originalTexts['alert_purpose_required'], currentLanguage);
+                 const alertMsg = "कृपया सध्याच्या भेटीचे कारण प्रविष्ट करा";
                  alert(alertMsg);
                  domElements['new-purpose']?.focus();
                  return;
              }
             if (!currentVisitorData) {
-                 const alertMsg = await translateText(originalTexts['alert_visitor_not_found'], currentLanguage);
+                 const alertMsg = "अभ्यागत डेटा आढळला नाही. कृपया आधी अभ्यागताला ओळखा.";
                  alert(alertMsg);
                  return;
              }
-            const newVisitorData = {
-                ...currentVisitorData,
-                purpose: newPurpose,
-                frame: capturedFrames[0] || currentVisitorData.frame || null // Use new frame if available, else existing one
-            };
 
-            registerVisitor(newVisitorData); // registerVisitor handles alerts
+            const confirmMsg = "तुम्हाला खात्री आहे की या विद्यमान अभ्यागतासाठी नवीन भेट जोडायची आहे?";
+             if (confirm(confirmMsg)) {
+                 showLoading(button, "भेट जोडत आहे...");
+                 const newVisitorData = {
+                    ...currentVisitorData,
+                    purpose: newPurpose,
+                    frame: capturedFrames[0] || currentVisitorData.frame || null
+                 };
+                 try {
+                    await registerVisitor(newVisitorData);
+                 } catch (error) {
+                    console.error("Error during addNewVisitForExistingVisitor registration:", error);
+                 } finally {
+                    hideLoading(button);
+                 }
+            } else {
+                 const cancelMsg = "वापरकर्त्याने नवीन भेट जोडणे रद्द केले.";
+                 console.log(cancelMsg);
+             }
         }
 
-       async function continueExistingVisit() {
+       async function continueExistingVisit(button) {
             if (!currentVisitorData || !currentVisitorData.visitor || !currentVisitorData.visitor.length) {
-                 const alertMsg = await translateText(originalTexts['alert_no_existing_visit'], currentLanguage);
+                 const alertMsg = "कोणतीही विद्यमान भेट आढळली नाही";
                  alert(alertMsg);
                  return;
              }
@@ -1028,67 +900,70 @@
                 (new Date(current.datetime) > new Date(latest.datetime)) ? current : latest
             );
 
-            const newVisitorData = {
-                ...currentVisitorData,
-                purpose: lastVisit.purpose,
-                frame: capturedFrames[0] || currentVisitorData.frame || null // Use new frame if available, else existing one
-            };
-
-            const alertPrefix = await translateText(originalTexts['alert_continue_visit_prefix'], currentLanguage);
-            // IMPORTANT: Do not translate lastVisit.purpose here
-            alert(`${alertPrefix}${lastVisit.purpose}`);
-
-            registerVisitor(newVisitorData); // registerVisitor handles alerts
+             const confirmMsg = `तुम्हाला खात्री आहे की '${lastVisit.purpose}' या कारणासाठी मागील भेट चालू ठेवायची आहे?`;
+             if (confirm(confirmMsg)) {
+                 showLoading(button, "भेट सुरू ठेवत आहे...");
+                 const newVisitorData = {
+                    ...currentVisitorData,
+                    purpose: lastVisit.purpose,
+                    frame: capturedFrames[0] || currentVisitorData.frame || null
+                 };
+                 try {
+                    await registerVisitor(newVisitorData);
+                 } catch (error) {
+                    console.error("Error during continueExistingVisit registration:", error);
+                 } finally {
+                    hideLoading(button);
+                 }
+             } else {
+                 const cancelMsg = "वापरकर्त्याने मागील भेट सुरू ठेवणे रद्द केले.";
+                 console.log(cancelMsg);
+             }
         }
 
-         function registerVisitor(visitorData) { // Made non-async, alerts inside fetch handlers
+         async function registerVisitor(visitorData) {
              let finalVisitorData = { ...visitorData };
-
-             // Determine if it's an update for a recognized visitor or a new registration
              const isUpdate = recognizedVisitorData && finalVisitorData.uid && finalVisitorData.uid === recognizedVisitorData.uid;
 
              if (isUpdate) {
                  finalVisitorData = {
-                     ...recognizedVisitorData, // Start with recognized data
-                     purpose: visitorData.purpose, // Update purpose
-                     frame: visitorData.frame || recognizedVisitorData.frame || null, // Use new frame if provided, else existing
-                     visitor: recognizedVisitorData.visitor || [] // Keep visitor history
+                     ...recognizedVisitorData,
+                     purpose: visitorData.purpose,
+                     frame: visitorData.frame || recognizedVisitorData.frame || null,
+                     visitor: recognizedVisitorData.visitor || []
                  };
-             } else if (!finalVisitorData.uid) { // It's a new visitor (no UID yet)
+             } else if (!finalVisitorData.uid) {
                   finalVisitorData = {
-                     ...visitorData, // Use the form data
-                     visitor: [] // Initialize visitor array for new users
+                     ...visitorData,
+                     visitor: []
                  };
              }
-             // Ensure frame is included if available (handles cases where visitorData might not have it but finalVisitorData should)
              finalVisitorData.frame = visitorData.frame || finalVisitorData.frame || null;
 
+             try {
+                 const response = await fetch("/register_visitor", {
+                     method: "POST",
+                     headers: {
+                         "Content-Type": "application/json"
+                     },
+                     body: JSON.stringify(finalVisitorData)
+                 });
 
-             fetch("/register_visitor", {
-                 method: "POST",
-                 headers: {
-                     "Content-Type": "application/json"
-                 },
-                 body: JSON.stringify(finalVisitorData)
-             })
-             .then(response => {
                  if (!response.ok) {
-                      // Try to get error message from response body
-                      return response.json().then(errData => {
-                           throw new Error(errData.message || `HTTP error! Status: ${response.status}`);
-                       }).catch(() => {
-                           // If parsing fails, throw generic error
-                           throw new Error(`HTTP error! Status: ${response.status}`);
-                       });
+                     let errorData;
+                     try {
+                         errorData = await response.json();
+                     } catch {
+                          throw new Error(`HTTP error! Status: ${response.status}`);
+                     }
+                     throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
                  }
-                 return response.json();
-             })
-             .then(async result => { // Make inner part async for translateText
+
+                 const result = await response.json();
+
                  if (result.success) {
                      const uid = result.uid;
-                     // Prepare success message parts
-                     let successMsgTemplate = await translateText(originalTexts['alert_registration_success'], currentLanguage);
-                     // IMPORTANT: Use finalVisitorData.name/purpose which reflect the *saved* data
+                     let successMsgTemplate = "अभ्यागत यशस्वीरित्या नोंदणीकृत झाला!\n\nअभ्यागत तपशील:\n- भेट आयडी: {visit_id}\n- युनिक वापरकर्ता आयडी: {uid}\n- नाव: {name}\n- कारण: {purpose}";
                      successMsgTemplate = successMsgTemplate
                          .replace('{visit_id}', result.visit_id)
                          .replace('{uid}', uid)
@@ -1096,57 +971,49 @@
                          .replace('{purpose}', finalVisitorData.purpose);
                      alert(successMsgTemplate);
 
-
                      setTimeout(() => {
-                         // Use the frame that was actually sent to the server
                          if(finalVisitorData.frame && uid) {
                             processProfileImage(finalVisitorData.frame, uid);
                          }
                      }, 500);
 
-                     // Fetch updated details after registration/update
-                     return fetch(`/get_visitor_details?uid=${uid}`, {
-                         cache: "no-store" // Prevent caching issues
+                     const detailsResponse = await fetch(`/get_visitor_details?uid=${uid}`, {
+                         cache: "no-store"
                      });
+
+                     if (!detailsResponse.ok) {
+                          let errorData;
+                         try {
+                              errorData = await detailsResponse.json();
+                          } catch {
+                              throw new Error(`Details fetch failed: ${detailsResponse.status}`);
+                          }
+                          throw new Error(errorData.message || `Details fetch failed: ${detailsResponse.status}`);
+                     }
+
+                     const visitorDetails = await detailsResponse.json();
+
+                     if (visitorDetails.success && visitorDetails.visitor_data) {
+                          recognizedVisitorData = visitorDetails.visitor_data;
+                         displayExistingVisitorDetails(visitorDetails.visitor_data);
+                         if(domElements['registration-form']) domElements['registration-form'].style.display = "none";
+                         if(domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "block";
+                         if (domElements['new-purpose']) domElements['new-purpose'].value = "";
+                         capturedFrames = [];
+                         if(domElements['captured-images']) domElements['captured-images'].innerHTML = "";
+                         setTimeout(resetForms, 1000);
+                     } else {
+                          throw new Error(visitorDetails.message || "Failed to fetch updated visitor details.");
+                      }
                  } else {
-                      // Use error message from API if available
                       throw new Error(result.message || "Registration failed (unknown reason)");
                  }
-             })
-             .then(response => {
-                  if (!response) return; // If previous step didn't return fetch promise
-                 if (!response.ok) {
-                      // Try to get error message from response body
-                      return response.json().then(errData => {
-                           throw new Error(errData.message || `Details fetch failed: ${response.status}`);
-                       }).catch(() => {
-                           throw new Error(`Details fetch failed: ${response.status}`);
-                       });
-                 }
-                 return response.json();
-             })
-             .then(async visitorDetails => { // Make inner part async
-                  if (!visitorDetails) return;
-                 if (visitorDetails.success && visitorDetails.visitor_data) {
-                      recognizedVisitorData = visitorDetails.visitor_data; // Update recognized data with latest from DB
-                     await displayExistingVisitorDetails(visitorDetails.visitor_data); // await display update
-                     if(domElements['registration-form']) domElements['registration-form'].style.display = "none";
-                     if(domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "block";
-                     if (domElements['new-purpose']) domElements['new-purpose'].value = ""; // Clear purpose field
-                     capturedFrames = []; // Clear captured frame after successful save
-                     if(domElements['captured-images']) domElements['captured-images'].innerHTML = ""; // Clear image display
-                     setTimeout(resetForms, 5000); // Reset after showing details for a while
-                 } else {
-                      throw new Error(visitorDetails.message || "Failed to fetch updated visitor details.");
-                  }
-             })
-             .catch(async error => { // Make catch async
+             } catch (error) {
                  console.error("Registration process error:", error);
-                 const errorPrefix = await translateText(originalTexts['alert_registration_failed_prefix'], currentLanguage);
+                 const errorPrefix = "नोंदणी अयशस्वी: ";
                  alert(`${errorPrefix}${error.message}`);
-                 // Optionally reset forms immediately on failure
-                 // resetForms();
-             });
+                 throw error;
+             }
          }
 
         function processProfileImage(imageDataUrl, uid) {
@@ -1171,7 +1038,6 @@
                 })
                 .then(response => {
                     if (!response.ok) {
-                        // Try to get error message from response body
                          return response.json().then(errData => {
                               throw new Error(errData.message || `Profile processing failed: ${response.status}`);
                           }).catch(() => {
@@ -1183,19 +1049,13 @@
                 .then(result => {
                     if (result.success) {
                         console.log('Profile image processed successfully:', result);
-                        const capturedImagesDiv = domElements['captured-images'];
-                         // We don't display the processed image here anymore,
-                         // because registerVisitor fetches details which triggers displayExistingVisitorDetails
-                         // which uses the new profile_img URL from the database.
-
-                         // Refresh displayed visitor details to show new profile image
                          if (currentVisitorData && currentVisitorData.uid === uid) {
                               fetch(`/get_visitor_details?uid=${uid}`, { cache: "no-store" })
                                 .then(res => res.ok ? res.json() : Promise.reject(`Failed to refetch details: ${res.status}`))
-                                .then(async details => { // Make async
+                                .then(details => {
                                     if (details.success && details.visitor_data) {
-                                         recognizedVisitorData = details.visitor_data; // Update cache
-                                        await displayExistingVisitorDetails(details.visitor_data); // Update display
+                                         recognizedVisitorData = details.visitor_data;
+                                        displayExistingVisitorDetails(details.visitor_data);
                                     } else {
                                          console.error("Failed to parse refetched details:", details.message);
                                      }
@@ -1203,12 +1063,10 @@
                          }
                     } else {
                         console.error('Profile image processing failed on server:', result.message);
-                         // Optionally inform the user
                     }
                 })
                 .catch(error => {
                     console.error('Error in processProfileImage function:', error);
-                     // Optionally inform the user about the profile image processing failure
                 });
         }
 
@@ -1220,18 +1078,14 @@
              if(domElements['phone-error']) domElements['phone-error'].textContent = "";
               if(domElements['existing-visitor-details']) domElements['existing-visitor-details'].innerHTML = '';
               if(domElements['last-visit-info']) {
-                    // Reset to default text structure
-                    domElements['last-visit-info'].innerHTML = `<span data-translate-key="no_previous_visits">${originalTexts['no_previous_visits']}</span>`;
-                     // Immediately translate the default text
-                     translatePage(currentLanguage);
+                    domElements['last-visit-info'].innerHTML = `<span>मागील भेटी नाहीत</span>`;
                }
-
 
             ['name', 'phone', 'email', 'address', 'tahasil', 'purpose', 'new-purpose'].forEach(id => {
                 if (domElements[id]) {
                      domElements[id].value = "";
                       if (id === 'tahasil') {
-                          domElements[id].selectedIndex = 0; // Reset dropdown selection
+                          domElements[id].selectedIndex = 0;
                       }
                  }
             });
@@ -1239,27 +1093,26 @@
             capturedFrames = [];
             currentVisitorData = null;
             recognizedVisitorData = null;
-             // Re-translate static elements like placeholders if needed after reset
-             // translatePage(currentLanguage); // Might be redundant if translatePage is called elsewhere
         }
 
-       async function confirmLogout() {
-            const confirmMsg = await translateText(originalTexts['logout_confirm'], currentLanguage);
+       function confirmLogout(button) {
+            const confirmMsg = "तुम्हाला खात्री आहे की तुम्हाला लॉगआउट करायचे आहे?";
             if (confirm(confirmMsg)) {
-                logout();
+                 showLoading(button, "लॉगआऊट करत आहे...");
+                 logout().finally(() => hideLoading(button));
             }
         }
 
-        function logout() {
-            fetch("/logout").then(() => {
+       async function logout() {
+           try {
+               await fetch("/logout");
+               localStorage.removeItem("user");
+               window.location.href = "/";
+           } catch (error) {
+                console.error("Logout failed:", error);
                 localStorage.removeItem("user");
                 window.location.href = "/";
-            }).catch(error => {
-                 console.error("Logout failed:", error);
-                 // Still attempt to redirect even if fetch fails
-                 localStorage.removeItem("user");
-                 window.location.href = "/";
-            });
+           }
         }
     </script>
 </body>

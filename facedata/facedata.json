@@ -1,126 +1,27 @@
 {
-    "UID1743661077": {
-        "name": "\u0935\u093f\u092e\u0932 \u0938\u0902\u091c\u093e\u092f\u0930\u093e\u0935 \u0917\u094b\u0930\u094d\u0932\u0940",
-        "phone": "7796857890",
-        "email": null,
-        "address": "\u0938\u0930\u093e\u092b\u0932\u093e\u0907\u0928 \u0905\u0915\u094b\u091f",
-        "tahasil": "\u0905\u0915\u094b\u091f",
-        "district": "\u0915\u0947\u0932\u0947",
-        "registration_datetime": "2025-04-03 11:48:01",
-        "images": [
-            "facedata/UID1743661077/UID1743661077_img1.jpg"
-        ],
-        "face_encodings": [
-            "encodings/UID1743661077_encoding1.npy"
-        ],
-        "visitor": [
-            {
-                "visit_id": "V202504030001",
-                "datetime": "2025-04-03 11:48:01",
-                "purpose": "\u0932\u093e\u0921\u0915\u0940 \u092c\u0939\u093f\u0928 \u092f\u094b\u091c\u0928\u093e",
-                "dvn": 1
-            }
-        ],
-        "profile_img": [
-            "profiles/UID1743661077/UID1743661077_img1.jpg"
-        ]
-    },
-    "UID1743664841": {
-        "name": "\u0936\u094d\u0930\u0941\u0924\u0940 \u0939\u0930\u094d\u0937 \u0938\u093e\u0915\u0932",
-        "phone": "8788697282",
-        "email": null,
-        "address": "\u0926\u0947\u0935\u0930\u093e \u092c\u093e\u092c\u093e \u091a\u093e\u0930 \u0905\u0915\u094b\u0932\u093e",
+    "UID1743753457": {
+        "name": "\u0930\u094b\u0939\u093f\u0924 \u0907\u0902\u0917\u0933\u0947",
+        "phone": "7719013881",
+        "email": "rohitingle2045@gmail.com",
+        "address": "\u0930\u0949\u092f \u0938\u093e\u0932\u094d\u0935\u094d\u0939 \u0938\u093e\u0932\u094d\u0935\u094d\u0939 \u092a\u094d\u0932\u0949\u091f, \u0936\u094d\u0930\u093e\u0926\u094d\u0921\u093e \u0930\u0939\u093f\u0935\u093e\u0938\u0940, \u0905\u0915\u094b\u0932\u093e",
         "tahasil": "\u0915\u0947\u0932\u0947",
         "district": "\u0915\u0947\u0932\u0947",
-        "registration_datetime": "2025-04-03 12:50:47",
+        "registration_datetime": "2025-04-04 13:27:42",
         "images": [
-            "facedata/UID1743664841/UID1743664841_img1.jpg"
+            "facedata/UID1743753457/UID1743753457_img1.jpg"
         ],
         "face_encodings": [
-            "encodings/UID1743664841_encoding1.npy"
+            "encodings/UID1743753457_encoding1.npy"
         ],
         "visitor": [
             {
-                "visit_id": "V202504030002",
-                "datetime": "2025-04-03 12:50:47",
-                "purpose": "\u0932\u093e\u0921\u0915\u0940 \u092c\u0939\u093f\u0928 \u092f\u094b\u091c\u0928\u093e",
-                "dvn": 2
+                "visit_id": "V202504040001",
+                "datetime": "2025-04-04 13:27:42",
+                "purpose": "\u092f\u0936 \u0906\u0923\u093f \u0930\u094b\u0939\u093f\u0924 \u0938\u0930 \u0906\u092f\u091f\u0940 \u0935\u093f\u092d\u093e\u0917\u093e\u091a\u0940 \u092c\u0948\u0920\u0915"
             }
         ],
         "profile_img": [
-            "profiles/UID1743664841/UID1743664841_img1.jpg"
-        ]
-    },
-    "UID1743665021": {
-        "name": "\u0935\u0915\u0940\u0932 \u0938\u092f\u094d\u092f\u0926 \u091d\u0948\u0928\u0941\u0932",
-        "phone": "9420653221",
-        "email": null,
-        "address": "\u0917\u0902\u0917\u093e\u0928\u0917\u0930",
-        "tahasil": "\u0915\u0947\u0932\u0947",
-        "district": "\u0915\u0947\u0932\u0947",
-        "registration_datetime": "2025-04-03 12:53:47",
-        "images": [
-            "facedata/UID1743665021/UID1743665021_img1.jpg"
-        ],
-        "face_encodings": [
-            "encodings/UID1743665021_encoding1.npy"
-        ],
-        "visitor": [
-            {
-                "visit_id": "V202504030003",
-                "datetime": "2025-04-03 12:53:47",
-                "purpose": "\u091f\u0901\u0915\u0930"
-            }
-        ],
-        "profile_img": [
-            "profiles/UID1743665021/UID1743665021_img1.jpg"
-        ]
-    },
-    "UID1743665150": {
-        "name": "Thais\u0935\u0947\u0926 rear\u093f\u092fal",
-        "phone": "9422860786",
-        "email": null,
-        "address": "\u092e\u094b\u0939\u092e\u094d\u092e\u0926 \u0905\u0932\u0940 \u091a\u094c\u0915",
-        "tahasil": "\u0915\u0947\u0932\u0947",
-        "district": "\u0915\u0947\u0932\u0947",
-        "registration_datetime": "2025-04-03 12:55:54",
-        "images": [
-            "facedata/UID1743665150/UID1743665150_img1.jpg"
-        ],
-        "face_encodings": [
-            "encodings/UID1743665150_encoding1.npy"
-        ],
-        "visitor": [
-            {
-                "visit_id": "V202504030004",
-                "datetime": "2025-04-03 12:55:54",
-                "purpose": "\u0906\u092e\u0902\u0924\u094d\u0930\u0923 \u0935\u093f\u0928\u0902\u0924\u0940"
-            }
-        ],
-        "profile_img": [
-            "profiles/UID1743665150/UID1743665150_img1.jpg"
-        ]
-    },
-    "UID1743665473": {
-        "name": "\u0936\u094d\u0930\u0940\u0927\u0930 \u0917\u0902\u0917\u093e\u0930\u093e\u092e \u0935\u093e\u0918",
-        "phone": "9421750414",
-        "email": null,
-        "address": "\u092e\u0941\u0902\u0921\u0935\u093e\u0939 \u0938\u093e\u0927\u093f\u091c\u093e\u0928",
-        "tahasil": "\u092c\u093e\u0932\u093e\u092a\u0942\u0930",
-        "district": "\u0915\u0947\u0932\u0947",
-        "registration_datetime": "2025-04-03 13:01:16",
-        "images": [
-            "facedata/UID1743665473/UID1743665473_img1.jpg"
-        ],
-        "face_encodings": [
-            "encodings/UID1743665473_encoding1.npy"
-        ],
-        "visitor": [
-            {
-                "visit_id": "V202504030005",
-                "datetime": "2025-04-03 13:01:17",
-                "purpose": "\u0936\u0947\u0924\u093e\u0924 \u0930\u0938\u094d\u0924\u093e \u0905\u0921\u0935\u0932\u093e"
-            }
+            "profiles/UID1743753457/UID1743753457_img1.jpg"
         ]
     }
 }

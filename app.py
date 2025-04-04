@@ -9,6 +9,8 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from ultralytics import YOLO
 from datetime import datetime
 from deep_translator import GoogleTranslator
+import ssl
+from werkzeug.serving import run_simple
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -550,6 +552,11 @@ def translate():
         return jsonify({"error": "No text provided"}), 400
     translated_text = translate_text(text, lang)
     return jsonify({"translated_text": translated_text, "language": lang})
+#
+# if __name__ == "__main__":
+#     app.run(host="0.0.0.0", port=5110, debug=True)
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5110, debug=True)
+context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+context.load_cert_chain('cert.pem', 'key.pem')
+
+run_simple('0.0.0.0', 5110, app, use_debugger=True, use_reloader=True, ssl_context=context)
