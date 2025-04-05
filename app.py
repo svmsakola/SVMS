@@ -16,7 +16,7 @@ from werkzeug.serving import run_simple
 
 # Initialize Flask app
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app)
 app.secret_key = os.urandom(24)
 
 
@@ -25,11 +25,9 @@ def signal_handler(sig, frame):
     print('Shutting down gracefully...')
     sys.exit(0)
 
-
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
 
-# Create necessary directories
 os.makedirs('facedata', exist_ok=True)
 os.makedirs('encodings', exist_ok=True)
 os.makedirs('profiles', exist_ok=True)
@@ -47,10 +45,8 @@ elif sys.platform.startswith('linux'):  # Ubuntu
     except:
         pass
 
-# Configure face_recognition library for better performance
-face_recognition_model = "hog"  # Faster but less accurate, use "cnn" for better accuracy if GPU available
+face_recognition_model = "hog"
 if sys.platform.startswith('linux'):
-    # Check if GPU is available on Linux
     try:
         import torch
 
@@ -59,7 +55,6 @@ if sys.platform.startswith('linux'):
     except ImportError:
         pass
 
-# Load YOLO models
 try:
     person_model = YOLO('models/yolo11n-seg.pt')
     face_model = YOLO('models/yolov11n-face.pt')

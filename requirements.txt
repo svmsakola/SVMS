@@ -1,0 +1,9 @@
+face_recognition
+Flask
+flask_cors
+numpy
+opencv_python
+python_bcrypt
+torch
+ultralytics
+Werkzeug
