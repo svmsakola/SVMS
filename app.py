@@ -27,9 +27,9 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
 
-os.makedirs('facedata', exist_ok=True)
-os.makedirs('encodings', exist_ok=True)
-os.makedirs('profiles', exist_ok=True)
+os.makedirs('data/facedata', exist_ok=True)
+os.makedirs('data/encodings', exist_ok=True)
+os.makedirs('data/profiles', exist_ok=True)
 
 # Optimize OpenCV for different platforms
 if sys.platform.startswith('darwin'):  # macOS
@@ -79,7 +79,7 @@ def cleanup_memory():
 def generate_visitor_id():
     today = datetime.now()
     try:
-        with open('facedata/facedata.json', 'r') as f:
+        with open('data/facedata/facedata.json', 'r') as f:
             visitors_data = json.load(f)
     except FileNotFoundError:
         visitors_data = {}
@@ -101,7 +101,7 @@ def is_marathi(text):
 
 
 def save_face_images(frame, uid):
-    user_dir = f'facedata/{uid}'
+    user_dir = f'data/facedata/{uid}'
     os.makedirs(user_dir, exist_ok=True)
     results = face_model.predict(source=frame, stream=True)
     saved_images = []
@@ -118,7 +118,7 @@ def save_face_images(frame, uid):
                 rgb_face = cv2.cvtColor(face_crop, cv2.COLOR_BGR2RGB)
                 encodings = face_recognition.face_encodings(rgb_face, model=face_recognition_model)
                 if encodings:
-                    encoding_filename = f'encodings/{uid}_encoding{len(face_encodings) + 1}.npy'
+                    encoding_filename = f'data/encodings/{uid}_encoding{len(face_encodings) + 1}.npy'
                     np.save(encoding_filename, encodings[0])
                     face_encodings.append(encoding_filename)
                 if len(saved_images) >= 3:
@@ -128,14 +128,14 @@ def save_face_images(frame, uid):
 
 def load_users():
     try:
-        with open("auth.json", "r") as file:
+        with open("JSON/auth.json", "r") as file:
             return json.load(file)
     except FileNotFoundError:
         return {}
 
 
 def save_users(users):
-    with open("auth.json", "w") as file:
+    with open("JSON/auth.json", "w") as file:
         json.dump(users, file, indent=4)
 
 
@@ -204,7 +204,7 @@ def register_visitor():
     if not data:
         return jsonify({'error': 'Invalid request, no data received'}), 400
     try:
-        with open('facedata/facedata.json', 'r') as f:
+        with open('data/facedata/facedata.json', 'r') as f:
             facedata = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         facedata = {}
@@ -256,7 +256,7 @@ def register_visitor():
     else:
         visitor_data['visitor'] = [visit_entry]
         facedata[uid] = visitor_data
-    with open('facedata/facedata.json', 'w') as f:
+    with open('data/facedata/facedata.json', 'w') as f:
         json.dump(facedata, f, indent=4)
     return jsonify({
         'success': True,
@@ -270,7 +270,7 @@ def register_visitor():
 def search_visitors():
     query = request.args.get('query', '').lower()
     try:
-        with open('facedata/facedata.json', 'r') as f:
+        with open('data/facedata/facedata.json', 'r') as f:
             facedata = json.load(f)
     except FileNotFoundError:
         return jsonify({'success': False, 'message': 'No visitor data found'})
@@ -296,7 +296,7 @@ def get_visitor_details():
     uid = request.args.get('uid')
     visit_id = request.args.get('visit_id')
     try:
-        with open('facedata/facedata.json', 'r') as f:
+        with open('data/facedata/facedata.json', 'r') as f:
             facedata = json.load(f)
     except FileNotFoundError:
         return jsonify({'success': False, 'message': 'No visitor data found'})
@@ -353,7 +353,7 @@ def detect_face():
                     face_crop = frame[y1:y2, x1:x2]
                     rgb_face = cv2.cvtColor(face_crop, cv2.COLOR_BGR2RGB)
                     try:
-                        with open('facedata/facedata.json', 'r') as f:
+                        with open('data/facedata/facedata.json', 'r') as f:
                             known_data = json.load(f)
                     except FileNotFoundError:
                         known_data = {}
@@ -392,7 +392,7 @@ def confirm_visitor_entry():
     dvn = data.get('dvn')
 
     try:
-        with open('facedata/facedata.json', 'r') as f:
+        with open('data/facedata/facedata.json', 'r') as f:
             facedata = json.load(f)
     except FileNotFoundError:
         return jsonify({'success': False, 'message': 'Visitor data not found'})
@@ -401,7 +401,7 @@ def confirm_visitor_entry():
         for visit in user_data.get('visitor', []):
             if visit.get('visit_id') == visit_id:
                 visit['dvn'] = dvn
-                with open('facedata/facedata.json', 'w') as f:
+                with open('data/facedata/facedata.json', 'w') as f:
                     json.dump(facedata, f, indent=4)
                 return jsonify({
                     'success': True,
@@ -415,7 +415,7 @@ def confirm_visitor_entry():
 def get_today_visitors():
     today = datetime.now().strftime("%Y-%m-%d")
     try:
-        with open('facedata/facedata.json', 'r') as f:
+        with open('data/facedata/facedata.json', 'r') as f:
             facedata = json.load(f)
     except FileNotFoundError:
         return jsonify({'success': False, 'message': 'No visitor data found', 'visitors': {}})
@@ -498,14 +498,14 @@ def process_profile_image():
         _, face_crop = detect_person_and_face(frame)
         if face_crop is None:
             return jsonify({'success': False, 'message': 'No face detected in the image'})
-        user_dir = f'profiles/{uid}'
+        user_dir = f'data/profiles/{uid}'
         os.makedirs(user_dir, exist_ok=True)
 
         existing_images = [f for f in os.listdir(user_dir) if f.startswith(f'{uid}_img') and f.endswith('.jpg')]
         next_img_num = len(existing_images) + 1
         face_path = f'{user_dir}/{uid}_img{next_img_num}.jpg'
         cv2.imwrite(face_path, face_crop)
-        facedata_path = 'facedata/facedata.json'
+        facedata_path = 'data/facedata/facedata.json'
         os.makedirs(os.path.dirname(facedata_path), exist_ok=True)
         if os.path.exists(facedata_path):
             with open(facedata_path, 'r') as json_file:
@@ -535,7 +535,7 @@ def process_profile_image():
 
 @app.route('/dashboard/profiles/<uid>/<filename>', methods=['GET'])
 def get_profile_image(uid, filename):
-    profiles_dir = os.path.join('profiles')
+    profiles_dir = os.path.join('data/profiles')
     if not os.path.exists(os.path.join(profiles_dir, uid, filename)):
         return jsonify({'success': False, 'message': 'Image not found'}), 404
     return send_from_directory(os.path.join(profiles_dir, uid), filename)
@@ -560,7 +560,7 @@ def complete_meeting():
         uid = request.args.get('uid')
         if not visit_id or not uid:
             return jsonify({"error": "Missing visit_id or uid parameter"}), 400
-        json_file_path = 'facedata/facedata.json'
+        json_file_path = 'data/facedata/facedata.json'
         if not os.path.exists(json_file_path):
             return jsonify({"error": "Data file not found"}), 404
         with open(json_file_path, 'r') as file:
@@ -600,7 +600,7 @@ def visitor_action():
         if not forwarding_department: missing.append("forwarding_department")
         return jsonify({"success": False, "message": f"Missing required fields: {', '.join(missing)}"}), 400
     try:
-        with open('facedata/facedata.json', 'r') as f:
+        with open('data/facedata/facedata.json', 'r') as f:
             facedata = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         return jsonify({"success": False, "message": "Could not load visitor data."}), 500
@@ -619,7 +619,7 @@ def visitor_action():
     if not visit_found:
         return jsonify({"success": False, "message": f"Visit with ID '{visit_id}' not found for visitor '{uid}'."}), 404
     try:
-        with open('facedata/facedata.json', 'w') as f:
+        with open('data/facedata/facedata.json', 'w') as f:
             json.dump(facedata, f, indent=4)
         return jsonify({"success": True, "message": "Visitor action recorded successfully."}), 200
     except Exception as e:
