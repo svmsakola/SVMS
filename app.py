@@ -682,4 +682,4 @@ def visitor_action():
 if __name__ == "__main__":
     app.run()
 
-# gunicorn --workers 3 --bind 127.0.0.1:8080 app:app
+# gunicorn --workers 3 --bind 0.0.0.0:8080 app:app
