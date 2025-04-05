@@ -5,23 +5,82 @@ import bcrypt
 import cv2
 import numpy as np
 import face_recognition
+import signal
+import sys
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory
+from flask_cors import CORS
 from ultralytics import YOLO
 from datetime import datetime
-from deep_translator import GoogleTranslator
 import ssl
 from werkzeug.serving import run_simple
 
+# Initialize Flask app
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 app.secret_key = os.urandom(24)
 
+
+# Set up signal handlers for graceful shutdown
+def signal_handler(sig, frame):
+    print('Shutting down gracefully...')
+    sys.exit(0)
+
+
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
+
+# Create necessary directories
 os.makedirs('facedata', exist_ok=True)
 os.makedirs('encodings', exist_ok=True)
+os.makedirs('profiles', exist_ok=True)
 
-person_model = YOLO('models/yolo11n-seg.pt')
-face_model = YOLO('models/yolov11n-face.pt')
+# Optimize OpenCV for different platforms
+if sys.platform.startswith('darwin'):  # macOS
+    cv2.setNumThreads(4)  # Limit threads on macOS for better performance
+    os.environ['OPENCV_OPENCL_RUNTIME'] = ''  # Disable OpenCL on macOS
+elif sys.platform.startswith('linux'):  # Ubuntu
+    cv2.setNumThreads(0)  # Let OpenCV use optimal thread count on Linux
+    # Enable OpenCL on Linux if available
+    try:
+        if cv2.ocl.haveOpenCL():
+            cv2.ocl.setUseOpenCL(True)
+    except:
+        pass
 
-person_model.model.fuse = lambda *args, **kwargs: None
+# Configure face_recognition library for better performance
+face_recognition_model = "hog"  # Faster but less accurate, use "cnn" for better accuracy if GPU available
+if sys.platform.startswith('linux'):
+    # Check if GPU is available on Linux
+    try:
+        import torch
+
+        if torch.cuda.is_available():
+            face_recognition_model = "cnn"
+    except ImportError:
+        pass
+
+# Load YOLO models
+try:
+    person_model = YOLO('models/yolo11n-seg.pt')
+    face_model = YOLO('models/yolov11n-face.pt')
+except Exception as e:
+    print(f"Error loading YOLO models: {e}")
+    sys.exit(1)
+
+
+def cleanup_memory():
+    """Helper function to clean up memory after processing large images"""
+    import gc
+    gc.collect()
+    if sys.platform.startswith('linux'):
+        try:
+            # On Linux, we can be more aggressive with memory cleanup
+            import ctypes
+            libc = ctypes.CDLL('libc.so.6')
+            libc.malloc_trim(0)
+        except:
+            pass
+
 
 def generate_visitor_id():
     today = datetime.now()
@@ -40,22 +99,12 @@ def generate_visitor_id():
     visitor_id = f"V{date_component}{str(visit_count).zfill(4)}"
     return visitor_id
 
+
 def is_marathi(text):
     if not text:
         return False
     return any('\u0900' <= c <= '\u097F' for c in text)
-def translate_text(text, target_lang):
-    if not text or (target_lang == 'mr' and is_marathi(text)):
-        return text
-    translator = GoogleTranslator(source='auto', target=target_lang)
-    try:
-        return translator.translate(text)
-    except:
-        return text
 
-def translate_text(text, target_lang):
-    translator = GoogleTranslator(source='auto', target=target_lang)
-    return translator.translate(text)
 
 def save_face_images(frame, uid):
     user_dir = f'facedata/{uid}'
@@ -73,7 +122,7 @@ def save_face_images(frame, uid):
                 cv2.imwrite(image_path, face_crop)
                 saved_images.append(f'facedata/{uid}/{filename}')
                 rgb_face = cv2.cvtColor(face_crop, cv2.COLOR_BGR2RGB)
-                encodings = face_recognition.face_encodings(rgb_face)
+                encodings = face_recognition.face_encodings(rgb_face, model=face_recognition_model)
                 if encodings:
                     encoding_filename = f'encodings/{uid}_encoding{len(face_encodings) + 1}.npy'
                     np.save(encoding_filename, encodings[0])
@@ -82,6 +131,7 @@ def save_face_images(frame, uid):
                     break
     return saved_images, face_encodings
 
+
 def load_users():
     try:
         with open("auth.json", "r") as file:
@@ -89,9 +139,11 @@ def load_users():
     except FileNotFoundError:
         return {}
 
+
 def save_users(users):
     with open("auth.json", "w") as file:
         json.dump(users, file, indent=4)
+
 
 @app.route("/", methods=["GET", "POST"])
 def login():
@@ -108,6 +160,7 @@ def login():
             return jsonify(success=True, redirect_url=url_for("dashboard", role=role))
         return jsonify(success=False, message="Invalid credentials")
     return render_template("index.html")
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -130,6 +183,7 @@ def register():
         return jsonify(success=True)
     return render_template("register.html")
 
+
 @app.route("/dashboard/<role>")
 def dashboard(role):
     if "user" not in session or session["user"]["role"] != role:
@@ -142,6 +196,7 @@ def dashboard(role):
         "cctv": "dashboard/cctv.html"
     }
     return render_template(templates.get(role, "unauthorized.html"))
+
 
 @app.route("/logout")
 def logout():
@@ -165,17 +220,17 @@ def register_visitor():
             existing_uid = uid
             break
     uid = existing_uid if existing_uid else f"UID{int(datetime.now().timestamp())}"
-    tahasil_options = ["AKOLA", "AKOT", "TELAHARA", "BALAPUR", "PATUR", "MURTIZAPUR", "BARSHITAKLI"]
+    tahasil_options = ["अकोला", "अकोट", "तेल्हारा", "बाळापूर", "पाटूर", "मुर्तिजापूर", "बार्शीटाकळी"]
     selected_tahasil = data.get('tahasil', '')
     if selected_tahasil not in tahasil_options and selected_tahasil:
         return jsonify({'error': 'Invalid tahasil selection'}), 400
     visitor_data = {
-        'name': translate_text(data.get('name', ''), 'mr'),
+        'name': data.get('name', ''),
         'phone': data.get('phone', ''),
         'email': data.get('email', ''),
-        'address': translate_text(data.get('address', ''), 'mr'),
-        'tahasil': translate_text(selected_tahasil, 'mr'),
-        'district': translate_text(data.get('district', 'Akola'), 'mr')
+        'address': data.get('address', ''),
+        'tahasil': selected_tahasil,
+        'district': data.get('district', 'Akola')
     }
     if not existing_uid:
         visitor_data['registration_datetime'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -194,11 +249,13 @@ def register_visitor():
                 return jsonify({'error': 'Invalid frame data, unable to decode'}), 400
         except Exception as e:
             return jsonify({'error': f'Error processing frame: {str(e)}'}), 500
+        finally:
+            cleanup_memory()  # Clean up memory after processing images
     visitor_id = generate_visitor_id()
     visit_entry = {
         'visit_id': visitor_id,
         'datetime': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        'purpose': translate_text(data.get('purpose', ''), 'mr')  # Translate purpose to Marathi
+        'purpose': data.get('purpose', '')
     }
     if existing_uid and uid in facedata:
         facedata[uid].setdefault('visitor', []).append(visit_entry)
@@ -213,6 +270,7 @@ def register_visitor():
         'uid': uid,
         'visit_id': visitor_id
     })
+
 
 @app.route('/search_visitors', methods=['GET'])
 def search_visitors():
@@ -237,6 +295,7 @@ def search_visitors():
         'success': True,
         'visitors': matching_visitors
     })
+
 
 @app.route('/get_visitor_details', methods=['GET'])
 def get_visitor_details():
@@ -263,57 +322,73 @@ def get_visitor_details():
                     })
     return jsonify({'success': False, 'message': 'Visitor not found'})
 
+
 @app.route('/detect_face', methods=['POST'])
 def detect_face():
     if 'frame' not in request.files:
         return jsonify({'recognized': False, 'message': 'No frame uploaded'})
-    frame = np.frombuffer(request.files['frame'].read(), dtype=np.uint8)
-    frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
-    results = person_model.predict(source=frame, stream=True, classes=[0])
-    max_area, selected_mask = 0, None
-    for r in results:
-        if r.boxes is not None and r.masks is not None:
-            for box, mask in zip(r.boxes.data, r.masks.data):
-                conf = float(box[4].cpu().numpy())
-                x1, y1, x2, y2 = map(int, box[:4].cpu().numpy())
-                box_area = (x2 - x1) * (y2 - y1)
-                if box_area > max_area and conf >= 0.5:
-                    max_area = box_area
-                    selected_mask = mask.cpu().numpy().astype('float32')
-    if selected_mask is None:
-        return jsonify({'recognized': False, 'message': 'No person detected'})
-    face_results = face_model.predict(source=frame, stream=True)
-    for fr in face_results:
-        if fr.boxes is not None:
-            for box in fr.boxes.data:
-                x1, y1, x2, y2 = map(int, box[:4].cpu().numpy())
-                face_crop = frame[y1:y2, x1:x2]
-                rgb_face = cv2.cvtColor(face_crop, cv2.COLOR_BGR2RGB)
-                try:
-                    with open('facedata/facedata.json', 'r') as f:
-                        known_data = json.load(f)
-                except FileNotFoundError:
-                    known_data = {}
-                known_encodings = []
-                known_uids = []
-                for uid, user in known_data.items():
-                    for encoding_path in user.get('face_encodings', []):
-                        if os.path.exists(encoding_path):
-                            encoding = np.load(encoding_path)
-                            known_encodings.append(encoding)
-                            known_uids.append(uid)
-                face_encodings = face_recognition.face_encodings(rgb_face)
-                if face_encodings:
-                    matches = face_recognition.compare_faces(known_encodings, face_encodings[0], tolerance=0.4)
-                    if True in matches:
-                        best_match_index = matches.index(True)
-                        matched_uid = known_uids[best_match_index]
-                        matched_user = known_data[matched_uid]
-                        return jsonify({
-                            'recognized': True,
-                            'user_data': matched_user
-                        })
-    return jsonify({'recognized': False, 'message': 'Face not recognized'})
+
+    try:
+        frame = np.frombuffer(request.files['frame'].read(), dtype=np.uint8)
+        frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
+
+        if person_model is None or not hasattr(person_model, 'predict'):
+            return jsonify({'recognized': False, 'message': 'Model not properly initialized'})
+
+        results = person_model.predict(source=frame, stream=True, classes=[0])
+
+        max_area, selected_mask = 0, None
+        for r in results:
+            if r.boxes is not None and r.masks is not None:
+                for box, mask in zip(r.boxes.data, r.masks.data):
+                    conf = float(box[4].cpu().numpy())
+                    x1, y1, x2, y2 = map(int, box[:4].cpu().numpy())
+                    box_area = (x2 - x1) * (y2 - y1)
+                    if box_area > max_area and conf >= 0.5:
+                        max_area = box_area
+                        selected_mask = mask.cpu().numpy().astype('float32')
+
+        if selected_mask is None:
+            return jsonify({'recognized': False, 'message': 'No person detected'})
+
+        face_results = face_model.predict(source=frame, stream=True)
+        for fr in face_results:
+            if fr.boxes is not None:
+                for box in fr.boxes.data:
+                    x1, y1, x2, y2 = map(int, box[:4].cpu().numpy())
+                    face_crop = frame[y1:y2, x1:x2]
+                    rgb_face = cv2.cvtColor(face_crop, cv2.COLOR_BGR2RGB)
+                    try:
+                        with open('facedata/facedata.json', 'r') as f:
+                            known_data = json.load(f)
+                    except FileNotFoundError:
+                        known_data = {}
+
+                    known_encodings = []
+                    known_uids = []
+                    for uid, user in known_data.items():
+                        for encoding_path in user.get('face_encodings', []):
+                            if os.path.exists(encoding_path):
+                                encoding = np.load(encoding_path)
+                                known_encodings.append(encoding)
+                                known_uids.append(uid)
+
+                    face_encodings = face_recognition.face_encodings(rgb_face, model=face_recognition_model)
+                    if face_encodings:
+                        matches = face_recognition.compare_faces(known_encodings, face_encodings[0], tolerance=0.4)
+                        if True in matches:
+                            best_match_index = matches.index(True)
+                            matched_uid = known_uids[best_match_index]
+                            matched_user = known_data[matched_uid]
+                            return jsonify({
+                                'recognized': True,
+                                'user_data': matched_user
+                            })
+        return jsonify({'recognized': False, 'message': 'Face not recognized'})
+    except Exception as e:
+        return jsonify({'recognized': False, 'message': f'Error processing image: {str(e)}'})
+    finally:
+        cleanup_memory()  # Clean up memory after processing
 
 
 @app.route('/confirm_visitor_entry', methods=['POST'])
@@ -341,6 +416,7 @@ def confirm_visitor_entry():
                 })
     return jsonify({'success': False, 'message': 'Visitor not found'})
 
+
 @app.route('/get_today_visitors', methods=['GET'])
 def get_today_visitors():
     today = datetime.now().strftime("%Y-%m-%d")
@@ -364,6 +440,7 @@ def get_today_visitors():
         'success': True,
         'visitors': today_visitors
     })
+
 
 def detect_person_and_face(frame):
     white_bg = np.ones_like(frame) * 255
@@ -407,6 +484,7 @@ def detect_person_and_face(frame):
             face_output[y1:y2, x1:x2] = face_crop
     return face_output, face_crop
 
+
 @app.route('/process_profile_image', methods=['POST'])
 def process_profile_image():
     if 'image' not in request.files:
@@ -417,44 +495,50 @@ def process_profile_image():
     uid = request.form.get('uid')
     if not uid:
         return jsonify({'success': False, 'message': 'User ID (uid) is required'})
-    image_bytes = file.read()
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    if frame is None:
-        return jsonify({'success': False, 'message': 'Invalid image format'})
-    _, face_crop = detect_person_and_face(frame)
-    if face_crop is None:
-        return jsonify({'success': False, 'message': 'No face detected in the image'})
-    user_dir = f'profiles/{uid}'
-    os.makedirs(user_dir, exist_ok=True)
+    try:
+        image_bytes = file.read()
+        nparr = np.frombuffer(image_bytes, np.uint8)
+        frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        if frame is None:
+            return jsonify({'success': False, 'message': 'Invalid image format'})
+        _, face_crop = detect_person_and_face(frame)
+        if face_crop is None:
+            return jsonify({'success': False, 'message': 'No face detected in the image'})
+        user_dir = f'profiles/{uid}'
+        os.makedirs(user_dir, exist_ok=True)
 
-    existing_images = [f for f in os.listdir(user_dir) if f.startswith(f'{uid}_img') and f.endswith('.jpg')]
-    next_img_num = len(existing_images) + 1
-    face_path = f'{user_dir}/{uid}_img{next_img_num}.jpg'
-    cv2.imwrite(face_path, face_crop)
-    facedata_path = 'facedata/facedata.json'
-    os.makedirs(os.path.dirname(facedata_path), exist_ok=True)
-    if os.path.exists(facedata_path):
-        with open(facedata_path, 'r') as json_file:
-            try:
-                facedata = json.load(json_file)
-            except json.JSONDecodeError:
-                facedata = {}
-    else:
-        facedata = {}
-    if uid not in facedata:
-        facedata[uid] = {"profile_img": []}
-    elif "profile_img" not in facedata[uid]:
-        facedata[uid]["profile_img"] = []
-    facedata[uid]["profile_img"].append(face_path)
-    with open(facedata_path, 'w') as json_file:
-        json.dump(facedata, json_file, indent=4)
-    return jsonify({
-        'success': True,
-        'message': 'Profile image processed successfully',
-        'image_path': face_path,
-        'image_number': next_img_num
-    })
+        existing_images = [f for f in os.listdir(user_dir) if f.startswith(f'{uid}_img') and f.endswith('.jpg')]
+        next_img_num = len(existing_images) + 1
+        face_path = f'{user_dir}/{uid}_img{next_img_num}.jpg'
+        cv2.imwrite(face_path, face_crop)
+        facedata_path = 'facedata/facedata.json'
+        os.makedirs(os.path.dirname(facedata_path), exist_ok=True)
+        if os.path.exists(facedata_path):
+            with open(facedata_path, 'r') as json_file:
+                try:
+                    facedata = json.load(json_file)
+                except json.JSONDecodeError:
+                    facedata = {}
+        else:
+            facedata = {}
+        if uid not in facedata:
+            facedata[uid] = {"profile_img": []}
+        elif "profile_img" not in facedata[uid]:
+            facedata[uid]["profile_img"] = []
+        facedata[uid]["profile_img"].append(face_path)
+        with open(facedata_path, 'w') as json_file:
+            json.dump(facedata, json_file, indent=4)
+        return jsonify({
+            'success': True,
+            'message': 'Profile image processed successfully',
+            'image_path': face_path,
+            'image_number': next_img_num
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Error processing image: {str(e)}'}), 500
+    finally:
+        cleanup_memory()  # Clean up memory after processing
+
 
 @app.route('/dashboard/profiles/<uid>/<filename>', methods=['GET'])
 def get_profile_image(uid, filename):
@@ -463,11 +547,17 @@ def get_profile_image(uid, filename):
         return jsonify({'success': False, 'message': 'Image not found'}), 404
     return send_from_directory(os.path.join(profiles_dir, uid), filename)
 
+
 @app.route('/departments', methods=['GET'])
 def get_departments():
-    with open('JSON/departments.json', 'r', encoding='utf-8') as file:
-        data = json.load(file)
-    return jsonify(data)
+    try:
+        with open('JSON/departments.json', 'r', encoding='utf-8') as file:
+            data = json.load(file)
+        return jsonify(data)
+    except FileNotFoundError:
+        return jsonify({"error": "Departments file not found"}), 404
+    except json.JSONDecodeError:
+        return jsonify({"error": "Invalid JSON in departments file"}), 500
 
 
 @app.route('/complete_meeting', methods=['POST'])
@@ -498,6 +588,7 @@ def complete_meeting():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 @app.route('/visitor_action', methods=['POST'])
 def visitor_action():
     if "user" not in session:
@@ -522,14 +613,12 @@ def visitor_action():
         return jsonify({"success": False, "message": "Could not load visitor data."}), 500
     if uid not in facedata:
         return jsonify({"success": False, "message": f"Visitor with UID '{uid}' not found."}), 404
-    translated_remark = translate_text(remark, 'mr')
-    translated_department = translate_text(forwarding_department, 'mr')
 
     visit_found = False
     for visit in facedata[uid].get('visitor', []):
         if visit.get('visit_id') == visit_id:
-            visit['remark'] = translated_remark
-            visit['forwarding_department'] = translated_department
+            visit['remark'] = remark
+            visit['forwarding_department'] = forwarding_department
             visit['status'] = 'pending'
             visit_found = True
             break
@@ -543,20 +632,26 @@ def visitor_action():
     except Exception as e:
         return jsonify({"success": False, "message": f"Failed to save updated visitor data: {str(e)}"}), 500
 
-@app.route('/translate', methods=['POST'])
-def translate():
-    data = request.get_json()
-    text = data.get("text", "")
-    lang = data.get("lang", "mr")
-    if not text:
-        return jsonify({"error": "No text provided"}), 400
-    translated_text = translate_text(text, lang)
-    return jsonify({"translated_text": translated_text, "language": lang})
-#
-# if __name__ == "__main__":
-#     app.run(host="0.0.0.0", port=5110, debug=True)
 
-context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-context.load_cert_chain('cert.pem', 'key.pem')
+# Improved SSL and Application Start
+if __name__ == "__main__":
+    try:
+        # Check if certificate files exist
+        cert_exists = os.path.isfile('cert.pem')
+        key_exists = os.path.isfile('key.pem')
 
-run_simple('0.0.0.0', 5110, app, use_debugger=True, use_reloader=True, ssl_context=context)
+        if cert_exists and key_exists:
+            # Use SSL if certificates are available
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+            context.load_cert_chain('cert.pem', 'key.pem')
+            # Set cipher suites for better security and performance
+            context.set_ciphers('ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384')
+            app.run(host='0.0.0.0', port=5110, ssl_context=context, threaded=True)
+        else:
+            # Run without SSL if certificates aren't available
+            print("Warning: SSL certificates not found, running without SSL")
+            app.run(host='0.0.0.0', port=5110, threaded=True)
+    except Exception as e:
+        print(f"Error starting server: {e}")
+        # Fallback to basic configuration
+        run_simple('0.0.0.0', 5110, app, threaded=True)

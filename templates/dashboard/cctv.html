@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visitor Entry Confirmation</title>
+    <title>अभ्यागत प्रवेश पुष्टी</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <style>
         :root {
@@ -323,7 +323,6 @@
             transition: all 0.4s ease;
         }
 
-        /* Modal styles */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -412,7 +411,38 @@
             background-color: #c82333;
         }
 
-        /* Skeleton loading animation */
+        .confirmation-popup-style {
+             width: 60% !important;
+             max-width: 500px;
+             background-color: var(--accent-color);
+             color: white;
+        }
+
+        .confirmation-popup-style .modal-title {
+            color: white;
+        }
+
+        .confirmation-popup-style .modal-content {
+            color: white;
+            font-size: 1.1rem;
+        }
+
+         .confirmation-popup-style .modal-actions {
+            justify-content: center;
+         }
+
+        .confirmation-popup-style .modal-btn-close {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            flex: 0 1 150px;
+        }
+
+        .confirmation-popup-style .modal-btn-close:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+
         @keyframes pulse {
             0% { opacity: 0.6; }
             50% { opacity: 1; }
@@ -458,15 +488,18 @@
             .main-content {
                 padding-top: 70px;
             }
+
+            .confirmation-popup-style {
+                width: 85% !important;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
         <div class="logo">
             <i class="fas fa-id-badge"></i>
-            <span>SVMS</span>
+            <span>एसव्हीएमएस</span>
         </div>
         <div class="user-menu" id="userMenu">
             <div class="user-icon">
@@ -475,25 +508,24 @@
             <div class="dropdown-menu" id="dropdownMenu">
                 <div class="dropdown-menu-item">
                     <i class="fas fa-user-circle"></i>
-                    <span>My Profile</span>
+                    <span>माझे प्रोफाइल</span>
                 </div>
                 <div class="dropdown-menu-item">
                     <i class="fas fa-cog"></i>
-                    <span>Settings</span>
+                    <span>सेटिंग्ज</span>
                 </div>
                 <div class="dropdown-menu-item">
                     <i class="fas fa-question-circle"></i>
-                    <span>Help & Support</span>
+                    <span>मदत आणि समर्थन</span>
                 </div>
                 <div class="dropdown-menu-item logout" id="logoutBtn">
                     <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>
+                    <span>लॉगआउट</span>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
     <div class="main-content">
         <div class="container">
             <div class="video-container">
@@ -502,55 +534,69 @@
 
             <div id="visitorDetails" class="visitor-details" style="display:none;">
                 <div class="visitor-info-header">
-                    <h2>Visitor Profile</h2>
-                    <div class="visitor-info-badge">Verified</div>
+                    <h2>अभ्यागत प्रोफाइल</h2>
+                    <div class="visitor-info-badge">सत्यापित</div>
                 </div>
                 <div class="visitor-details-grid">
                     <div class="visitor-detail-item">
-                        <div class="visitor-detail-label">Full Name</div>
+                        <div class="visitor-detail-label">पूर्ण नाव</div>
                         <div id="visitorName" class="visitor-detail-value">-</div>
                     </div>
                     <div class="visitor-detail-item">
-                        <div class="visitor-detail-label">Visitor ID</div>
+                        <div class="visitor-detail-label">अभ्यागत आयडी</div>
                         <div id="visitorID" class="visitor-detail-value">-</div>
                     </div>
                     <div class="visitor-detail-item">
-                        <div class="visitor-detail-label">Daily Visitor Number</div>
+                        <div class="visitor-detail-label">दैनिक अभ्यागत क्रमांक</div>
                         <div id="dailyVisitorNumber" class="visitor-detail-value">-</div>
                     </div>
                     <div class="visitor-detail-item">
-                        <div class="visitor-detail-label">Registered Time</div>
+                        <div class="visitor-detail-label">नोंदणीची वेळ</div>
                         <div class="visitor-detail-value" id="entryTime">-</div>
                     </div>
                 </div>
             </div>
 
             <button id="confirmEntryBtn" class="btn" style="display:none;" onclick="confirmVisitorEntry()">
-                Confirm Visitor Entry
+                अभ्यागत प्रवेशाची पुष्टी करा
             </button>
 
-            <div id="noMatchMessage" class="no-match" style="display:none;">
-                <i class="fas fa-user-slash" style="font-size: 2rem; margin-bottom: 15px;"></i>
-                <p>No recognized visitor</p>
+            <div id="noMatchMessage" class="no-match" style="display:block;">
+                 <div class="skeleton-loading skeleton-text" style="height: 30px; width: 60%; margin: auto auto 10px;"></div>
+                 <div class="skeleton-loading skeleton-text" style="height: 20px; width: 80%; margin: auto;"></div>
             </div>
         </div>
     </div>
 
-    <!-- Logout Confirmation Modal -->
     <div class="modal-overlay" id="logoutModal">
         <div class="modal-container">
             <div class="modal-header">
-                <h3 class="modal-title">Confirm Logout</h3>
+                <h3 class="modal-title">लॉगआउटची पुष्टी करा</h3>
             </div>
             <div class="modal-content">
-                <p>Are you sure you want to logout from the system?</p>
+                <p>तुम्हाला खात्री आहे की तुम्हाला सिस्टममधून लॉगआउट करायचे आहे?</p>
             </div>
             <div class="modal-actions">
-                <button id="cancelLogoutBtn" class="modal-btn modal-btn-cancel">Cancel</button>
-                <button id="confirmLogoutBtn" class="modal-btn modal-btn-confirm">Logout</button>
+                <button id="cancelLogoutBtn" class="modal-btn modal-btn-cancel">रद्द करा</button>
+                <button id="confirmLogoutBtn" class="modal-btn modal-btn-confirm">लॉगआउट</button>
             </div>
         </div>
     </div>
+
+     <div class="modal-overlay" id="confirmationPopup">
+        <div class="modal-container confirmation-popup-style">
+            <div class="modal-header">
+                <h3 class="modal-title">अभ्यागत प्रवेशाची पुष्टी झाली</h3>
+            </div>
+            <div class="modal-content">
+                 <p>दैनिक अभ्यागत क्रमांक: <strong id="popupDvnValue" style="font-size: 1.3em;">-</strong></p>
+            </div>
+            <div class="modal-actions">
+                 <button id="closeConfirmationPopupBtn" class="modal-btn modal-btn-close">बंद करा</button>
+            </div>
+        </div>
+    </div>
+
 
     <script>
        const videoFeed = document.getElementById('videoFeed');
@@ -562,69 +608,65 @@ const confirmEntryBtn = document.getElementById('confirmEntryBtn');
 const noMatchMessage = document.getElementById('noMatchMessage');
 const entryTime = document.getElementById('entryTime');
 
-// Dropdown menu elements
 const userMenu = document.getElementById('userMenu');
 const dropdownMenu = document.getElementById('dropdownMenu');
 const logoutBtn = document.getElementById('logoutBtn');
 
-// Modal elements
 const logoutModal = document.getElementById('logoutModal');
 const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
 const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
 
+const confirmationPopup = document.getElementById('confirmationPopup');
+const popupDvnValue = document.getElementById('popupDvnValue');
+const closeConfirmationPopupBtn = document.getElementById('closeConfirmationPopupBtn');
+
+
 let recognitionInterval;
 let currentVisitorData = null;
 let isProcessing = false;
+let confirmationPopupTimeout;
+let lastDisplayedVisitorId = null;
 
-// Toggle dropdown menu
 userMenu.addEventListener('click', (e) => {
     dropdownMenu.classList.toggle('active');
     e.stopPropagation();
 });
 
-// Close dropdown when clicking outside
 document.addEventListener('click', () => {
     dropdownMenu.classList.remove('active');
 });
 
-// Logout button click
 logoutBtn.addEventListener('click', () => {
     logoutModal.classList.add('active');
 });
 
-// Cancel logout
 cancelLogoutBtn.addEventListener('click', () => {
     logoutModal.classList.remove('active');
 });
 
-// Confirm logout
 confirmLogoutBtn.addEventListener('click', () => {
     logout();
 });
+
+if (closeConfirmationPopupBtn) {
+    closeConfirmationPopupBtn.addEventListener('click', () => {
+        confirmationPopup.classList.remove('active');
+        if(confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
+    });
+}
+
 
 function generateDailyVisitorNumber() {
     const today = new Date();
     const dateKey = today.toISOString().split('T')[0];
 
-    // Retrieve or initialize daily visitor tracking
     let dailyVisitorTracker = JSON.parse(localStorage.getItem('dailyVisitorTracker') || '{}');
+    let currentNumber = dailyVisitorTracker[dateKey] || 0;
+    currentNumber = Math.min(currentNumber + 1, 1000);
+    dailyVisitorTracker[dateKey] = currentNumber;
 
-    // Reset tracking if it's a new day
-    if (!dailyVisitorTracker[dateKey]) {
-        dailyVisitorTracker = {};
-        dailyVisitorTracker[dateKey] = 1;
-    } else {
-        // Increment visitor number, ensuring it doesn't exceed 1000
-        dailyVisitorTracker[dateKey] = Math.min(
-            (dailyVisitorTracker[dateKey] || 0) + 1,
-            1000
-        );
-    }
-
-    // Save updated tracker
     localStorage.setItem('dailyVisitorTracker', JSON.stringify(dailyVisitorTracker));
-
-    return dailyVisitorTracker[dateKey];
+    return currentNumber;
 }
 
 function startCamera() {
@@ -633,227 +675,231 @@ function startCamera() {
     })
     .then(stream => {
         videoFeed.srcObject = stream;
+        resetInitialDisplay();
 
-        // Show loading state before detection starts
-        noMatchMessage.innerHTML = `
-            <div class="skeleton-loading skeleton-text" style="height: 30px; width: 60%;"></div>
-            <div class="skeleton-loading skeleton-text" style="height: 20px; width: 80%;"></div>
-        `;
-        noMatchMessage.style.display = 'block';
-
-        // Add a delay before starting detection to ensure camera is ready
         setTimeout(() => {
+            if (recognitionInterval) clearInterval(recognitionInterval);
             recognitionInterval = setInterval(detectFace, 1000);
         }, 1500);
     })
     .catch(error => {
         console.error('Camera access error:', error);
-        noMatchMessage.innerHTML = '<i class="fas fa-camera-slash" style="font-size: 2rem; margin-bottom: 15px;"></i><p>Camera access denied</p>';
+        noMatchMessage.innerHTML = '<i class="fas fa-camera-slash" style="font-size: 2rem; margin-bottom: 15px;"></i><p>कॅमेरा प्रवेश नाकारला</p>';
         noMatchMessage.style.display = 'block';
+        visitorDetails.style.display = 'none';
+        confirmEntryBtn.style.display = 'none';
+        confirmationPopup.classList.remove('active');
     });
 }
 
 function detectFace() {
-    if (isProcessing) return; // Prevent multiple simultaneous requests
+    if (isProcessing || !videoFeed.srcObject || videoFeed.paused || videoFeed.ended || videoFeed.readyState < 3) {
+         if (videoFeed.readyState < 3 && videoFeed.srcObject) {
+            // console.log("Video not ready, skipping frame.");
+         }
+        return;
+    }
+
 
     isProcessing = true;
 
-    // Capture frame from video
     const canvas = document.createElement('canvas');
-    canvas.width = videoFeed.videoWidth;
-    canvas.height = videoFeed.videoHeight;
+    const videoWidth = videoFeed.videoWidth;
+    const videoHeight = videoFeed.videoHeight;
+
+    if (videoWidth === 0 || videoHeight === 0) {
+        isProcessing = false;
+        return;
+    }
+
+
+    canvas.width = videoWidth;
+    canvas.height = videoHeight;
     const ctx = canvas.getContext('2d');
     ctx.drawImage(videoFeed, 0, 0, canvas.width, canvas.height);
 
-    // Convert canvas to blob
     canvas.toBlob(blob => {
+        if (!blob) {
+           isProcessing = false;
+           return;
+        }
         const formData = new FormData();
         formData.append('frame', blob, 'frame.jpg');
 
-        // Send to face detection endpoint
         fetch('/detect_face', {
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
+        .then(response => {
+             if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+             }
+             return response.json();
+         })
         .then(data => {
             if (data.recognized) {
-                displayVisitorDetails(data.user_data);
+                // Only update if it's a new visitor or the same visitor being redisplayed
+                if (lastDisplayedVisitorId !== data.user_data.visitor[0]?.visit_id) {
+                     handleSuccessfulDetection(data.user_data);
+                     lastDisplayedVisitorId = data.user_data.visitor[0]?.visit_id;
+                 } else {
+                    // Keep showing the same visitor, maybe refresh popup timer?
+                    // For now, do nothing to avoid constant re-rendering/popup flashing
+                 }
             } else {
-                resetDisplay();
+                // If no face is recognized, reset the display
+                if (lastDisplayedVisitorId !== null) {
+                    resetDisplay();
+                    lastDisplayedVisitorId = null;
+                }
             }
             isProcessing = false;
         })
         .catch(error => {
             console.error('Face detection error:', error);
-            resetDisplay();
+             if (lastDisplayedVisitorId !== null) {
+                 resetDisplay();
+                 lastDisplayedVisitorId = null;
+             }
             isProcessing = false;
         });
-    }, 'image/jpeg', 0.8); // Reduced quality for faster transmission
+    }, 'image/jpeg', 0.8);
 }
 
-function displayVisitorDetails(userData) {
-    // Get today's date
+async function handleSuccessfulDetection(userData) {
     const today = new Date().toISOString().split('T')[0];
+    const todayVisits = userData.visitor ? userData.visitor.filter(visit => visit.datetime && visit.datetime.startsWith(today)) : [];
 
-    // Filter visits for today
-    const todayVisits = userData.visitor
-        ? userData.visitor.filter(visit =>
-            visit.datetime.startsWith(today)
-        )
-        : [];
-
-    // If no visits today, reset display
     if (todayVisits.length === 0) {
         resetDisplay();
+        lastDisplayedVisitorId = null;
         return;
     }
 
-    // Check if DVN already exists
-    const existingDVN = todayVisits[0].dvn;
+    const visitData = todayVisits[0];
+    let finalDVN = visitData.dvn; // Check if DVN already exists from server data
+    let needsServerUpdate = false;
 
-    // Store current visitor data
-    currentVisitorData = {
-        name: userData.name,
-        visitId: todayVisits[0].visit_id,
-        dvn: existingDVN
-    };
-
-    // Update visitor details in the specified format
-    visitorName.innerHTML = `${userData.name || 'N/A'}`;
-    visitorID.innerHTML = todayVisits[0].visit_id;
-
-    // Update Daily Visitor Number display
-    dailyVisitorNumber.innerHTML = existingDVN || '-';
-
-    // Update entry time
-    const entryDateTime = new Date(todayVisits[0].datetime);
-    entryTime.innerHTML = entryDateTime.toLocaleTimeString();
-
-    // Show/hide confirm button based on DVN
-    if (existingDVN) {
-        confirmEntryBtn.style.display = 'none';
-    } else {
-        confirmEntryBtn.style.display = 'block';
+    // If DVN doesn't exist in the fetched data for today's visit
+    if (!finalDVN) {
+        finalDVN = generateDailyVisitorNumber(); // Generate a new one
+        needsServerUpdate = true; // Mark that we need to tell the server
     }
 
-    // Show details
-    visitorDetails.style.display = 'block';
-    noMatchMessage.style.display = 'none';
+    // Display details immediately with either existing or new DVN
+    displayVisitorDetails(userData.name, visitData.visit_id, finalDVN, visitData.datetime);
+
+    // Show popup with the DVN
+    showConfirmationPopup(finalDVN);
+
+    // If we generated a new DVN, send it to the server
+    if (needsServerUpdate) {
+        try {
+            const confirmationData = {
+                visitId: visitData.visit_id,
+                dvn: finalDVN,
+                name: userData.name
+            };
+            const response = await fetch('/confirm_visitor_entry', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(confirmationData)
+            });
+            const data = await response.json();
+            if (!data.success) {
+                console.warn('Server confirmation failed for DVN:', finalDVN, 'Visit ID:', visitData.visit_id);
+                // Optional: Handle failure, maybe try again later?
+            } else {
+                 console.log('Server confirmed DVN:', finalDVN, 'for Visit ID:', visitData.visit_id);
+            }
+        } catch (error) {
+            console.error('Error confirming visitor entry:', error);
+            // Optional: Handle network error
+        }
+    }
 }
+
+function displayVisitorDetails(name, visitId, dvn, entryDatetime) {
+     visitorName.textContent = name || 'N/A';
+     visitorID.textContent = visitId || '-';
+     dailyVisitorNumber.textContent = dvn || '-';
+     const entryDateTimeObj = new Date(entryDatetime);
+     entryTime.textContent = !isNaN(entryDateTimeObj) ? entryDateTimeObj.toLocaleTimeString('mr-IN') : '-';
+
+     confirmEntryBtn.style.display = 'none'; // Button is never needed now
+     visitorDetails.style.display = 'block';
+     noMatchMessage.style.display = 'none';
+}
+
+
+function showConfirmationPopup(dvn) {
+    if (confirmationPopup && popupDvnValue) {
+        popupDvnValue.textContent = dvn || '-';
+        confirmationPopup.classList.add('active');
+
+        if (confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
+        confirmationPopupTimeout = setTimeout(() => {
+            confirmationPopup.classList.remove('active');
+        }, 5000); // Auto-close after 5 seconds
+    }
+}
+
 
 function confirmVisitorEntry() {
-    if (!currentVisitorData) return;
-
-    // Disable button to prevent double submission
-    confirmEntryBtn.disabled = true;
-    confirmEntryBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-
-    // Generate Daily Visitor Number (DVN)
-    const dvn = generateDailyVisitorNumber();
-
-    // Prepare data to send to server
-    const confirmationData = {
-        visitId: currentVisitorData.visitId,
-        dvn: dvn,
-        name: currentVisitorData.name
-    };
-
-    // Send confirmation to server
-    fetch('/confirm_visitor_entry', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(confirmationData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Update visitor details to show DVN
-            dailyVisitorNumber.innerHTML = dvn;
-
-            // Display success notification
-            const notification = document.createElement('div');
-            notification.style.position = 'fixed';
-            notification.style.top = '70px';
-            notification.style.right = '20px';
-            notification.style.background = 'var(--accent-color)';
-            notification.style.color = 'white';
-            notification.style.padding = '15px 20px';
-            notification.style.borderRadius = '8px';
-            notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-            notification.style.zIndex = '9999';
-            notification.style.transform = 'translateY(-20px)';
-            notification.style.opacity = '0';
-            notification.style.transition = 'all 0.3s ease';
-            notification.innerHTML = `
-                <div style="display: flex; align-items: center;">
-                    <i class="fas fa-check-circle" style="margin-right: 10px; font-size: 1.2rem;"></i>
-                    <div>
-                        <div style="font-weight: 600; margin-bottom: 3px;">Visitor Entry Confirmed</div>
-                        <div style="font-size: 0.8rem;">Daily Visitor Number: ${dvn}</div>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(notification);
-
-            // Animate notification
-            setTimeout(() => {
-                notification.style.transform = 'translateY(0)';
-                notification.style.opacity = '1';
-            }, 10);
-
-            // Remove notification after 5 seconds
-            setTimeout(() => {
-                notification.style.transform = 'translateY(-20px)';
-                notification.style.opacity = '0';
-                setTimeout(() => notification.remove(), 300);
-            }, 5000);
-
-            // Hide confirm button
-            confirmEntryBtn.style.display = 'none';
-        } else {
-            // Show error
-            confirmEntryBtn.disabled = false;
-            confirmEntryBtn.innerHTML = 'Confirm Visitor Entry';
-            alert('Confirmation failed. Please try again.');
-        }
-    })
-    .catch(error => {
-        console.error('Confirmation error:', error);
-        confirmEntryBtn.disabled = false;
-        confirmEntryBtn.innerHTML = 'Confirm Visitor Entry';
-        alert('An error occurred during confirmation.');
-    });
+   // This function is not used anymore as confirmation is automatic
+   console.log("Manual confirmation button clicked - Deprecated.");
 }
 
+function resetInitialDisplay() {
+     noMatchMessage.innerHTML = `
+         <div class="skeleton-loading skeleton-text" style="height: 30px; width: 60%; margin: auto auto 10px;"></div>
+         <div class="skeleton-loading skeleton-text" style="height: 20px; width: 80%; margin: auto;"></div>
+     `;
+     noMatchMessage.style.display = 'block';
+     visitorDetails.style.display = 'none';
+     confirmEntryBtn.style.display = 'none';
+     confirmationPopup.classList.remove('active');
+     if(confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
+     lastDisplayedVisitorId = null; // Reset last displayed visitor
+}
+
+
 function resetDisplay() {
-    visitorDetails.style.display = 'none';
-    confirmEntryBtn.style.display = 'none';
-    noMatchMessage.innerHTML = '<i class="fas fa-user-slash" style="font-size: 2rem; margin-bottom: 15px;"></i><p>No recognized visitor</p>';
-    noMatchMessage.style.display = 'block';
+    // Only reset if something was actually displayed
+    if (visitorDetails.style.display !== 'none' || noMatchMessage.style.display === 'none') {
+        visitorDetails.style.display = 'none';
+        confirmEntryBtn.style.display = 'none';
+        confirmationPopup.classList.remove('active');
+        if(confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
 
-    // Reset all detail fields
-    visitorName.innerHTML = '-';
-    visitorID.innerHTML = '-';
-    dailyVisitorNumber.innerHTML = '-';
-    entryTime.innerHTML = '-';
+        noMatchMessage.innerHTML = '<i class="fas fa-user-slash" style="font-size: 2rem; margin-bottom: 15px;"></i><p>ओळखलेला अभ्यागत नाही</p>';
+        noMatchMessage.style.display = 'block';
 
-    currentVisitorData = null;
+        // Clear detail fields
+        visitorName.textContent = '-';
+        visitorID.textContent = '-';
+        dailyVisitorNumber.textContent = '-';
+        entryTime.textContent = '-';
+
+        currentVisitorData = null; // Clear any potentially stale data
+    }
+     lastDisplayedVisitorId = null; // Reset last displayed visitor
 }
 
 function stopCamera() {
     if (recognitionInterval) {
         clearInterval(recognitionInterval);
+        recognitionInterval = null;
     }
     if (videoFeed.srcObject) {
         videoFeed.srcObject.getTracks().forEach(track => track.stop());
+        videoFeed.srcObject = null;
     }
+     isProcessing = false;
+     lastDisplayedVisitorId = null; // Reset on stop
 }
 
 function logout() {
-    // Show loading state
     confirmLogoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
     confirmLogoutBtn.disabled = true;
 
@@ -861,93 +907,104 @@ function logout() {
         .then(response => response.json())
         .then(() => {
             localStorage.removeItem("user");
-            localStorage.removeItem("dailyVisitorTracker");
+            localStorage.removeItem("dailyVisitorTracker"); // Clear tracker on logout
             window.location.href = "/";
         })
         .catch(error => {
             console.error('Logout error:', error);
-            // Force logout even if API fails
             localStorage.removeItem("user");
+            localStorage.removeItem("dailyVisitorTracker"); // Clear tracker on logout
             window.location.href = "/";
         });
 }
 
-// Start camera on page load
 document.addEventListener('DOMContentLoaded', () => {
     if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
         startCamera();
     } else {
-        noMatchMessage.innerHTML = '<i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 15px; color: #f8d7da;"></i><p>Camera not supported</p>';
+        noMatchMessage.innerHTML = '<i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 15px; color: #f8d7da;"></i><p>कॅमेरा समर्थित नाही</p>';
         noMatchMessage.style.display = 'block';
     }
 });
 
-// Clean up on page unload
 window.addEventListener('beforeunload', () => {
     stopCamera();
 });
 
-// Handle keyboard shortcuts
 document.addEventListener('keydown', (e) => {
-    // Escape key closes the modal
     if (e.key === 'Escape') {
         logoutModal.classList.remove('active');
         dropdownMenu.classList.remove('active');
+        confirmationPopup.classList.remove('active');
+         if(confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
     }
 });
 
-// Handle pull-to-refresh for mobile
 let touchStartY = 0;
 let isRefreshing = false;
 
 document.addEventListener('touchstart', (e) => {
-    touchStartY = e.touches[0].clientY;
+    // Only track touch start if the user is at the very top
+    if (document.documentElement.scrollTop === 0 || document.body.scrollTop === 0) {
+        touchStartY = e.touches[0].clientY;
+    } else {
+        touchStartY = 0; // Reset if not at top
+    }
 }, { passive: true });
 
 document.addEventListener('touchmove', (e) => {
     const touchY = e.touches[0].clientY;
     const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
 
-    // If at top of page and pulling down
-    if (scrollTop === 0 && touchY > touchStartY + 70 && !isRefreshing) {
+    // Check if we started at the top, pulled down significantly, and not already refreshing
+    if (touchStartY > 0 && scrollTop === 0 && touchY > touchStartY + 70 && !isRefreshing) {
         isRefreshing = true;
+        touchStartY = 0; // Reset start Y to prevent multiple triggers
 
-        // Show refreshing indicator
         noMatchMessage.innerHTML = `
             <i class="fas fa-sync fa-spin" style="font-size: 2rem; margin-bottom: 15px;"></i>
-            <p>Refreshing camera...</p>
+            <p>कॅमेरा रिफ्रेश करत आहे...</p>
         `;
         noMatchMessage.style.display = 'block';
+        visitorDetails.style.display = 'none';
+        confirmEntryBtn.style.display = 'none';
+        confirmationPopup.classList.remove('active');
+        if(confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
+        lastDisplayedVisitorId = null;
 
-        // Stop the camera
+
         stopCamera();
 
-        // Start camera again after a short delay
         setTimeout(() => {
             startCamera();
-            isRefreshing = false;
+            // Make sure isRefreshing is reset *after* camera starts to avoid race conditions
+             setTimeout(() => { isRefreshing = false; }, 500);
         }, 1000);
 
+        // Prevent default pull-to-refresh behavior if we handled it
         e.preventDefault();
     }
-}, { passive: false });
+}, { passive: false }); // Need non-passive to prevent default
 
-// Handle offline/online status
 window.addEventListener('online', () => {
-    // Restart camera when coming back online
+    console.log("Status: Online. Restarting camera.");
     stopCamera();
     startCamera();
 });
 
 window.addEventListener('offline', () => {
-    // Show offline message
+    console.log("Status: Offline.");
+    stopCamera();
     noMatchMessage.innerHTML = `
         <i class="fas fa-wifi-slash" style="font-size: 2rem; margin-bottom: 15px;"></i>
-        <p>You are offline. Please check your connection.</p>
+        <p>तुम्ही ऑफलाइन आहात. कृपया तुमचे कनेक्शन तपासा.</p>
     `;
     noMatchMessage.style.display = 'block';
     visitorDetails.style.display = 'none';
     confirmEntryBtn.style.display = 'none';
+    confirmationPopup.classList.remove('active');
+     if(confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
+     lastDisplayedVisitorId = null;
 });
     </script>
 </body>

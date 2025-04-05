@@ -507,13 +507,13 @@
                 <textarea id="address" placeholder="पत्ता (आवश्यक)" required></textarea>
                 <select id="tahasil" required>
                     <option value="" disabled selected>तहसील निवडा</option>
-                    <option value="AKOLA">अकोला</option>
-                    <option value="AKOT">अकोट</option>
-                    <option value="TELAHARA">तेल्हारा</option>
-                    <option value="BALAPUR">बाळापूर</option>
-                    <option value="PATUR">पातूर</option>
-                    <option value="MURTIZAPUR">मुर्तिजापूर</option>
-                    <option value="BARSHITAKLI">बार्शीटाकळी</option>
+                    <option value="अकोला">अकोला</option>
+                    <option value="अकोट">अकोट</option>
+                    <option value="तेल्हारा">तेल्हारा</option>
+                    <option value="बाळापूर">बाळापूर</option>
+                    <option value="पातूर">पातूर</option>
+                    <option value="मुर्तिजापूर">मुर्तिजापूर</option>
+                    <option value="बार्शीटाकळी<">बार्शीटाकळी</option>
                 </select>
                 <input type="text" id="purpose" placeholder="भेटीचे कारण" required>
                 <button onclick="saveVisitorData(this)">अभ्यागताचा डेटा जतन करा</button>
@@ -1001,7 +1001,7 @@
                          if (domElements['new-purpose']) domElements['new-purpose'].value = "";
                          capturedFrames = [];
                          if(domElements['captured-images']) domElements['captured-images'].innerHTML = "";
-                         setTimeout(resetForms, 1000);
+                         setTimeout(resetForms, 5000);
                      } else {
                           throw new Error(visitorDetails.message || "Failed to fetch updated visitor details.");
                       }
