@@ -752,33 +752,42 @@ function detectFace() {
     }, 'image/jpeg', 0.8);
 }
 
+function generateDailyVisitorNumber(visitorId) {
+    const today = new Date().toISOString().split('T')[0];
+    let tracker = JSON.parse(localStorage.getItem('dailyVisitorTracker') || '{}');
+    if (!tracker[today]) tracker[today] = {};
+    let todayVisitors = tracker[today];
+    if (todayVisitors[visitorId]) return todayVisitors[visitorId];
+    let numbers = Object.values(todayVisitors);
+    let nextNumber = numbers.length ? Math.max(...numbers) + 1 : 1;
+    todayVisitors[visitorId] = nextNumber;
+    tracker[today] = todayVisitors;
+    localStorage.setItem('dailyVisitorTracker', JSON.stringify(tracker));
+    return nextNumber;
+}
+
 async function handleSuccessfulDetection(userData) {
     const today = new Date().toISOString().split('T')[0];
     const todayVisits = userData.visitor ? userData.visitor.filter(visit => visit.datetime && visit.datetime.startsWith(today)) : [];
 
-    if (todayVisits.length === 0) {
+    if (!todayVisits.length) {
         resetDisplay();
         lastDisplayedVisitorId = null;
         return;
     }
 
     const visitData = todayVisits[0];
-    let finalDVN = visitData.dvn; // Check if DVN already exists from server data
+    let finalDVN = visitData.dvn;
     let needsServerUpdate = false;
 
-    // If DVN doesn't exist in the fetched data for today's visit
     if (!finalDVN) {
-        finalDVN = generateDailyVisitorNumber(); // Generate a new one
-        needsServerUpdate = true; // Mark that we need to tell the server
+        finalDVN = generateDailyVisitorNumber(visitData.visit_id);
+        needsServerUpdate = true;
     }
 
-    // Display details immediately with either existing or new DVN
     displayVisitorDetails(userData.name, visitData.visit_id, finalDVN, visitData.datetime);
-
-    // Show popup with the DVN
     showConfirmationPopup(finalDVN);
 
-    // If we generated a new DVN, send it to the server
     if (needsServerUpdate) {
         try {
             const confirmationData = {
@@ -792,15 +801,9 @@ async function handleSuccessfulDetection(userData) {
                 body: JSON.stringify(confirmationData)
             });
             const data = await response.json();
-            if (!data.success) {
-                console.warn('Server confirmation failed for DVN:', finalDVN, 'Visit ID:', visitData.visit_id);
-                // Optional: Handle failure, maybe try again later?
-            } else {
-                 console.log('Server confirmed DVN:', finalDVN, 'for Visit ID:', visitData.visit_id);
-            }
+            if (!data.success) console.warn('Server confirmation failed for DVN:', finalDVN);
         } catch (error) {
-            console.error('Error confirming visitor entry:', error);
-            // Optional: Handle network error
+            console.error('Error confirming DVN to server:', error);
         }
     }
 }
