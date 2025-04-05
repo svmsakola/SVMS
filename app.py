@@ -11,8 +11,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from flask_cors import CORS
 from ultralytics import YOLO
 from datetime import datetime
-import ssl
-from werkzeug.serving import run_simple
+
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -149,7 +148,7 @@ def login():
         username = data.get("username")
         password = data.get("password")
         users = load_users()
-        if username in users and bcrypt.checkpw(password.encode(), users[username]["password"].encode()):
+        if username in users and bcrypt.checkpw(password.encode('utf-8'), users[username]["password"].encode('utf-8')):
             role = users[username]["role"]
             session["user"] = {"username": username, "role": role}
             return jsonify(success=True, redirect_url=url_for("dashboard", role=role))
@@ -532,8 +531,7 @@ def process_profile_image():
     except Exception as e:
         return jsonify({'success': False, 'message': f'Error processing image: {str(e)}'}), 500
     finally:
-        cleanup_memory()  # Clean up memory after processing
-
+        cleanup_memory()
 
 @app.route('/dashboard/profiles/<uid>/<filename>', methods=['GET'])
 def get_profile_image(uid, filename):
@@ -628,25 +626,7 @@ def visitor_action():
         return jsonify({"success": False, "message": f"Failed to save updated visitor data: {str(e)}"}), 500
 
 
-# Improved SSL and Application Start
 if __name__ == "__main__":
-    try:
-        # Check if certificate files exist
-        cert_exists = os.path.isfile('cert.pem')
-        key_exists = os.path.isfile('key.pem')
+    app.run()
 
-        if cert_exists and key_exists:
-            # Use SSL if certificates are available
-            context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-            context.load_cert_chain('cert.pem', 'key.pem')
-            # Set cipher suites for better security and performance
-            context.set_ciphers('ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384')
-            app.run(host='0.0.0.0', port=5110, ssl_context=context, threaded=True)
-        else:
-            # Run without SSL if certificates aren't available
-            print("Warning: SSL certificates not found, running without SSL")
-            app.run(host='0.0.0.0', port=5110, threaded=True)
-    except Exception as e:
-        print(f"Error starting server: {e}")
-        # Fallback to basic configuration
-        run_simple('0.0.0.0', 5110, app, threaded=True)
+# gunicorn --workers 3 --bind 127.0.0.1:8080 app:app
