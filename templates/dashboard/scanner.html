@@ -189,47 +189,6 @@
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
             z-index: 900;
             overflow-y: auto;
-            padding-top: 20px;
-        }
-
-        /* New sidebar menu styles */
-        .sidebar-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .sidebar-menu-item {
-            margin-bottom: 5px;
-        }
-
-        .sidebar-menu-link {
-            display: flex;
-            align-items: center;
-            padding: 12px 20px;
-            color: var(--text-dark);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border-left: 4px solid transparent;
-            font-weight: 500;
-        }
-
-        .sidebar-menu-link:hover {
-            background-color: var(--light-blue);
-            border-left-color: var(--secondary-blue);
-        }
-
-        .sidebar-menu-link.active {
-            background-color: var(--light-blue);
-            border-left-color: var(--primary-blue);
-            color: var(--primary-blue);
-        }
-
-        .sidebar-menu-icon {
-            margin-right: 12px;
-            width: 20px;
-            text-align: center;
-            font-size: 1.1rem;
         }
 
         /* Main content with sidebar */
@@ -243,28 +202,6 @@
             flex: 1;
             padding: 30px;
             margin-left: var(--sidebar-width); /* Account for sidebar */
-        }
-
-        /* Content loader */
-        .content-loader {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 200px;
-        }
-
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border-left-color: var(--secondary-blue);
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         /* Modal styles */
@@ -438,42 +375,14 @@
         </header>
 
         <div class="main-wrapper">
-            <!-- Sidebar with menu items -->
+            <!-- Sidebar -->
             <aside class="sidebar" id="sidebar">
-                <ul class="sidebar-menu">
-                    <li class="sidebar-menu-item">
-                        <a href="#" class="sidebar-menu-link active" data-page="visitor-dashboard">
-                            <i class="fas fa-tachometer-alt sidebar-menu-icon"></i>
-                            <span>Visitor Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-menu-item">
-                        <a href="#" class="sidebar-menu-link" data-page="department-role">
-                            <i class="fas fa-building sidebar-menu-icon"></i>
-                            <span>Department</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-menu-item">
-                        <a href="#" class="sidebar-menu-link" data-page="role-manager">
-                            <i class="fas fa-user-tag sidebar-menu-icon"></i>
-                            <span>Role Manager</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-menu-item">
-                        <a href="#" class="sidebar-menu-link" data-page="settings">
-                            <i class="fas fa-cog sidebar-menu-icon"></i>
-                            <span>Settings</span>
-                        </a>
-                    </li>
-                </ul>
+                <!-- Empty sidebar as requested -->
             </aside>
 
             <!-- Main Content -->
-            <div class="main-content" id="mainContent">
-                <!-- Content will be loaded dynamically here -->
-                <div class="content-loader">
-                    <div class="spinner"></div>
-                </div>
+            <div class="main-content">
+                <!-- Body is empty as requested -->
             </div>
         </div>
 
@@ -491,7 +400,6 @@
     </div>
 
     <script>
-        // Profile dropdown toggle
         const profileIcon = document.getElementById('profileIcon');
         const dropdownMenu = document.getElementById('dropdownMenu');
 
@@ -499,18 +407,15 @@
             dropdownMenu.classList.toggle('active');
         });
 
-        // Close dropdown when clicking outside
         document.addEventListener('click', function(event) {
             if (!profileIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
                 dropdownMenu.classList.remove('active');
             }
         });
 
-        // Mobile menu toggle
         const menuToggle = document.getElementById('menuToggle');
         const sidebar = document.getElementById('sidebar');
 
-        // Show menu toggle button on mobile
         function checkScreenSize() {
             if (window.innerWidth <= 992) {
                 menuToggle.style.display = 'flex';
@@ -520,76 +425,14 @@
             }
         }
 
-        // Initial check
         checkScreenSize();
 
-        // Check on resize
         window.addEventListener('resize', checkScreenSize);
 
-        // Toggle sidebar
         menuToggle.addEventListener('click', function() {
             sidebar.classList.toggle('active');
         });
 
-        // Content loading function
-        async function loadContent(pageId) {
-            const mainContent = document.getElementById('mainContent');
-
-            // Show loading spinner
-            mainContent.innerHTML = `
-                <div class="content-loader">
-                    <div class="spinner"></div>
-                </div>
-            `;
-
-            try {
-                const response = await fetch(`/dashboard/pages/${pageId}.html`);
-
-                if (!response.ok) {
-                    throw new Error(`Failed to load ${pageId}.html (${response.status})`);
-                }
-
-                const content = await response.text();
-                mainContent.innerHTML = content;
-
-            } catch (error) {
-                console.error('Error loading content:', error);
-                mainContent.innerHTML = `
-                    <div class="error-message">
-                        <h3>Error Loading Content</h3>
-                        <p>${error.message}</p>
-                    </div>
-                `;
-            }
-        }
-
-        // Menu item click handler
-        const menuLinks = document.querySelectorAll('.sidebar-menu-link');
-
-        menuLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-
-                // Get the target page id
-                const targetPageId = this.getAttribute('data-page');
-
-                // Load the content
-                loadContent(targetPageId);
-
-                // Update active state in sidebar
-                menuLinks.forEach(item => {
-                    item.classList.remove('active');
-                });
-                this.classList.add('active');
-
-                // Close sidebar on mobile after selection
-                if (window.innerWidth <= 992) {
-                    sidebar.classList.remove('active');
-                }
-            });
-        });
-
-        // Logout functionality
         const logoutBtn = document.getElementById('logoutBtn');
         const logoutModal = document.getElementById('logoutModal');
         const cancelLogout = document.getElementById('cancelLogout');
@@ -612,16 +455,10 @@
             });
         });
 
-        // Close modal if clicking outside
         window.addEventListener('click', function(event) {
             if (event.target === logoutModal) {
                 logoutModal.style.display = 'none';
             }
-        });
-
-        // Load default content when the page loads (Visitor Dashboard)
-        window.addEventListener('DOMContentLoaded', function() {
-            loadContent('visitor-dashboard');
         });
     </script>
 </body>

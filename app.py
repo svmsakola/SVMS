@@ -26,13 +26,12 @@ signal.signal(signal.SIGTERM, signal_handler)
 os.makedirs('data/facedata', exist_ok=True)
 os.makedirs('data/encodings', exist_ok=True)
 os.makedirs('data/profiles', exist_ok=True)
-os.makedirs('JSON', exist_ok=True)  # Ensure JSON directory exists
+os.makedirs('JSON', exist_ok=True)
 
-# Optimize OpenCV for different platforms
-if sys.platform.startswith('darwin'):  # macOS
-    cv2.setNumThreads(4)  # Limit threads on macOS for better performance
-    os.environ['OPENCV_OPENCL_RUNTIME'] = ''  # Disable OpenCL on macOS
-elif sys.platform.startswith('linux'):  # Ubuntu
+if sys.platform.startswith('darwin'):
+    cv2.setNumThreads(4)
+    os.environ['OPENCV_OPENCL_RUNTIME'] = ''
+elif sys.platform.startswith('linux'):
     cv2.setNumThreads(0)
     try:
         if cv2.ocl.haveOpenCL():
@@ -59,13 +58,11 @@ def cleanup_memory():
     gc.collect()
     if sys.platform.startswith('linux'):
         try:
-            # On Linux, we can be more aggressive with memory cleanup
             import ctypes
             libc = ctypes.CDLL('libc.so.6')
             libc.malloc_trim(0)
         except:
             pass
-
 
 def generate_visitor_id():
     today = datetime.now()
@@ -84,7 +81,6 @@ def generate_visitor_id():
     visit_count = len(today_visitors) + 1
     visitor_id = f"V{date_component}{str(visit_count).zfill(4)}"
     return visitor_id
-
 
 def is_marathi(text):
     if not text:
@@ -132,6 +128,48 @@ def save_users(users):
     with open("JSON/auth.json", "w") as file:
         json.dump(users, file, indent=4)
 
+def detect_person_and_face(frame):
+    white_bg = np.ones_like(frame) * 255
+    frame_area = frame.shape[0] * frame.shape[1]
+    results = person_model.predict(source=frame, stream=True, classes=[0])
+    max_area, selected_mask = 0, None
+    for r in results:
+        if r.boxes is not None and r.masks is not None:
+            for box, mask in zip(r.boxes.data, r.masks.data):
+                conf = float(box[4].cpu().numpy())
+                x1, y1, x2, y2 = map(int, box[:4].cpu().numpy())
+                box_area = (x2 - x1) * (y2 - y1)
+                if box_area / frame_area >= 0.15 and conf >= 0.5 and box_area > max_area:
+                    max_area = box_area
+                    selected_mask = mask.cpu().numpy().astype('float32')
+    face_output = white_bg.copy()
+    face_crop = None
+    if selected_mask is not None:
+        selected_mask = cv2.resize(selected_mask, (frame.shape[1], frame.shape[0]))
+        _, binary_mask = cv2.threshold(selected_mask, 0.5, 255, cv2.THRESH_BINARY)
+        binary_mask = cv2.merge([binary_mask.astype(np.uint8)] * 3)
+        person_only = cv2.bitwise_and(frame, binary_mask)
+        person_with_white_bg = np.where(binary_mask == 0, white_bg, person_only)
+        face_results = face_model.predict(source=person_with_white_bg, stream=True)
+        max_face_area, selected_face = 0, None
+        for fr in face_results:
+            if fr.boxes is not None:
+                for box in fr.boxes.data:
+                    x1, y1, x2, y2 = map(int, box[:4].cpu().numpy())
+                    face_area = (x2 - x1) * (y2 - y1)
+                    if face_area > max_face_area:
+                        max_face_area = face_area
+                        selected_face = (x1, y1, x2, y2)
+        if selected_face:
+            x1, y1, x2, y2 = selected_face
+            w, h = x2 - x1, y2 - y1
+            pad_w, pad_h = int(w * 0.6), int(h * 0.4)
+            x1, y1 = max(x1 - pad_w, 0), max(y1 - pad_h, 0)
+            x2, y2 = min(x2 + pad_w, frame.shape[1]), min(y2 + pad_h, frame.shape[0])
+            face_crop = person_with_white_bg[y1:y2, x1:x2]
+            face_output[y1:y2, x1:x2] = face_crop
+    return face_output, face_crop
+
 @app.route("/", methods=["GET", "POST"])
 def login():
     if "user" in session:
@@ -163,7 +201,7 @@ def register():
         role = data.get("role")
         if not username or not password or not role:
             return jsonify(success=False, message="All fields are required")
-        valid_roles = ["admin", "registrar", "inoffice", "cctv"]
+        valid_roles = ["admin", "registrar", "inoffice", "cctv", "scanner"]
         if role not in valid_roles:
             return jsonify(success=False, message="Invalid role selected")
         users = load_users()
@@ -186,7 +224,8 @@ def dashboard(role):
         "admin": "admin/admin.html",
         "registrar": "dashboard/registrar.html",
         "inoffice": "dashboard/inoffice.html",
-        "cctv": "dashboard/cctv.html"
+        "cctv": "dashboard/cctv.html",
+        "scanner": "dashboard/scanner.html"
     }
     if role not in templates:
         return render_template("unauthorized.html")
@@ -238,7 +277,6 @@ def register_visitor():
             frame_data = data['frame']
             if ',' in frame_data:
                 frame_data = frame_data.split(',')[1]
-
             frame_bytes = base64.b64decode(frame_data)
             nparr = np.frombuffer(frame_bytes, np.uint8)
             frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
@@ -463,7 +501,6 @@ def confirm_visitor_entry():
                 visit['confirmation_time'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 with open('data/facedata/facedata.json', 'w') as f:
                     json.dump(facedata, f, indent=4)
-
                 return jsonify({
                     'success': True,
                     'message': 'Visitor entry confirmed',
@@ -495,48 +532,6 @@ def get_today_visitors():
         'success': True,
         'visitors': today_visitors
     })
-
-def detect_person_and_face(frame):
-    white_bg = np.ones_like(frame) * 255
-    frame_area = frame.shape[0] * frame.shape[1]
-    results = person_model.predict(source=frame, stream=True, classes=[0])
-    max_area, selected_mask = 0, None
-    for r in results:
-        if r.boxes is not None and r.masks is not None:
-            for box, mask in zip(r.boxes.data, r.masks.data):
-                conf = float(box[4].cpu().numpy())
-                x1, y1, x2, y2 = map(int, box[:4].cpu().numpy())
-                box_area = (x2 - x1) * (y2 - y1)
-                if box_area / frame_area >= 0.15 and conf >= 0.5 and box_area > max_area:
-                    max_area = box_area
-                    selected_mask = mask.cpu().numpy().astype('float32')
-    face_output = white_bg.copy()
-    face_crop = None
-    if selected_mask is not None:
-        selected_mask = cv2.resize(selected_mask, (frame.shape[1], frame.shape[0]))
-        _, binary_mask = cv2.threshold(selected_mask, 0.5, 255, cv2.THRESH_BINARY)
-        binary_mask = cv2.merge([binary_mask.astype(np.uint8)] * 3)
-        person_only = cv2.bitwise_and(frame, binary_mask)
-        person_with_white_bg = np.where(binary_mask == 0, white_bg, person_only)
-        face_results = face_model.predict(source=person_with_white_bg, stream=True)
-        max_face_area, selected_face = 0, None
-        for fr in face_results:
-            if fr.boxes is not None:
-                for box in fr.boxes.data:
-                    x1, y1, x2, y2 = map(int, box[:4].cpu().numpy())
-                    face_area = (x2 - x1) * (y2 - y1)
-                    if face_area > max_face_area:
-                        max_face_area = face_area
-                        selected_face = (x1, y1, x2, y2)
-        if selected_face:
-            x1, y1, x2, y2 = selected_face
-            w, h = x2 - x1, y2 - y1
-            pad_w, pad_h = int(w * 0.6), int(h * 0.4)
-            x1, y1 = max(x1 - pad_w, 0), max(y1 - pad_h, 0)
-            x2, y2 = min(x2 + pad_w, frame.shape[1]), min(y2 + pad_h, frame.shape[0])
-            face_crop = person_with_white_bg[y1:y2, x1:x2]
-            face_output[y1:y2, x1:x2] = face_crop
-    return face_output, face_crop
 
 @app.route('/process_profile_image', methods=['POST'])
 def process_profile_image():
@@ -678,6 +673,10 @@ def visitor_action():
         return jsonify({"success": True, "message": "Visitor action recorded successfully."}), 200
     except Exception as e:
         return jsonify({"success": False, "message": f"Failed to save updated visitor data: {str(e)}"}), 500
+
+@app.route('/dashboard/pages/<page_id>.html')
+def serve_dashboard_page(page_id):
+    return render_template(f'admin/{page_id}.html')
 
 if __name__ == "__main__":
     app.run()
