@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVMS ADMINISTRATION</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #2c3e90;
+            --secondary-blue: #3498db;
+            --light-blue: #e6f2ff;
+            --white: #ffffff;
+            --text-dark: #2c3e50;
+            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            --hover-shadow: 0 15px 30px rgba(52, 152, 219, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-blue);
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e6f2ff 0%, #f8fbff 100%);
+        }
+
+        .header {
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            color: var(--white);
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .header img {height: 60px; width: auto; max-height: 100%; object-fit: contain;}
+
+        .header-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .profile-container {
+            position: relative;
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .profile-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .profile-icon i {
+            font-size: 1.2rem;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            min-width: 200px;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:first-child {
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--light-blue);
+        }
+
+        .dropdown-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: #e0e0e0;
+            margin: 5px 0;
+        }
+
+        .user-info {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .user-details h3 {
+            font-size: 1rem;
+            margin-bottom: 3px;
+        }
+
+        .user-details p {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+
+        /* Main content without sidebar */
+        .main-wrapper {
+            flex: 1;
+            margin-top: 70px; /* Account for fixed header */
+        }
+
+        .main-content {
+            padding: 30px;
+            width: 100%;
+        }
+
+        /* Table styles */
+        .content-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .refresh-btn {
+            background-color: var(--light-blue);
+            color: var(--primary-blue);
+            border: none;
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .refresh-btn:hover {
+            background-color: #d1e6f9;
+        }
+
+        .visitors-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+
+        .visitors-table th,
+        .visitors-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .visitors-table th {
+            background-color: #f8f9fa;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .visitors-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .visitors-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .action-btn {
+            background-color: var(--secondary-blue);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .action-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            border-color: var(--secondary-blue);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .search-btn {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background-color: #1e2f6d;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 30px;
+            width: 500px;
+            max-width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            color: var(--primary-blue);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary-blue);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+        }
+
+        .btn-secondary {
+            background-color: #e0e0e0;
+            color: var(--text-dark);
+            border: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 0;
+            color: #7f8c8d;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #bdc3c7;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            .header {
+                padding: 6px 10px;
+            }
+
+            .header img {height: 60px; width: auto; max-height: 100%; object-fit: contain;}
+
+            .header-subtitle {
+                font-size: 0.8rem;
+            }
+
+            .dropdown-menu {
+                right: -10px;
+                min-width: 220px;
+            }
+
+            .main-content {
+                padding: 15px;
+            }
+
+            .main-wrapper {
+                margin-top: 60px; /* Adjusted for smaller header */
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .card-actions {
+                width: 100%;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            .visitors-table {
+                font-size: 0.85rem;
+            }
+
+            .visitors-table th,
+            .visitors-table td {
+                padding: 8px;
+            }
+
+            .action-column {
+                min-width: 100px;
+            }
+        }
+
+        /* For very small screens */
+        @media (max-width: 480px) {
+            .header img {height: 50px; width: auto; max-height: 100%; object-fit: contain;}
+
+            .header-subtitle {
+                display: none;
+            }
+
+            .main-wrapper {
+                margin-top: 50px;
+            }
+
+            .content-card {
+                padding: 15px;
+            }
+
+            .table-responsive {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="header">
+            <div class="header-left">
+                <img src="{{ url_for('static', filename='assets/logo/svmslogo.png') }}" alt="Smart Visitor Management System Logo">
+            </div>
+            <div class="profile-container" id="profile-container">
+                <div class="profile-icon" id="profileIcon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <div class="user-info">
+                        <div class="user-avatar">JD</div>
+                        <div class="user-details">
+                            <h3>John Doe</h3>
+                            <p>Administrator</p>
+                        </div>
+                    </div>
+                    <div class="dropdown-item">
+                        <i class="fas fa-user-circle"></i>
+                        <span>My Profile</span>
+                    </div>
+                    <div class="dropdown-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="dropdown-item" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-wrapper">
+            <!-- Main Content (No Sidebar) -->
+            <div class="main-content">
+                <!-- Today's Visitors Section -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Today's Visitors</h2>
+                        <div class="card-actions">
+                            <button class="refresh-btn" id="refreshVisitors">
+                                <i class="fas fa-sync-alt"></i>
+                                <span>Refresh</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="search-container">
+                        <input type="text" class="search-box" id="searchVisitor" placeholder="Search by name, phone or visitor ID...">
+                        <button class="search-btn" id="searchBtn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="visitors-table" id="visitorsTable">
+                            <thead>
+                                <tr>
+                                    <th>Visitor ID</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Registration Time</th>
+                                    <th class="action-column">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="visitorsTableBody">
+                                <!-- Table will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="empty-state" id="emptyState" style="display: none;">
+                        <i class="fas fa-user-slash"></i>
+                        <p>No visitors registered today</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Document Modal -->
+        <div class="modal" id="uploadDocumentModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Upload Document</h3>
+                    <button class="close-modal" id="closeUploadModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Visitor ID</label>
+                        <input type="text" class="form-control" id="visitorIdForDoc" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Visitor Name</label>
+                        <input type="text" class="form-control" id="visitorNameForDoc" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Document Type</label>
+                        <select class="form-control" id="documentType">
+                            <option value="">Select document type</option>
+                            <option value="id_proof">ID Proof</option>
+                            <option value="address_proof">Address Proof</option>
+                            <option value="photo">Photo</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Document File</label>
+                        <input type="file" class="form-control" id="documentFile">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Notes</label>
+                        <textarea class="form-control" id="documentNotes" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="cancelUpload">Cancel</button>
+                    <button class="btn btn-primary" id="submitDocument">Upload</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logout Modal -->
+        <div class="modal" id="logoutModal">
+            <div class="modal-content">
+                <h3 class="modal-title">Confirm Logout</h3>
+                <p>Are you sure you want to logout?</p>
+                <div class="modal-buttons">
+                    <button class="modal-btn modal-btn-cancel" id="cancelLogout">Cancel</button>
+                    <button class="modal-btn modal-btn-confirm" id="confirmLogout">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const profileIcon = document.getElementById('profileIcon');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutModal = document.getElementById('logoutModal');
+        const cancelLogout = document.getElementById('cancelLogout');
+        const confirmLogout = document.getElementById('confirmLogout');
+        const refreshVisitors = document.getElementById('refreshVisitors');
+        const searchVisitor = document.getElementById('searchVisitor');
+        const searchBtn = document.getElementById('searchBtn');
+        const visitorsTableBody = document.getElementById('visitorsTableBody');
+        const emptyState = document.getElementById('emptyState');
+        const uploadDocumentModal = document.getElementById('uploadDocumentModal');
+        const closeUploadModal = document.getElementById('closeUploadModal');
+        const visitorIdForDoc = document.getElementById('visitorIdForDoc');
+        const visitorNameForDoc = document.getElementById('visitorNameForDoc');
+        const documentType = document.getElementById('documentType');
+        const documentFile = document.getElementById('documentFile');
+        const documentNotes = document.getElementById('documentNotes');
+        const cancelUpload = document.getElementById('cancelUpload');
+        const submitDocument = document.getElementById('submitDocument');
+
+        // Format date for display
+        function formatDateTime(dateTimeString) {
+            const dateTime = new Date(dateTimeString);
+            const options = {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            };
+            return dateTime.toLocaleTimeString('en-US', options);
+        }
+
+        // Populate visitors table
+        function populateVisitorsTable(visitorsList) {
+            visitorsTableBody.innerHTML = '';
+
+            if (visitorsList.length === 0) {
+                emptyState.style.display = 'block';
+                document.getElementById('visitorsTable').style.display = 'none';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            document.getElementById('visitorsTable').style.display = 'table';
+
+            visitorsList.forEach(visitor => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${visitor.id}</td>
+                    <td>${visitor.name}</td>
+                    <td>${visitor.phone}</td>
+                    <td>${formatDateTime(visitor.registrationTime)}</td>
+                    <td>
+                        <button class="action-btn upload-doc-btn" data-id="${visitor.id}" data-name="${visitor.name}">
+                            <i class="fas fa-file-upload"></i> Add Document
+                        </button>
+                    </td>
+                `;
+
+                visitorsTableBody.appendChild(row);
+            });
+
+            // Add event listeners to newly created buttons
+            document.querySelectorAll('.upload-doc-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const visitorId = this.getAttribute('data-id');
+                    const visitorName = this.getAttribute('data-name');
+                    showUploadDocumentModal(visitorId, visitorName);
+                });
+            });
+        }
+
+        // Search visitors
+        function searchVisitors() {
+            const searchTerm = searchVisitor.value.toLowerCase();
+
+            if (!searchTerm.trim()) {
+                populateVisitorsTable(visitors);
+                return;
+            }
+
+            const filteredVisitors = visitors.filter(visitor =>
+                visitor.id.toLowerCase().includes(searchTerm) ||
+                visitor.name.toLowerCase().includes(searchTerm) ||
+                visitor.phone.includes(searchTerm)
+            );
+
+            populateVisitorsTable(filteredVisitors);
+        }
+
+        // Fetch today's visitors (simulated)
+        function fetchTodayVisitors() {
+            // In a real application, this would be an API call
+            // For demo purposes, we're using our sample data
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve(visitors);
+                }, 500);
+            });
+        }
+
+        // Show upload document modal
+        function showUploadDocumentModal(visitorId, visitorName) {
+            visitorIdForDoc.value = visitorId;
+            visitorNameForDoc.value = visitorName;
+            documentType.selectedIndex = 0;
+            documentFile.value = '';
+            documentNotes.value = '';
+            uploadDocumentModal.style.display = 'flex';
+        }
+
+        // Close upload document modal
+        function closeUploadDocumentModal() {
+            uploadDocumentModal.style.display = 'none';
+        }
+
+        // Handle document upload
+        function handleDocumentUpload() {
+            const visitorId = visitorIdForDoc.value;
+            const docType = documentType.value;
+            const file = documentFile.files[0];
+            const notes = documentNotes.value;
+
+            if (!docType) {
+                alert('Please select a document type');
+                return;
+            }
+
+            if (!file) {
+                alert('Please select a file to upload');
+                return;
+            }
+
+            // In a real application, you would upload the file to the server
+            // For demo purposes, we'll just show a success message
+            alert(`Document uploaded successfully for visitor ID: ${visitorId}`);
+            closeUploadDocumentModal();
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initial table population
+            fetchTodayVisitors().then(data => {
+                visitors = data;
+                populateVisitorsTable(visitors);
+            });
+
+            // Profile dropdown toggle
+            profileIcon.addEventListener('click', function() {
+                dropdownMenu.classList.toggle('active');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!profileIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.remove('active');
+                }
+            });
+
+            // Logout button
+            logoutBtn.addEventListener('click', function() {
+                logoutModal.style.display = 'flex';
+                dropdownMenu.classList.remove('active');
+            });
+
+            // Cancel logout
+            cancelLogout.addEventListener('click', function() {
+                logoutModal.style.display = 'none';
+            });
+
+            // Confirm logout
+            confirmLogout.addEventListener('click', function() {
+                fetch("/logout").then(() => {
+                    localStorage.removeItem("user");
+                    window.location.href = "/";
+                });
+            });
+
+            window.addEventListener('click', function(event) {
+                if (event.target === logoutModal) {
+                    logoutModal.style.display = 'none';
+                }
+                if (event.target === uploadDocumentModal) {
+                    uploadDocumentModal.style.display = 'none';
+                }
+            });
+
+            refreshVisitors.addEventListener('click', function() {
+                this.disabled = true;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+
+                fetchTodayVisitors().then(data => {
+                    visitors = data;
+                    populateVisitorsTable(visitors);
+
+                    this.disabled = false;
+                    this.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh';
+                });
+            });
+
+            searchBtn.addEventListener('click', searchVisitors);
+            searchVisitor.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchVisitors();
+                }
+            });
+            closeUploadModal.addEventListener('click', closeUploadDocumentModal);
+            cancelUpload.addEventListener('click', closeUploadDocumentModal);
+            submitDocument.addEventListenerएसव्हीएमएस प्रकल्पाबाबत जिल्हाधिकारी कार्यालयासोबत बैठक('click', handleDocumentUpload);
+        });
+    </script>
+</body>
+</html>

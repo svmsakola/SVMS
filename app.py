@@ -1,20 +1,36 @@
-import base64
-import os
-import json
-import bcrypt
-import cv2
-import numpy as np
-import face_recognition
-import signal
-import sys
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory
+import os, sys, uuid, json, shutil, base64, signal
+import cv2, numpy as np, bcrypt, face_recognition
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory, send_file
 from flask_cors import CORS
 from ultralytics import YOLO
 from datetime import datetime
+from PIL import Image
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 
 app = Flask(__name__)
 CORS(app)
 app.secret_key = os.urandom(24)
+
+UPLOAD_FOLDER = 'uploads/docimg'
+PDF_FOLDER = 'pdf'
+DATA_FILE = 'data/facedata/facedata.json'
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(PDF_FOLDER, exist_ok=True)
+
+# Load face data from JSON file
+def load_face_data():
+    try:
+        with open(DATA_FILE, 'r') as file:
+            return json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
+def save_face_data(data):
+    os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
+    with open(DATA_FILE, 'w') as file:
+        json.dump(data, file, indent=4)
 
 def signal_handler(sig, frame):
     print('Shutting down gracefully...')
@@ -241,7 +257,6 @@ def register_visitor():
     data = request.get_json()
     if not data:
         return jsonify({'error': 'Invalid request, no data received'}), 400
-
     if not data.get('name') or not data.get('phone'):
         missing = []
         if not data.get('name'): missing.append("name")
@@ -258,10 +273,12 @@ def register_visitor():
             existing_uid = uid
             break
     uid = existing_uid if existing_uid else f"UID{int(datetime.now().timestamp())}"
-    tahasil_options = ["अकोला", "अकोट", "तेल्हारा", "बाळापूर", "पाटूर", "मुर्तिजापूर", "बार्शीटाकळी"]
+    tahasil_options = ["अकोला", "अकोट", "तेल्हारा", "बाळापूर", "पातूर", "मुर्तिजापूर", "बार्शीटाकळी"]
     selected_tahasil = data.get('tahasil', '')
+    if selected_tahasil.endswith('<'):
+        selected_tahasil = selected_tahasil[:-1]
     if selected_tahasil and selected_tahasil not in tahasil_options:
-        return jsonify({'error': 'Invalid tahasil selection'}), 400
+        return jsonify({'error': f'Invalid tahasil selection: {selected_tahasil}'}), 400
     visitor_data = {
         'name': data.get('name', ''),
         'phone': data.get('phone', ''),
@@ -677,6 +694,191 @@ def visitor_action():
 @app.route('/dashboard/pages/<page_id>.html')
 def serve_dashboard_page(page_id):
     return render_template(f'admin/{page_id}.html')
+
+@app.route('/registered_visitor_today')
+def registered_visitor_today():
+    face_data = load_face_data()
+    today = datetime.now().strftime('%Y-%m-%d')
+    today_visitors = []
+    for uid, user_data in face_data.items():
+        if 'visitor' in user_data:
+            for visit in user_data['visitor']:
+                if 'datetime' in visit and isinstance(visit['datetime'], str):
+                     visit_date_str = visit['datetime'].split(' ')[0]
+                     try:
+                         datetime.strptime(visit_date_str, '%Y-%m-%d')
+                         if visit_date_str == today:
+                            today_visitors.append({
+                                'uid': uid,
+                                'name': user_data.get('name', 'N/A'), # Use .get for safety
+                                'phone': user_data.get('phone', 'N/A'),
+                                'purpose': visit.get('purpose', 'N/A'),
+                                'visit_id': visit.get('visit_id', 'N/A'),
+                                'status': visit.get('status', 'Unknown'),
+                                'pdf_path': visit.get('document_pdf', '') # Already uses .get
+                            })
+                     except ValueError:
+                         print(f"Warning: Invalid date format found for visit_id {visit.get('visit_id', 'N/A')}: {visit['datetime']}")
+                else:
+                     print(f"Warning: Missing or invalid 'datetime' for visit in user {uid}")
+    return jsonify({'visitors': today_visitors})
+
+@app.route('/api/upload-visitor-document/<visit_id>', methods=['POST'])
+def upload_visitor_document(visit_id):
+    if 'document' not in request.files:
+        return jsonify({'error': 'No document provided'}), 400
+    file = request.files['document']
+    if file.filename == '':
+        return jsonify({'error': 'No file selected'}), 400
+    if not file.filename.lower().endswith('.pdf'):
+        return jsonify({'error': 'Only PDF files are allowed'}), 400
+    try:
+        filename = f"{visit_id}_1.pdf"
+        filepath = os.path.join(PDF_FOLDER, filename)
+        file.save(filepath)
+        face_data = load_face_data()
+        updated = False
+        for uid, user_data in face_data.items():
+            if 'visitor' in user_data:
+                for visit in user_data['visitor']:
+                    if visit['visit_id'] == visit_id:
+                        visit['document_pdf'] = filepath
+                        updated = True
+                        break
+            if updated:
+                break
+        if updated:
+            save_face_data(face_data)
+            return jsonify({
+                'success': True,
+                'message': 'Document uploaded successfully',
+                'pdf_path': filepath
+            })
+        else:
+            return jsonify({'error': 'Visitor ID not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/get-visitor-document/<visit_id>')
+def get_visitor_document(visit_id):
+    face_data = load_face_data()
+    pdf_filename = None
+    for uid, user_data in face_data.items():
+        if 'visitor' in user_data:
+            for visit in user_data['visitor']:
+                if visit.get('visit_id') == visit_id and 'document_pdf' in visit:
+                    full_pdf_path = visit['document_pdf']
+                    if full_pdf_path and isinstance(full_pdf_path, str):
+                       pdf_filename = os.path.basename(full_pdf_path)
+                       break
+        if pdf_filename:
+            break
+    if pdf_filename:
+        try:
+            print(f"Attempting to send file: Directory='{PDF_FOLDER}', Filename='{pdf_filename}'")
+            return send_from_directory(
+                PDF_FOLDER,
+                pdf_filename,
+                as_attachment=False,
+                mimetype='application/pdf'
+            )
+        except FileNotFoundError:
+             print(f"Error: File not found at expected location: {os.path.join(PDF_FOLDER, pdf_filename)}")
+             return jsonify({'error': 'Document file not found on server.'}), 404
+        except Exception as e:
+             print(f"Error sending file: {e}")
+             return jsonify({'error': 'An error occurred while retrieving the document.'}), 500
+    else:
+        print(f"Document reference not found in JSON data for visit_id: {visit_id}")
+        return jsonify({'error': 'Document reference not found for this visitor ID.'}), 404
+
+@app.route('/api/upload-image', methods=['POST'])
+def upload_image():
+    if 'image' not in request.json:
+        return jsonify({'error': 'No image provided'}), 400
+    try:
+        image_data = request.json['image'].split(',')[1]
+        image_bytes = base64.b64decode(image_data)
+        filename = f"{uuid.uuid4()}.jpg"
+        filepath = os.path.join(UPLOAD_FOLDER, filename)
+        with open(filepath, 'wb') as f:
+            f.write(image_bytes)
+        return jsonify({
+            'success': True,
+            'image_id': filename
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/generate-pdf', methods=['POST'])
+def generate_pdf():
+    if 'images' not in request.json or 'visit_id' not in request.json:
+        return jsonify({'error': 'No images or visit ID provided'}), 400
+    try:
+        image_ids = request.json['images']
+        visit_id = request.json['visit_id']
+        pdf_filename = f"{visit_id}_1.pdf"
+        pdf_path = os.path.join(PDF_FOLDER, pdf_filename)
+        c = canvas.Canvas(pdf_path, pagesize=letter)
+        letter_width, letter_height = letter
+        image_paths = []
+        for image_id in image_ids:
+            img_path = os.path.join(UPLOAD_FOLDER, image_id)
+            if os.path.exists(img_path):
+                image_paths.append(img_path)
+                img = Image.open(img_path)
+                width, height = img.size
+                scale = min(letter_width / width, letter_height / height) * 0.9
+                img_width = width * scale
+                img_height = height * scale
+                x = (letter_width - img_width) / 2
+                y = (letter_height - img_height) / 2
+                c.drawImage(img_path, x, y, width=img_width, height=img_height)
+                c.showPage()
+        c.save()
+        for img_path in image_paths:
+            if os.path.exists(img_path):
+                os.remove(img_path)
+        for filename in os.listdir(UPLOAD_FOLDER):
+            file_path = os.path.join(UPLOAD_FOLDER, filename)
+            try:
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
+            except Exception as e:
+                print(f"Error deleting {file_path}: {e}")
+        face_data = load_face_data()
+        updated = False
+        for uid, user_data in face_data.items():
+            if 'visitor' in user_data:
+                for visit in user_data['visitor']:
+                    if visit['visit_id'] == visit_id:
+                        visit['document_pdf'] = pdf_path
+                        updated = True
+                        break
+            if updated:
+                break
+        if updated:
+            save_face_data(face_data)
+        return jsonify({
+            'success': True,
+            'pdf_url': f'/api/get-visitor-document/{visit_id}'
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/cleanup', methods=['POST'])
+def cleanup_images():
+    try:
+        for filename in os.listdir(UPLOAD_FOLDER):
+            file_path = os.path.join(UPLOAD_FOLDER, filename)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+        return jsonify({
+            'success': True,
+            'message': 'All temporary images have been deleted'
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":
     app.run()
