@@ -1,12 +1,17 @@
 import os, sys, uuid, json, shutil, base64, signal
 import cv2, numpy as np, bcrypt, face_recognition
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory, send_file
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory, send_file, \
+    flash
 from flask_cors import CORS
 from ultralytics import YOLO
 from datetime import datetime
 from PIL import Image
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
+
+import json, smtplib, random, ssl
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 app = Flask(__name__)
 CORS(app)
@@ -19,7 +24,6 @@ DATA_FILE = 'data/facedata/facedata.json'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(PDF_FOLDER, exist_ok=True)
 
-# Load face data from JSON file
 def load_face_data():
     try:
         with open(DATA_FILE, 'r') as file:
@@ -297,7 +301,6 @@ def register_visitor():
             frame_bytes = base64.b64decode(frame_data)
             nparr = np.frombuffer(frame_bytes, np.uint8)
             frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-
             if frame is not None:
                 saved_images, face_encodings = save_face_images(frame, uid)
                 if saved_images:
@@ -710,12 +713,12 @@ def registered_visitor_today():
                          if visit_date_str == today:
                             today_visitors.append({
                                 'uid': uid,
-                                'name': user_data.get('name', 'N/A'), # Use .get for safety
+                                'name': user_data.get('name', 'N/A'),
                                 'phone': user_data.get('phone', 'N/A'),
                                 'purpose': visit.get('purpose', 'N/A'),
                                 'visit_id': visit.get('visit_id', 'N/A'),
                                 'status': visit.get('status', 'Unknown'),
-                                'pdf_path': visit.get('document_pdf', '') # Already uses .get
+                                'pdf_path': visit.get('document_pdf', '')
                             })
                      except ValueError:
                          print(f"Warning: Invalid date format found for visit_id {visit.get('visit_id', 'N/A')}: {visit['datetime']}")
@@ -879,6 +882,79 @@ def cleanup_images():
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+def load_departments():
+    with open('JSON/departments.json', 'r') as f:
+        content = f.read().strip()
+        if not content:
+            return []
+        return json.loads(content).get('departments', [])
+
+def send_otp_email(recipient_email, otp):
+    sender_email = "svmsakola@gmail.com"
+    sender_password = "aess hmcl bkqm slph"
+    message = MIMEMultipart("alternative")
+    message["Subject"] = "Your OTP for SVMS Department Login"
+    message["From"] = f"SVMS Akola <{sender_email}>"
+    message["To"] = recipient_email
+    message["Reply-To"] = sender_email
+    message["Return-Path"] = sender_email
+    text = f"Dear User,\n\nYour One-Time Password (OTP) for department login is: {otp}\n\nThis OTP is valid for 10 minutes. Please do not share it with anyone.\n\nRegards,\nSVMS Akola Support Team"
+    message.attach(MIMEText(text, "plain"))
+    try:
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+            server.login(sender_email, sender_password)
+            server.sendmail(sender_email, recipient_email, message.as_string())
+            return True
+    except Exception as e:
+        print(f"Email error: {str(e)}")
+        return False
+
+@app.route('/department/login', methods=['GET', 'POST'])
+def login_department():
+    if 'department' in session:
+        return redirect(url_for('department_dashboard'))
+    if request.method == 'POST':
+        email = request.form.get('email')
+        departments = load_departments()
+        department = next((d for d in departments if d['email'] == email), None)
+        if department:
+            otp = str(random.randint(100000, 999999))
+            session['otp'] = otp
+            session['pending_department'] = department
+            if send_otp_email(email, otp):
+                flash('OTP sent to your email.', 'info')
+                return redirect(url_for('verify_otp'))
+            else:
+                flash('Failed to send OTP email. Please try again later.', 'danger')
+        else:
+            flash('Email not found.', 'danger')
+    return render_template('department/auth/login_department.html')
+
+@app.route('/department/verify-otp', methods=['GET', 'POST'])
+def verify_otp():
+    if request.method == 'POST':
+        entered_otp = request.form.get('otp')
+        if entered_otp == session.get('otp'):
+            session['department'] = session.pop('pending_department', None)
+            session.pop('otp', None)
+            return redirect(url_for('department_dashboard'))
+        else:
+            flash('Invalid OTP.', 'danger')
+    return render_template('department/auth/verify_otp.html')
+
+@app.route('/department/dashboard')
+def department_dashboard():
+    department = session.get('department')
+    if not department:
+        return redirect(url_for('login_department'))
+    return render_template('department/dashboard/department_dashboard.html', department=department)
+
+@app.route('/department/logout')
+def logout_department():
+    session.pop('department', None)
+    return redirect(url_for('login_department'))
 
 if __name__ == "__main__":
     app.run()

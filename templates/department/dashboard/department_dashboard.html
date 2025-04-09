@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SVMS ADMINISTRATION</title>
+    <title>Department Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <style>
         :root {
@@ -58,7 +58,12 @@
             align-items: center;
         }
 
-        .header img {height: 60px; width: auto; max-height: 100%; object-fit: contain;}
+        .header img {
+            height: 60px;
+            width: auto;
+            max-height: 100%;
+            object-fit: contain;
+        }
 
         .header-subtitle {
             font-size: 0.9rem;
@@ -177,143 +182,84 @@
             color: #7f8c8d;
         }
 
-        /* Main content without sidebar */
         .main-wrapper {
             flex: 1;
-            margin-top: 70px; /* Account for fixed header */
+            margin-top: 80px; /* Account for fixed header */
+            padding: 20px;
         }
 
         .main-content {
-            padding: 30px;
-            width: 100%;
-        }
-
-        /* Table styles */
-        .content-card {
             background-color: var(--white);
             border-radius: 12px;
             box-shadow: var(--card-shadow);
-            padding: 25px;
-            margin-bottom: 30px;
+            padding: 30px;
+            min-height: 300px;
         }
 
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .card-title {
-            font-size: 1.4rem;
+        .welcome-message {
+            font-size: 1.8rem;
             color: var(--primary-blue);
+            margin-bottom: 20px;
             font-weight: 600;
         }
 
-        .card-actions {
-            display: flex;
-            gap: 10px;
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
         }
 
-        .refresh-btn {
-            background-color: var(--light-blue);
-            color: var(--primary-blue);
-            border: none;
-            border-radius: 6px;
-            padding: 8px 12px;
-            cursor: pointer;
+        .stat-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
             transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
             display: flex;
             align-items: center;
-            gap: 5px;
+            justify-content: center;
+            margin-bottom: 15px;
         }
 
-        .refresh-btn:hover {
-            background-color: #d1e6f9;
+        .stat-icon i {
+            font-size: 1.5rem;
+            color: var(--white);
         }
 
-        .visitors-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            font-size: 0.95rem;
-        }
-
-        .visitors-table th,
-        .visitors-table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .visitors-table th {
-            background-color: #f8f9fa;
-            color: var(--text-dark);
-            font-weight: 600;
-        }
-
-        .visitors-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .visitors-table tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .action-btn {
-            background-color: var(--secondary-blue);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 6px 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.85rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .action-btn:hover {
-            background-color: #2980b9;
-        }
-
-        .search-container {
-            margin-bottom: 20px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .search-box {
-            flex: 1;
-            padding: 10px 15px;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
+        .stat-title {
             font-size: 0.9rem;
-            transition: all 0.3s ease;
+            color: var(--text-muted);
+            margin-bottom: 5px;
         }
 
-        .search-box:focus {
-            border-color: var(--secondary-blue);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
         }
 
-        .search-btn {
-            background-color: var(--primary-blue);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 10px 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .stat-info {
+            font-size: 0.8rem;
+            color: var(--text-muted);
         }
 
-        .search-btn:hover {
-            background-color: #1e2f6d;
-        }
-
-        /* Modal styles */
+        /* Logout Modal */
         .modal {
             display: none;
             position: fixed;
@@ -330,105 +276,46 @@
         .modal-content {
             background-color: var(--white);
             border-radius: 10px;
-            padding: 30px;
-            width: 500px;
-            max-width: 90%;
+            padding: 25px;
+            width: 350px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+            text-align: center;
         }
 
         .modal-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: var(--primary-blue);
-        }
-
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #7f8c8d;
-        }
-
-        .modal-body {
-            margin-bottom: 20px;
-        }
-
-        .form-group {
             margin-bottom: 15px;
         }
 
-        .form-label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #e0e0e0;
-            border-radius: 5px;
-            font-size: 0.9rem;
-        }
-
-        .form-control:focus {
-            border-color: var(--secondary-blue);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-        }
-
-        .modal-footer {
+        .modal-buttons {
             display: flex;
-            justify-content: flex-end;
-            gap: 10px;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
         }
 
-        .btn {
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 6px;
             font-weight: 500;
+            cursor: pointer;
             transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-blue);
-            color: white;
             border: none;
         }
 
-        .btn-secondary {
+        .modal-btn-cancel {
             background-color: #e0e0e0;
             color: var(--text-dark);
-            border: none;
         }
 
-        .btn:hover {
+        .modal-btn-confirm {
+            background-color: var(--primary-blue);
+            color: var(--white);
+        }
+
+        .modal-btn:hover {
             transform: translateY(-2px);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 0;
-            color: #7f8c8d;
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #bdc3c7;
-        }
-
-        .empty-state p {
-            font-size: 1.1rem;
-            margin-bottom: 20px;
         }
 
         /* Mobile styles */
@@ -437,71 +324,30 @@
                 padding: 6px 10px;
             }
 
-            .header img {height: 60px; width: auto; max-height: 100%; object-fit: contain;}
+            .header img {
+                height: 50px;
+            }
 
             .header-subtitle {
                 font-size: 0.8rem;
-            }
-
-            .dropdown-menu {
-                right: -10px;
-                min-width: 220px;
-            }
-
-            .main-content {
-                padding: 15px;
-            }
-
-            .main-wrapper {
-                margin-top: 60px; /* Adjusted for smaller header */
-            }
-
-            .card-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
-            .card-actions {
-                width: 100%;
-            }
-
-            .search-container {
-                flex-direction: column;
-            }
-
-            .visitors-table {
-                font-size: 0.85rem;
-            }
-
-            .visitors-table th,
-            .visitors-table td {
-                padding: 8px;
-            }
-
-            .action-column {
-                min-width: 100px;
-            }
-        }
-
-        /* For very small screens */
-        @media (max-width: 480px) {
-            .header img {height: 50px; width: auto; max-height: 100%; object-fit: contain;}
-
-            .header-subtitle {
                 display: none;
             }
 
             .main-wrapper {
-                margin-top: 50px;
-            }
-
-            .content-card {
+                margin-top: 70px;
                 padding: 15px;
             }
 
-            .table-responsive {
-                overflow-x: auto;
+            .main-content {
+                padding: 20px;
+            }
+
+            .welcome-message {
+                font-size: 1.5rem;
+            }
+
+            .dashboard-stats {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -518,10 +364,16 @@
                 </div>
                 <div class="dropdown-menu" id="dropdownMenu">
                     <div class="user-info">
-                        <div class="user-avatar">JD</div>
+                        <div class="user-avatar">
+                            {% if department.name %}
+                                {{ department.name[0]|upper }}
+                            {% else %}
+                                D
+                            {% endif %}
+                        </div>
                         <div class="user-details">
-                            <h3>John Doe</h3>
-                            <p>Administrator</p>
+                            <h3>{% if department.name %}{{ department.name }}{% else %}Department{% endif %}</h3>
+                            <p>Department</p>
                         </div>
                     </div>
                     <div class="dropdown-item">
@@ -542,90 +394,35 @@
         </header>
 
         <div class="main-wrapper">
-            <!-- Main Content (No Sidebar) -->
             <div class="main-content">
-                <!-- Today's Visitors Section -->
-                <div class="content-card">
-                    <div class="card-header">
-                        <h2 class="card-title">Today's Visitors</h2>
-                        <div class="card-actions">
-                            <button class="refresh-btn" id="refreshVisitors">
-                                <i class="fas fa-sync-alt"></i>
-                                <span>Refresh</span>
-                            </button>
+                <h1 class="welcome-message">Welcome, {% if department.name %}{{ department.name }}{% else %}Department{% endif %}</h1>
+                <!-- Empty dashboard body ready to be populated with future content -->
+                <div class="dashboard-stats">
+                    <!-- Placeholder stats, can be populated dynamically in future -->
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
                         </div>
+                        <div class="stat-title">Today's Visitors</div>
+                        <div class="stat-value">0</div>
+                        <div class="stat-info">No visitors registered today</div>
                     </div>
-
-                    <div class="search-container">
-                        <input type="text" class="search-box" id="searchVisitor" placeholder="Search by name, phone or visitor ID...">
-                        <button class="search-btn" id="searchBtn">
-                            <i class="fas fa-search"></i>
-                        </button>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-title">Pending Approvals</div>
+                        <div class="stat-value">0</div>
+                        <div class="stat-info">No pending approvals</div>
                     </div>
-
-                    <div class="table-responsive">
-                        <table class="visitors-table" id="visitorsTable">
-                            <thead>
-                                <tr>
-                                    <th>Visitor ID</th>
-                                    <th>Name</th>
-                                    <th>Phone</th>
-                                    <th>Registration Time</th>
-                                    <th class="action-column">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="visitorsTableBody">
-                                <!-- Table will be populated by JavaScript -->
-                            </tbody>
-                        </table>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <div class="stat-title">Total Visits</div>
+                        <div class="stat-value">0</div>
+                        <div class="stat-info">All time visits</div>
                     </div>
-
-                    <div class="empty-state" id="emptyState" style="display: none;">
-                        <i class="fas fa-user-slash"></i>
-                        <p>No visitors registered today</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Upload Document Modal -->
-        <div class="modal" id="uploadDocumentModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title">Upload Document</h3>
-                    <button class="close-modal" id="closeUploadModal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label class="form-label">Visitor ID</label>
-                        <input type="text" class="form-control" id="visitorIdForDoc" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Visitor Name</label>
-                        <input type="text" class="form-control" id="visitorNameForDoc" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Document Type</label>
-                        <select class="form-control" id="documentType">
-                            <option value="">Select document type</option>
-                            <option value="id_proof">ID Proof</option>
-                            <option value="address_proof">Address Proof</option>
-                            <option value="photo">Photo</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Document File</label>
-                        <input type="file" class="form-control" id="documentFile">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Notes</label>
-                        <textarea class="form-control" id="documentNotes" rows="3"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" id="cancelUpload">Cancel</button>
-                    <button class="btn btn-primary" id="submitDocument">Upload</button>
                 </div>
             </div>
         </div>
@@ -651,148 +448,9 @@
         const logoutModal = document.getElementById('logoutModal');
         const cancelLogout = document.getElementById('cancelLogout');
         const confirmLogout = document.getElementById('confirmLogout');
-        const refreshVisitors = document.getElementById('refreshVisitors');
-        const searchVisitor = document.getElementById('searchVisitor');
-        const searchBtn = document.getElementById('searchBtn');
-        const visitorsTableBody = document.getElementById('visitorsTableBody');
-        const emptyState = document.getElementById('emptyState');
-        const uploadDocumentModal = document.getElementById('uploadDocumentModal');
-        const closeUploadModal = document.getElementById('closeUploadModal');
-        const visitorIdForDoc = document.getElementById('visitorIdForDoc');
-        const visitorNameForDoc = document.getElementById('visitorNameForDoc');
-        const documentType = document.getElementById('documentType');
-        const documentFile = document.getElementById('documentFile');
-        const documentNotes = document.getElementById('documentNotes');
-        const cancelUpload = document.getElementById('cancelUpload');
-        const submitDocument = document.getElementById('submitDocument');
-
-        // Format date for display
-        function formatDateTime(dateTimeString) {
-            const dateTime = new Date(dateTimeString);
-            const options = {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true
-            };
-            return dateTime.toLocaleTimeString('en-US', options);
-        }
-
-        // Populate visitors table
-        function populateVisitorsTable(visitorsList) {
-            visitorsTableBody.innerHTML = '';
-
-            if (visitorsList.length === 0) {
-                emptyState.style.display = 'block';
-                document.getElementById('visitorsTable').style.display = 'none';
-                return;
-            }
-
-            emptyState.style.display = 'none';
-            document.getElementById('visitorsTable').style.display = 'table';
-
-            visitorsList.forEach(visitor => {
-                const row = document.createElement('tr');
-
-                row.innerHTML = `
-                    <td>${visitor.id}</td>
-                    <td>${visitor.name}</td>
-                    <td>${visitor.phone}</td>
-                    <td>${formatDateTime(visitor.registrationTime)}</td>
-                    <td>
-                        <button class="action-btn upload-doc-btn" data-id="${visitor.id}" data-name="${visitor.name}">
-                            <i class="fas fa-file-upload"></i> Add Document
-                        </button>
-                    </td>
-                `;
-
-                visitorsTableBody.appendChild(row);
-            });
-
-            // Add event listeners to newly created buttons
-            document.querySelectorAll('.upload-doc-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const visitorId = this.getAttribute('data-id');
-                    const visitorName = this.getAttribute('data-name');
-                    showUploadDocumentModal(visitorId, visitorName);
-                });
-            });
-        }
-
-        // Search visitors
-        function searchVisitors() {
-            const searchTerm = searchVisitor.value.toLowerCase();
-
-            if (!searchTerm.trim()) {
-                populateVisitorsTable(visitors);
-                return;
-            }
-
-            const filteredVisitors = visitors.filter(visitor =>
-                visitor.id.toLowerCase().includes(searchTerm) ||
-                visitor.name.toLowerCase().includes(searchTerm) ||
-                visitor.phone.includes(searchTerm)
-            );
-
-            populateVisitorsTable(filteredVisitors);
-        }
-
-        // Fetch today's visitors (simulated)
-        function fetchTodayVisitors() {
-            // In a real application, this would be an API call
-            // For demo purposes, we're using our sample data
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    resolve(visitors);
-                }, 500);
-            });
-        }
-
-        // Show upload document modal
-        function showUploadDocumentModal(visitorId, visitorName) {
-            visitorIdForDoc.value = visitorId;
-            visitorNameForDoc.value = visitorName;
-            documentType.selectedIndex = 0;
-            documentFile.value = '';
-            documentNotes.value = '';
-            uploadDocumentModal.style.display = 'flex';
-        }
-
-        // Close upload document modal
-        function closeUploadDocumentModal() {
-            uploadDocumentModal.style.display = 'none';
-        }
-
-        // Handle document upload
-        function handleDocumentUpload() {
-            const visitorId = visitorIdForDoc.value;
-            const docType = documentType.value;
-            const file = documentFile.files[0];
-            const notes = documentNotes.value;
-
-            if (!docType) {
-                alert('Please select a document type');
-                return;
-            }
-
-            if (!file) {
-                alert('Please select a file to upload');
-                return;
-            }
-
-            // In a real application, you would upload the file to the server
-            // For demo purposes, we'll just show a success message
-            alert(`Document uploaded successfully for visitor ID: ${visitorId}`);
-            closeUploadDocumentModal();
-        }
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
-            // Initial table population
-            fetchTodayVisitors().then(data => {
-                visitors = data;
-                populateVisitorsTable(visitors);
-            });
-
             // Profile dropdown toggle
             profileIcon.addEventListener('click', function() {
                 dropdownMenu.classList.toggle('active');
@@ -818,43 +476,15 @@
 
             // Confirm logout
             confirmLogout.addEventListener('click', function() {
-                fetch("/logout").then(() => {
-                    localStorage.removeItem("user");
-                    window.location.href = "/";
-                });
+                window.location.href = "{{ url_for('logout_department') }}";
             });
 
+            // Close modal when clicking outside
             window.addEventListener('click', function(event) {
                 if (event.target === logoutModal) {
                     logoutModal.style.display = 'none';
                 }
-                if (event.target === uploadDocumentModal) {
-                    uploadDocumentModal.style.display = 'none';
-                }
             });
-
-            refreshVisitors.addEventListener('click', function() {
-                this.disabled = true;
-                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-
-                fetchTodayVisitors().then(data => {
-                    visitors = data;
-                    populateVisitorsTable(visitors);
-
-                    this.disabled = false;
-                    this.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh';
-                });
-            });
-
-            searchBtn.addEventListener('click', searchVisitors);
-            searchVisitor.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    searchVisitors();
-                }
-            });
-            closeUploadModal.addEventListener('click', closeUploadDocumentModal);
-            cancelUpload.addEventListener('click', closeUploadDocumentModal);
-            submitDocument.addEventListenerएसव्हीएमएस प्रकल्पाबाबत जिल्हाधिकारी कार्यालयासोबत बैठक('click', handleDocumentUpload);
         });
     </script>
 </body>
