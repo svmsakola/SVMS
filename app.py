@@ -12,6 +12,7 @@ from reportlab.lib.pagesizes import letter
 import json, smtplib, random, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from functools import wraps
 
 app = Flask(__name__)
 CORS(app)
@@ -350,7 +351,7 @@ def search_visitors():
     for uid, visitor_data in facedata.items():
         if (query in visitor_data.get('name', '').lower() or
                 query in uid.lower() or
-                query in visitor_data.get('phone', '').lower() or  # Also search in phone numbers
+                query in visitor_data.get('phone', '').lower() or
                 any(query in visit.get('visit_id', '').lower() for visit in visitor_data.get('visitor', []))):
             last_visit = visitor_data.get('visitor', [])[-1] if visitor_data.get('visitor') else None
             matching_visitors.append({
@@ -956,7 +957,289 @@ def logout_department():
     session.pop('department', None)
     return redirect(url_for('login_department'))
 
+
+def department_login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'department' not in session:
+            return redirect(url_for('login_department'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+@app.route('/api/department/applications', methods=['GET'])
+@department_login_required
+def get_department_applications():
+    department = session.get('department')
+    department_name = department.get('name')
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+    status = request.args.get('status')
+    try:
+        with open(DATA_FILE, 'r') as file:
+            facedata = json.load(file)
+    except Exception as e:
+        return jsonify({'error': f'Failed to load data: {str(e)}'}), 500
+    applications = []
+    for uid, user_data in facedata.items():
+        for visit in user_data.get('visitor', []):
+            if visit.get('forwarding_department') == department_name:
+                if status and visit.get('status') != status:
+                    continue
+                if start_date or end_date:
+                    try:
+                        visit_date = datetime.strptime(visit.get('datetime'), '%Y-%m-%d %H:%M:%S').date()
+                        if start_date:
+                            start = datetime.strptime(start_date, '%Y-%m-%d').date()
+                            if visit_date < start:
+                                continue
+                        if end_date:
+                            end = datetime.strptime(end_date, '%Y-%m-%d').date()
+                            if visit_date > end:
+                                continue
+                    except ValueError:
+                        continue
+                application = {
+                    'uid': uid,
+                    'visit_id': visit.get('visit_id'),
+                    'name': user_data.get('name'),
+                    'phone': user_data.get('phone'),
+                    'email': user_data.get('email'),
+                    'datetime': visit.get('datetime'),
+                    'purpose': visit.get('purpose'),
+                    'status': visit.get('status'),
+                    'remark': visit.get('remark', ''),
+                    'profile_img': user_data.get('profile_img', [''])[0] if user_data.get('profile_img') else ''
+                }
+                applications.append(application)
+
+    return jsonify(applications)
+
+@app.route('/api/department/application/<visit_id>', methods=['GET'])
+@department_login_required
+def get_application_details(visit_id):
+    department = session.get('department')
+    department_name = department.get('name')
+    try:
+        with open(DATA_FILE, 'r') as file:
+            facedata = json.load(file)
+    except Exception as e:
+        return jsonify({'error': f'Failed to load data: {str(e)}'}), 500
+    for uid, user_data in facedata.items():
+        for visit in user_data.get('visitor', []):
+            if visit.get('visit_id') == visit_id:
+                if visit.get('forwarding_department') == department_name:
+                    application = {
+                        'uid': uid,
+                        'visit_id': visit.get('visit_id'),
+                        'name': user_data.get('name'),
+                        'phone': user_data.get('phone'),
+                        'email': user_data.get('email'),
+                        'address': user_data.get('address'),
+                        'district': user_data.get('district'),
+                        'tahasil': user_data.get('tahasil'),
+                        'registration_datetime': user_data.get('registration_datetime'),
+                        'datetime': visit.get('datetime'),
+                        'purpose': visit.get('purpose'),
+                        'status': visit.get('status'),
+                        'remark': visit.get('remark', ''),
+                        'document_pdf': visit.get('document_pdf', ''),
+                        'entry_confirmed': visit.get('entry_confirmed', False),
+                        'confirmation_time': visit.get('confirmation_time', ''),
+                        'profile_img': user_data.get('profile_img', [''])[0] if user_data.get('profile_img') else '',
+                        'images': user_data.get('images', [])
+                    }
+                    return jsonify(application)
+                else:
+                    return jsonify({"error": "Unauthorized access"}), 403
+    return jsonify({"error": "Application not found"}), 404
+
+@app.route('/api/department/update-application/<visit_id>', methods=['POST'])
+@department_login_required
+def update_application(visit_id):
+    department = session.get('department')
+    department_name = department.get('name')
+    status = request.form.get('status')
+    remark = request.form.get('remark', '')
+    if not status or status not in ['pending', 'completed']:
+        return jsonify({"error": "Invalid status value"}), 400
+    try:
+        with open(DATA_FILE, 'r') as file:
+            facedata = json.load(file)
+    except Exception as e:
+        return jsonify({'error': f'Failed to load data: {str(e)}'}), 500
+    updated = False
+    for uid, user_data in facedata.items():
+        for i, visit in enumerate(user_data.get('visitor', [])):
+            if visit.get('visit_id') == visit_id:
+                if visit.get('forwarding_department') == department_name:
+                    user_data['visitor'][i]['status'] = status
+                    user_data['visitor'][i]['remark'] = remark
+                    updated = True
+                    break
+        if updated:
+            break
+    if updated:
+        try:
+            with open(DATA_FILE, 'w') as file:
+                json.dump(facedata, file, indent=4)
+            return jsonify({"success": True, "message": "Application updated successfully"})
+        except Exception as e:
+            return jsonify({'error': f'Failed to save data: {str(e)}'}), 500
+    else:
+        return jsonify({"error": "Application not found or unauthorized"}), 404
+
+@app.route('/api/department/application-stats', methods=['GET'])
+@department_login_required
+def get_application_stats():
+    department = session.get('department')
+    department_name = department.get('name')
+    try:
+        with open(DATA_FILE, 'r') as file:
+            facedata = json.load(file)
+    except Exception as e:
+        return jsonify({'error': f'Failed to load data: {str(e)}'}), 500
+    total_count = 0
+    pending_count = 0
+    completed_count = 0
+    today = datetime.now().date() # Corrected
+    today_count = 0
+    for uid, user_data in facedata.items():
+        for visit in user_data.get('visitor', []):
+            if visit.get('forwarding_department') == department_name:
+                total_count += 1
+                if visit.get('status') == 'pending':
+                    pending_count += 1
+                elif visit.get('status') == 'completed':
+                    completed_count += 1
+                try:
+                    visit_date = datetime.strptime(visit.get('datetime'), '%Y-%m-%d %H:%M:%S').date() # Corrected
+                    if visit_date == today:
+                        today_count += 1
+                except ValueError:
+                    pass
+    stats = {
+        'total': total_count,
+        'pending': pending_count,
+        'completed': completed_count,
+        'today': today_count
+    }
+
+    return jsonify(stats)
+
+@app.route('/api/department/forward-application/<visit_id>', methods=['POST'])
+@department_login_required
+def forward_application(visit_id):
+    current_department = session.get('department')
+    current_department_name = current_department.get('name')
+    target_department = request.form.get('target_department')
+    note = request.form.get('note', '')
+    if not target_department:
+        return jsonify({"error": "Target department is required"}), 400
+    departments = load_departments()
+    if not any(d['name'] == target_department for d in departments):
+        return jsonify({"error": "Invalid target department"}), 400
+    try:
+        with open(DATA_FILE, 'r') as file:
+            facedata = json.load(file)
+    except Exception as e:
+        return jsonify({'error': f'Failed to load data: {str(e)}'}), 500
+    updated = False
+    for uid, user_data in facedata.items():
+        for i, visit in enumerate(user_data.get('visitor', [])):
+            if visit.get('visit_id') == visit_id:
+                if visit.get('forwarding_department') == current_department_name:
+                    user_data['visitor'][i]['forwarding_department'] = target_department
+                    user_data['visitor'][i]['status'] = 'pending'
+                    user_data['visitor'][i]['forwarding_note'] = note
+                    user_data['visitor'][i]['forwarded_from'] = current_department_name
+                    user_data['visitor'][i]['forwarded_datetime'] = datetime.now().strftime( # Corrected
+                        '%Y-%m-%d %H:%M:%S')
+                    updated = True
+                    break
+        if updated:
+            break
+    if updated:
+        try:
+            with open(DATA_FILE, 'w') as file:
+                json.dump(facedata, file, indent=4)
+            return jsonify({
+                "success": True,
+                "message": f"Application forwarded to {target_department} successfully"
+            })
+        except Exception as e:
+            return jsonify({'error': f'Failed to save data: {str(e)}'}), 500
+    else:
+        return jsonify({"error": "Application not found or unauthorized"}), 404
+
+@app.route('/api/department/search-applications', methods=['GET'])
+@department_login_required
+def search_applications():
+    department = session.get('department')
+    department_name = department.get('name')
+    query = request.args.get('query', '').lower()
+    if not query or len(query) < 3:
+        return jsonify({"error": "Search query must be at least 3 characters"}), 400
+    try:
+        with open(DATA_FILE, 'r') as file:
+            facedata = json.load(file)
+    except Exception as e:
+        return jsonify({'error': f'Failed to load data: {str(e)}'}), 500
+    results = []
+    for uid, user_data in facedata.items():
+        for visit in user_data.get('visitor', []):
+            if visit.get('forwarding_department') == department_name:
+                if (query in user_data.get('name', '').lower() or
+                        query in user_data.get('phone', '').lower() or
+                        query in user_data.get('email', '').lower() or
+                        query in visit.get('visit_id', '').lower() or
+                        query in visit.get('purpose', '').lower() or
+                        query in user_data.get('address', '').lower() or
+                        query in user_data.get('district', '').lower()):
+                    result = {
+                        'uid': uid,
+                        'visit_id': visit.get('visit_id'),
+                        'name': user_data.get('name'),
+                        'phone': user_data.get('phone'),
+                        'email': user_data.get('email'),
+                        'datetime': visit.get('datetime'),
+                        'purpose': visit.get('purpose'),
+                        'status': visit.get('status'),
+                        'profile_img': user_data.get('profile_img', [''])[0] if user_data.get('profile_img') else ''
+                    }
+                    results.append(result)
+    return jsonify(results)
+
+@app.route('/api/department/recent-activities', methods=['GET'])
+@department_login_required
+def get_recent_activities():
+    department = session.get('department')
+    department_name = department.get('name')
+    limit = int(request.args.get('limit', 10))
+    try:
+        with open(DATA_FILE, 'r') as file:
+            facedata = json.load(file)
+    except Exception as e:
+        return jsonify({'error': f'Failed to load data: {str(e)}'}), 500
+    activities = []
+    for uid, user_data in facedata.items():
+        for visit in user_data.get('visitor', []):
+            if visit.get('forwarding_department') == department_name:
+                activity = {
+                    'uid': uid,
+                    'visit_id': visit.get('visit_id'),
+                    'name': user_data.get('name'),
+                    'datetime': visit.get('datetime'),
+                    'purpose': visit.get('purpose'),
+                    'status': visit.get('status'),
+                    'profile_img': user_data.get('profile_img', [''])[0] if user_data.get('profile_img') else ''
+                }
+                activities.append(activity)
+    try:
+        activities.sort(key=lambda x: datetime.strptime(x['datetime'], '%Y-%m-%d %H:%M:%S'), reverse=True) # Corrected
+    except:
+        pass
+    return jsonify(activities[:limit])
+
 if __name__ == "__main__":
     app.run()
-
 # gunicorn --workers 3 --bind 0.0.0.0:8080 app:app

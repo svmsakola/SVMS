@@ -1,0 +1,37 @@
+{
+    "UID1744213827": {
+        "name": "Rohit Ingle",
+        "phone": "7719013881",
+        "email": "rohitingle2045@gmail.com",
+        "address": "Roy Salve Plot, Shraddha Residency, Akola",
+        "tahasil": "\u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940",
+        "district": "Akola",
+        "registration_datetime": "2025-04-09 21:20:27",
+        "images": [
+            "facedata/UID1744213827/UID1744213827_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1744213827_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202504090001",
+                "datetime": "2025-04-09 21:20:28",
+                "purpose": "Meeting On Akola Development with Rohit",
+                "status": "pending",
+                "dvn": 1,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-04-09 21:27:44",
+                "document_pdf": "pdf/V202504090001_1.pdf",
+                "remark": "get this work done in 5 days",
+                "forwarding_department": "Rohit",
+                "forwarding_note": "Make the changes in the date of birth",
+                "forwarded_from": "Rohit Login",
+                "forwarded_datetime": "2025-04-10 01:13:51"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1744213827/UID1744213827_img1.jpg"
+        ]
+    }
+}
