@@ -1,21 +1,13 @@
-import base64
-import json
-import os
-import random
-import signal
-import sys
-import uuid
-from datetime import datetime
+import os, io, sys, uuid, json, random, signal, base64
+from datetime import datetime, timedelta
 from functools import wraps
-
-import bcrypt
-import cv2
-import face_recognition
-import numpy as np
+import bcrypt, cv2, numpy as np, face_recognition
 from PIL import Image
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory, flash, \
-    make_response
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory, \
+    flash, make_response, send_file
 from flask_cors import CORS
+import openpyxl
+from openpyxl.styles import Font, Alignment, Border, Side
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from ultralytics import YOLO
@@ -1470,6 +1462,117 @@ def delete_visitor_entry():
         print(f"Error deleting visit {visit_id} for UID {uid}: {e}")
         return jsonify({"success": False, "message": f"Server error: {str(e)}"}), 500
 
+def safe_get(data, key, default='N/A'):
+    return data.get(key, default) if data else default
+
+@app.route('/api/admin/generate_report')
+def generate_visitor_report():
+    if not is_admin_authenticated():
+        return jsonify({"error": "Unauthorized access"}), 403
+
+    start_date_str = request.args.get('start_date')
+    end_date_str = request.args.get('end_date')
+
+    if not start_date_str:
+        return jsonify({"error": "Missing required parameter: start_date"}), 400
+
+    try:
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+        if not end_date_str:
+            end_date = start_date
+        else:
+            end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+
+        if start_date > end_date:
+            return jsonify({"error": "Start date cannot be after end date"}), 400
+
+    except ValueError:
+        return jsonify({"error": "Invalid date format. Use YYYY-MM-DD"}), 400
+
+    try:
+        face_data = load_face_data()
+        report_data = []
+
+        for uid, user_data in face_data.items():
+            if isinstance(user_data, dict) and 'visitor' in user_data and isinstance(user_data['visitor'], list):
+                for visit in user_data['visitor']:
+                    if isinstance(visit, dict) and 'datetime' in visit and isinstance(visit['datetime'], str):
+                        try:
+                            visit_dt = datetime.strptime(visit['datetime'], '%Y-%m-%d %H:%M:%S')
+                            visit_date = visit_dt.date()
+                            if start_date <= visit_date <= end_date:
+                                report_entry = {
+                                    "Name": safe_get(user_data, 'name'),
+                                    "Phone": safe_get(user_data, 'phone'),
+                                    "Address": safe_get(user_data, 'address'),
+                                    "Tahasil": safe_get(user_data, 'tahasil'),
+                                    "District": safe_get(user_data, 'district'),
+                                    "Visit ID": safe_get(visit, 'visit_id'),
+                                    "Date & Time": visit_dt.strftime('%d/%m/%Y %I:%M:%S %p'),
+                                    "Purpose": safe_get(visit, 'purpose'),
+                                    "Document": "Yes" if visit.get('document_pdf') else "No",
+                                    "Status": safe_get(visit, 'status', 'unknown').capitalize(),
+                                    "Entry Confirmed": "Yes" if visit.get('entry_confirmed', False) else "No",
+                                    "Forwarded To": safe_get(visit, 'forwarding_department', '-'),
+                                    "Remark": safe_get(visit, 'forwarding_note', '-')
+                                }
+                                report_data.append(report_entry)
+                        except ValueError:
+                            print(f"Skipping visit due to invalid datetime format: UID {uid}, Visit {visit.get('visit_id', 'N/A')}")
+                        except Exception as e:
+                            print(f"Error processing visit row for report: UID {uid}, Visit {visit.get('visit_id', 'N/A')} - {e}")
+
+        report_data.sort(key=lambda x: datetime.strptime(x['Date & Time'], '%d/%m/%Y %I:%M:%S %p'))
+
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Visitor Report"
+
+        headers = [
+            "Name", "Phone", "Address", "Tahasil", "District", "Visit ID",
+            "Date & Time", "Purpose", "Document", "Status", "Entry Confirmed",
+            "Forwarded To", "Remark"
+        ]
+        ws.append(headers)
+
+        header_font = Font(bold=True, color="FFFFFF")
+        header_fill = openpyxl.styles.PatternFill(start_color="2C3E90", end_color="2C3E90", fill_type="solid")
+        for cell in ws[1]:
+            cell.font = header_font
+            cell.fill = header_fill
+            cell.alignment = Alignment(horizontal='center', vertical='center')
+
+        for entry in report_data:
+            row_data = [entry.get(header, 'N/A') for header in headers]
+            ws.append(row_data)
+
+        for col_idx, column_letter in enumerate(openpyxl.utils.get_column_letter(i) for i in range(1, len(headers) + 1)):
+            max_length = 0
+            column = ws[column_letter]
+            for cell in column:
+                try:
+                    if len(str(cell.value)) > max_length:
+                        max_length = len(str(cell.value))
+                except:
+                    pass
+            adjusted_width = (max_length + 2) * 1.2
+            ws.column_dimensions[column_letter].width = max(15, min(adjusted_width, 50))
+        excel_stream = io.BytesIO()
+        wb.save(excel_stream)
+        excel_stream.seek(0)
+        if start_date == end_date:
+            filename = f"visitor_report_{start_date_str}.xlsx"
+        else:
+            filename = f"visitor_report_{start_date_str}_to_{end_date_str}.xlsx"
+        return send_file(
+            excel_stream,
+            as_attachment=True,
+            download_name=filename,
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+    except Exception as e:
+        print(f"CRITICAL: Error generating Excel report: {e}")
+        return jsonify({"error": f"An unexpected server error occurred while generating the report: {str(e)}"}), 500
 
 if __name__ == "__main__":
     app.run()

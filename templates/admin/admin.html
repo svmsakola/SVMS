@@ -26,6 +26,8 @@
             --action-delete-hover-bg: #c0392b;
             --action-delete-user-bg: #9b211b; /* Darker red for user delete */
             --action-delete-user-hover-bg: #781a14;
+            --report-button-bg: #1abc9c;
+            --report-button-hover-bg: #16a085;
         }
 
         * {
@@ -225,6 +227,13 @@
             font-weight: 600;
         }
 
+        .log-controls { /* New container for date and report button */
+             display: flex;
+             align-items: center;
+             gap: 20px; /* Space between date filter and report button */
+             flex-wrap: wrap;
+         }
+
         .date-filter {
             display: flex;
             align-items: center;
@@ -245,6 +254,27 @@
             color: var(--text-dark);
             cursor: pointer;
         }
+
+        .report-btn { /* Style for the new report button */
+             padding: 8px 15px;
+             background-color: var(--report-button-bg);
+             color: white;
+             border: none;
+             border-radius: 6px;
+             cursor: pointer;
+             font-weight: 600;
+             font-size: 0.9rem;
+             transition: background-color 0.3s ease;
+             display: inline-flex;
+             align-items: center;
+             gap: 8px;
+         }
+         .report-btn i {
+             font-size: 1rem;
+         }
+         .report-btn:hover {
+             background-color: var(--report-button-hover-bg);
+         }
 
         .table-container {
             overflow-x: auto; /* Allow horizontal scrolling for the table */
@@ -381,7 +411,7 @@
 
         /* --- Modal Styles --- */
         .modal {
-            display: none;
+            display: none; /* Hidden by default */
             position: fixed;
             top: 0;
             left: 0;
@@ -392,18 +422,28 @@
             justify-content: center;
             align-items: center;
             backdrop-filter: blur(3px);
+            opacity: 0; /* Start hidden for transition */
+             transition: opacity 0.3s ease;
         }
-        .modal.active { display: flex; } /* Use class to show modal */
+        .modal.active {
+            display: flex; /* Use flex to center content */
+            opacity: 1; /* Fade in */
+         }
 
         .modal-content {
             background-color: var(--white);
             border-radius: 10px;
             padding: 30px;
-            width: 400px; /* Slightly wider for confirmation */
-            max-width: 90%;
+            width: 90%; /* Responsive width */
+            max-width: 450px; /* Max width for larger modals */
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            text-align: center;
+            text-align: center; /* Center basic text */
+             transform: scale(0.95); /* Start slightly smaller */
+             transition: transform 0.3s ease;
         }
+        .modal.active .modal-content {
+             transform: scale(1); /* Scale up when active */
+         }
 
         .modal-title {
             font-size: 1.3rem; /* Larger title */
@@ -445,9 +485,11 @@
         }
         .modal-btn-confirm.delete-visit { background-color: var(--action-delete-bg); } /* Style for visit delete */
         .modal-btn-confirm.delete-user { background-color: var(--action-delete-user-bg); } /* Style for user delete */
+        .modal-btn-confirm.generate-report { background-color: var(--report-button-bg); } /* Style for report generate */
         .modal-btn-confirm:hover { background-color: var(--secondary-blue); }
         .modal-btn-confirm.delete-visit:hover { background-color: var(--action-delete-hover-bg); }
         .modal-btn-confirm.delete-user:hover { background-color: var(--action-delete-user-hover-bg); }
+        .modal-btn-confirm.generate-report:hover { background-color: var(--report-button-hover-bg); }
 
         .modal-btn-cancel {
             background-color: #e0e0e0;
@@ -459,6 +501,61 @@
             opacity: 0.7;
             cursor: not-allowed;
         }
+        /* --- End Generic Modal Styles --- */
+
+        /* --- Report Modal Specific Styles --- */
+        #reportModal .modal-content {
+             text-align: left; /* Align content left for form */
+        }
+        .report-options {
+             margin-bottom: 20px;
+             border-bottom: 1px solid var(--border-color);
+             padding-bottom: 15px;
+        }
+        .report-options label {
+             display: block;
+             margin-bottom: 10px;
+             font-weight: 500;
+        }
+        .report-options input[type="radio"] {
+             margin-right: 8px;
+             accent-color: var(--primary-blue); /* Style radio button */
+        }
+        .date-input-group {
+             margin-top: 15px;
+             padding-left: 25px; /* Indent date inputs */
+        }
+        .date-input-group label {
+             display: block;
+             font-size: 0.9rem;
+             color: var(--text-gray);
+             margin-bottom: 5px;
+        }
+        .date-input-group input[type="date"] {
+             width: 100%;
+             padding: 8px 10px;
+             border: 1px solid var(--border-color);
+             border-radius: 5px;
+             font-size: 0.9rem;
+             margin-bottom: 10px;
+        }
+        #reportDateRangeInputs {
+             display: none; /* Hide date range initially */
+        }
+        #reportStatus {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            min-height: 1.2em; /* Reserve space */
+            color: var(--text-gray);
+        }
+         #reportStatus.error {
+             color: var(--error-red);
+             font-weight: bold;
+         }
+         #reportStatus.success {
+             color: var(--success-green);
+         }
+        /* --- End Report Modal Specific Styles --- */
 
         /* PDF Viewer Popup Styles */
         .pdf-popup-overlay {
@@ -514,7 +611,7 @@
             height: 100%;
             border: none;
         }
-        /* --- End Modal Styles --- */
+        /* --- End PDF Popup Styles --- */
 
 
         @media (max-width: 768px) {
@@ -526,11 +623,14 @@
             .main-wrapper { margin-top: 60px; }
             .visitor-log-container { padding: 15px; }
             .log-header { flex-direction: column; align-items: flex-start; }
+             .log-controls { width: 100%; justify-content: space-between;} /* Adjust controls layout */
+             .report-btn { padding: 7px 12px; font-size: 0.85rem;}
             .log-header h2 { font-size: 1.3rem; }
             .visitor-table th, .visitor-table td { padding: 10px 12px; font-size: 0.85rem; }
              .view-pdf-btn-table { padding: 4px 8px; font-size: 0.75rem; }
              .action-btn { font-size: 1rem; }
              .file-status-icons span { font-size: 1rem; margin-right: 5px;}
+             .modal-content { padding: 20px; }
         }
 
         @media (max-width: 480px) {
@@ -542,6 +642,12 @@
              .view-pdf-btn-table { padding: 3px 6px; font-size: 0.7rem; }
              .file-status-icons span { margin-right: 4px;}
              .delete-visit-btn { margin-right: 5px; } /* Adjust spacing for small screens */
+             .log-controls { flex-direction: column; align-items: stretch; gap: 10px;}
+             .date-filter { width: 100%; }
+             .report-btn { width: 100%; justify-content: center; }
+             .modal-buttons { flex-direction: column; gap: 10px; }
+             .modal-btn { width: 100%; }
+             #reportModal .modal-content { width: 95%; }
         }
     </style>
 </head>
@@ -581,9 +687,14 @@
                 <div class="visitor-log-container">
                     <div class="log-header">
                         <h2>Visitor Log</h2>
-                        <div class="date-filter">
-                            <label for="visitorDate">Select Date:</label>
-                            <input type="date" id="visitorDate" name="visitorDate">
+                        <div class="log-controls">
+                            <div class="date-filter">
+                                <label for="visitorDate">Select Date:</label>
+                                <input type="date" id="visitorDate" name="visitorDate">
+                            </div>
+                            <button class="report-btn" id="generateReportBtn">
+                                <i class="fas fa-file-excel"></i> Generate Report
+                            </button>
                         </div>
                     </div>
                     <div class="table-container">
@@ -624,7 +735,7 @@
                 <h3 class="modal-title">Confirm Logout</h3>
                 <p>Are you sure you want to logout?</p>
                 <div class="modal-buttons">
-                    <button class="modal-btn modal-btn-cancel" id="cancelLogout">Cancel</button>
+                    <button class="modal-btn modal-btn-cancel" data-close-modal="logoutModal">Cancel</button>
                     <button class="modal-btn modal-btn-confirm" id="confirmLogout">Logout</button>
                 </div>
             </div>
@@ -632,12 +743,12 @@
 
         <!-- Delete Specific Visit Confirmation Modal -->
         <div class="modal" id="deleteVisitModal">
-            <div class="modal-content">
+             <div class="modal-content">
                 <h3 class="modal-title">Delete Visit Entry</h3>
                 <p>Are you sure you want to delete the specific visit entry with ID: <strong id="deleteVisitIdDisplay"></strong>?</p>
                 <p style="font-size: 0.85rem; color: var(--text-gray);">The user's main profile and other visits will remain.</p>
                 <div class="modal-buttons">
-                    <button class="modal-btn modal-btn-cancel" id="deleteVisitCancel">Cancel</button>
+                    <button class="modal-btn modal-btn-cancel" data-close-modal="deleteVisitModal">Cancel</button>
                     <button class="modal-btn modal-btn-confirm delete-visit" id="deleteVisitConfirm">Delete Visit</button>
                 </div>
             </div>
@@ -645,16 +756,46 @@
 
         <!-- Delete Entire User Confirmation Modal -->
         <div class="modal" id="deleteUserModal">
-            <div class="modal-content">
+             <div class="modal-content">
                 <h3 class="modal-title" style="color: var(--error-red);">Delete Entire User</h3>
                 <p>Are you sure you want to permanently delete the user <strong id="deleteUserNameDisplay"></strong> (UID: <strong id="deleteUserUidDisplay"></strong>)?</p>
                 <p style="font-size: 0.9rem; color: var(--error-red);">This action will remove <strong>ALL</strong> visits and personal data associated with this user and cannot be undone.</p>
                 <div class="modal-buttons">
-                    <button class="modal-btn modal-btn-cancel" id="deleteUserCancel">Cancel</button>
+                    <button class="modal-btn modal-btn-cancel" data-close-modal="deleteUserModal">Cancel</button>
                     <button class="modal-btn modal-btn-confirm delete-user" id="deleteUserConfirm">Delete User Permanently</button>
                 </div>
             </div>
         </div>
+
+         <!-- Report Generation Modal -->
+         <div class="modal" id="reportModal">
+             <div class="modal-content">
+                 <h3 class="modal-title">Generate Visitor Report</h3>
+                 <div class="report-options">
+                     <label>
+                         <input type="radio" name="reportType" value="single" checked> Single Date
+                     </label>
+                     <div class="date-input-group" id="reportSingleDateInputs">
+                         <label for="reportSingleDate">Select Date:</label>
+                         <input type="date" id="reportSingleDate" name="reportSingleDate">
+                     </div>
+                     <label>
+                         <input type="radio" name="reportType" value="range"> Date Range
+                     </label>
+                     <div class="date-input-group" id="reportDateRangeInputs">
+                         <label for="reportStartDate">Start Date:</label>
+                         <input type="date" id="reportStartDate" name="reportStartDate">
+                         <label for="reportEndDate">End Date:</label>
+                         <input type="date" id="reportEndDate" name="reportEndDate">
+                     </div>
+                 </div>
+                 <p id="reportStatus"></p>
+                 <div class="modal-buttons">
+                     <button class="modal-btn modal-btn-cancel" data-close-modal="reportModal">Cancel</button>
+                     <button class="modal-btn modal-btn-confirm generate-report" id="generateReportConfirm">Generate & Download</button>
+                 </div>
+             </div>
+         </div>
 
 
         <!-- PDF Viewer Popup -->
@@ -674,7 +815,6 @@
             const dropdownMenu = document.getElementById('dropdownMenu');
             const logoutBtn = document.getElementById('logoutBtn');
             const logoutModal = document.getElementById('logoutModal');
-            const cancelLogout = document.getElementById('cancelLogout');
             const confirmLogout = document.getElementById('confirmLogout');
             const visitorDateInput = document.getElementById('visitorDate');
             const visitorTableBody = document.getElementById('visitorTableBody');
@@ -684,16 +824,26 @@
 
             // Delete Visit Modal Elements
             const deleteVisitModal = document.getElementById('deleteVisitModal');
-            const deleteVisitCancelBtn = document.getElementById('deleteVisitCancel');
             const deleteVisitConfirmBtn = document.getElementById('deleteVisitConfirm');
             const deleteVisitIdDisplay = document.getElementById('deleteVisitIdDisplay');
 
             // Delete User Modal Elements
             const deleteUserModal = document.getElementById('deleteUserModal');
-            const deleteUserCancelBtn = document.getElementById('deleteUserCancel');
             const deleteUserConfirmBtn = document.getElementById('deleteUserConfirm');
             const deleteUserUidDisplay = document.getElementById('deleteUserUidDisplay');
             const deleteUserNameDisplay = document.getElementById('deleteUserNameDisplay');
+
+            // Report Modal Elements
+             const generateReportBtn = document.getElementById('generateReportBtn');
+             const reportModal = document.getElementById('reportModal');
+             const reportTypeRadios = document.querySelectorAll('input[name="reportType"]');
+             const reportSingleDateInputs = document.getElementById('reportSingleDateInputs');
+             const reportDateRangeInputs = document.getElementById('reportDateRangeInputs');
+             const reportSingleDate = document.getElementById('reportSingleDate');
+             const reportStartDate = document.getElementById('reportStartDate');
+             const reportEndDate = document.getElementById('reportEndDate');
+             const generateReportConfirmBtn = document.getElementById('generateReportConfirm');
+             const reportStatus = document.getElementById('reportStatus');
 
             // PDF Popup Elements
             const pdfPopupOverlay = document.getElementById('pdf-popup-overlay');
@@ -703,6 +853,14 @@
             // --- State Variables ---
             let visitToDelete = { uid: null, visit_id: null };
             let userToDelete = { uid: null, name: null };
+
+            // --- Helper: Format Date ---
+             function formatDate(date) {
+                 const year = date.getFullYear();
+                 const month = String(date.getMonth() + 1).padStart(2, '0');
+                 const day = String(date.getDate()).padStart(2, '0');
+                 return `${year}-${month}-${day}`;
+             }
 
             // --- User Info and Dropdown Logic ---
             function setUserInfo() {
@@ -720,24 +878,53 @@
                     dropdownMenu.classList.remove('active');
                 }
             });
-            logoutBtn.addEventListener('click', () => { logoutModal.style.display = 'flex'; dropdownMenu.classList.remove('active'); });
-            cancelLogout.addEventListener('click', () => logoutModal.style.display = 'none');
+
+            // --- Modal Handling (Generic) ---
+            function showModal(modalElement) {
+                if(modalElement) modalElement.classList.add('active');
+            }
+            function hideModal(modalElement) {
+                if(modalElement) modalElement.classList.remove('active');
+            }
+
+            // Add listeners for generic modal close buttons
+             document.querySelectorAll('[data-close-modal]').forEach(button => {
+                 button.addEventListener('click', () => {
+                     const modalId = button.getAttribute('data-close-modal');
+                     const modalToClose = document.getElementById(modalId);
+                     hideModal(modalToClose);
+                 });
+             });
+
+            // Close modals on outside click
+            window.addEventListener('click', (event) => {
+                 if (event.target.classList.contains('modal')) {
+                    hideModal(event.target);
+                 }
+                 if (event.target === pdfPopupOverlay) {
+                     hidePdfPopup();
+                 }
+             });
+            // Close modals on Escape key press
+             window.addEventListener('keydown', function(event) {
+                 if (event.key === 'Escape') {
+                     document.querySelectorAll('.modal.active').forEach(modal => hideModal(modal));
+                     hidePdfPopup();
+                 }
+             });
+
+
+            // --- Logout Logic ---
+            logoutBtn.addEventListener('click', () => { showModal(logoutModal); dropdownMenu.classList.remove('active'); });
             confirmLogout.addEventListener('click', () => {
                 fetch("/logout").then(() => {
                     localStorage.removeItem("user"); window.location.href = "/";
                 }).catch(error => {
                     console.error('Logout failed:', error);
                     alert('Logout failed. Please try again.');
-                    logoutModal.style.display = 'none';
+                    hideModal(logoutModal);
                 });
             });
-            // Close modals on outside click
-             window.addEventListener('click', (event) => {
-                 if (event.target === logoutModal) logoutModal.style.display = 'none';
-                 if (event.target === deleteVisitModal) deleteVisitModal.classList.remove('active');
-                 if (event.target === deleteUserModal) deleteUserModal.classList.remove('active');
-                 if (event.target === pdfPopupOverlay) hidePdfPopup();
-             });
 
             // --- PDF Popup Logic ---
              function showPdfPopup(pdfUrl) {
@@ -755,14 +942,14 @@
                      pdfIframe.src = ''; // Clear src to stop loading
                  }
              }
-             pdfCloseBtn.addEventListener('click', hidePdfPopup);
+             if(pdfCloseBtn) pdfCloseBtn.addEventListener('click', hidePdfPopup);
 
              // --- Delete Modals Logic ---
              function showDeleteVisitPopup(uid, visitId) {
                  visitToDelete = { uid, visit_id: visitId };
                  userToDelete = { uid: null, name: null };
                  deleteVisitIdDisplay.textContent = visitId || 'N/A';
-                 deleteVisitModal.classList.add('active');
+                 showModal(deleteVisitModal);
                  deleteVisitConfirmBtn.disabled = false;
                  deleteVisitConfirmBtn.textContent = 'Delete Visit';
              }
@@ -772,21 +959,20 @@
                  visitToDelete = { uid: null, visit_id: null };
                  deleteUserUidDisplay.textContent = uid || 'N/A';
                  deleteUserNameDisplay.textContent = name || 'N/A';
-                 deleteUserModal.classList.add('active');
+                 showModal(deleteUserModal);
                  deleteUserConfirmBtn.disabled = false;
                  deleteUserConfirmBtn.textContent = 'Delete User Permanently';
              }
 
-             deleteVisitCancelBtn.addEventListener('click', () => deleteVisitModal.classList.remove('active'));
-             deleteUserCancelBtn.addEventListener('click', () => deleteUserModal.classList.remove('active'));
-             deleteVisitConfirmBtn.addEventListener('click', executeDeleteVisit);
-             deleteUserConfirmBtn.addEventListener('click', executeDeleteUser);
+             if(deleteVisitConfirmBtn) deleteVisitConfirmBtn.addEventListener('click', executeDeleteVisit);
+             if(deleteUserConfirmBtn) deleteUserConfirmBtn.addEventListener('click', executeDeleteUser);
 
             async function executeDeleteVisit() {
                 if (!visitToDelete.uid || !visitToDelete.visit_id) return;
                 deleteVisitConfirmBtn.disabled = true;
                 deleteVisitConfirmBtn.textContent = 'Deleting...';
                 try {
+                    // Assumes endpoint '/api/admin/delete_visitor_entry' exists
                     const response = await fetch('/api/admin/delete_visitor_entry', {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(visitToDelete)
@@ -794,7 +980,7 @@
                     const data = await response.json();
                     if (!response.ok || !data.success) throw new Error(data.message || 'Failed to delete visit entry.');
                     alert('Visitor entry deleted successfully.');
-                    deleteVisitModal.classList.remove('active');
+                    hideModal(deleteVisitModal);
                     fetchVisitorData(visitorDateInput.value); // Refresh
                 } catch (error) {
                     console.error("Error deleting visit entry:", error); alert(`Error: ${error.message}`);
@@ -806,22 +992,17 @@
                 if (!userToDelete.uid) return;
                 deleteUserConfirmBtn.disabled = true;
                 deleteUserConfirmBtn.textContent = 'Deleting User...';
-                // NOTE: The backend endpoint '/api/admin/delete_user' was not provided in the original Python code.
-                // This JS function assumes such an endpoint exists and works similarly to the visit deletion.
-                // If this endpoint doesn't exist, this function will fail.
                 try {
-                    const response = await fetch('/api/admin/delete_user', { // Assuming this endpoint exists
+                     // Assumes endpoint '/api/admin/delete_user' exists
+                    const response = await fetch('/api/admin/delete_user', {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ uid: userToDelete.uid })
                     });
-                    const data = await response.json();
-                    // Adjust status code check if necessary (e.g., 200 OK or 204 No Content)
-                    if (!response.ok) throw new Error(data.message || `Failed to delete user (Status: ${response.status})`);
-                     // Check for a success flag if the backend sends one
-                    if (data.success === false) throw new Error(data.message || 'API reported failure in deleting user.');
-
+                     const data = await response.json();
+                     if (!response.ok) throw new Error(data.message || `Failed to delete user (Status: ${response.status})`);
+                     if (!data.success) throw new Error(data.message || 'API reported failure in deleting user.');
                     alert('User and all associated data deleted successfully.');
-                    deleteUserModal.classList.remove('active');
+                    hideModal(deleteUserModal);
                     fetchVisitorData(visitorDateInput.value); // Refresh
                 } catch (error) {
                     console.error("Error deleting user:", error); alert(`Error: ${error.message}`);
@@ -830,14 +1011,102 @@
             }
 
 
-            // --- Visitor Log Logic ---
-            function formatDate(date) {
-                 const year = date.getFullYear();
-                 const month = String(date.getMonth() + 1).padStart(2, '0');
-                 const day = String(date.getDate()).padStart(2, '0');
-                 return `${year}-${month}-${day}`;
-            }
+            // --- Report Modal Logic ---
+             if (generateReportBtn) {
+                 generateReportBtn.addEventListener('click', () => {
+                     const today = formatDate(new Date());
+                     reportSingleDate.value = today;
+                     reportStartDate.value = today;
+                     reportEndDate.value = today;
+                     reportStatus.textContent = ''; reportStatus.className = '';
+                     document.querySelector('input[name="reportType"][value="single"]').checked = true;
+                     handleReportTypeChange(); // Update visibility based on default radio
+                     showModal(reportModal);
+                 });
+             }
 
+             function handleReportTypeChange() {
+                const selectedType = document.querySelector('input[name="reportType"]:checked').value;
+                if (selectedType === 'single') {
+                    reportSingleDateInputs.style.display = 'block';
+                    reportDateRangeInputs.style.display = 'none';
+                } else { // range
+                    reportSingleDateInputs.style.display = 'none';
+                    reportDateRangeInputs.style.display = 'block';
+                }
+             }
+
+             reportTypeRadios.forEach(radio => { radio.addEventListener('change', handleReportTypeChange); });
+
+             if(generateReportConfirmBtn) {
+                 generateReportConfirmBtn.addEventListener('click', async () => {
+                     const reportType = document.querySelector('input[name="reportType"]:checked').value;
+                     let url = '/api/admin/generate_report?';
+                     let valid = true;
+                     let params;
+                     let filename = "visitor_report";
+
+                     reportStatus.textContent = ''; reportStatus.className = '';
+
+                     if (reportType === 'single') {
+                         const singleDateVal = reportSingleDate.value;
+                         if (!singleDateVal) {
+                             reportStatus.textContent = 'Please select a date.'; reportStatus.className = 'error'; valid = false;
+                         } else {
+                             params = new URLSearchParams({ start_date: singleDateVal }); // Use start_date for single date
+                             filename += `_${singleDateVal}.xlsx`;
+                         }
+                     } else { // range
+                         const startDateVal = reportStartDate.value;
+                         const endDateVal = reportEndDate.value;
+                         if (!startDateVal || !endDateVal) {
+                             reportStatus.textContent = 'Please select both start and end dates.'; reportStatus.className = 'error'; valid = false;
+                         } else if (startDateVal > endDateVal) {
+                             reportStatus.textContent = 'Start date cannot be after end date.'; reportStatus.className = 'error'; valid = false;
+                         } else {
+                             params = new URLSearchParams({ start_date: startDateVal, end_date: endDateVal });
+                             filename += `_${startDateVal}_to_${endDateVal}.xlsx`;
+                         }
+                     }
+
+                     if (!valid) return;
+
+                     url += params.toString();
+                     generateReportConfirmBtn.disabled = true;
+                     generateReportConfirmBtn.textContent = 'Generating...';
+                     reportStatus.textContent = 'Generating report, please wait...'; reportStatus.className = '';
+
+                     try {
+                         const response = await fetch(url);
+                         if (!response.ok) {
+                             let errorMsg = `Failed to generate report. Status: ${response.status}`;
+                             try { const errorData = await response.json(); errorMsg = errorData.error || errorMsg; } catch (e) {}
+                             throw new Error(errorMsg);
+                         }
+
+                         // Handle the file download
+                         const blob = await response.blob();
+                         const downloadUrl = window.URL.createObjectURL(blob);
+                         const a = document.createElement('a');
+                         a.style.display = 'none'; a.href = downloadUrl; a.download = filename;
+                         document.body.appendChild(a); a.click();
+                         window.URL.revokeObjectURL(downloadUrl); a.remove();
+
+                         reportStatus.textContent = 'Report generated successfully!'; reportStatus.className = 'success';
+                         setTimeout(() => hideModal(reportModal), 1500);
+
+                     } catch (error) {
+                         console.error('Error generating report:', error);
+                         reportStatus.textContent = `Error: ${error.message}`; reportStatus.className = 'error';
+                     } finally {
+                         generateReportConfirmBtn.disabled = false;
+                         generateReportConfirmBtn.textContent = 'Generate & Download';
+                     }
+                 });
+             }
+
+
+            // --- Visitor Log Table Logic ---
              function formatDateTimeForDisplay(dateTimeString) {
                  if (!dateTimeString) return 'N/A';
                  try {
@@ -849,36 +1118,42 @@
                  } catch (e) { console.error("Error formatting date:", e); return dateTimeString; }
              }
 
-             function getProfileImageHtml(visitorData) {
+            function getProfileImageHtml(visitorData) {
                  let imageUrl = visitorData?.profile_img?.[0] || visitorData?.images?.[0] || null;
                  const initials = (visitorData?.name?.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || '?');
                  const altText = visitorData?.name || 'Visitor';
                  const timestamp = Date.now();
-                 // Assuming profile_img contains 'profiles/UID.../img.jpg'
-                 // and images contains 'facedata/UID.../img.jpg'
-                 let basePath = '/dashboard/'; // Default base path
-                 if (imageUrl && imageUrl.startsWith('profiles/')) {
-                    // Route: /dashboard/profiles/<uid>/<filename>
-                    imageUrl = imageUrl.substring('profiles/'.length);
-                    basePath = '/dashboard/profiles/';
-                 } else if (imageUrl && imageUrl.startsWith('facedata/')) {
-                     // Check if a route exists for facedata images, e.g., /dashboard/facedata/<uid>/<filename>
-                     // If not, you might need to create one or adjust the path structure
-                     // For now, let's assume a similar structure for demonstration
-                     imageUrl = imageUrl.substring('facedata/'.length);
-                     basePath = '/dashboard/facedata/'; // Adjust if needed
-                 }
+                 // --- Adjust Base Path Logic ---
+                 let basePath = '/dashboard/'; // Default if path is unexpected
+                 let finalImageName = null;
 
-                 const finalImageUrl = imageUrl ? `${basePath}${imageUrl}?t=${timestamp}` : null;
+                 if (imageUrl && typeof imageUrl === 'string') {
+                     if (imageUrl.startsWith('profiles/')) {
+                         finalImageName = imageUrl.substring('profiles/'.length);
+                         basePath = '/dashboard/profiles/';
+                     } else if (imageUrl.startsWith('facedata/')) {
+                         // Assuming facedata route exists: /dashboard/facedata/<uid>/<filename>
+                         // Need to extract UID and filename if not already part of the path
+                         // If imageUrl is like 'facedata/UID123/img1.jpg'
+                         const parts = imageUrl.split('/');
+                         if (parts.length >= 3) {
+                             finalImageName = `${parts[1]}/${parts[2]}`; // Keep "UID/filename" part
+                             basePath = '/dashboard/facedata/'; // Base route for facedata
+                         }
+                     }
+                     // Add more conditions here if you have other image storage structures
+                 }
+                 // --- End Adjust Base Path Logic ---
+
+                 const finalImageUrl = finalImageName ? `${basePath}${finalImageName}?t=${timestamp}` : null;
 
                  return `<div class="profile-img-container">
-                            ${finalImageUrl
-                                ? `<img src="${finalImageUrl}" alt="${altText}" onerror="this.style.display='none'; this.parentElement.innerHTML='${initials}';">`
-                                : initials
-                            }
-                         </div>`;
+                             ${finalImageUrl
+                                 ? `<img src="${finalImageUrl}" alt="${altText}" onerror="this.style.display='none'; this.parentElement.innerHTML='${initials}';">`
+                                 : initials
+                             }
+                          </div>`;
              }
-
 
              function getStatusBadge(status) {
                  let badgeClass = 'status-default';
@@ -906,6 +1181,8 @@
                  iconsHtml += (visitorData?.images && visitorData.images.length > 0) ? checkIcon : crossIcon;
                  // Check face encodings
                  iconsHtml += (visitorData?.face_encodings && visitorData.face_encodings.length > 0) ? checkIcon : crossIcon;
+                 // Check document PDF
+                  iconsHtml += (visitorData?.document_pdf) ? checkIcon : crossIcon;
                  return `<div class="file-status-icons">${iconsHtml}</div>`;
              }
 
@@ -931,9 +1208,10 @@
                  visitors.forEach(visit => {
                      let pdfButton = '-';
                      if (visit.document_pdf) {
-                         const pdfUrl = `/api/get-visitor-document/${visit.visit_id}`;
-                         pdfButton = `<button class="action-btn view-pdf-btn-table" data-pdf-url="${pdfUrl}" title="View Document"><i class="fas fa-file-pdf"></i></button>`;
+                         const pdfUrl = visit.visit_id ? `/api/get-visitor-document/${visit.visit_id}` : '#';
+                         pdfButton = `<button class="action-btn view-pdf-btn-table" data-pdf-url="${pdfUrl}" title="View Document" ${!visit.visit_id ? 'disabled' : ''}><i class="fas fa-file-pdf"></i></button>`;
                      }
+                      const remarkText = visit.forwarding_note || visit.remark || '-'; // Use forwarding_note first, fallback to remark
 
                      tableHtml += `
                          <tr>
@@ -951,7 +1229,7 @@
                              <td>${getStatusBadge(visit.status)}</td>
                              <td>${getConfirmationIcon(visit.entry_confirmed)}</td>
                              <td>${visit.forwarding_department || '-'}</td>
-                             <td>${visit.remark || '-'}</td> {/* CORRECTED LINE */}
+                             <td>${remarkText}</td>
                              <td class="actions-cell">
                                  <button class="action-btn delete-visit-btn" data-uid="${visit.uid}" data-visit-id="${visit.visit_id}" title="Delete This Visit Entry">
                                      <i class="fas fa-calendar-times"></i>
@@ -974,24 +1252,37 @@
 
                 if (targetButton.classList.contains('view-pdf-btn-table')) {
                     const pdfUrl = targetButton.dataset.pdfUrl;
-                    showPdfPopup(pdfUrl);
+                    if (pdfUrl && pdfUrl !== '#') {
+                         showPdfPopup(pdfUrl);
+                    } else {
+                        alert('Document URL is missing or invalid.');
+                    }
                 } else if (targetButton.classList.contains('delete-visit-btn')) {
                     const uid = targetButton.dataset.uid;
                     const visitId = targetButton.dataset.visitId;
-                    showDeleteVisitPopup(uid, visitId);
+                    if (uid && visitId) {
+                        showDeleteVisitPopup(uid, visitId);
+                    } else {
+                         console.error("Missing UID or Visit ID for deletion.");
+                    }
                 } else if (targetButton.classList.contains('delete-user-btn')) {
                     const uid = targetButton.dataset.uid;
                     const name = targetButton.dataset.name;
-                    showDeleteUserPopup(uid, name);
+                     if (uid) {
+                         showDeleteUserPopup(uid, name);
+                     } else {
+                          console.error("Missing UID for user deletion.");
+                     }
                 }
             });
+
 
             // --- Initialization ---
             const todayStr = formatDate(new Date());
             visitorDateInput.value = todayStr;
             fetchVisitorData(todayStr); // Fetch data for today on load
-            visitorDateInput.addEventListener('change', function() {
-                fetchVisitorData(this.value); // Fetch data when date changes
+            visitorDateInput.addEventListener('change', function() { // Update table view on date change
+                fetchVisitorData(this.value);
             });
 
         });
