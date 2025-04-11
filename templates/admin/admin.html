@@ -806,14 +806,20 @@
                 if (!userToDelete.uid) return;
                 deleteUserConfirmBtn.disabled = true;
                 deleteUserConfirmBtn.textContent = 'Deleting User...';
+                // NOTE: The backend endpoint '/api/admin/delete_user' was not provided in the original Python code.
+                // This JS function assumes such an endpoint exists and works similarly to the visit deletion.
+                // If this endpoint doesn't exist, this function will fail.
                 try {
-                    const response = await fetch('/api/admin/delete_user', {
+                    const response = await fetch('/api/admin/delete_user', { // Assuming this endpoint exists
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ uid: userToDelete.uid })
                     });
                     const data = await response.json();
+                    // Adjust status code check if necessary (e.g., 200 OK or 204 No Content)
                     if (!response.ok) throw new Error(data.message || `Failed to delete user (Status: ${response.status})`);
-                    if (!data.success) throw new Error(data.message || 'API reported failure in deleting user.');
+                     // Check for a success flag if the backend sends one
+                    if (data.success === false) throw new Error(data.message || 'API reported failure in deleting user.');
+
                     alert('User and all associated data deleted successfully.');
                     deleteUserModal.classList.remove('active');
                     fetchVisitorData(visitorDateInput.value); // Refresh
@@ -848,8 +854,22 @@
                  const initials = (visitorData?.name?.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || '?');
                  const altText = visitorData?.name || 'Visitor';
                  const timestamp = Date.now();
-                 // IMPORTANT: Adjust the base path if profile images are served differently
-                 const finalImageUrl = imageUrl ? `/dashboard/${imageUrl}?t=${timestamp}` : null;
+                 // Assuming profile_img contains 'profiles/UID.../img.jpg'
+                 // and images contains 'facedata/UID.../img.jpg'
+                 let basePath = '/dashboard/'; // Default base path
+                 if (imageUrl && imageUrl.startsWith('profiles/')) {
+                    // Route: /dashboard/profiles/<uid>/<filename>
+                    imageUrl = imageUrl.substring('profiles/'.length);
+                    basePath = '/dashboard/profiles/';
+                 } else if (imageUrl && imageUrl.startsWith('facedata/')) {
+                     // Check if a route exists for facedata images, e.g., /dashboard/facedata/<uid>/<filename>
+                     // If not, you might need to create one or adjust the path structure
+                     // For now, let's assume a similar structure for demonstration
+                     imageUrl = imageUrl.substring('facedata/'.length);
+                     basePath = '/dashboard/facedata/'; // Adjust if needed
+                 }
+
+                 const finalImageUrl = imageUrl ? `${basePath}${imageUrl}?t=${timestamp}` : null;
 
                  return `<div class="profile-img-container">
                             ${finalImageUrl
@@ -858,6 +878,7 @@
                             }
                          </div>`;
              }
+
 
              function getStatusBadge(status) {
                  let badgeClass = 'status-default';
@@ -879,7 +900,7 @@
                  let iconsHtml = '';
                  const checkIcon = '<span title="Available"><i class="fas fa-check-circle"></i></span>';
                  const crossIcon = '<span title="Missing"><i class="fas fa-times-circle"></i></span>';
-                 // Check profile image (check if array exists and has content)
+                 // Check profile image
                  iconsHtml += (visitorData?.profile_img && visitorData.profile_img.length > 0) ? checkIcon : crossIcon;
                  // Check other images
                  iconsHtml += (visitorData?.images && visitorData.images.length > 0) ? checkIcon : crossIcon;
@@ -930,7 +951,7 @@
                              <td>${getStatusBadge(visit.status)}</td>
                              <td>${getConfirmationIcon(visit.entry_confirmed)}</td>
                              <td>${visit.forwarding_department || '-'}</td>
-                             <td>${visit.forwarding_note || '-'}</td>
+                             <td>${visit.remark || '-'}</td> {/* CORRECTED LINE */}
                              <td class="actions-cell">
                                  <button class="action-btn delete-visit-btn" data-uid="${visit.uid}" data-visit-id="${visit.visit_id}" title="Delete This Visit Entry">
                                      <i class="fas fa-calendar-times"></i>

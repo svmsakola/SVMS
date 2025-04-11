@@ -1356,90 +1356,77 @@ def get_recent_activities():
 
 @app.route('/api/admin/visitors')
 def get_admin_visitors():
-    # Basic role check (enhance with proper decorators/session checks if needed)
-    # Example using Flask session:
-    # if "user" not in session or session.get("user", {}).get("role") != "admin":
-    #     return jsonify({"error": "Unauthorized"}), 403
-
     selected_date_str = request.args.get('date')
     if not selected_date_str:
         return jsonify({"error": "Date parameter is required"}), 400
-
     try:
-        # Validate date format (YYYY-MM-DD)
+        # Validate date format
         datetime.strptime(selected_date_str, '%Y-%m-%d')
     except ValueError:
         return jsonify({"error": "Invalid date format. Use YYYY-MM-DD"}), 400
 
-    face_data = load_face_data() # Load the main data file
+    face_data = load_face_data()
     daily_visitors = []
 
     for uid, user_data in face_data.items():
-        # Ensure user_data is a dictionary and has 'visitor' key
+        # Basic validation for user_data structure
         if isinstance(user_data, dict) and 'visitor' in user_data and isinstance(user_data['visitor'], list):
             for visit in user_data['visitor']:
-                # Ensure visit is a dictionary and has 'datetime' key
+                # Basic validation for visit structure and datetime field
                 if isinstance(visit, dict) and 'datetime' in visit and isinstance(visit['datetime'], str):
                     try:
-                        visit_date_str = visit['datetime'].split(' ')[0]
-                        # Compare date part with the selected date
-                        if visit_date_str == selected_date_str:
-                            # Construct the comprehensive data object for the table row
-                            visitor_entry = {
-                                # User details (needed for rendering profile, name, etc.)
+                        # Check if the visit date matches the selected date
+                        if visit['datetime'].split(' ')[0] == selected_date_str:
+                            # Construct the visitor entry dictionary
+                            daily_visitors.append({
                                 "uid": uid,
                                 "name": user_data.get('name', 'N/A'),
                                 "phone": user_data.get('phone', 'N/A'),
                                 "address": user_data.get('address', 'N/A'),
                                 "tahasil": user_data.get('tahasil', 'N/A'),
                                 "district": user_data.get('district', 'N/A'),
-                                # File paths for status check
-                                "profile_img": user_data.get('profile_img', []), # Expecting a list
-                                "images": user_data.get('images', []), # Expecting a list
-                                "face_encodings": user_data.get('face_encodings', []), # Expecting a list
-
-                                # Visit specific details
+                                # Use profile_img if available, fallback to images, then empty list
+                                "profile_img": user_data.get('profile_img', user_data.get('images', [])[:1]), # Simplified fallback
+                                "images": user_data.get('images', []), # Keep original images list
+                                "face_encodings": user_data.get('face_encodings', []),
                                 "visit_id": visit.get('visit_id', 'N/A'),
                                 "datetime": visit.get('datetime', ''),
                                 "purpose": visit.get('purpose', 'N/A'),
                                 "status": visit.get('status', 'unknown'),
                                 "entry_confirmed": visit.get('entry_confirmed', False),
-                                "dvn": visit.get('dvn', None), # Include DVN if needed elsewhere
+                                "dvn": visit.get('dvn', None),
                                 "forwarding_department": visit.get('forwarding_department', ''),
-                                "forwarding_note": visit.get('forwarding_note', ''),
-                                "document_pdf": visit.get('document_pdf', None) # Path to PDF document
-                            }
-                            daily_visitors.append(visitor_entry)
-                    except IndexError:
-                        # Handle cases where datetime string might not have a space
-                        print(f"Warning: Malformed datetime string for UID {uid}, Visit {visit.get('visit_id', 'N/A')}: {visit['datetime']}")
+                                "forwarding_note": visit.get('forwarding_note', ''), # Added forwarding_note
+                                "remark": visit.get('remark', ''), # Added remark explicitly
+                                "document_pdf": visit.get('document_pdf', None)
+                            })
                     except Exception as e:
-                        # Catch other potential errors during processing a visit
-                         print(f"Error processing visit for UID {uid}, Visit {visit.get('visit_id', 'N/A')}: {e}")
-
+                        # Log errors during processing individual visits if needed
+                        print(f"Error processing visit for UID {uid}, Visit {visit.get('visit_id', 'N/A')}: {e}")
                 else:
-                    # Log if a visit entry is missing datetime or is not a dict
+                    # Log or handle invalid visit entries
                     print(f"Warning: Skipping invalid visit entry for UID {uid}: {visit}")
         else:
-             # Log if user_data structure is unexpected
-             print(f"Warning: Skipping invalid user data structure for UID {uid}")
+            # Log or handle invalid user data structures
+            print(f"Warning: Skipping invalid user data structure for UID {uid}")
 
-
-    # Sort by datetime ascending (optional, useful for chronological view)
+    # Sort the results by datetime
     try:
-        # Ensure datetime exists and is valid before sorting
+        # Filter out entries with invalid datetime strings before sorting
         valid_visitors = [v for v in daily_visitors if 'datetime' in v and isinstance(v['datetime'], str)]
         invalid_visitors = [v for v in daily_visitors if not ('datetime' in v and isinstance(v['datetime'], str))]
 
+        # Sort valid visitors
         valid_visitors.sort(key=lambda x: datetime.strptime(x['datetime'], '%Y-%m-%d %H:%M:%S'))
+
+        # Combine sorted valid visitors with invalid ones (optional, puts invalid ones at the end)
         sorted_daily_visitors = valid_visitors + invalid_visitors
-        if invalid_visitors:
-             print(f"Warning: {len(invalid_visitors)} visitors had missing or invalid datetime for sorting.")
-
-    except (ValueError, KeyError, TypeError) as e:
+    except Exception as e:
+        # Log sorting errors if they occur, possibly due to unexpected data
         print(f"Warning: Could not sort visitors due to invalid data or structure: {e}")
-        sorted_daily_visitors = daily_visitors
+        sorted_daily_visitors = daily_visitors # Fallback to unsorted list
 
+    # Create response and set cache headers
     response = make_response(jsonify({"visitors": sorted_daily_visitors}))
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response.headers['Pragma'] = 'no-cache'
