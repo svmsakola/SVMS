@@ -774,9 +774,9 @@ async function startFaceRecognition(button) {
             }
             recognizedVisitorData = result.user_data;
 
-            // Store image for display
+            // Store image for display (but don't re-send later for updates)
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            capturedFrames = [canvas.toDataURL('image/jpeg', 0.9)];
+            capturedFrames = [canvas.toDataURL('image/jpeg', 0.9)]; // Store initially if needed for display
 
             displayExistingVisitorDetails(result.user_data);
         } else {
@@ -804,7 +804,7 @@ async function startFaceRecognition(button) {
 
 // Display existing visitor details
 function displayExistingVisitorDetails(visitorData) {
-    currentVisitorData = visitorData;
+    currentVisitorData = visitorData; // Store the full data including uid
     if (domElements['registration-form']) domElements['registration-form'].style.display = "none";
     if (domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "block";
 
@@ -812,13 +812,21 @@ function displayExistingVisitorDetails(visitorData) {
     let profileImgHtml = '';
     const timestamp = Date.now(); // Add timestamp to prevent caching
 
-    if (visitorData.profile_img && visitorData.profile_img.length > 0) {
-        profileImgHtml = `<img src="${visitorData.profile_img[0]}?t=${timestamp}" alt="${visitorData.name}" class="profile-circle">`;
-    } else if (visitorData.images && visitorData.images.length > 0) {
-        profileImgHtml = `<img src="${visitorData.images[0]}?t=${timestamp}" alt="${visitorData.name}" class="profile-circle">`;
-    } else {
+    // Use profile_img first, then images, then placeholder
+    const profileImages = visitorData.profile_img || [];
+    const faceImages = visitorData.images || [];
+
+    if (profileImages.length > 0 && profileImages[0]) {
+         profileImgHtml = `<img src="/dashboard/${profileImages[0]}?t=${timestamp}" alt="${visitorData.name}" class="profile-circle">`;
+    } else if (faceImages.length > 0 && faceImages[0]) {
+         // Assuming faceImages paths are relative like 'facedata/UID.../img.jpg'
+         // Adjust the path if necessary based on your Flask routing for these images
+         profileImgHtml = `<img src="/${faceImages[0]}?t=${timestamp}" alt="${visitorData.name}" class="profile-circle">`;
+    }
+     else {
         profileImgHtml = `<div class="profile-circle profile-placeholder">${visitorData.name ? visitorData.name.charAt(0).toUpperCase() : '?'}</div>`;
     }
+
 
     // Set labels
     const nameLabel = "नाव:";
@@ -864,7 +872,7 @@ function showRegistrationForm(capturedFrame) {
         capturedImagesDiv.appendChild(img);
     }
 
-    capturedFrames = [capturedFrame];
+    capturedFrames = [capturedFrame]; // Store frame for NEW registration
     currentVisitorData = null;
     recognizedVisitorData = null;
 }
@@ -903,7 +911,7 @@ async function saveVisitorData(button) {
         return;
     }
 
-    // Collect visitor data
+    // Collect visitor data - INCLUDE FRAME FOR NEW REGISTRATION
     const visitorData = {
         name: domElements['name']?.value.trim() ?? '',
         phone: domElements['phone']?.value.trim() ?? '',
@@ -911,13 +919,14 @@ async function saveVisitorData(button) {
         address: domElements['address']?.value.trim() ?? '',
         tahasil: domElements['tahasil']?.value ?? '',
         purpose: domElements['purpose']?.value.trim() ?? '',
-        frame: capturedFrames[0]
+        frame: capturedFrames[0] // Include frame for new registration
     };
 
     const confirmMsg = "तुम्हाला खात्री आहे की हा अभ्यागत डेटा जतन करायचा आहे?";
     if (confirm(confirmMsg)) {
         showLoading(button, "जतन करत आहे...");
         try {
+            // Pass the data WITH frame
             await registerVisitor(visitorData);
         } catch (error) {
             console.error("Error during saveVisitorData registration:", error);
@@ -940,7 +949,10 @@ async function addNewVisitForExistingVisitor(button) {
         return;
     }
 
-    if (!currentVisitorData) {
+    // Use recognizedVisitorData if available, fallback to currentVisitorData
+    const visitorDataSource = recognizedVisitorData || currentVisitorData;
+
+    if (!visitorDataSource || !visitorDataSource.name || !visitorDataSource.phone) { // Check essential fields
         const alertMsg = "अभ्यागत डेटा आढळला नाही. कृपया आधी अभ्यागताला ओळखा.";
         alert(alertMsg);
         return;
@@ -949,13 +961,20 @@ async function addNewVisitForExistingVisitor(button) {
     const confirmMsg = "तुम्हाला खात्री आहे की या विद्यमान अभ्यागतासाठी नवीन भेट जोडायची आहे?";
     if (confirm(confirmMsg)) {
         showLoading(button, "भेट जोडत आहे...");
-        const newVisitorData = {
-            ...currentVisitorData,
+        // Construct data WITHOUT frame
+        const newVisitData = {
+            name: visitorDataSource.name,
+            phone: visitorDataSource.phone,
+            email: visitorDataSource.email || null,
+            address: visitorDataSource.address || '',
+            tahasil: visitorDataSource.tahasil || '',
+            district: visitorDataSource.district || 'Akola', // Ensure district is included
             purpose: newPurpose,
-            frame: capturedFrames[0] || currentVisitorData.frame || null
+            // NO 'frame' property here
         };
         try {
-            await registerVisitor(newVisitorData);
+            // Pass data WITHOUT frame
+            await registerVisitor(newVisitData);
         } catch (error) {
             console.error("Error during addNewVisitForExistingVisitor registration:", error);
         } finally {
@@ -969,28 +988,38 @@ async function addNewVisitForExistingVisitor(button) {
 
 // Continue existing visit
 async function continueExistingVisit(button) {
-    if (!currentVisitorData || !currentVisitorData.visitor || !currentVisitorData.visitor.length) {
+     // Use recognizedVisitorData if available, fallback to currentVisitorData
+     const visitorDataSource = recognizedVisitorData || currentVisitorData;
+
+    if (!visitorDataSource || !visitorDataSource.visitor || !visitorDataSource.visitor.length) {
         const alertMsg = "कोणतीही विद्यमान भेट आढळली नाही";
         alert(alertMsg);
         return;
     }
 
     // Find the most recent visit
-    const lastVisit = currentVisitorData.visitor.reduce((latest, current) =>
+    const lastVisit = visitorDataSource.visitor.reduce((latest, current) =>
         (new Date(current.datetime) > new Date(latest.datetime)) ? current : latest,
-        currentVisitorData.visitor[0]
+        visitorDataSource.visitor[0]
     );
 
     const confirmMsg = `तुम्हाला खात्री आहे की '${lastVisit.purpose}' या कारणासाठी मागील भेट चालू ठेवायची आहे?`;
     if (confirm(confirmMsg)) {
         showLoading(button, "भेट सुरू ठेवत आहे...");
-        const newVisitorData = {
-            ...currentVisitorData,
-            purpose: lastVisit.purpose,
-            frame: capturedFrames[0] || currentVisitorData.frame || null
+        // Construct data WITHOUT frame
+        const continueVisitData = {
+            name: visitorDataSource.name,
+            phone: visitorDataSource.phone,
+            email: visitorDataSource.email || null,
+            address: visitorDataSource.address || '',
+            tahasil: visitorDataSource.tahasil || '',
+            district: visitorDataSource.district || 'Akola',
+            purpose: lastVisit.purpose, // Use purpose from the last visit
+            // NO 'frame' property here
         };
         try {
-            await registerVisitor(newVisitorData);
+             // Pass data WITHOUT frame
+            await registerVisitor(continueVisitData);
         } catch (error) {
             console.error("Error during continueExistingVisit registration:", error);
         } finally {
@@ -1003,32 +1032,17 @@ async function continueExistingVisit(button) {
 }
 
 // Register a visitor (new or existing)
+// This function now just sends the data it receives. The decision to include 'frame'
+// is made *before* calling this function.
 async function registerVisitor(visitorData) {
-    let finalVisitorData = { ...visitorData };
-    const isUpdate = recognizedVisitorData && finalVisitorData.uid && finalVisitorData.uid === recognizedVisitorData.uid;
-
-    if (isUpdate) {
-        finalVisitorData = {
-            ...recognizedVisitorData,
-            purpose: visitorData.purpose,
-            frame: visitorData.frame || recognizedVisitorData.frame || null,
-            visitor: recognizedVisitorData.visitor || []
-        };
-    } else if (!finalVisitorData.uid) {
-        finalVisitorData = {
-            ...visitorData,
-            visitor: []
-        };
-    }
-    finalVisitorData.frame = visitorData.frame || finalVisitorData.frame || null;
-
+    // visitorData might or might not have the 'frame' property depending on the flow.
     try {
         const response = await fetch("/register_visitor", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(finalVisitorData)
+            body: JSON.stringify(visitorData) // Send data as received
         });
 
         if (!response.ok) {
@@ -1038,32 +1052,39 @@ async function registerVisitor(visitorData) {
             } catch {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+            throw new Error(errorData.error || `HTTP error! Status: ${response.status}`); // Use error field from backend
         }
 
         const result = await response.json();
 
         if (result.success) {
             const uid = result.uid;
+            const visitId = result.visit_id;
             let successMsgTemplate = "अभ्यागत यशस्वीरित्या नोंदणीकृत झाला!\n\nअभ्यागत तपशील:\n- भेट आयडी: {visit_id}\n- युनिक वापरकर्ता आयडी: {uid}\n- नाव: {name}\n- कारण: {purpose}";
             successMsgTemplate = successMsgTemplate
-                .replace('{visit_id}', result.visit_id)
+                .replace('{visit_id}', visitId)
                 .replace('{uid}', uid)
-                .replace('{name}', finalVisitorData.name)
-                .replace('{purpose}', finalVisitorData.purpose);
+                .replace('{name}', visitorData.name) // Use name from the data sent
+                .replace('{purpose}', visitorData.purpose); // Use purpose from the data sent
             alert(successMsgTemplate);
 
-            // Process profile image in the background
-            if (finalVisitorData.frame && uid) {
+            // Process profile image ONLY IF a frame was included (i.e., new registration)
+            if (visitorData.frame && uid) {
                 setTimeout(() => {
-                    processProfileImage(finalVisitorData.frame, uid);
+                    processProfileImage(visitorData.frame, uid)
+                        .catch(err => console.error("Background profile processing failed:", err));
                 }, 300);
             }
 
-            // Get updated visitor details
+            // Get updated visitor details to refresh the UI
             try {
                 const detailsResponse = await fetch(`/get_visitor_details?uid=${uid}`, {
-                    cache: "no-store"
+                    cache: "no-store",
+                     headers: { // Add cache control headers
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
                 });
 
                 if (!detailsResponse.ok) {
@@ -1079,37 +1100,42 @@ async function registerVisitor(visitorData) {
                 const visitorDetails = await detailsResponse.json();
 
                 if (visitorDetails.success && visitorDetails.visitor_data) {
-                    recognizedVisitorData = visitorDetails.visitor_data;
-                    displayExistingVisitorDetails(visitorDetails.visitor_data);
+                    recognizedVisitorData = visitorDetails.visitor_data; // Update recognized data
+                    currentVisitorData = visitorDetails.visitor_data; // Also update current data
+                    displayExistingVisitorDetails(visitorDetails.visitor_data); // Refresh display
                     if (domElements['registration-form']) domElements['registration-form'].style.display = "none";
                     if (domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "block";
                     if (domElements['new-purpose']) domElements['new-purpose'].value = "";
 
-                    // Clear captured images but keep the frames for potential use
+                    // Clear captured images display area (frame data itself is handled)
                     if (domElements['captured-images']) domElements['captured-images'].innerHTML = "";
 
-                    // Reset forms after delay
-                    setTimeout(resetForms, 5000);
+                    // Optionally Reset forms after delay (maybe not ideal UX for existing)
+                    // Consider if you want to reset immediately or keep the existing form visible
+                    // setTimeout(resetForms, 5000); // Commented out for potentially better UX
                 } else {
                     throw new Error(visitorDetails.message || "Failed to fetch updated visitor details.");
                 }
             } catch (detailsError) {
-                console.error("Error fetching visitor details:", detailsError);
-                // Even if details fetch fails, registration was successful
-                setTimeout(resetForms, 5000);
+                console.error("Error fetching visitor details after registration:", detailsError);
+                 // Even if details fetch fails, registration might have been successful
+                 // Maybe just reset forms or show a generic success message
+                 // setTimeout(resetForms, 5000);
             }
         } else {
-            throw new Error(result.message || "Registration failed (unknown reason)");
+            throw new Error(result.error || "Registration failed (unknown reason)"); // Use error field
         }
     } catch (error) {
         console.error("Registration process error:", error);
         const errorPrefix = "नोंदणी अयशस्वी: ";
         alert(`${errorPrefix}${error.message}`);
-        throw error;
+        throw error; // Re-throw to be caught by callers if needed
     }
 }
 
+
 // Process and upload profile image
+// This should ONLY be called for new registrations where a frame exists.
 function processProfileImage(imageDataUrl, uid) {
     if (!imageDataUrl || !uid) {
         console.error("Missing image data or UID for profile processing.");
@@ -1144,26 +1170,8 @@ function processProfileImage(imageDataUrl, uid) {
         .then(result => {
             if (result.success) {
                 console.log('Profile image processed successfully:', result);
-                if (currentVisitorData && currentVisitorData.uid === uid) {
-                    // Refresh visitor details to show updated profile
-                    return fetch(`/get_visitor_details?uid=${uid}`, {
-                        cache: "no-store",
-                        headers: {
-                            'Cache-Control': 'no-cache, no-store, must-revalidate',
-                            'Pragma': 'no-cache',
-                            'Expires': '0'
-                        }
-                    })
-                    .then(res => res.ok ? res.json() : Promise.reject(`Failed to refetch details: ${res.status}`))
-                    .then(details => {
-                        if (details.success && details.visitor_data) {
-                            recognizedVisitorData = details.visitor_data;
-                            displayExistingVisitorDetails(details.visitor_data);
-                        } else {
-                            console.error("Failed to parse refetched details:", details.message);
-                        }
-                    }).catch(err => console.error("Error refetching details after profile processing:", err));
-                }
+                // Optionally trigger a silent refresh of details if needed elsewhere
+                // But primary refresh is handled after registerVisitor call
                 return result;
             } else {
                 console.error('Profile image processing failed on server:', result.message);
@@ -1172,7 +1180,9 @@ function processProfileImage(imageDataUrl, uid) {
         })
         .catch(error => {
             console.error('Error in processProfileImage function:', error);
-            return Promise.reject(error);
+            // Don't reject the main flow if background processing fails
+            // return Promise.reject(error);
+            return null; // Indicate failure gracefully
         });
 }
 
@@ -1223,14 +1233,14 @@ async function logout() {
         }
 
         const response = await fetch("/logout");
-        localStorage.removeItem("user");
-        window.location.href = "/";
-        return response;
+        localStorage.removeItem("user"); // Assuming user info is stored here
+        window.location.href = "/"; // Redirect to login/home page
+        // return response; // Not strictly needed after redirection
     } catch (error) {
         console.error("Logout failed:", error);
-        localStorage.removeItem("user");
-        window.location.href = "/";
-        return Promise.reject(error);
+        localStorage.removeItem("user"); // Still try to clear local storage
+        window.location.href = "/"; // Still try to redirect
+        // return Promise.reject(error); // Not strictly needed after redirection
     }
 }
     </script>

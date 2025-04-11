@@ -270,23 +270,31 @@ def register_visitor():
         if not data.get('name'): missing.append("name")
         if not data.get('phone'): missing.append("phone")
         return jsonify({'error': f'Missing required fields: {", ".join(missing)}'}), 400
+
     try:
         with open('data/facedata/facedata.json', 'r') as f:
             facedata = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         facedata = {}
+
     existing_uid = None
-    for uid, user_data in facedata.items():
-        if user_data.get('name') == data.get('name') and user_data.get('phone') == data.get('phone'):
-            existing_uid = uid
-            break
+    for uid_key, user_data_val in facedata.items():
+        if isinstance(user_data_val, dict):
+            if user_data_val.get('name') == data.get('name') and user_data_val.get('phone') == data.get('phone'):
+                existing_uid = uid_key
+                break
+        else:
+            print(f"Warning: Skipping non-dict entry for UID {uid_key} in facedata.json")
+
     uid = existing_uid if existing_uid else f"UID{int(datetime.now().timestamp())}"
+
     tahasil_options = ["अकोला", "अकोट", "तेल्हारा", "बाळापूर", "पातूर", "मुर्तिजापूर", "बार्शीटाकळी"]
     selected_tahasil = data.get('tahasil', '')
     if selected_tahasil.endswith('<'):
         selected_tahasil = selected_tahasil[:-1]
     if selected_tahasil and selected_tahasil not in tahasil_options:
         return jsonify({'error': f'Invalid tahasil selection: {selected_tahasil}'}), 400
+
     visitor_data = {
         'name': data.get('name', ''),
         'phone': data.get('phone', ''),
@@ -295,44 +303,65 @@ def register_visitor():
         'tahasil': selected_tahasil,
         'district': data.get('district', 'Akola')
     }
+
     if not existing_uid:
         visitor_data['registration_datetime'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    if 'frame' in data and data['frame']:
-        try:
-            frame_data = data['frame']
-            if ',' in frame_data:
-                frame_data = frame_data.split(',')[1]
-            frame_bytes = base64.b64decode(frame_data)
-            nparr = np.frombuffer(frame_bytes, np.uint8)
-            frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-            if frame is not None:
-                saved_images, face_encodings = save_face_images(frame, uid)
-                if saved_images:
-                    visitor_data['images'] = saved_images
-                if face_encodings:
-                    visitor_data['face_encodings'] = face_encodings
-            else:
-                return jsonify({'error': 'Invalid frame data, unable to decode'}), 400
-        except Exception as e:
-            return jsonify({'error': f'Error processing frame: {str(e)}'}), 500
-        finally:
-            cleanup_memory()
+        if 'frame' in data and data['frame']:
+            try:
+                frame_data = data['frame']
+                if ',' in frame_data:
+                    frame_data = frame_data.split(',')[1]
+                frame_bytes = base64.b64decode(frame_data)
+                nparr = np.frombuffer(frame_bytes, np.uint8)
+                frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+                if frame is not None:
+                    saved_images, face_encodings = save_face_images(frame, uid)
+                    if saved_images:
+                        visitor_data['images'] = saved_images
+                    if face_encodings:
+                        visitor_data['face_encodings'] = face_encodings
+                else:
+                    return jsonify({'error': 'Invalid frame data, unable to decode'}), 400
+            except Exception as e:
+                return jsonify({'error': f'Error processing frame: {str(e)}'}), 500
+            finally:
+                cleanup_memory()
+
+    visit_status = 'पुनरावृत्ती अभ्यागत' if existing_uid else 'नवीन अभ्यागत'
+
     visitor_id = generate_visitor_id()
     visit_entry = {
         'visit_id': visitor_id,
         'datetime': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         'purpose': data.get('purpose', ''),
-        'status': 'new'
+        'status': visit_status
     }
+
     if existing_uid and uid in facedata:
-        if 'visitor' not in facedata[uid]:
+        facedata[uid]['name'] = visitor_data['name']
+        facedata[uid]['phone'] = visitor_data['phone']
+        if visitor_data.get('email'): facedata[uid]['email'] = visitor_data['email']
+        if visitor_data.get('address'): facedata[uid]['address'] = visitor_data['address']
+        if visitor_data.get('tahasil'): facedata[uid]['tahasil'] = visitor_data['tahasil']
+        if visitor_data.get('district'): facedata[uid]['district'] = visitor_data['district']
+        if 'visitor' not in facedata[uid] or not isinstance(facedata[uid].get('visitor'), list):
             facedata[uid]['visitor'] = []
         facedata[uid]['visitor'].append(visit_entry)
     else:
         visitor_data['visitor'] = [visit_entry]
         facedata[uid] = visitor_data
-    with open('data/facedata/facedata.json', 'w') as f:
-        json.dump(facedata, f, indent=4)
+
+    if not isinstance(facedata.get(uid), dict):
+        print(f"Error: Data for UID {uid} is not a dictionary. Aborting save.")
+        return jsonify({'error': 'Internal server error processing data structure.'}), 500
+
+    try:
+        with open('data/facedata/facedata.json', 'w') as f:
+            json.dump(facedata, f, indent=4)
+    except Exception as e:
+        print(f"Error saving data to facedata.json: {e}")
+        return jsonify({'error': 'Failed to save visitor data.'}), 500
+
     return jsonify({
         'success': True,
         'message': 'Visitor registered successfully',
