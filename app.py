@@ -694,10 +694,6 @@ def visitor_action():
     except Exception as e:
         return jsonify({"success": False, "message": f"Failed to save updated visitor data: {str(e)}"}), 500
 
-@app.route('/dashboard/pages/<page_id>.html')
-def serve_dashboard_page(page_id):
-    return render_template(f'admin/{page_id}.html')
-
 @app.route('/registered_visitor_today')
 def registered_visitor_today():
     face_data = load_face_data()
@@ -1345,7 +1341,6 @@ def get_recent_activities():
     except:
         pass
     return jsonify(activities[:limit])
-
 
 if __name__ == "__main__":
     app.run()
