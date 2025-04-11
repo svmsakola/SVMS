@@ -9,9 +9,7 @@ from PIL import Image
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 
-import json, smtplib, random, ssl
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+import json, random
 from functools import wraps
 
 app = Flask(__name__)
@@ -21,6 +19,7 @@ app.secret_key = os.urandom(24)
 UPLOAD_FOLDER = 'uploads/docimg'
 PDF_FOLDER = 'pdf'
 DATA_FILE = 'data/facedata/facedata.json'
+DEPARTMENTS_FILE = 'JSON/departments.json'
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(PDF_FOLDER, exist_ok=True)
@@ -891,22 +890,129 @@ def load_departments():
             return []
         return json.loads(content).get('departments', [])
 
+
 def send_otp_email(recipient_email, otp):
+    import smtplib
+    import ssl
+    import random
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
+    from email.utils import formataddr, formatdate
+
     sender_email = "svmsakola@gmail.com"
     sender_password = "aess hmcl bkqm slph"
+    sender_name = "SVMS Akola"
+
+    # Create message
     message = MIMEMultipart("alternative")
-    message["Subject"] = "Your OTP for SVMS Department Login"
-    message["From"] = f"SVMS Akola <{sender_email}>"
+
+    # Enhanced headers
+    message["Subject"] = "Secure Access Code - SVMS Department Portal"
+    message["From"] = formataddr((sender_name, sender_email))
     message["To"] = recipient_email
+    message["Date"] = formatdate(localtime=True)
+    message["Message-ID"] = f"<{random.getrandbits(128)}@{sender_email.split('@')[-1]}>"
+    message["X-Mailer"] = "CustomMailer/1.0"
     message["Reply-To"] = sender_email
     message["Return-Path"] = sender_email
-    text = f"Dear User,\n\nYour One-Time Password (OTP) for department login is: {otp}\n\nThis OTP is valid for 10 minutes. Please do not share it with anyone.\n\nRegards,\nSVMS Akola Support Team"
+
+    # Text version
+    text = f"""Dear SVMS Department User,
+
+Your secure verification code for accessing the SVMS Department Portal is:
+
+{otp}
+
+This verification code will expire in 10 minutes for your security.
+
+IMPORTANT: Never share this code with anyone. SVMS staff will never ask for this code.
+
+If you did not attempt to access the SVMS Department Portal, please contact our IT support team immediately.
+
+Best regards,
+SVMS Akola Administration
+Shri Vasantrao Naik Mahavidyalaya, Akola
+Maharashtra - 444001
+Tel: +91 12345 67890
+"""
+
+    # HTML version with more professional styling
+    html = f"""<!DOCTYPE html>
+<html>
+<body style="margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; color: #333333;">
+  <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; border: 1px solid #cccccc;">
+    <tr>
+      <td align="center" bgcolor="#1a4f8a" style="padding: 30px 0;">
+        <h1 style="color: #ffffff; margin: 0;">SVMS Department Portal</h1>
+      </td>
+    </tr>
+    <tr>
+      <td bgcolor="#ffffff" style="padding: 30px;">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tr>
+            <td style="padding: 10px 0;">
+              <p style="margin: 0;">Dear SVMS Department User,</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 0;">
+              <p style="margin: 0;">Your secure verification code for accessing the SVMS Department Portal is:</p>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="padding: 20px 0;">
+              <div style="background-color: #f3f7fc; border: 1px solid #dae4f2; border-radius: 6px; padding: 15px; font-family: Courier, monospace; font-size: 24px; font-weight: bold; letter-spacing: 5px; color: #1a4f8a;">
+                {otp}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 0;">
+              <p style="margin: 0;">This verification code will expire in <strong>10 minutes</strong> for your security.</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 15px 0; border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
+              <p style="margin: 0; color: #e74c3c; font-weight: bold;">IMPORTANT: Never share this code with anyone. SVMS staff will never ask for this code.</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 0;">
+              <p style="margin: 0;">If you did not attempt to access the SVMS Department Portal, please contact our IT support team immediately.</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td bgcolor="#f2f2f2" style="padding: 20px;">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tr>
+            <td style="color: #555555; font-size: 13px;">
+              <p style="margin: 0; padding-bottom: 5px;"><strong>SVMS Akola Administration</strong></p>
+              <p style="margin: 0; padding-bottom: 5px;">Shri Vasantrao Naik Mahavidyalaya, Akola</p>
+              <p style="margin: 0; padding-bottom: 5px;">Maharashtra - 444001</p>
+              <p style="margin: 0; padding-bottom: 5px;">Tel: +91 12345 67890</p>
+              <p style="margin: 0; font-size: 11px; color: #777777; padding-top: 10px;">This is an automated message. Please do not reply to this email.</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>"""
+
+    # Attach both versions
     message.attach(MIMEText(text, "plain"))
+    message.attach(MIMEText(html, "html"))
+
     try:
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
             server.login(sender_email, sender_password)
             server.sendmail(sender_email, recipient_email, message.as_string())
+            print(f"Access code sent to {recipient_email}")
             return True
     except Exception as e:
         print(f"Email error: {str(e)}")
@@ -1240,6 +1346,9 @@ def get_recent_activities():
         pass
     return jsonify(activities[:limit])
 
+
 if __name__ == "__main__":
     app.run()
+
+
 # gunicorn --workers 3 --bind 0.0.0.0:8080 app:app
