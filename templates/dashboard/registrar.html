@@ -524,597 +524,725 @@
 
     <script>
         const domElements = {};
-        const requiredFields = [
-            { id: 'name', label: 'पूर्ण नाव' },
-            { id: 'phone', label: 'फोन नंबर' },
-            { id: 'address', label: 'पत्ता' },
-            { id: 'tahasil', label: 'तहसील' },
-            { id: 'purpose', label: 'भेटीचे कारण' }
-        ];
+const requiredFields = [
+    { id: 'name', label: 'पूर्ण नाव' },
+    { id: 'phone', label: 'फोन नंबर' },
+    { id: 'address', label: 'पत्ता' },
+    { id: 'tahasil', label: 'तहसील' },
+    { id: 'purpose', label: 'भेटीचे कारण' }
+];
 
-        let capturedFrames = [];
-        let currentVisitorData = null;
-        let recognizedVisitorData = null;
-        let webcamStream = null;
+let capturedFrames = [];
+let currentVisitorData = null;
+let recognizedVisitorData = null;
+let webcamStream = null;
+let faceDetectionInProgress = false;
 
-        function showLoading(button, loadingText = "लोड करत आहे...") {
-            if (!button) return;
-            button.dataset.originalText = button.innerHTML;
-            button.innerHTML = loadingText;
-            button.disabled = true;
-            if (button.tagName === 'LI') {
-                 button.style.cursor = 'not-allowed';
-                 button.style.opacity = '0.7';
-             }
+// Improved loading state management
+function showLoading(button, loadingText = "लोड करत आहे...") {
+    if (!button) return;
+    button.dataset.originalText = button.innerHTML;
+    button.innerHTML = loadingText;
+    button.disabled = true;
+    if (button.tagName === 'LI') {
+        button.style.cursor = 'not-allowed';
+        button.style.opacity = '0.7';
+    }
+}
+
+function hideLoading(button) {
+    if (!button || typeof button.dataset?.originalText === 'undefined') return;
+    button.innerHTML = button.dataset.originalText;
+    button.disabled = false;
+    if (button.tagName === 'LI') {
+        button.style.cursor = 'pointer';
+        button.style.opacity = '1';
+    }
+    delete button.dataset.originalText;
+}
+
+// Initialize DOM elements and setup event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    const elementIds = [
+        'webcam', 'recognition-result', 'captured-images', 'registration-form',
+        'existing-visitor-form', 'name', 'phone', 'email', 'address', 'purpose',
+        'new-purpose', 'phone-error', 'existing-visitor-details', 'last-visit-info',
+        'profile-icon', 'profile-dropdown', 'logout-button', 'tahasil',
+        'profile-container'  // Added missing element
+    ];
+
+    elementIds.forEach(id => {
+        domElements[id] = document.getElementById(id);
+    });
+
+    // Setup profile dropdown toggle
+    if (domElements['profile-icon']) {
+        domElements['profile-icon'].addEventListener('click', (event) => {
+            event.stopPropagation();
+            domElements['profile-dropdown']?.classList.toggle('active');
+        });
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (event) => {
+        if (domElements['profile-container'] && !domElements['profile-container'].contains(event.target)) {
+            domElements['profile-dropdown']?.classList.remove('active');
+        }
+    });
+
+    // Setup logout button
+    if (domElements['logout-button']) {
+        domElements['logout-button'].addEventListener('click', (event) => confirmLogout(event.currentTarget));
+    }
+
+    // Initialize webcam
+    startWebcam();
+});
+
+// Improved webcam initialization with error handling
+async function startWebcam() {
+    try {
+        // Stop any existing stream
+        if (webcamStream) {
+            webcamStream.getTracks().forEach(track => track.stop());
         }
 
-        function hideLoading(button) {
-            if (!button || typeof button.dataset?.originalText === 'undefined') return;
-             button.innerHTML = button.dataset.originalText;
-             button.disabled = false;
-             if (button.tagName === 'LI') {
-                  button.style.cursor = 'pointer';
-                  button.style.opacity = '1';
-              }
-             delete button.dataset.originalText;
+        const constraints = {
+            video: {
+                width: { ideal: 640 },
+                height: { ideal: 480 },
+                facingMode: "user"
+            }
+        };
+
+        webcamStream = await navigator.mediaDevices.getUserMedia(constraints);
+
+        if (domElements['webcam']) {
+            domElements['webcam'].srcObject = webcamStream;
+            domElements['webcam'].onloadedmetadata = () => {
+                domElements['webcam'].play();
+            };
+        }
+    } catch (error) {
+        console.error("Error accessing webcam:", error);
+        const errorMsg = document.createElement('p');
+        errorMsg.textContent = 'कॅमेरामध्ये प्रवेश करू शकलो नाही. कृपया परवानग्या तपासा.';
+        errorMsg.style.color = "red";
+        if (domElements['webcam'] && domElements['webcam'].parentNode) {
+            domElements['webcam'].parentNode.appendChild(errorMsg);
+        }
+    }
+}
+
+// Enhanced phone validation
+async function validatePhoneNumber(phone) {
+    const phoneRegex = /^[6-9]\d{9}$/;
+    const isValid = phoneRegex.test(phone);
+    const errorMsg = isValid ? "" : "कृपया योग्य १० अंकी फोन नंबर प्रविष्ट करा जो ६-९ ने सुरू होतो";
+    if (domElements['phone-error']) {
+        domElements['phone-error'].textContent = errorMsg;
+    }
+    return isValid;
+}
+
+// Improved formatting of last visit data
+function formatLastVisit(visitorData) {
+    if (!visitorData || !visitorData.visitor || visitorData.visitor.length === 0) {
+        return `<span>मागील भेटी नाहीत</span>`;
+    }
+
+    // Find the most recent visit
+    const lastVisit = visitorData.visitor.reduce((latest, current) =>
+        (new Date(current.datetime) > new Date(latest.datetime)) ? current : latest,
+        visitorData.visitor[0]
+    );
+
+    try {
+        const visitDate = new Date(lastVisit.datetime);
+        const formattedDate = visitDate.toLocaleString('mr-IN', { dateStyle: 'short', timeStyle: 'short' })
+            || `${visitDate.toLocaleDateString()} ${visitDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+
+        const dateLabel = "शेवटची भेट तारीख:";
+        const purposeLabel = "शेवटच्या भेटीचे कारण:";
+
+        return `
+            <strong>${dateLabel}</strong> ${formattedDate}<br>
+            <strong>${purposeLabel}</strong> ${lastVisit.purpose || 'N/A'}
+        `;
+    } catch (error) {
+        console.error("Error formatting last visit:", error);
+        return `<span>मागील भेटी माहिती प्रदर्शित करताना त्रुटी</span>`;
+    }
+}
+
+// Reset all recognition data and form fields
+function resetRecognitionData() {
+    capturedFrames = [];
+    currentVisitorData = null;
+    recognizedVisitorData = null;
+
+    if (domElements['recognition-result']) domElements['recognition-result'].textContent = "";
+    if (domElements['captured-images']) domElements['captured-images'].innerHTML = "";
+
+    if (domElements['registration-form']) domElements['registration-form'].style.display = "none";
+    if (domElements['existing-visitor-form']) {
+        domElements['existing-visitor-form'].style.display = "none";
+        if (domElements['existing-visitor-details']) domElements['existing-visitor-details'].innerHTML = '';
+        if (domElements['last-visit-info']) {
+            domElements['last-visit-info'].innerHTML = `<span>मागील भेटी नाहीत</span>`;
+        }
+    }
+
+    // Clear all form fields
+    ['name', 'phone', 'email', 'address', 'purpose', 'new-purpose'].forEach(id => {
+        if (domElements[id]) domElements[id].value = "";
+    });
+
+    if (domElements['tahasil']) domElements['tahasil'].selectedIndex = 0;
+    if (domElements['phone-error']) domElements['phone-error'].textContent = "";
+}
+
+// Improved face recognition with debouncing
+async function startFaceRecognition(button) {
+    if (faceDetectionInProgress) return;
+
+    resetRecognitionData();
+    showLoading(button, "ओळखत आहे...");
+    faceDetectionInProgress = true;
+
+    const video = domElements['webcam'];
+    if (!video || !video.videoWidth || !video.videoHeight) {
+        console.error("Webcam not ready or dimensions are zero.");
+        const errorText = "वेबकॅम तयार नाही. कृपया प्रतीक्षा करा आणि पुन्हा प्रयत्न करा.";
+        if (domElements['recognition-result']) domElements['recognition-result'].textContent = errorText;
+        hideLoading(button);
+        faceDetectionInProgress = false;
+        return;
+    }
+
+    try {
+        // Take multiple frames for better accuracy
+        const frames = [];
+        const frameCount = 3;
+        const frameDelay = 200; // milliseconds between frames
+
+        let canvas = window.recognitionCanvas;
+        if (!canvas) {
+            canvas = window.recognitionCanvas = document.createElement("canvas");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            ['webcam', 'recognition-result', 'captured-images', 'registration-form',
-             'existing-visitor-form', 'name', 'phone', 'email',
-             'address', 'purpose', 'new-purpose', 'phone-error', 'existing-visitor-details',
-             'last-visit-info', 'profile-icon', 'profile-dropdown', 'logout-button', 'tahasil'
-            ].forEach(id => {
-                domElements[id] = document.getElementById(id);
-            });
+        const ctx = canvas.getContext("2d");
 
-            domElements['profile-icon'].addEventListener('click', (event) => {
-                event.stopPropagation();
-                domElements['profile-dropdown'].classList.toggle('active');
-            });
-
-            document.addEventListener('click', (event) => {
-                 if (!domElements['profile-container']?.contains(event.target)) {
-                    domElements['profile-dropdown']?.classList.remove('active');
-                }
-            });
-
-            domElements['logout-button'].addEventListener('click', (event) => confirmLogout(event.currentTarget));
-
-            startWebcam();
+        // Capture first frame immediately
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const firstFrame = await new Promise(resolve => {
+            canvas.toBlob(blob => resolve(blob), "image/jpeg", 0.9);
         });
 
-        async function startWebcam() {
+        if (!firstFrame) {
+            throw new Error("प्रतिमा कॅप्चर करण्यात त्रुटी");
+        }
+
+        frames.push(firstFrame);
+
+        // Process the first frame immediately
+        const formData = new FormData();
+        formData.append("frame", firstFrame, "frame.jpg");
+
+        const response = await fetch("/detect_face", {
+            method: "POST",
+            body: formData
+        });
+
+        if (!response.ok) {
             try {
-                if (webcamStream) {
-                    const tracks = webcamStream.getTracks();
-                    tracks.forEach(track => track.stop());
-                }
-
-                const constraints = {
-                    video: {
-                        width: { ideal: 640 },
-                        height: { ideal: 480 },
-                        facingMode: "user"
-                    }
-                };
-
-                webcamStream = await navigator.mediaDevices.getUserMedia(constraints);
-                domElements['webcam'].srcObject = webcamStream;
-
-                domElements['webcam'].onloadedmetadata = () => {
-                    domElements['webcam'].play();
-                };
-            } catch (error) {
-                console.error("Error accessing webcam:", error);
-                const errorMsg = document.createElement('p');
-                errorMsg.textContent = 'कॅमेरामध्ये प्रवेश करू शकलो नाही. कृपया परवानग्या तपासा.';
-                errorMsg.style.color = "red";
-                if (domElements['webcam'] && domElements['webcam'].parentNode) {
-                     domElements['webcam'].parentNode.appendChild(errorMsg);
-                }
+                const errData = await response.json();
+                throw new Error(errData.message || `Server error: ${response.status}`);
+            } catch {
+                throw new Error(`Server error: ${response.status}`);
             }
         }
 
-        async function validatePhoneNumber(phone) {
-             const phoneRegex = /^[6-9]\d{9}$/;
-             const isValid = phoneRegex.test(phone);
-             const errorMsg = isValid ? "" : "कृपया योग्य १० अंकी फोन नंबर प्रविष्ट करा जो ६-९ ने सुरू होतो";
-             domElements['phone-error'].textContent = errorMsg;
-             return isValid;
-         }
+        const result = await response.json();
 
-         function formatLastVisit(visitorData) {
-              if (!visitorData || !visitorData.visitor || visitorData.visitor.length === 0) {
-                   return `<span>मागील भेटी नाहीत</span>`;
-               }
+        if (result.recognized) {
+            const recognizedPrefix = "ओळखले: ";
+            if (domElements['recognition-result']) {
+                domElements['recognition-result'].textContent = `${recognizedPrefix}${result.user_data.name}`;
+            }
+            recognizedVisitorData = result.user_data;
 
-              const lastVisit = visitorData.visitor.reduce((latest, current) =>
-                  (new Date(current.datetime) > new Date(latest.datetime)) ? current : latest
-              );
+            // Store image for display (but don't re-send later for updates)
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            capturedFrames = [canvas.toDataURL('image/jpeg', 0.9)]; // Store initially if needed for display
 
-              const visitDate = new Date(lastVisit.datetime);
-              const formattedDate = visitDate.toLocaleString('mr-IN', { dateStyle: 'short', timeStyle: 'short' })
-                                      || `${visitDate.toLocaleDateString()} ${visitDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
-
-              const dateLabel = "शेवटची भेट तारीख:";
-              const purposeLabel = "शेवटच्या भेटीचे कारण:";
-
-              return `
-                  <strong>${dateLabel}</strong> ${formattedDate}<br>
-                  <strong>${purposeLabel}</strong> ${lastVisit.purpose || 'N/A'}
-              `;
-          }
-
-        function resetRecognitionData() {
-            capturedFrames = [];
-            currentVisitorData = null;
-            recognizedVisitorData = null;
-
-            if(domElements['recognition-result']) domElements['recognition-result'].textContent = "";
-            if(domElements['captured-images']) domElements['captured-images'].innerHTML = "";
-
-            if(domElements['registration-form']) domElements['registration-form'].style.display = "none";
-            if(domElements['existing-visitor-form']) {
-                 domElements['existing-visitor-form'].style.display = "none";
-                  if(domElements['existing-visitor-details']) domElements['existing-visitor-details'].innerHTML = '';
-                  if(domElements['last-visit-info']) {
-                      domElements['last-visit-info'].innerHTML = `<span>मागील भेटी नाहीत</span>`;
-                  }
+            displayExistingVisitorDetails(result.user_data);
+        } else {
+            const notRecognizedText = "चेहरा ओळखला नाही. नोंदणीसह पुढे जा.";
+            if (domElements['recognition-result']) {
+                domElements['recognition-result'].textContent = notRecognizedText;
             }
 
-            ['name', 'phone', 'email', 'address', 'purpose', 'new-purpose'].forEach(id => {
-                if (domElements[id]) domElements[id].value = "";
-            });
-             if(domElements['tahasil']) domElements['tahasil'].selectedIndex = 0;
+            // Capture frame for registration
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const frameDataUrl = canvas.toDataURL('image/jpeg', 0.9);
+            showRegistrationForm(frameDataUrl);
+        }
+    } catch (error) {
+        console.error("Recognition error:", error);
+        const errorPrefix = "ओळखण्यात त्रुटी. कृपया पुन्हा प्रयत्न करा.";
+        if (domElements['recognition-result']) {
+            domElements['recognition-result'].textContent = `${errorPrefix}${error.message}`;
+        }
+    } finally {
+        hideLoading(button);
+        faceDetectionInProgress = false;
+    }
+}
 
-            if(domElements['phone-error']) domElements['phone-error'].textContent = "";
+// Display existing visitor details
+function displayExistingVisitorDetails(visitorData) {
+    currentVisitorData = visitorData; // Store the full data including uid
+    if (domElements['registration-form']) domElements['registration-form'].style.display = "none";
+    if (domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "block";
+
+    // Create profile image HTML
+    let profileImgHtml = '';
+    const timestamp = Date.now(); // Add timestamp to prevent caching
+
+    // Use profile_img first, then images, then placeholder
+    const profileImages = visitorData.profile_img || [];
+    const faceImages = visitorData.images || [];
+
+    if (profileImages.length > 0 && profileImages[0]) {
+         profileImgHtml = `<img src="/dashboard/${profileImages[0]}?t=${timestamp}" alt="${visitorData.name}" class="profile-circle">`;
+    } else if (faceImages.length > 0 && faceImages[0]) {
+         // Assuming faceImages paths are relative like 'facedata/UID.../img.jpg'
+         // Adjust the path if necessary based on your Flask routing for these images
+         profileImgHtml = `<img src="/${faceImages[0]}?t=${timestamp}" alt="${visitorData.name}" class="profile-circle">`;
+    }
+     else {
+        profileImgHtml = `<div class="profile-circle profile-placeholder">${visitorData.name ? visitorData.name.charAt(0).toUpperCase() : '?'}</div>`;
+    }
+
+
+    // Set labels
+    const nameLabel = "नाव:";
+    const phoneLabel = "फोन:";
+    const addressLabel = "पत्ता:";
+    const tahasilLabel = "तहसील:";
+
+    // Update visitor details
+    if (domElements['existing-visitor-details']) {
+        domElements['existing-visitor-details'].innerHTML = `
+            <div class="visitor-profile-container">
+                <div class="profile-image-container">
+                    ${profileImgHtml}
+                </div>
+                <div class="visitor-info-container">
+                    <p><strong>${nameLabel}</strong> ${visitorData.name || 'N/A'}</p>
+                    <p><strong>${phoneLabel}</strong> ${visitorData.phone || 'N/A'}</p>
+                    <p><strong>${addressLabel}</strong> ${visitorData.address || 'N/A'}</p>
+                    <p><strong>${tahasilLabel}</strong> ${visitorData.tahasil || 'N/A'}</p>
+                </div>
+            </div>
+        `;
+    }
+
+    // Update last visit info
+    const lastVisitFormatted = formatLastVisit(visitorData);
+    if (domElements['last-visit-info']) {
+        domElements['last-visit-info'].innerHTML = lastVisitFormatted;
+    }
+}
+
+// Show registration form with captured image
+function showRegistrationForm(capturedFrame) {
+    if (domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "none";
+    if (domElements['registration-form']) domElements['registration-form'].style.display = "block";
+
+    const capturedImagesDiv = domElements['captured-images'];
+    if (capturedImagesDiv) {
+        capturedImagesDiv.innerHTML = '';
+        const img = document.createElement("img");
+        img.src = capturedFrame;
+        img.style.maxWidth = "100%";
+        capturedImagesDiv.appendChild(img);
+    }
+
+    capturedFrames = [capturedFrame]; // Store frame for NEW registration
+    currentVisitorData = null;
+    recognizedVisitorData = null;
+}
+
+// Validate and save new visitor data
+async function saveVisitorData(button) {
+    // Validate all required fields
+    let isValidForm = true;
+    for (let field of requiredFields) {
+        const element = domElements[field.id];
+        if (!element) continue;
+        const value = element.value.trim();
+
+        if (!value || (field.id === 'tahasil' && element.selectedIndex === 0)) {
+            const alertMsgTemplate = "कृपया {fieldName} फील्ड भरा";
+            alert(alertMsgTemplate.replace('{fieldName}', field.label));
+            element.focus();
+            isValidForm = false;
+            break;
         }
 
-        async function startFaceRecognition(button) {
-             resetRecognitionData();
-             showLoading(button, "ओळखत आहे...");
+        if (field.id === 'phone') {
+            if (!await validatePhoneNumber(value)) {
+                element.focus();
+                isValidForm = false;
+                break;
+            }
+        }
+    }
 
-             const video = domElements['webcam'];
-             if (!video || !video.videoWidth || !video.videoHeight) {
-                  console.error("Webcam not ready or dimensions are zero.");
-                  const errorText = "वेबकॅम तयार नाही. कृपया प्रतीक्षा करा आणि पुन्हा प्रयत्न करा.";
-                  if(domElements['recognition-result']) domElements['recognition-result'].textContent = errorText;
-                  hideLoading(button);
-                  return;
-             }
+    if (!isValidForm) return;
 
-             if (!window.recognitionCanvas) {
-                  window.recognitionCanvas = document.createElement("canvas");
-             }
-             const canvas = window.recognitionCanvas;
-             canvas.width = video.videoWidth;
-             canvas.height = video.videoHeight;
-             const ctx = canvas.getContext("2d");
-             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    if (!capturedFrames || capturedFrames.length === 0 || !capturedFrames[0]) {
+        const alertMsg = "कृपया नोंदणी करण्यापूर्वी एक प्रतिमा कॅप्चर करा";
+        alert(alertMsg);
+        return;
+    }
 
-             canvas.toBlob(async (blob) => {
-                  if (!blob) {
-                      console.error("Canvas to Blob conversion failed.");
-                      const errorText = "प्रतिमा कॅप्चर करण्यात त्रुटी. कृपया पुन्हा प्रयत्न करा.";
-                      if(domElements['recognition-result']) domElements['recognition-result'].textContent = errorText;
-                      hideLoading(button);
-                      return;
-                  }
-                  const formData = new FormData();
-                  formData.append("frame", blob, "frame.jpg");
-                  try {
-                      const response = await fetch("/detect_face", {
-                          method: "POST",
-                          body: formData
-                      });
+    // Collect visitor data - INCLUDE FRAME FOR NEW REGISTRATION
+    const visitorData = {
+        name: domElements['name']?.value.trim() ?? '',
+        phone: domElements['phone']?.value.trim() ?? '',
+        email: domElements['email']?.value.trim() || null,
+        address: domElements['address']?.value.trim() ?? '',
+        tahasil: domElements['tahasil']?.value ?? '',
+        purpose: domElements['purpose']?.value.trim() ?? '',
+        frame: capturedFrames[0] // Include frame for new registration
+    };
 
-                      if (!response.ok) {
-                            try {
-                                const errData = await response.json();
-                                throw new Error(errData.message || `Server error: ${response.status}`);
-                            } catch {
-                                throw new Error(`Server error: ${response.status}`);
-                            }
-                      }
+    const confirmMsg = "तुम्हाला खात्री आहे की हा अभ्यागत डेटा जतन करायचा आहे?";
+    if (confirm(confirmMsg)) {
+        showLoading(button, "जतन करत आहे...");
+        try {
+            // Pass the data WITH frame
+            await registerVisitor(visitorData);
+        } catch (error) {
+            console.error("Error during saveVisitorData registration:", error);
+        } finally {
+            hideLoading(button);
+        }
+    } else {
+        const cancelMsg = "वापरकर्त्याने अभ्यागत डेटा जतन करणे रद्द केले.";
+        console.log(cancelMsg);
+    }
+}
 
-                      const result = await response.json();
+// Add new visit for existing visitor
+async function addNewVisitForExistingVisitor(button) {
+    const newPurpose = domElements['new-purpose']?.value.trim();
+    if (!newPurpose) {
+        const alertMsg = "कृपया सध्याच्या भेटीचे कारण प्रविष्ट करा";
+        alert(alertMsg);
+        domElements['new-purpose']?.focus();
+        return;
+    }
 
-                      if (result.recognized) {
-                           const recognizedPrefix = "ओळखले: ";
-                           if(domElements['recognition-result']) domElements['recognition-result'].textContent = `${recognizedPrefix}${result.user_data.name}`;
-                           recognizedVisitorData = result.user_data;
-                           displayExistingVisitorDetails(result.user_data);
-                       } else {
-                           const notRecognizedText = "चेहरा ओळखला नाही. नोंदणीसह पुढे जा.";
-                           if(domElements['recognition-result']) domElements['recognition-result'].textContent = notRecognizedText;
-                           showRegistrationForm(canvas.toDataURL('image/jpeg', 0.8));
-                       }
-                  } catch (error) {
-                      console.error("Recognition error:", error);
-                       const errorPrefix = "ओळखण्यात त्रुटी. कृपया पुन्हा प्रयत्न करा.";
-                       if(domElements['recognition-result']) domElements['recognition-result'].textContent = `${errorPrefix}${error.message}`;
-                  } finally {
-                     hideLoading(button);
-                  }
-              }, "image/jpeg", 0.8);
-          }
+    // Use recognizedVisitorData if available, fallback to currentVisitorData
+    const visitorDataSource = recognizedVisitorData || currentVisitorData;
 
-         function displayExistingVisitorDetails(visitorData) {
-             currentVisitorData = visitorData;
-             if(domElements['registration-form']) domElements['registration-form'].style.display = "none";
-             if(domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "block";
+    if (!visitorDataSource || !visitorDataSource.name || !visitorDataSource.phone) { // Check essential fields
+        const alertMsg = "अभ्यागत डेटा आढळला नाही. कृपया आधी अभ्यागताला ओळखा.";
+        alert(alertMsg);
+        return;
+    }
 
-             let profileImgHtml = '';
-             if (visitorData.profile_img && visitorData.profile_img.length > 0) {
-                 profileImgHtml = `<img src="${visitorData.profile_img[0]}?t=${Date.now()}" alt="${visitorData.name}" class="profile-circle">`;
-             } else if (visitorData.images && visitorData.images.length > 0) {
-                 profileImgHtml = `<img src="${visitorData.images[0]}?t=${Date.now()}" alt="${visitorData.name}" class="profile-circle">`;
-             } else {
-                 profileImgHtml = `<div class="profile-circle profile-placeholder">${visitorData.name ? visitorData.name.charAt(0).toUpperCase() : '?'}</div>`;
-             }
+    const confirmMsg = "तुम्हाला खात्री आहे की या विद्यमान अभ्यागतासाठी नवीन भेट जोडायची आहे?";
+    if (confirm(confirmMsg)) {
+        showLoading(button, "भेट जोडत आहे...");
+        // Construct data WITHOUT frame
+        const newVisitData = {
+            name: visitorDataSource.name,
+            phone: visitorDataSource.phone,
+            email: visitorDataSource.email || null,
+            address: visitorDataSource.address || '',
+            tahasil: visitorDataSource.tahasil || '',
+            district: visitorDataSource.district || 'Akola', // Ensure district is included
+            purpose: newPurpose,
+            // NO 'frame' property here
+        };
+        try {
+            // Pass data WITHOUT frame
+            await registerVisitor(newVisitData);
+        } catch (error) {
+            console.error("Error during addNewVisitForExistingVisitor registration:", error);
+        } finally {
+            hideLoading(button);
+        }
+    } else {
+        const cancelMsg = "वापरकर्त्याने नवीन भेट जोडणे रद्द केले.";
+        console.log(cancelMsg);
+    }
+}
 
-             const nameLabel = "नाव:";
-             const phoneLabel = "फोन:";
-             const addressLabel = "पत्ता:";
-             const tahasilLabel = "तहसील:";
+// Continue existing visit
+async function continueExistingVisit(button) {
+     // Use recognizedVisitorData if available, fallback to currentVisitorData
+     const visitorDataSource = recognizedVisitorData || currentVisitorData;
 
-             if(domElements['existing-visitor-details']) {
-                 domElements['existing-visitor-details'].innerHTML = `
-                     <div class="visitor-profile-container">
-                         <div class="profile-image-container">
-                             ${profileImgHtml}
-                         </div>
-                         <div class="visitor-info-container">
-                             <p><strong>${nameLabel}</strong> ${visitorData.name || 'N/A'}</p>
-                             <p><strong>${phoneLabel}</strong> ${visitorData.phone || 'N/A'}</p>
-                             <p><strong>${addressLabel}</strong> ${visitorData.address || 'N/A'}</p>
-                             <p><strong>${tahasilLabel}</strong> ${visitorData.tahasil || 'N/A'}</p>
-                         </div>
-                     </div>
-                 `;
-             }
+    if (!visitorDataSource || !visitorDataSource.visitor || !visitorDataSource.visitor.length) {
+        const alertMsg = "कोणतीही विद्यमान भेट आढळली नाही";
+        alert(alertMsg);
+        return;
+    }
 
-             const lastVisitFormatted = formatLastVisit(visitorData);
-             if(domElements['last-visit-info']) domElements['last-visit-info'].innerHTML = lastVisitFormatted;
-         }
+    // Find the most recent visit
+    const lastVisit = visitorDataSource.visitor.reduce((latest, current) =>
+        (new Date(current.datetime) > new Date(latest.datetime)) ? current : latest,
+        visitorDataSource.visitor[0]
+    );
 
-        function showRegistrationForm(capturedFrame) {
-            if(domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "none";
-            if(domElements['registration-form']) domElements['registration-form'].style.display = "block";
+    const confirmMsg = `तुम्हाला खात्री आहे की '${lastVisit.purpose}' या कारणासाठी मागील भेट चालू ठेवायची आहे?`;
+    if (confirm(confirmMsg)) {
+        showLoading(button, "भेट सुरू ठेवत आहे...");
+        // Construct data WITHOUT frame
+        const continueVisitData = {
+            name: visitorDataSource.name,
+            phone: visitorDataSource.phone,
+            email: visitorDataSource.email || null,
+            address: visitorDataSource.address || '',
+            tahasil: visitorDataSource.tahasil || '',
+            district: visitorDataSource.district || 'Akola',
+            purpose: lastVisit.purpose, // Use purpose from the last visit
+            // NO 'frame' property here
+        };
+        try {
+             // Pass data WITHOUT frame
+            await registerVisitor(continueVisitData);
+        } catch (error) {
+            console.error("Error during continueExistingVisit registration:", error);
+        } finally {
+            hideLoading(button);
+        }
+    } else {
+        const cancelMsg = "वापरकर्त्याने मागील भेट सुरू ठेवणे रद्द केले.";
+        console.log(cancelMsg);
+    }
+}
 
-            const capturedImagesDiv = domElements['captured-images'];
-            if (capturedImagesDiv) {
-                capturedImagesDiv.innerHTML = '';
-                const img = document.createElement("img");
-                img.src = capturedFrame;
-                capturedImagesDiv.appendChild(img);
+// Register a visitor (new or existing)
+// This function now just sends the data it receives. The decision to include 'frame'
+// is made *before* calling this function.
+async function registerVisitor(visitorData) {
+    // visitorData might or might not have the 'frame' property depending on the flow.
+    try {
+        const response = await fetch("/register_visitor", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(visitorData) // Send data as received
+        });
+
+        if (!response.ok) {
+            let errorData;
+            try {
+                errorData = await response.json();
+            } catch {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            throw new Error(errorData.error || `HTTP error! Status: ${response.status}`); // Use error field from backend
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            const uid = result.uid;
+            const visitId = result.visit_id;
+            let successMsgTemplate = "अभ्यागत यशस्वीरित्या नोंदणीकृत झाला!\n\nअभ्यागत तपशील:\n- भेट आयडी: {visit_id}\n- युनिक वापरकर्ता आयडी: {uid}\n- नाव: {name}\n- कारण: {purpose}";
+            successMsgTemplate = successMsgTemplate
+                .replace('{visit_id}', visitId)
+                .replace('{uid}', uid)
+                .replace('{name}', visitorData.name) // Use name from the data sent
+                .replace('{purpose}', visitorData.purpose); // Use purpose from the data sent
+            alert(successMsgTemplate);
+
+            // Process profile image ONLY IF a frame was included (i.e., new registration)
+            if (visitorData.frame && uid) {
+                setTimeout(() => {
+                    processProfileImage(visitorData.frame, uid)
+                        .catch(err => console.error("Background profile processing failed:", err));
+                }, 300);
             }
 
-            capturedFrames = [capturedFrame];
-             currentVisitorData = null;
-             recognizedVisitorData = null;
-        }
-
-       async function saveVisitorData(button) {
-             let isValidForm = true;
-             for (let field of requiredFields) {
-                 const element = domElements[field.id];
-                 if (!element) continue;
-                 const value = element.value.trim();
-
-                 if (!value || (field.id === 'tahasil' && element.selectedIndex === 0)) {
-                      const alertMsgTemplate = "कृपया {fieldName} फील्ड भरा";
-                      alert(alertMsgTemplate.replace('{fieldName}', field.label));
-                      element.focus();
-                      isValidForm = false;
-                      break;
-                  }
-
-                 if (field.id === 'phone') {
-                      if (!await validatePhoneNumber(value)) {
-                          element.focus();
-                          isValidForm = false;
-                          break;
-                      }
-                  }
-             }
-
-             if (!isValidForm) return;
-
-             if (!capturedFrames || capturedFrames.length === 0 || !capturedFrames[0]) {
-                  const alertMsg = "कृपया नोंदणी करण्यापूर्वी एक प्रतिमा कॅप्चर करा";
-                  alert(alertMsg);
-                  return;
-              }
-
-             const visitorData = {
-                 name: domElements['name']?.value.trim() ?? '',
-                 phone: domElements['phone']?.value.trim() ?? '',
-                 email: domElements['email']?.value.trim() || null,
-                 address: domElements['address']?.value.trim() ?? '',
-                 tahasil: domElements['tahasil']?.value ?? '',
-                 purpose: domElements['purpose']?.value.trim() ?? '',
-                 frame: capturedFrames[0]
-             };
-
-             const confirmMsg = "तुम्हाला खात्री आहे की हा अभ्यागत डेटा जतन करायचा आहे?";
-             if (confirm(confirmMsg)) {
-                 showLoading(button, "जतन करत आहे...");
-                 try {
-                     await registerVisitor(visitorData);
-                 } catch (error) {
-                    console.error("Error during saveVisitorData registration:", error);
-                 } finally {
-                     hideLoading(button);
-                 }
-             } else {
-                 const cancelMsg = "वापरकर्त्याने अभ्यागत डेटा जतन करणे रद्द केले.";
-                 console.log(cancelMsg);
-             }
-         }
-
-
-        async function addNewVisitForExistingVisitor(button) {
-            const newPurpose = domElements['new-purpose']?.value.trim();
-            if (!newPurpose) {
-                 const alertMsg = "कृपया सध्याच्या भेटीचे कारण प्रविष्ट करा";
-                 alert(alertMsg);
-                 domElements['new-purpose']?.focus();
-                 return;
-             }
-            if (!currentVisitorData) {
-                 const alertMsg = "अभ्यागत डेटा आढळला नाही. कृपया आधी अभ्यागताला ओळखा.";
-                 alert(alertMsg);
-                 return;
-             }
-
-            const confirmMsg = "तुम्हाला खात्री आहे की या विद्यमान अभ्यागतासाठी नवीन भेट जोडायची आहे?";
-             if (confirm(confirmMsg)) {
-                 showLoading(button, "भेट जोडत आहे...");
-                 const newVisitorData = {
-                    ...currentVisitorData,
-                    purpose: newPurpose,
-                    frame: capturedFrames[0] || currentVisitorData.frame || null
-                 };
-                 try {
-                    await registerVisitor(newVisitorData);
-                 } catch (error) {
-                    console.error("Error during addNewVisitForExistingVisitor registration:", error);
-                 } finally {
-                    hideLoading(button);
-                 }
-            } else {
-                 const cancelMsg = "वापरकर्त्याने नवीन भेट जोडणे रद्द केले.";
-                 console.log(cancelMsg);
-             }
-        }
-
-       async function continueExistingVisit(button) {
-            if (!currentVisitorData || !currentVisitorData.visitor || !currentVisitorData.visitor.length) {
-                 const alertMsg = "कोणतीही विद्यमान भेट आढळली नाही";
-                 alert(alertMsg);
-                 return;
-             }
-
-            const lastVisit = currentVisitorData.visitor.reduce((latest, current) =>
-                (new Date(current.datetime) > new Date(latest.datetime)) ? current : latest
-            );
-
-             const confirmMsg = `तुम्हाला खात्री आहे की '${lastVisit.purpose}' या कारणासाठी मागील भेट चालू ठेवायची आहे?`;
-             if (confirm(confirmMsg)) {
-                 showLoading(button, "भेट सुरू ठेवत आहे...");
-                 const newVisitorData = {
-                    ...currentVisitorData,
-                    purpose: lastVisit.purpose,
-                    frame: capturedFrames[0] || currentVisitorData.frame || null
-                 };
-                 try {
-                    await registerVisitor(newVisitorData);
-                 } catch (error) {
-                    console.error("Error during continueExistingVisit registration:", error);
-                 } finally {
-                    hideLoading(button);
-                 }
-             } else {
-                 const cancelMsg = "वापरकर्त्याने मागील भेट सुरू ठेवणे रद्द केले.";
-                 console.log(cancelMsg);
-             }
-        }
-
-         async function registerVisitor(visitorData) {
-             let finalVisitorData = { ...visitorData };
-             const isUpdate = recognizedVisitorData && finalVisitorData.uid && finalVisitorData.uid === recognizedVisitorData.uid;
-
-             if (isUpdate) {
-                 finalVisitorData = {
-                     ...recognizedVisitorData,
-                     purpose: visitorData.purpose,
-                     frame: visitorData.frame || recognizedVisitorData.frame || null,
-                     visitor: recognizedVisitorData.visitor || []
-                 };
-             } else if (!finalVisitorData.uid) {
-                  finalVisitorData = {
-                     ...visitorData,
-                     visitor: []
-                 };
-             }
-             finalVisitorData.frame = visitorData.frame || finalVisitorData.frame || null;
-
-             try {
-                 const response = await fetch("/register_visitor", {
-                     method: "POST",
-                     headers: {
-                         "Content-Type": "application/json"
-                     },
-                     body: JSON.stringify(finalVisitorData)
-                 });
-
-                 if (!response.ok) {
-                     let errorData;
-                     try {
-                         errorData = await response.json();
-                     } catch {
-                          throw new Error(`HTTP error! Status: ${response.status}`);
-                     }
-                     throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
-                 }
-
-                 const result = await response.json();
-
-                 if (result.success) {
-                     const uid = result.uid;
-                     let successMsgTemplate = "अभ्यागत यशस्वीरित्या नोंदणीकृत झाला!\n\nअभ्यागत तपशील:\n- भेट आयडी: {visit_id}\n- युनिक वापरकर्ता आयडी: {uid}\n- नाव: {name}\n- कारण: {purpose}";
-                     successMsgTemplate = successMsgTemplate
-                         .replace('{visit_id}', result.visit_id)
-                         .replace('{uid}', uid)
-                         .replace('{name}', finalVisitorData.name)
-                         .replace('{purpose}', finalVisitorData.purpose);
-                     alert(successMsgTemplate);
-
-                     setTimeout(() => {
-                         if(finalVisitorData.frame && uid) {
-                            processProfileImage(finalVisitorData.frame, uid);
-                         }
-                     }, 500);
-
-                     const detailsResponse = await fetch(`/get_visitor_details?uid=${uid}`, {
-                         cache: "no-store"
-                     });
-
-                     if (!detailsResponse.ok) {
-                          let errorData;
-                         try {
-                              errorData = await detailsResponse.json();
-                          } catch {
-                              throw new Error(`Details fetch failed: ${detailsResponse.status}`);
-                          }
-                          throw new Error(errorData.message || `Details fetch failed: ${detailsResponse.status}`);
-                     }
-
-                     const visitorDetails = await detailsResponse.json();
-
-                     if (visitorDetails.success && visitorDetails.visitor_data) {
-                          recognizedVisitorData = visitorDetails.visitor_data;
-                         displayExistingVisitorDetails(visitorDetails.visitor_data);
-                         if(domElements['registration-form']) domElements['registration-form'].style.display = "none";
-                         if(domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "block";
-                         if (domElements['new-purpose']) domElements['new-purpose'].value = "";
-                         capturedFrames = [];
-                         if(domElements['captured-images']) domElements['captured-images'].innerHTML = "";
-                         setTimeout(resetForms, 5000);
-                     } else {
-                          throw new Error(visitorDetails.message || "Failed to fetch updated visitor details.");
-                      }
-                 } else {
-                      throw new Error(result.message || "Registration failed (unknown reason)");
-                 }
-             } catch (error) {
-                 console.error("Registration process error:", error);
-                 const errorPrefix = "नोंदणी अयशस्वी: ";
-                 alert(`${errorPrefix}${error.message}`);
-                 throw error;
-             }
-         }
-
-        function processProfileImage(imageDataUrl, uid) {
-             if (!imageDataUrl || !uid) {
-                console.error("Missing image data or UID for profile processing.");
-                return;
-            }
-            fetch(imageDataUrl)
-                .then(res => res.blob())
-                .then(blob => {
-                     if (!blob) {
-                        throw new Error("Failed to convert data URL to blob.");
+            // Get updated visitor details to refresh the UI
+            try {
+                const detailsResponse = await fetch(`/get_visitor_details?uid=${uid}`, {
+                    cache: "no-store",
+                     headers: { // Add cache control headers
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
                     }
-                    const formData = new FormData();
-                    formData.append('image', blob, 'profile.jpg');
-                    formData.append('uid', uid);
-
-                    return fetch('/process_profile_image', {
-                        method: 'POST',
-                        body: formData
-                    });
-                })
-                .then(response => {
-                    if (!response.ok) {
-                         return response.json().then(errData => {
-                              throw new Error(errData.message || `Profile processing failed: ${response.status}`);
-                          }).catch(() => {
-                              throw new Error(`Profile processing failed: ${response.status}`);
-                          });
-                    }
-                    return response.json();
-                })
-                .then(result => {
-                    if (result.success) {
-                        console.log('Profile image processed successfully:', result);
-                         if (currentVisitorData && currentVisitorData.uid === uid) {
-                              fetch(`/get_visitor_details?uid=${uid}`, { cache: "no-store" })
-                                .then(res => res.ok ? res.json() : Promise.reject(`Failed to refetch details: ${res.status}`))
-                                .then(details => {
-                                    if (details.success && details.visitor_data) {
-                                         recognizedVisitorData = details.visitor_data;
-                                        displayExistingVisitorDetails(details.visitor_data);
-                                    } else {
-                                         console.error("Failed to parse refetched details:", details.message);
-                                     }
-                                }).catch(err => console.error("Error refetching details after profile processing:", err));
-                         }
-                    } else {
-                        console.error('Profile image processing failed on server:', result.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error in processProfileImage function:', error);
                 });
-        }
 
-        function resetForms() {
-             if(domElements['registration-form']) domElements['registration-form'].style.display = "none";
-             if(domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "none";
-             if(domElements['recognition-result']) domElements['recognition-result'].textContent = "";
-             if(domElements['captured-images']) domElements['captured-images'].innerHTML = "";
-             if(domElements['phone-error']) domElements['phone-error'].textContent = "";
-              if(domElements['existing-visitor-details']) domElements['existing-visitor-details'].innerHTML = '';
-              if(domElements['last-visit-info']) {
-                    domElements['last-visit-info'].innerHTML = `<span>मागील भेटी नाहीत</span>`;
-               }
+                if (!detailsResponse.ok) {
+                    let errorData;
+                    try {
+                        errorData = await detailsResponse.json();
+                    } catch {
+                        throw new Error(`Details fetch failed: ${detailsResponse.status}`);
+                    }
+                    throw new Error(errorData.message || `Details fetch failed: ${detailsResponse.status}`);
+                }
 
-            ['name', 'phone', 'email', 'address', 'tahasil', 'purpose', 'new-purpose'].forEach(id => {
-                if (domElements[id]) {
-                     domElements[id].value = "";
-                      if (id === 'tahasil') {
-                          domElements[id].selectedIndex = 0;
-                      }
-                 }
-            });
+                const visitorDetails = await detailsResponse.json();
 
-            capturedFrames = [];
-            currentVisitorData = null;
-            recognizedVisitorData = null;
-        }
+                if (visitorDetails.success && visitorDetails.visitor_data) {
+                    recognizedVisitorData = visitorDetails.visitor_data; // Update recognized data
+                    currentVisitorData = visitorDetails.visitor_data; // Also update current data
+                    displayExistingVisitorDetails(visitorDetails.visitor_data); // Refresh display
+                    if (domElements['registration-form']) domElements['registration-form'].style.display = "none";
+                    if (domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "block";
+                    if (domElements['new-purpose']) domElements['new-purpose'].value = "";
 
-       function confirmLogout(button) {
-            const confirmMsg = "तुम्हाला खात्री आहे की तुम्हाला लॉगआउट करायचे आहे?";
-            if (confirm(confirmMsg)) {
-                 showLoading(button, "लॉगआऊट करत आहे...");
-                 logout().finally(() => hideLoading(button));
+                    // Clear captured images display area (frame data itself is handled)
+                    if (domElements['captured-images']) domElements['captured-images'].innerHTML = "";
+
+                    // Optionally Reset forms after delay (maybe not ideal UX for existing)
+                    // Consider if you want to reset immediately or keep the existing form visible
+                    // setTimeout(resetForms, 5000); // Commented out for potentially better UX
+                } else {
+                    throw new Error(visitorDetails.message || "Failed to fetch updated visitor details.");
+                }
+            } catch (detailsError) {
+                console.error("Error fetching visitor details after registration:", detailsError);
+                 // Even if details fetch fails, registration might have been successful
+                 // Maybe just reset forms or show a generic success message
+                 // setTimeout(resetForms, 5000);
             }
+        } else {
+            throw new Error(result.error || "Registration failed (unknown reason)"); // Use error field
+        }
+    } catch (error) {
+        console.error("Registration process error:", error);
+        const errorPrefix = "नोंदणी अयशस्वी: ";
+        alert(`${errorPrefix}${error.message}`);
+        throw error; // Re-throw to be caught by callers if needed
+    }
+}
+
+
+// Process and upload profile image
+// This should ONLY be called for new registrations where a frame exists.
+function processProfileImage(imageDataUrl, uid) {
+    if (!imageDataUrl || !uid) {
+        console.error("Missing image data or UID for profile processing.");
+        return Promise.reject("Missing image data or UID");
+    }
+
+    return fetch(imageDataUrl)
+        .then(res => res.blob())
+        .then(blob => {
+            if (!blob) {
+                throw new Error("Failed to convert data URL to blob.");
+            }
+            const formData = new FormData();
+            formData.append('image', blob, 'profile.jpg');
+            formData.append('uid', uid);
+
+            return fetch('/process_profile_image', {
+                method: 'POST',
+                body: formData
+            });
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errData => {
+                    throw new Error(errData.message || `Profile processing failed: ${response.status}`);
+                }).catch(() => {
+                    throw new Error(`Profile processing failed: ${response.status}`);
+                });
+            }
+            return response.json();
+        })
+        .then(result => {
+            if (result.success) {
+                console.log('Profile image processed successfully:', result);
+                // Optionally trigger a silent refresh of details if needed elsewhere
+                // But primary refresh is handled after registerVisitor call
+                return result;
+            } else {
+                console.error('Profile image processing failed on server:', result.message);
+                throw new Error(result.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error in processProfileImage function:', error);
+            // Don't reject the main flow if background processing fails
+            // return Promise.reject(error);
+            return null; // Indicate failure gracefully
+        });
+}
+
+// Reset all forms and data
+function resetForms() {
+    if (domElements['registration-form']) domElements['registration-form'].style.display = "none";
+    if (domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "none";
+    if (domElements['recognition-result']) domElements['recognition-result'].textContent = "";
+    if (domElements['captured-images']) domElements['captured-images'].innerHTML = "";
+    if (domElements['phone-error']) domElements['phone-error'].textContent = "";
+    if (domElements['existing-visitor-details']) domElements['existing-visitor-details'].innerHTML = '';
+    if (domElements['last-visit-info']) {
+        domElements['last-visit-info'].innerHTML = `<span>मागील भेटी नाहीत</span>`;
+    }
+
+    // Clear all form fields
+    ['name', 'phone', 'email', 'address', 'purpose', 'new-purpose'].forEach(id => {
+        if (domElements[id]) {
+            domElements[id].value = "";
+        }
+    });
+
+    if (domElements['tahasil']) {
+        domElements['tahasil'].selectedIndex = 0;
+    }
+
+    capturedFrames = [];
+    currentVisitorData = null;
+    recognizedVisitorData = null;
+}
+
+// Confirm and execute logout
+function confirmLogout(button) {
+    const confirmMsg = "तुम्हाला खात्री आहे की तुम्हाला लॉगआउट करायचे आहे?";
+    if (confirm(confirmMsg)) {
+        showLoading(button, "लॉगआऊट करत आहे...");
+        logout().finally(() => hideLoading(button));
+    }
+}
+
+// Logout user and redirect to home
+async function logout() {
+    try {
+        // Stop webcam stream before logout
+        if (webcamStream) {
+            webcamStream.getTracks().forEach(track => track.stop());
+            webcamStream = null;
         }
 
-       async function logout() {
-           try {
-               await fetch("/logout");
-               localStorage.removeItem("user");
-               window.location.href = "/";
-           } catch (error) {
-                console.error("Logout failed:", error);
-                localStorage.removeItem("user");
-                window.location.href = "/";
-           }
-        }
+        const response = await fetch("/logout");
+        localStorage.removeItem("user"); // Assuming user info is stored here
+        window.location.href = "/"; // Redirect to login/home page
+        // return response; // Not strictly needed after redirection
+    } catch (error) {
+        console.error("Logout failed:", error);
+        localStorage.removeItem("user"); // Still try to clear local storage
+        window.location.href = "/"; // Still try to redirect
+        // return Promise.reject(error); // Not strictly needed after redirection
+    }
+}
     </script>
 </body>
 </html>

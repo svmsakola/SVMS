@@ -1,11 +1,24 @@
 {
   "departments": [
-    {"id": 1, "name": "CollRevenue Department"},
-    {"id": 2, "name": "Election Department"},
-    {"id": 3, "name": "Disaster Management Department"},
-    {"id": 4, "name": "District Road Safety Committee"},
-    {"id": 5, "name": "Census Department"},
-    {"id": 6, "name": "Citizen Charter Department"},
-    {"id": 7, "name": "National Informatics Centre (NIC)"}
+    {"id": 1, "name": "Addition Collector", "email": "adc_akola@rediffmail.com"},
+    {"id": 2, "name": "Resident Deputy Collector", "email": "rdc_akola@rediffmail.com"},
+    {"id": 3, "name": "Dy. Collector Revenue", "email": "dcrakola@rediffmail.com"},
+    {"id": 4, "name": "Dy. Collector Election Akola", "email": "dydeoakola@gmail.com"},
+    {"id": 5, "name": "Dy Collector EGS", "email": "egsdycoll.ako-mh@gov.in"},
+    {"id": 6, "name": "District Supply Officer", "email": "dsoakola1@gmail.com"},
+    {"id": 7, "name": "SDO Akola", "email": "sdo.akola@rediffmail.com"},
+    {"id": 8, "name": "SDO Akot", "email": "sdo.akot@rediffmail.com"},
+    {"id": 9, "name": "SDO Balapur", "email": "sdo.balapur@rediffmail.com"},
+    {"id": 10, "name": "SDO Murtizapur", "email": "sdo.murtizapur@rediffmail.com"},
+    {"id": 11, "name": "Tahasildar Akola", "email": "tah.akola@rediffmail.com"},
+    {"id": 12, "name": "Tahasildar Akot", "email": "tah.akot@rediffmail.com"},
+    {"id": 13, "name": "Tahasildar Balapur", "email": "tah.balapur@rediffmail.com"},
+    {"id": 14, "name": "Tahasildar Patur", "email": "tah.barshitakli@rediffmail.com"},
+    {"id": 15, "name": "Tahasildar Murtizapur", "email": "tah.murtizapur@rediffmail.com"},
+    {"id": 16, "name": "Tahasildar Barshitakli", "email": "tah.barshitakli@rediffmail.com"},
+    {"id": 17, "name": "Tahasildar Telhar", "email": "tah.telhara@rediffmail.com"},
+    {"id": 18, "name": "Tahasildar SGY", "email": "tah.sgyakola@agmail.com"},
+    {"id": 19, "name": "Rohit", "email": "rohitingle2060@gmail.com"},
+    {"id": 20, "name": "Rohit Login", "email": "rohitingle34@gmail.com"}
   ]
 }
