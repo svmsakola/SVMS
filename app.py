@@ -1,16 +1,24 @@
-import os, sys, uuid, json, shutil, base64, signal
-import cv2, numpy as np, bcrypt, face_recognition
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory, send_file, \
-    flash
-from flask_cors import CORS
-from ultralytics import YOLO
+import base64
+import json
+import os
+import random
+import signal
+import sys
+import uuid
 from datetime import datetime
-from PIL import Image
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
-
-import json, random
 from functools import wraps
+
+import bcrypt
+import cv2
+import face_recognition
+import numpy as np
+from PIL import Image
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory, flash, \
+    make_response
+from flask_cors import CORS
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from ultralytics import YOLO
 
 app = Flask(__name__)
 CORS(app)
@@ -23,6 +31,10 @@ DEPARTMENTS_FILE = 'JSON/departments.json'
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(PDF_FOLDER, exist_ok=True)
+
+def is_admin_authenticated():
+    print("WARNING: delete_visitor_entry endpoint called WITHOUT proper authentication check!")
+    return True
 
 def load_face_data():
     try:
@@ -1341,6 +1353,136 @@ def get_recent_activities():
     except:
         pass
     return jsonify(activities[:limit])
+
+@app.route('/api/admin/visitors')
+def get_admin_visitors():
+    # Basic role check (enhance with proper decorators/session checks if needed)
+    # Example using Flask session:
+    # if "user" not in session or session.get("user", {}).get("role") != "admin":
+    #     return jsonify({"error": "Unauthorized"}), 403
+
+    selected_date_str = request.args.get('date')
+    if not selected_date_str:
+        return jsonify({"error": "Date parameter is required"}), 400
+
+    try:
+        # Validate date format (YYYY-MM-DD)
+        datetime.strptime(selected_date_str, '%Y-%m-%d')
+    except ValueError:
+        return jsonify({"error": "Invalid date format. Use YYYY-MM-DD"}), 400
+
+    face_data = load_face_data() # Load the main data file
+    daily_visitors = []
+
+    for uid, user_data in face_data.items():
+        # Ensure user_data is a dictionary and has 'visitor' key
+        if isinstance(user_data, dict) and 'visitor' in user_data and isinstance(user_data['visitor'], list):
+            for visit in user_data['visitor']:
+                # Ensure visit is a dictionary and has 'datetime' key
+                if isinstance(visit, dict) and 'datetime' in visit and isinstance(visit['datetime'], str):
+                    try:
+                        visit_date_str = visit['datetime'].split(' ')[0]
+                        # Compare date part with the selected date
+                        if visit_date_str == selected_date_str:
+                            # Construct the comprehensive data object for the table row
+                            visitor_entry = {
+                                # User details (needed for rendering profile, name, etc.)
+                                "uid": uid,
+                                "name": user_data.get('name', 'N/A'),
+                                "phone": user_data.get('phone', 'N/A'),
+                                "address": user_data.get('address', 'N/A'),
+                                "tahasil": user_data.get('tahasil', 'N/A'),
+                                "district": user_data.get('district', 'N/A'),
+                                # File paths for status check
+                                "profile_img": user_data.get('profile_img', []), # Expecting a list
+                                "images": user_data.get('images', []), # Expecting a list
+                                "face_encodings": user_data.get('face_encodings', []), # Expecting a list
+
+                                # Visit specific details
+                                "visit_id": visit.get('visit_id', 'N/A'),
+                                "datetime": visit.get('datetime', ''),
+                                "purpose": visit.get('purpose', 'N/A'),
+                                "status": visit.get('status', 'unknown'),
+                                "entry_confirmed": visit.get('entry_confirmed', False),
+                                "dvn": visit.get('dvn', None), # Include DVN if needed elsewhere
+                                "forwarding_department": visit.get('forwarding_department', ''),
+                                "forwarding_note": visit.get('forwarding_note', ''),
+                                "document_pdf": visit.get('document_pdf', None) # Path to PDF document
+                            }
+                            daily_visitors.append(visitor_entry)
+                    except IndexError:
+                        # Handle cases where datetime string might not have a space
+                        print(f"Warning: Malformed datetime string for UID {uid}, Visit {visit.get('visit_id', 'N/A')}: {visit['datetime']}")
+                    except Exception as e:
+                        # Catch other potential errors during processing a visit
+                         print(f"Error processing visit for UID {uid}, Visit {visit.get('visit_id', 'N/A')}: {e}")
+
+                else:
+                    # Log if a visit entry is missing datetime or is not a dict
+                    print(f"Warning: Skipping invalid visit entry for UID {uid}: {visit}")
+        else:
+             # Log if user_data structure is unexpected
+             print(f"Warning: Skipping invalid user data structure for UID {uid}")
+
+
+    # Sort by datetime ascending (optional, useful for chronological view)
+    try:
+        # Ensure datetime exists and is valid before sorting
+        valid_visitors = [v for v in daily_visitors if 'datetime' in v and isinstance(v['datetime'], str)]
+        invalid_visitors = [v for v in daily_visitors if not ('datetime' in v and isinstance(v['datetime'], str))]
+
+        valid_visitors.sort(key=lambda x: datetime.strptime(x['datetime'], '%Y-%m-%d %H:%M:%S'))
+        sorted_daily_visitors = valid_visitors + invalid_visitors
+        if invalid_visitors:
+             print(f"Warning: {len(invalid_visitors)} visitors had missing or invalid datetime for sorting.")
+
+    except (ValueError, KeyError, TypeError) as e:
+        print(f"Warning: Could not sort visitors due to invalid data or structure: {e}")
+        sorted_daily_visitors = daily_visitors
+
+    response = make_response(jsonify({"visitors": sorted_daily_visitors}))
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
+
+@app.route('/api/admin/delete_visitor_entry', methods=['POST'])
+def delete_visitor_entry():
+    if not is_admin_authenticated():
+        return jsonify({"success": False, "message": "Unauthorized access"}), 403
+
+    data = request.get_json()
+    uid, visit_id = data.get('uid'), data.get('visit_id') if data else (None, None)
+    if not uid or not visit_id:
+        return jsonify({"success": False, "message": "Missing or empty uid/visit_id"}), 400
+
+    try:
+        face_data = load_face_data()
+        user_visits = face_data.get(uid, {}).get('visitor')
+        if not isinstance(user_visits, list):
+            return jsonify({"success": False, "message": "Invalid or missing visitor data"}), 404
+
+        visit_to_remove = next((v for v in user_visits if isinstance(v, dict) and v.get('visit_id') == visit_id), None)
+        if not visit_to_remove:
+            return jsonify({"success": False, "message": f"Visit ID '{visit_id}' not found for UID '{uid}'"}), 404
+
+        face_data[uid]['visitor'] = [v for v in user_visits if v.get('visit_id') != visit_id]
+
+        pdf = visit_to_remove.get('document_pdf')
+        if pdf and isinstance(pdf, str) and pdf.strip():
+            abs_path, abs_folder = os.path.abspath(pdf), os.path.abspath(PDF_FOLDER)
+            if abs_path.startswith(abs_folder) and os.path.exists(pdf):
+                try: os.remove(pdf)
+                except OSError as e: print(f"PDF deletion failed: {e}")
+
+        if save_face_data(face_data):
+            return jsonify({"success": True, "message": "Visitor entry deleted successfully"})
+        return jsonify({"success": False, "message": "Failed to save changes"}), 500
+
+    except Exception as e:
+        print(f"Error deleting visit {visit_id} for UID {uid}: {e}")
+        return jsonify({"success": False, "message": f"Server error: {str(e)}"}), 500
+
 
 if __name__ == "__main__":
     app.run()
