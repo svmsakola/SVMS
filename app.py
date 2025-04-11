@@ -1574,6 +1574,30 @@ def generate_visitor_report():
         print(f"CRITICAL: Error generating Excel report: {e}")
         return jsonify({"error": f"An unexpected server error occurred while generating the report: {str(e)}"}), 500
 
+@app.route('/api/admin/delete_user', methods=['POST']) # Crucial: methods=['POST']
+def delete_user():
+    # !! IMPORTANT: Add robust admin authentication/authorization here !!
+    # Example: if not is_admin(session): return jsonify(...), 403
+
+    data = request.get_json()
+    if not data or 'uid' not in data:
+        return jsonify({"success": False, "message": "Missing UID"}), 400
+    uid_to_delete = data['uid']
+    try:
+        face_data = load_face_data()
+        if uid_to_delete not in face_data:
+            return jsonify({"success": False, "message": "Visitor UID not found"}), 404
+        removed_data = face_data.pop(uid_to_delete, None)
+        if removed_data is None:
+            return jsonify({"success": False, "message": "User UID found initially but could not be removed."}), 500
+        save_face_data(face_data)
+        return jsonify({"success": True, "message": "User and all associated data deleted successfully"})
+    except Exception as e:
+        print(f"Error deleting user {uid_to_delete}: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"success": False, "message": f"An server error occurred: {str(e)}"}), 500
+
 if __name__ == "__main__":
     app.run()
 
