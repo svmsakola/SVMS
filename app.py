@@ -948,101 +948,63 @@ def send_otp_email(recipient_email, otp):
     from email.mime.multipart import MIMEMultipart
     from email.mime.text import MIMEText
     from email.utils import formataddr, formatdate
-
     sender_email = "svmsakola@gmail.com"
     sender_password = "aess hmcl bkqm slph"
-    sender_name = "SVMS Akola"
-
-    # Create message
+    sender_name = "स्मार्ट व्हिजिटर मॅनेजमेंट सिस्टिम (SVMS)"
     message = MIMEMultipart("alternative")
-
-    # Enhanced headers
-    message["Subject"] = "Secure Access Code - SVMS Department Portal"
+    message["Subject"] = "सुरक्षित प्रवेश कोड - SVMS विभाग पोर्टल"
     message["From"] = formataddr((sender_name, sender_email))
     message["To"] = recipient_email
     message["Date"] = formatdate(localtime=True)
     message["Message-ID"] = f"<{random.getrandbits(128)}@{sender_email.split('@')[-1]}>"
-    message["X-Mailer"] = "CustomMailer/1.0"
+    message["X-Mailer"] = "SVMSMailer/1.0"
     message["Reply-To"] = sender_email
     message["Return-Path"] = sender_email
+    text = f"""आदरणीय SVMS विभाग सदस्य,
 
-    text = f"""Dear SVMS Department User,
-
-Your secure verification code for accessing the SVMS Department Portal is:
+आपला सुरक्षित प्रवेश कोड:
 
 {otp}
 
-This verification code will expire in 10 minutes for your security.
+हा कोड 10 मिनिटांत कालबाह्य होईल.
 
-IMPORTANT: Never share this code with anyone. SVMS staff will never ask for this code.
+महत्वाचे: कृपया हा कोड कोणाशीही शेअर करू नका.
 
-If you did not attempt to access the SVMS Department Portal, please contact our IT support team immediately.
+जर आपण हा विनंती केलेली नसेल तर कृपया आमच्या IT टीमशी तात्काळ संपर्क साधा.
 
-Best regards,
-SVMS Akola Administration
-Shri Vasantrao Naik Mahavidyalaya, Akola
-Maharashtra - 444001
-Tel: +91 12345 67890
+सादर,
+स्मार्ट व्हिजिटर मॅनेजमेंट सिस्टिम (SVMS)
 """
-
-    # HTML version with more professional styling
     html = f"""<!DOCTYPE html>
-<html>
-<body style="margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; color: #333333;">
-  <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; border: 1px solid #cccccc;">
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<title>SVMS Secure Code</title>
+</head>
+<body style="margin:0;padding:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background-color:#f4f6f9;">
+  <table align="center" width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
     <tr>
-      <td align="center" bgcolor="#1a4f8a" style="padding: 30px 0;">
-        <h1 style="color: #ffffff; margin: 0;">SVMS Department Portal</h1>
+      <td align="center" bgcolor="#004aad" style="padding:40px 0;">
+        <h1 style="color:#ffffff;font-size:28px;margin:0;">स्मार्ट व्हिजिटर मॅनेजमेंट सिस्टिम (SVMS)</h1>
       </td>
     </tr>
     <tr>
-      <td bgcolor="#ffffff" style="padding: 30px;">
-        <table border="0" cellpadding="0" cellspacing="0" width="100%">
-          <tr>
-            <td style="padding: 10px 0;">
-              <p style="margin: 0;">Dear SVMS Department User,</p>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding: 10px 0;">
-              <p style="margin: 0;">Your secure verification code for accessing the SVMS Department Portal is:</p>
-            </td>
-          </tr>
-          <tr>
-            <td align="center" style="padding: 20px 0;">
-              <div style="background-color: #f3f7fc; border: 1px solid #dae4f2; border-radius: 6px; padding: 15px; font-family: Courier, monospace; font-size: 24px; font-weight: bold; letter-spacing: 5px; color: #1a4f8a;">
-                {otp}
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding: 10px 0;">
-              <p style="margin: 0;">This verification code will expire in <strong>10 minutes</strong> for your security.</p>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding: 15px 0; border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
-              <p style="margin: 0; color: #e74c3c; font-weight: bold;">IMPORTANT: Never share this code with anyone. SVMS staff will never ask for this code.</p>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding: 10px 0;">
-              <p style="margin: 0;">If you did not attempt to access the SVMS Department Portal, please contact our IT support team immediately.</p>
-            </td>
-          </tr>
-        </table>
+      <td style="padding:30px 40px;">
+        <h2 style="color:#333333;font-size:22px;margin:0 0 20px;">आपला सुरक्षित प्रवेश कोड</h2>
+        <p style="color:#555555;font-size:16px;margin:0 0 10px;">आदरणीय SVMS विभाग सदस्य,</p>
+        <p style="color:#555555;font-size:16px;margin:10px 0;">आपला प्रवेश कोड खाली दिला आहे:</p>
+        <div style="background:#eef4fc;border:1px dashed #004aad;border-radius:6px;text-align:center;padding:20px;margin:20px 0;font-size:28px;font-weight:bold;letter-spacing:5px;color:#004aad;">
+          {otp}
+        </div>
+        <p style="color:#777777;font-size:14px;margin:20px 0;">हा कोड <strong>10 मिनिटांत</strong> कालबाह्य होईल. कृपया सुरक्षा कारणास्तव कोड कोणाशीही शेअर करू नका.</p>
+        <p style="color:#e74c3c;font-weight:bold;font-size:14px;">महत्वाचे: SVMS स्टाफ कधीही आपल्याकडून हा कोड मागणार नाही.</p>
+        <p style="color:#555555;font-size:14px;margin:20px 0;">जर आपण हा विनंती केलेली नसेल तर त्वरित आमच्या IT सहाय्यता टीमशी संपर्क साधा.</p>
       </td>
     </tr>
     <tr>
-      <td bgcolor="#f2f2f2" style="padding: 20px;">
-        <table border="0" cellpadding="0" cellspacing="0" width="100%">
-          <tr>
-            <td style="color: #555555; font-size: 13px;">
-              <p style="margin: 0; padding-bottom: 5px;"><strong>SVMS Akola</strong></p>
-              <p style="margin: 0; font-size: 11px; color: #777777; padding-top: 10px;">This is an automated message. Please do not reply to this email.</p>
-            </td>
-          </tr>
-        </table>
+      <td bgcolor="#f0f0f0" style="padding:20px;text-align:center;color:#999999;font-size:12px;">
+        <p style="margin:0;">© {sender_name} सर्व हक्क राखीव.</p>
+        <p style="margin:5px 0 0;">ही एक स्वयंचलित ई-मेल आहे, कृपया प्रतिसाद देऊ नका.</p>
       </td>
     </tr>
   </table>
@@ -1062,6 +1024,7 @@ Tel: +91 12345 67890
     except Exception as e:
         print(f"Email error: {str(e)}")
         return False
+
 
 @app.route('/department/login', methods=['GET', 'POST'])
 def login_department():
