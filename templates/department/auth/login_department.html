@@ -62,7 +62,7 @@
         }
 
         .logo {
-            max-width: 400px;
+            max-width: 400px; /* Adjust as needed */
             height: auto;
             filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.15));
         }
@@ -124,11 +124,14 @@
             display: flex;
             align-items: center;
             color: var(--text-muted);
+            z-index: 2; /* Ensure icon is above select arrow */
+            pointer-events: none; /* Allow clicking through icon */
         }
 
-        input[type="email"] {
+        /* Style for the select dropdown */
+        select {
             width: 100%;
-            padding: 15px 16px 15px 45px;
+            padding: 15px 16px 15px 45px; /* Adjust padding for icon */
             border: 2px solid #e2e8f0;
             border-radius: var(--border-radius);
             font-size: 15px;
@@ -136,16 +139,28 @@
             outline: none;
             color: var(--text-dark);
             background-color: #f8fafc;
+            appearance: none; /* Remove default system appearance */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%236c757d" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* Custom dropdown arrow */
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            cursor: pointer;
         }
 
-        input[type="email"]:focus {
+        select:focus {
             border-color: var(--accent-blue);
             background-color: var(--white);
             box-shadow: 0 0 0 4px rgba(91, 164, 230, 0.15);
         }
 
-        input[type="email"]::placeholder {
+        select:required:invalid { /* Style for the default disabled option */
             color: #a0aec0;
+        }
+
+        option {
+             color: var(--text-dark); /* Ensure options have dark text */
+             background-color: var(--white); /* Optional: set background for options */
         }
 
         button {
@@ -160,6 +175,7 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 10px rgba(26, 79, 138, 0.25);
             letter-spacing: 0.5px;
+            margin-top: 10px; /* Add some space above the button */
         }
 
         button:hover {
@@ -175,13 +191,12 @@
 
         .alert {
             padding: 14px 16px;
-            margin-top: 25px;
+            margin-bottom: 20px; /* Space below alert if form follows */
             border-radius: var(--border-radius);
             font-size: 14px;
             font-weight: 500;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            align-items: flex-start; /* Align icon to top */
             text-align: left;
         }
 
@@ -189,6 +204,11 @@
             margin-right: 10px;
             display: flex;
             align-items: center;
+            flex-shrink: 0; /* Prevent icon from shrinking */
+            margin-top: 1px; /* Small adjustment for vertical alignment */
+        }
+        .alert > div:last-child { /* Target the div containing the message */
+           flex-grow: 1; /* Allow message text to take available space */
         }
 
         .alert-success {
@@ -239,43 +259,56 @@
 <body>
     <div class="container">
         <div class="logo-container">
+            <!-- Make sure the static path is correct for your project structure -->
             <img src="{{ url_for('static', filename='assets/logo/svmslogo.png') }}" alt="Smart Visitor Management System Logo" class="logo">
         </div>
         <div class="login-card">
             <h1>Department Login</h1>
-            <p class="subtitle">Enter your email to receive a secure OTP</p>
-            <form method="POST" action="{{ url_for('login_department') }}">
-                <div class="input-group">
-                    <div class="input-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
-                        </svg>
-                    </div>
-                    <input type="email" name="email" placeholder="Enter Department Email" required>
-                </div>
-                <button type="submit">Send OTP</button>
-            </form>
+            <p class="subtitle">Select your department to receive a secure OTP</p>
+
+            <!-- Flash Messages Display (Moved above form) -->
             {% with messages = get_flashed_messages(with_categories=true) %}
               {% if messages %}
                 {% for category, message in messages %}
                   <div class="alert alert-{{ category }}">
                     <div class="alert-icon">
-                      {% if category == 'success' %}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                      {% elif category == 'danger' %}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                      {% elif category == 'warning' %}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                      {% elif category == 'info' %}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                      {% if category == 'success' %}<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                      {% elif category == 'danger' %}<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                      {% elif category == 'warning' %}<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                      {% elif category == 'info' %}<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
                       {% endif %}
                     </div>
-                    {{ message }}
+                    <div>{{ message }}</div> <!-- Wrapped message in div -->
                   </div>
                 {% endfor %}
               {% endif %}
             {% endwith %}
+
+            <form method="POST" action="{{ url_for('login_department') }}">
+                <div class="input-group">
+                    <div class="input-icon">
+                        <!-- Building Icon for Department Selection -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="3" y1="9" x2="21" y2="9"></line>
+                            <line x1="9" y1="21" x2="9" y2="9"></line>
+                        </svg>
+                    </div>
+                    <select name="department_name" required>
+                        <option value="" disabled selected>-- Select Department --</option>
+                        <!-- Loop through departments passed from Flask -->
+                        {% if departments %}
+                            {% for dept in departments %}
+                                <option value="{{ dept.name }}">{{ dept.name }}</option>
+                            {% endfor %}
+                        {% else %}
+                            <option value="" disabled>No departments configured</option>
+                        {% endif %}
+                    </select>
+                </div>
+                <button type="submit">Send OTP</button>
+            </form>
+
         </div>
         <p class="footer-text">Smart Visitor Management System © 2025</p>
     </div>

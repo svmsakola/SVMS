@@ -913,11 +913,32 @@ def cleanup_images():
         return jsonify({'error': str(e)}), 500
 
 def load_departments():
-    with open('JSON/departments.json', 'r') as f:
-        content = f.read().strip()
-        if not content:
-            return []
-        return json.loads(content).get('departments', [])
+    try:
+        if not os.path.exists(DEPARTMENTS_FILE):
+             print(f"Error: Departments file not found at {DEPARTMENTS_FILE}")
+             return []
+
+        with open(DEPARTMENTS_FILE, 'r', encoding='utf-8') as f:
+            content = f.read().strip()
+            if not content:
+                print(f"Warning: Departments file {DEPARTMENTS_FILE} is empty.")
+                return []
+            data = json.loads(content)
+            departments = data.get('departments', [])
+            if isinstance(departments, list):
+                valid_departments = [d for d in departments if isinstance(d, dict) and d.get('name') and d.get('email')]
+                if len(valid_departments) != len(departments):
+                    print("Warning: Some entries in departments.json might be missing 'name' or 'email'.")
+                return valid_departments
+            else:
+                print(f"Error: 'departments' key in {DEPARTMENTS_FILE} does not contain a list.")
+                return []
+    except json.JSONDecodeError as e:
+        print(f"Error: Invalid JSON format in {DEPARTMENTS_FILE}: {e}")
+        return []
+    except Exception as e:
+        print(f"Error: Failed to load departments from {DEPARTMENTS_FILE}: {e}")
+        return []
 
 
 def send_otp_email(recipient_email, otp):
@@ -945,7 +966,6 @@ def send_otp_email(recipient_email, otp):
     message["Reply-To"] = sender_email
     message["Return-Path"] = sender_email
 
-    # Text version
     text = f"""Dear SVMS Department User,
 
 Your secure verification code for accessing the SVMS Department Portal is:
@@ -1018,10 +1038,7 @@ Tel: +91 12345 67890
         <table border="0" cellpadding="0" cellspacing="0" width="100%">
           <tr>
             <td style="color: #555555; font-size: 13px;">
-              <p style="margin: 0; padding-bottom: 5px;"><strong>SVMS Akola Administration</strong></p>
-              <p style="margin: 0; padding-bottom: 5px;">Shri Vasantrao Naik Mahavidyalaya, Akola</p>
-              <p style="margin: 0; padding-bottom: 5px;">Maharashtra - 444001</p>
-              <p style="margin: 0; padding-bottom: 5px;">Tel: +91 12345 67890</p>
+              <p style="margin: 0; padding-bottom: 5px;"><strong>SVMS Akola</strong></p>
               <p style="margin: 0; font-size: 11px; color: #777777; padding-top: 10px;">This is an automated message. Please do not reply to this email.</p>
             </td>
           </tr>
@@ -1031,13 +1048,12 @@ Tel: +91 12345 67890
   </table>
 </body>
 </html>"""
-
-    # Attach both versions
     message.attach(MIMEText(text, "plain"))
     message.attach(MIMEText(html, "html"))
-
     try:
         context = ssl.create_default_context()
+        context.check_hostname = False
+        context.verify_mode = ssl.CERT_NONE
         with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
             server.login(sender_email, sender_password)
             server.sendmail(sender_email, recipient_email, message.as_string())
@@ -1051,55 +1067,107 @@ Tel: +91 12345 67890
 def login_department():
     if 'department' in session:
         return redirect(url_for('department_dashboard'))
+
+    departments_list = load_departments()
+
     if request.method == 'POST':
-        email = request.form.get('email')
-        departments = load_departments()
-        department = next((d for d in departments if d['email'] == email), None)
+        selected_department_name = request.form.get('department_name')
+
+        if not selected_department_name:
+            flash('Please select a department.', 'warning')
+            return render_template('department/auth/login_department.html', departments=departments_list)
+
+        department = next((d for d in departments_list if d.get('name') == selected_department_name), None)
+
         if department:
+            email = department.get('email')
             otp = str(random.randint(100000, 999999))
             session['otp'] = otp
-            session['pending_department'] = department
+            # Assuming datetime is imported and available
+            session['otp_timestamp'] = datetime.now().timestamp()
+            session['pending_department_info'] = department
+
+            # Assuming send_otp_email function exists
             if send_otp_email(email, otp):
-                flash('OTP sent to your email.', 'info')
+                flash(f'An OTP has been sent to the registered email for {selected_department_name}. Please check the inbox.', 'info')
                 return redirect(url_for('verify_otp'))
             else:
-                flash('Failed to send OTP email. Please try again later.', 'danger')
+                session.pop('otp', None)
+                session.pop('otp_timestamp', None)
+                session.pop('pending_department_info', None)
+                flash('Failed to send OTP email. Please check server logs or contact support.', 'danger')
+                return render_template('department/auth/login_department.html', departments=departments_list)
         else:
-            flash('Email not found.', 'danger')
-    return render_template('department/auth/login_department.html')
+            flash('Invalid department selected.', 'danger')
+            return render_template('department/auth/login_department.html', departments=departments_list)
+
+    print(f"Passing departments to template: {departments_list}")
+    return render_template('department/auth/login_department.html', departments=departments_list)
 
 @app.route('/department/verify-otp', methods=['GET', 'POST'])
 def verify_otp():
+    pending_info = session.get('pending_department_info')
+    display_email = pending_info.get('email', 'your registered email') if pending_info else 'your registered email'
+    department_name = pending_info.get('name', 'Your Department') if pending_info else 'Your Department'
     if request.method == 'POST':
         entered_otp = request.form.get('otp')
-        if entered_otp == session.get('otp'):
-            session['department'] = session.pop('pending_department', None)
+        stored_otp = session.get('otp')
+        otp_timestamp = session.get('otp_timestamp')
+        if not entered_otp:
+            flash('Please enter the OTP.', 'warning')
+        elif not stored_otp or not otp_timestamp:
+            flash('OTP session expired or invalid. Please login again.', 'danger')
             session.pop('otp', None)
+            session.pop('otp_timestamp', None)
+            session.pop('pending_department_info', None)
+            return redirect(url_for('login_department'))
+        elif (datetime.now().timestamp() - otp_timestamp) > 300:
+            flash('OTP has expired (valid for 5 minutes). Please request a new one.', 'danger')
+            session.pop('otp', None)
+            session.pop('otp_timestamp', None)
+            session.pop('pending_department_info', None)
+            return redirect(url_for('login_department'))
+        elif entered_otp == stored_otp:
+            session['department'] = session.pop('pending_department_info', None)
+            session.pop('otp', None)
+            session.pop('otp_timestamp', None)
+            session.modified = True
+            print(">>> verify_otp: Session after setting 'department':", session)
+            if not session.get('department'):
+                flash('Login failed due to session issue. Please try again.', 'danger')
+                return redirect(url_for('login_department'))
+            flash('Login successful!', 'success')
             return redirect(url_for('department_dashboard'))
         else:
-            flash('Invalid OTP.', 'danger')
-    return render_template('department/auth/verify_otp.html')
+            flash('Invalid OTP entered. Please try again.', 'danger')
+    return render_template('department/auth/verify_otp.html', email=display_email, department_name=department_name)
+
+def department_login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        print(">>> Decorator: Checking session:", session)
+        if 'department' not in session:
+            flash('Please login to access this page.', 'warning')
+            print(">>> Decorator: Redirecting to login, 'department' not found.")
+            return redirect(url_for('login_department'))
+        print(">>> Decorator: 'department' found, allowing access.")
+        return f(*args, **kwargs)
+    return decorated_function
 
 @app.route('/department/dashboard')
+@department_login_required
 def department_dashboard():
     department = session.get('department')
-    if not department:
-        return redirect(url_for('login_department'))
     return render_template('department/dashboard/department_dashboard.html', department=department)
 
 @app.route('/department/logout')
 def logout_department():
     session.pop('department', None)
+    session.pop('otp', None)
+    session.pop('otp_timestamp', None)
+    session.pop('pending_department_info', None)
+    flash('You have been logged out successfully.', 'info')
     return redirect(url_for('login_department'))
-
-
-def department_login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'department' not in session:
-            return redirect(url_for('login_department'))
-        return f(*args, **kwargs)
-    return decorated_function
 
 @app.route('/api/department/applications', methods=['GET'])
 @department_login_required
@@ -1258,7 +1326,6 @@ def get_application_stats():
         'completed': completed_count,
         'today': today_count
     }
-
     return jsonify(stats)
 
 @app.route('/api/department/forward-application/<visit_id>', methods=['POST'])
@@ -1381,24 +1448,17 @@ def get_admin_visitors():
     if not selected_date_str:
         return jsonify({"error": "Date parameter is required"}), 400
     try:
-        # Validate date format
         datetime.strptime(selected_date_str, '%Y-%m-%d')
     except ValueError:
         return jsonify({"error": "Invalid date format. Use YYYY-MM-DD"}), 400
-
     face_data = load_face_data()
     daily_visitors = []
-
     for uid, user_data in face_data.items():
-        # Basic validation for user_data structure
         if isinstance(user_data, dict) and 'visitor' in user_data and isinstance(user_data['visitor'], list):
             for visit in user_data['visitor']:
-                # Basic validation for visit structure and datetime field
                 if isinstance(visit, dict) and 'datetime' in visit and isinstance(visit['datetime'], str):
                     try:
-                        # Check if the visit date matches the selected date
                         if visit['datetime'].split(' ')[0] == selected_date_str:
-                            # Construct the visitor entry dictionary
                             daily_visitors.append({
                                 "uid": uid,
                                 "name": user_data.get('name', 'N/A'),
@@ -1605,9 +1665,6 @@ def generate_visitor_report():
 
 @app.route('/api/admin/delete_user', methods=['POST']) # Crucial: methods=['POST']
 def delete_user():
-    # !! IMPORTANT: Add robust admin authentication/authorization here !!
-    # Example: if not is_admin(session): return jsonify(...), 403
-
     data = request.get_json()
     if not data or 'uid' not in data:
         return jsonify({"success": False, "message": "Missing UID"}), 400
@@ -1629,6 +1686,5 @@ def delete_user():
 
 if __name__ == "__main__":
     app.run()
-
 
 # gunicorn --workers 3 --bind 0.0.0.0:8080 app:app
