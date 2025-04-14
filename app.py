@@ -1497,24 +1497,19 @@ def delete_visitor_entry():
         user_visits = face_data.get(uid, {}).get('visitor')
         if not isinstance(user_visits, list):
             return jsonify({"success": False, "message": "Invalid or missing visitor data"}), 404
-
         visit_to_remove = next((v for v in user_visits if isinstance(v, dict) and v.get('visit_id') == visit_id), None)
         if not visit_to_remove:
             return jsonify({"success": False, "message": f"Visit ID '{visit_id}' not found for UID '{uid}'"}), 404
-
         face_data[uid]['visitor'] = [v for v in user_visits if v.get('visit_id') != visit_id]
-
         pdf = visit_to_remove.get('document_pdf')
         if pdf and isinstance(pdf, str) and pdf.strip():
             abs_path, abs_folder = os.path.abspath(pdf), os.path.abspath(PDF_FOLDER)
             if abs_path.startswith(abs_folder) and os.path.exists(pdf):
                 try: os.remove(pdf)
                 except OSError as e: print(f"PDF deletion failed: {e}")
-
         if save_face_data(face_data):
             return jsonify({"success": True, "message": "Visitor entry deleted successfully"})
         return jsonify({"success": False, "message": "Failed to save changes"}), 500
-
     except Exception as e:
         print(f"Error deleting visit {visit_id} for UID {uid}: {e}")
         return jsonify({"success": False, "message": f"Server error: {str(e)}"}), 500
@@ -1526,13 +1521,10 @@ def safe_get(data, key, default='N/A'):
 def generate_visitor_report():
     if not is_admin_authenticated():
         return jsonify({"error": "Unauthorized access"}), 403
-
     start_date_str = request.args.get('start_date')
     end_date_str = request.args.get('end_date')
-
     if not start_date_str:
         return jsonify({"error": "Missing required parameter: start_date"}), 400
-
     try:
         start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
         if not end_date_str:
@@ -1698,7 +1690,6 @@ def delete_user():
         import traceback
         traceback.print_exc()
         return jsonify({"success": False, "message": f"An server error occurred during user deletion: {str(e)}"}), 500
-
 
 if __name__ == "__main__":
     app.run()
