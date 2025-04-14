@@ -1631,26 +1631,74 @@ def generate_visitor_report():
         print(f"CRITICAL: Error generating Excel report: {e}")
         return jsonify({"error": f"An unexpected server error occurred while generating the report: {str(e)}"}), 500
 
-@app.route('/api/admin/delete_user', methods=['POST']) # Crucial: methods=['POST']
+@app.route('/api/admin/delete_user', methods=['POST'])
 def delete_user():
     data = request.get_json()
     if not data or 'uid' not in data:
-        return jsonify({"success": False, "message": "Missing UID"}), 400
+        return jsonify({"success": False, "message": "Missing UID in request body"}), 400
     uid_to_delete = data['uid']
     try:
         face_data = load_face_data()
         if uid_to_delete not in face_data:
-            return jsonify({"success": False, "message": "Visitor UID not found"}), 404
+            return jsonify({"success": False, "message": f"Visitor UID '{uid_to_delete}' not found"}), 404
         removed_data = face_data.pop(uid_to_delete, None)
         if removed_data is None:
             return jsonify({"success": False, "message": "User UID found initially but could not be removed."}), 500
+        encodings_dir = 'data/encodings'
+        if isinstance(removed_data, dict) and 'face_encodings' in removed_data:
+            for encoding_path in removed_data.get('face_encodings', []):
+                if encoding_path and isinstance(encoding_path, str):
+                    full_encoding_path = os.path.abspath(encoding_path)
+                    expected_dir = os.path.abspath(encodings_dir)
+                    if full_encoding_path.startswith(expected_dir) and os.path.exists(full_encoding_path):
+                        try:
+                            os.remove(full_encoding_path)
+                        except OSError as e:
+                            print(f"Error deleting encoding file {full_encoding_path}: {e}")
+                    elif os.path.exists(encoding_path):
+                        try:
+                            os.remove(encoding_path)
+                        except OSError as e:
+                            print(f"Error deleting encoding file {encoding_path}: {e}")
+        profile_dir = os.path.join('data/profiles', uid_to_delete)
+        if os.path.exists(profile_dir) and os.path.isdir(profile_dir):
+            import shutil
+            try:
+                shutil.rmtree(profile_dir)
+            except OSError as e:
+                print(f"Error deleting profile directory {profile_dir}: {e}")
+        face_data_dir = os.path.join('data/facedata', uid_to_delete)
+        if os.path.exists(face_data_dir) and os.path.isdir(face_data_dir):
+            import shutil
+            try:
+                shutil.rmtree(face_data_dir)
+            except OSError as e:
+                print(f"Error deleting facedata image directory {face_data_dir}: {e}")
+        if isinstance(removed_data, dict) and 'visitor' in removed_data:
+            for visit in removed_data.get('visitor', []):
+                if isinstance(visit, dict) and 'document_pdf' in visit:
+                    pdf_path = visit['document_pdf']
+                    if pdf_path and isinstance(pdf_path, str):
+                        abs_pdf_path = os.path.abspath(pdf_path)
+                        abs_pdf_folder = os.path.abspath(PDF_FOLDER)
+                        if abs_pdf_path.startswith(abs_pdf_folder) and os.path.exists(abs_pdf_path):
+                            try:
+                                os.remove(abs_pdf_path)
+                            except OSError as e:
+                                print(f"Error deleting PDF {abs_pdf_path} during user deletion: {e}")
+                        elif os.path.exists(pdf_path):
+                            try:
+                                os.remove(pdf_path)
+                            except OSError as e:
+                                print(f"Error deleting PDF {pdf_path} during user deletion: {e}")
         save_face_data(face_data)
-        return jsonify({"success": True, "message": "User and all associated data deleted successfully"})
+        return jsonify({"success": True, "message": f"User '{uid_to_delete}' and associated files deleted successfully"})
     except Exception as e:
         print(f"Error deleting user {uid_to_delete}: {e}")
         import traceback
         traceback.print_exc()
-        return jsonify({"success": False, "message": f"An server error occurred: {str(e)}"}), 500
+        return jsonify({"success": False, "message": f"An server error occurred during user deletion: {str(e)}"}), 500
+
 
 if __name__ == "__main__":
     app.run()
