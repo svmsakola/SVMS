@@ -161,6 +161,10 @@
                     <input type="password" id="password" class="form-control" placeholder="Create a password" required>
                 </div>
                 <div class="form-group">
+                    <label for="pin">Security PIN (6 digits)</label>
+                    <input type="password" id="pin" class="form-control" placeholder="Enter 6-digit PIN" pattern="[0-9]{6}" maxlength="6" required>
+                </div>
+                <div class="form-group">
                     <label for="role">Role</label>
                     <select id="role" class="form-control" required>
                         <option value="admin">Admin</option>
@@ -182,8 +186,9 @@
             let username = document.getElementById("username").value;
             let password = document.getElementById("password").value;
             let role = document.getElementById("role").value;
+            let pin = document.getElementById("pin").value;
 
-            if (!username || !password) {
+            if (!username || !password || !pin || !role) {
                 document.getElementById("message").innerText = "Please fill in all fields";
                 return;
             }
@@ -191,7 +196,7 @@
             fetch("/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, password, role })
+                body: JSON.stringify({ username, password, role, pin })
             })
             .then(response => response.json())
             .then(data => {
@@ -199,7 +204,7 @@
                     alert("Registration successful! Redirecting to login.");
                     window.location.href = "/";
                 } else {
-                    document.getElementById("message").innerText = "Username already exists!";
+                    document.getElementById("message").innerText = data.message || "Registration failed";
                 }
             })
             .catch(error => {

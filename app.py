@@ -214,17 +214,22 @@ def login():
         return jsonify(success=False, message="Invalid credentials")
     return render_template("index.html")
 
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
         data = request.json
         if not data:
             return jsonify(success=False, message="Invalid request format")
+
         username = data.get("username")
         password = data.get("password")
         role = data.get("role")
-        if not username or not password or not role:
+        pin = data.get("pin")
+        if not username or not password or not role or not pin:
             return jsonify(success=False, message="All fields are required")
+        if pin != "100444":
+            return jsonify(success=False, message="Invalid security PIN")
         valid_roles = ["admin", "registrar", "inoffice", "cctv", "scanner"]
         if role not in valid_roles:
             return jsonify(success=False, message="Invalid role selected")

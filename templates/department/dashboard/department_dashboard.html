@@ -1377,7 +1377,6 @@
                 const forwardedTime = data.forwarded_datetime ? new Date(data.forwarded_datetime).toLocaleString() : '';
                 const statusClass = data.status === 'completed' ? 'completed' : 'pending';
                 const documentLink = data.document_pdf ? `<a href="/api/get-visitor-document/${data.visit_id}" target="_blank" title="View PDF">View Document <i class="fas fa-external-link-alt fa-xs"></i></a>` : 'No document';
-
                  const capturedImagesHTML = (data.images && data.images.length > 0)
                     ? `<hr>
                        <span class="label">Captured Images:</span>
@@ -1436,7 +1435,6 @@
                 detailsModalBody.innerHTML = `<p class="modal-error">Error loading details: ${error.message}</p>`;
             }
         }
-
 
         function showUpdateModal(visitId, currentStatus, currentRemark) {
              updateVisitIdInput.value = visitId;
@@ -1497,18 +1495,15 @@
                  searchApplications(searchQueryInput.value);
              }
          });
-
         updateForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const visitId = updateVisitIdInput.value;
             const status = updateStatusSelect.value;
             const remark = updateRemarkTextarea.value;
             updateErrorDiv.style.display = 'none';
-
             const formData = new FormData();
             formData.append('status', status);
             formData.append('remark', remark);
-
             try {
                 const result = await fetchData(`${API_BASE}/api/department/update-application/${visitId}`, {
                     method: 'POST',
@@ -1585,7 +1580,6 @@
             window.location.href = "{{ url_for('logout_department') }}";
         });
 
-
         document.addEventListener('DOMContentLoaded', () => {
             loadStats();
             loadApplications();
@@ -1593,8 +1587,6 @@
             loadDepartmentsForForwarding();
             addTableButtonListeners();
         });
-
     </script>
-
 </body>
 </html>
