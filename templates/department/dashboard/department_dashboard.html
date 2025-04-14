@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mr"> <!-- Changed lang to Marathi -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if department.name %}{{ department.name }}{% else %}Department{% endif %} - Dashboard</title>
+    <!-- Updated title to include Marathi text -->
+    <title>{% if department.name %}{{ department.name }}{% else %}विभाग{% endif %} - डॅशबोर्ड</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         :root {
@@ -586,7 +587,7 @@
             margin-bottom: 25px;
             max-height: 60vh;
             overflow-y: auto;
-            padding-right: 10px;
+            padding-right: 10px; /* To prevent scrollbar overlap */
         }
 
          .modal-body .label {
@@ -810,50 +811,51 @@
                 <div class="dropdown-menu" id="dropdownMenu">
                     <div class="user-info">
                         <div class="user-avatar">
-                             {{ department.name[0]|upper if department.name else 'D' }}
+                             {{ department.name[0]|upper if department.name else 'वि' }} <!-- Marathi Initial -->
                         </div>
                         <div class="user-details">
-                            <h3>{{ department.name or 'Department' }}</h3>
-                            <p>Department Portal</p>
+                            <h3>{{ department.name or 'विभाग' }}</h3>
+                            <p>विभाग पोर्टल</p> <!-- Marathi Text -->
                         </div>
                     </div>
-                    <div class="dropdown-item"> <i class="fas fa-user-circle"></i> <span>My Profile</span> </div>
-                    <div class="dropdown-item"> <i class="fas fa-cog"></i> <span>Settings</span> </div>
+                    <div class="dropdown-item"> <i class="fas fa-user-circle"></i> <span>माझे प्रोफाइल</span> </div> <!-- Marathi Text -->
+                    <div class="dropdown-item"> <i class="fas fa-cog"></i> <span>सेटिंग्ज</span> </div> <!-- Marathi Text -->
                     <div class="divider"></div>
-                    <div class="dropdown-item" id="logoutBtn"> <i class="fas fa-sign-out-alt"></i> <span>Logout</span> </div>
+                    <div class="dropdown-item" id="logoutBtn"> <i class="fas fa-sign-out-alt"></i> <span>लॉगआउट</span> </div> <!-- Marathi Text -->
                 </div>
             </div>
         </header>
 
         <div class="main-wrapper">
-            <h1 class="welcome-message">Welcome, {{ department.name or 'Department' }}</h1>
+            <!-- Updated Welcome Message -->
+            <h1 class="welcome-message">स्वागत आहे, {{ department.name or 'विभाग' }}</h1>
 
             <div class="dashboard-stats">
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-folder-open"></i></div>
                     <div class="stat-content">
-                        <div class="stat-title">Total Applications</div>
+                        <div class="stat-title">एकूण अर्ज</div> <!-- Marathi Text -->
                         <div class="stat-value" id="totalCount">0</div>
                     </div>
                 </div>
                 <div class="stat-card warning">
                     <div class="stat-icon"><i class="fas fa-hourglass-half"></i></div>
                      <div class="stat-content">
-                        <div class="stat-title">Pending</div>
+                        <div class="stat-title">प्रलंबित</div> <!-- Marathi Text -->
                         <div class="stat-value" id="pendingCount">0</div>
                     </div>
                 </div>
                 <div class="stat-card success">
                     <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
                      <div class="stat-content">
-                        <div class="stat-title">Completed</div>
+                        <div class="stat-title">पूर्ण झाले</div> <!-- Marathi Text -->
                         <div class="stat-value" id="completedCount">0</div>
                     </div>
                 </div>
                  <div class="stat-card info">
                     <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
                      <div class="stat-content">
-                        <div class="stat-title">Received Today</div>
+                        <div class="stat-title">आज प्राप्त झाले</div> <!-- Marathi Text -->
                         <div class="stat-value" id="todayCount">0</div>
                     </div>
                 </div>
@@ -864,36 +866,39 @@
                 <div class="main-column">
                     <div class="card">
                          <div class="card-header">
-                             <i class="fas fa-filter"></i> Filter & Search Applications
+                             <i class="fas fa-filter"></i> अर्ज फिल्टर आणि शोधा <!-- Marathi Text -->
                          </div>
                          <div class="filter-search-area">
                             <div class="filter-group">
-                                <label for="startDate">Start Date</label>
+                                <label for="startDate">प्रारंभ तारीख</label> <!-- Marathi Text -->
                                 <input type="date" class="form-input" id="startDate">
                             </div>
                             <div class="filter-group">
-                                <label for="endDate">End Date</label>
+                                <label for="endDate">समाप्ती तारीख</label> <!-- Marathi Text -->
                                 <input type="date" class="form-input" id="endDate">
                             </div>
                             <div class="filter-group">
-                                <label for="statusFilter">Status</label>
+                                <label for="statusFilter">स्थिती</label> <!-- Marathi Text -->
                                 <select class="form-select" id="statusFilter">
-                                    <option value="">All Statuses</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="completed">Completed</option>
+                                    <option value="">सर्व स्थिती</option> <!-- Marathi Text -->
+                                    <option value="pending">प्रलंबित</option> <!-- Marathi Text -->
+                                    <option value="completed">पूर्ण झाले</option> <!-- Marathi Text -->
                                 </select>
                             </div>
                              <div class="filter-group">
                                  <label> </label>
-                                 <button type="button" class="btn btn-primary" id="applyFilterBtn" title="Apply Filters">
-                                     <i class="fas fa-check"></i> Filter
+                                 <!-- Updated button title -->
+                                 <button type="button" class="btn btn-primary" id="applyFilterBtn" title="फिल्टर लागू करा">
+                                     <i class="fas fa-check"></i> फिल्टर करा <!-- Marathi Text -->
                                  </button>
                              </div>
                             <div class="filter-group search-group">
-                                 <label for="searchQuery">Search</label>
+                                 <label for="searchQuery">शोधा</label> <!-- Marathi Text -->
                                  <div style="display: flex; width: 100%;">
-                                    <input type="text" class="form-input" id="searchQuery" placeholder="Name, Phone, ID, etc.">
-                                    <button class="btn search-btn" type="button" id="searchBtn" title="Search">
+                                     <!-- Updated placeholder -->
+                                    <input type="text" class="form-input" id="searchQuery" placeholder="नाव, फोन, आयडी, इत्यादी.">
+                                     <!-- Updated button title -->
+                                    <button class="btn search-btn" type="button" id="searchBtn" title="शोधा">
                                         <i class="fas fa-search"></i>
                                     </button>
                                  </div>
@@ -903,31 +908,31 @@
 
                     <div class="card">
                          <div class="card-header">
-                             <i class="fas fa-list-alt"></i> Visitor Applications
+                             <i class="fas fa-list-alt"></i> अभ्यागत अर्ज <!-- Marathi Text -->
                          </div>
                          <div id="loadingIndicator">
-                            <i class="fas fa-spinner fa-spin"></i>Loading applications...
+                            <i class="fas fa-spinner fa-spin"></i>अर्ज लोड होत आहेत... <!-- Marathi Text -->
                          </div>
                          <div class="table-responsive">
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Profile</th>
-                                        <th>Name</th>
-                                        <th>Phone</th>
-                                        <th>Date/Time</th>
-                                        <th>Purpose</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
+                                        <th>प्रोफाइल</th> <!-- Marathi Text -->
+                                        <th>नाव</th> <!-- Marathi Text -->
+                                        <th>फोन</th> <!-- Marathi Text -->
+                                        <th>तारीख/वेळ</th> <!-- Marathi Text -->
+                                        <th>उद्देश</th> <!-- Marathi Text -->
+                                        <th>स्थिती</th> <!-- Marathi Text -->
+                                        <th>क्रिया</th> <!-- Marathi Text -->
                                     </tr>
                                 </thead>
                                 <tbody id="applicationsTableBody">
-
+                                    <!-- Table rows will be populated by JavaScript -->
                                 </tbody>
                             </table>
                         </div>
                          <div id="noResults" style="display: none;">
-                            No applications match your criteria.
+                            तुमच्या निकषांशी जुळणारे कोणतेही अर्ज नाहीत. <!-- Marathi Text -->
                         </div>
                     </div>
                 </div>
@@ -935,13 +940,13 @@
                 <div class="sidebar-column">
                      <div class="card">
                          <div class="card-header">
-                             <i class="fas fa-history"></i> Recent Activities
+                             <i class="fas fa-history"></i> अलीकडील क्रियाकलाप <!-- Marathi Text -->
                          </div>
                          <div id="loadingRecentActivities">
-                             <i class="fas fa-spinner fa-spin"></i> Loading activities...
+                             <i class="fas fa-spinner fa-spin"></i> क्रियाकलाप लोड होत आहेत... <!-- Marathi Text -->
                          </div>
                          <ul class="recent-activities-list" id="recentActivitiesList">
-                             <li>No recent activities found.</li>
+                             <li>कोणतेही अलीकडील क्रियाकलाप आढळले नाहीत.</li> <!-- Marathi Text -->
                          </ul>
                      </div>
                  </div>
@@ -954,14 +959,14 @@
             <div class="modal-content">
                  <button class="modal-close-btn" onclick="closeModal('logoutModal')">×</button>
                  <div class="modal-header">
-                     <h3 class="modal-title">Confirm Logout</h3>
+                     <h3 class="modal-title">लॉगआउटची पुष्टी करा</h3> <!-- Marathi Text -->
                  </div>
                  <div class="modal-body">
-                    <p>Are you sure you want to logout?</p>
+                    <p>तुम्हाला नक्की लॉगआउट करायचे आहे का?</p> <!-- Marathi Text -->
                  </div>
                 <div class="modal-footer">
-                    <button class="modal-btn modal-btn-cancel" onclick="closeModal('logoutModal')">Cancel</button>
-                    <button class="modal-btn modal-btn-confirm" id="confirmLogout">Logout</button>
+                    <button class="modal-btn modal-btn-cancel" onclick="closeModal('logoutModal')">रद्द करा</button> <!-- Marathi Text -->
+                    <button class="modal-btn modal-btn-confirm" id="confirmLogout">लॉगआउट</button> <!-- Marathi Text -->
                 </div>
             </div>
         </div>
@@ -970,13 +975,13 @@
             <div class="modal-content modal-lg">
                  <button class="modal-close-btn" onclick="closeModal('detailsModal')">×</button>
                  <div class="modal-header">
-                     <h3 class="modal-title" id="detailsModalLabel">Application Details</h3>
+                     <h3 class="modal-title" id="detailsModalLabel">अर्जाचे तपशील</h3> <!-- Marathi Text -->
                  </div>
                 <div class="modal-body" id="detailsModalBody">
-                    <p><i class="fas fa-spinner fa-spin me-2"></i> Loading details...</p>
+                    <p><i class="fas fa-spinner fa-spin me-2"></i> तपशील लोड होत आहेत...</p> <!-- Marathi Text -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="modal-btn modal-btn-cancel" onclick="closeModal('detailsModal')">Close</button>
+                    <button type="button" class="modal-btn modal-btn-cancel" onclick="closeModal('detailsModal')">बंद करा</button> <!-- Marathi Text -->
                 </div>
             </div>
         </div>
@@ -985,27 +990,27 @@
             <div class="modal-content">
                  <button class="modal-close-btn" onclick="closeModal('updateModal')">×</button>
                  <div class="modal-header">
-                     <h3 class="modal-title" id="updateModalLabel">Update Application Status</h3>
+                     <h3 class="modal-title" id="updateModalLabel">अर्जाची स्थिती अपडेट करा</h3> <!-- Marathi Text -->
                  </div>
                  <form id="updateForm">
                      <div class="modal-body">
                         <input type="hidden" id="updateVisitId">
                         <div class="modal-form-group">
-                            <label for="updateStatus">Status</label>
+                            <label for="updateStatus">स्थिती</label> <!-- Marathi Text -->
                             <select class="form-select" id="updateStatus" required>
-                                <option value="pending">Pending</option>
-                                <option value="completed">Completed</option>
+                                <option value="pending">प्रलंबित</option> <!-- Marathi Text -->
+                                <option value="completed">पूर्ण झाले</option> <!-- Marathi Text -->
                             </select>
                         </div>
                         <div class="modal-form-group">
-                            <label for="updateRemark">Remark (Optional)</label>
+                            <label for="updateRemark">शेरा (ऐच्छिक)</label> <!-- Marathi Text -->
                             <textarea class="form-input" id="updateRemark" rows="3"></textarea>
                         </div>
                          <div id="updateError" class="modal-error" style="display: none;"></div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="modal-btn modal-btn-cancel" onclick="closeModal('updateModal')">Cancel</button>
-                        <button type="submit" class="modal-btn modal-btn-update">Update Status</button>
+                        <button type="button" class="modal-btn modal-btn-cancel" onclick="closeModal('updateModal')">रद्द करा</button> <!-- Marathi Text -->
+                        <button type="submit" class="modal-btn modal-btn-update">स्थिती अपडेट करा</button> <!-- Marathi Text -->
                     </div>
                 </form>
             </div>
@@ -1015,26 +1020,26 @@
             <div class="modal-content">
                 <button class="modal-close-btn" onclick="closeModal('forwardModal')">×</button>
                  <div class="modal-header">
-                     <h3 class="modal-title" id="forwardModalLabel">Forward Application</h3>
+                     <h3 class="modal-title" id="forwardModalLabel">अर्ज फॉरवर्ड करा</h3> <!-- Marathi Text -->
                  </div>
                 <form id="forwardForm">
                     <div class="modal-body">
                         <input type="hidden" id="forwardVisitId">
                         <div class="modal-form-group">
-                            <label for="targetDepartment">Forward To Department</label>
+                            <label for="targetDepartment">या विभागाकडे फॉरवर्ड करा</label> <!-- Marathi Text -->
                             <select class="form-select" id="targetDepartment" required>
-                                <option value="">Loading departments...</option>
+                                <option value="">विभाग लोड होत आहेत...</option> <!-- Marathi Text -->
                             </select>
                         </div>
                         <div class="modal-form-group">
-                            <label for="forwardNote">Note (Optional)</label>
+                            <label for="forwardNote">टीप (ऐच्छिक)</label> <!-- Marathi Text -->
                             <textarea class="form-input" id="forwardNote" rows="3"></textarea>
                         </div>
                          <div id="forwardError" class="modal-error" style="display: none;"></div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="modal-btn modal-btn-cancel" onclick="closeModal('forwardModal')">Cancel</button>
-                        <button type="submit" class="modal-btn modal-btn-forward">Forward Application</button>
+                        <button type="button" class="modal-btn modal-btn-cancel" onclick="closeModal('forwardModal')">रद्द करा</button> <!-- Marathi Text -->
+                        <button type="submit" class="modal-btn modal-btn-forward">अर्ज फॉरवर्ड करा</button> <!-- Marathi Text -->
                     </div>
                 </form>
             </div>
@@ -1143,15 +1148,16 @@
                     const text = await response.text();
                     return text ? JSON.parse(text) : { success: true };
                  } else {
+                     // Assuming non-JSON success means operation worked
                      return { success: true, message: 'Operation successful (no content)' };
                  }
             } catch (error) {
                 console.error('Fetch error:', error);
-                showToast('API Error', `Failed to fetch data: ${error.message}`, 'danger');
+                // Updated toast message to Marathi
+                showToast('API त्रुटी', `डेटा आणण्यात अयशस्वी: ${error.message}`, 'danger');
                 throw error;
             }
         }
-
          function openModal(modalId) {
              const modal = document.getElementById(modalId);
              if (modal) {
@@ -1159,7 +1165,6 @@
                  document.body.style.overflow = 'hidden';
              }
          }
-
          function closeModal(modalId) {
              const modal = document.getElementById(modalId);
              if (modal) {
@@ -1167,7 +1172,7 @@
                  document.body.style.overflow = '';
              }
          }
-
+         // Close modal if clicked outside content
          window.addEventListener('click', (event) => {
              document.querySelectorAll('.modal.active').forEach(modal => {
                  if (event.target === modal) {
@@ -1183,7 +1188,8 @@
 
             if (!applications || applications.length === 0) {
                 noResultsDiv.style.display = 'block';
-                applicationsTableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 20px; color: var(--text-muted);">No applications found matching your criteria.</td></tr>`;
+                 // Updated no results message in table
+                applicationsTableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 20px; color: var(--text-muted);">तुमच्या निकषांशी जुळणारे कोणतेही अर्ज नाहीत.</td></tr>`;
                 return;
             }
 
@@ -1208,25 +1214,28 @@
                     }
                 }
 
-                const visitDate = app.datetime ? new Date(app.datetime).toLocaleString() : 'N/A';
+                const visitDate = app.datetime ? new Date(app.datetime).toLocaleString('mr-IN') : 'N/A'; // Marathi locale for date/time
                 const statusClass = app.status === 'completed' ? 'completed' : 'pending';
+                // Marathi status text
+                const statusText = app.status === 'completed' ? 'पूर्ण झाले' : 'प्रलंबित';
 
                 row.innerHTML = `
-                    <td><img src="${profileImgSrc}" alt="Profile" class="profile-img-sm" onerror="this.onerror=null; this.src='${defaultProfileUrl}';"></td>
+                    <td><img src="${profileImgSrc}" alt="प्रोफाइल" class="profile-img-sm" onerror="this.onerror=null; this.src='${defaultProfileUrl}';"></td>
                     <td>${app.name || 'N/A'}</td>
                     <td>${app.phone || 'N/A'}</td>
                     <td>${visitDate}</td>
                     <td>${app.purpose || 'N/A'}</td>
-                    <td><span class="status-badge ${statusClass}">${app.status || 'N/A'}</span></td>
+                    <td><span class="status-badge ${statusClass}">${statusText || 'N/A'}</span></td>
                     <td class="action-buttons">
-                        <button class="btn btn-info btn-icon view-details-btn" data-visit-id="${app.visit_id}" title="View Details">
-                            <i class="fas fa-eye"></i> <span>View</span>
+                         <!-- Marathi titles and text -->
+                        <button class="btn btn-info btn-icon view-details-btn" data-visit-id="${app.visit_id}" title="तपशील पहा">
+                            <i class="fas fa-eye"></i> <span>पहा</span>
                         </button>
-                        <button class="btn btn-primary btn-icon update-status-btn" data-visit-id="${app.visit_id}" data-status="${app.status || 'pending'}" data-remark="${app.remark || ''}" title="Update Status">
-                            <i class="fas fa-edit"></i> <span>Update</span>
+                        <button class="btn btn-primary btn-icon update-status-btn" data-visit-id="${app.visit_id}" data-status="${app.status || 'pending'}" data-remark="${app.remark || ''}" title="स्थिती अपडेट करा">
+                            <i class="fas fa-edit"></i> <span>अपडेट</span>
                         </button>
-                        <button class="btn btn-warning btn-icon forward-app-btn" data-visit-id="${app.visit_id}" title="Forward Application">
-                             <i class="fas fa-share"></i> <span>Forward</span>
+                        <button class="btn btn-warning btn-icon forward-app-btn" data-visit-id="${app.visit_id}" title="अर्ज फॉरवर्ड करा">
+                             <i class="fas fa-share"></i> <span>फॉरवर्ड</span>
                         </button>
                     </td>
                 `;
@@ -1249,7 +1258,8 @@
                 renderApplications(data);
             } catch (error) {
                  showLoading(false);
-                 noResultsDiv.textContent = 'Error loading applications.';
+                 // Marathi error message
+                 noResultsDiv.textContent = 'अर्ज लोड करताना त्रुटी.';
                  noResultsDiv.style.display = 'block';
             }
         }
@@ -1257,8 +1267,9 @@
         async function searchApplications(query) {
             showLoading(true);
              if (!query || query.length < 3) {
-                 showToast('Search Info', 'Please enter at least 3 characters.', 'info');
-                 loadApplications();
+                 // Marathi toast message
+                 showToast('शोधा माहिती', 'कृपया किमान ३ अक्षरे प्रविष्ट करा.', 'info');
+                 loadApplications(); // Load all if search is too short
                  return;
             }
             const url = new URL(`${API_BASE}/api/department/search-applications`, window.location.origin);
@@ -1269,7 +1280,8 @@
                 renderApplications(data);
             } catch (error) {
                  showLoading(false);
-                 noResultsDiv.textContent = 'Error during search.';
+                 // Marathi error message
+                 noResultsDiv.textContent = 'शोधताना त्रुटी.';
                  noResultsDiv.style.display = 'block';
             }
         }
@@ -1294,9 +1306,12 @@
                      activities.forEach(act => {
                          const li = document.createElement('li');
                          const activityDate = new Date(act.datetime);
-                         const timeString = activityDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                         const dateString = activityDate.toLocaleDateString([], {day: '2-digit', month: 'short' });
+                          // Use Marathi locale for date/time formatting
+                         const timeString = activityDate.toLocaleTimeString('mr-IN', { hour: '2-digit', minute: '2-digit' });
+                         const dateString = activityDate.toLocaleDateString('mr-IN', {day: '2-digit', month: 'short' });
                          const statusClass = act.status === 'completed' ? 'completed' : 'pending';
+                         // Marathi status text
+                         const statusText = act.status === 'completed' ? 'पूर्ण झाले' : 'प्रलंबित';
 
                          li.innerHTML = `
                              <div class="activity-icon"><i class="fas fa-user-clock"></i></div>
@@ -1305,51 +1320,59 @@
                                  <span class="activity-time">${dateString}, ${timeString}</span>
                              </div>
                              <div class="activity-status">
-                                 <span class="status-badge ${statusClass}">${act.status}</span>
+                                 <span class="status-badge ${statusClass}">${statusText}</span>
                              </div>
                          `;
                          recentActivitiesList.appendChild(li);
                      });
                  } else {
-                     recentActivitiesList.innerHTML = '<li>No recent activities found.</li>';
+                     // Marathi message
+                     recentActivitiesList.innerHTML = '<li>कोणतेही अलीकडील क्रियाकलाप आढळले नाहीत.</li>';
                  }
              } catch (error) {
                  loadingRecentActivities.style.display = 'none';
-                 recentActivitiesList.innerHTML = '<li>Error loading activities.</li>';
+                 // Marathi error message
+                 recentActivitiesList.innerHTML = '<li>क्रियाकलाप लोड करताना त्रुटी.</li>';
                  console.error("Failed to load recent activities:", error);
              }
          }
 
         async function loadDepartmentsForForwarding() {
-            targetDepartmentSelect.innerHTML = '<option value="">Loading...</option>';
+            // Marathi loading text
+            targetDepartmentSelect.innerHTML = '<option value="">विभाग लोड होत आहेत...</option>';
             try {
                 const response = await fetch(`${API_BASE}/departments`);
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const data = await response.json();
                 const departments = data.departments || [];
 
-                targetDepartmentSelect.innerHTML = '<option value="">Select Department...</option>';
+                // Marathi default option
+                targetDepartmentSelect.innerHTML = '<option value="">विभाग निवडा...</option>';
                 const currentDeptName = "{{ department.name }}";
 
                 departments.forEach(dept => {
                     const deptName = dept.name;
+                    // Exclude current department from the list
                     if (deptName && deptName !== currentDeptName) {
                         const option = document.createElement('option');
                         option.value = deptName;
-                        option.textContent = deptName;
+                        option.textContent = deptName; // Keep department name as is, assuming they are proper nouns or known names
                         targetDepartmentSelect.appendChild(option);
                     }
                 });
             } catch (error) {
                 console.error("Could not load departments for forwarding:", error);
-                targetDepartmentSelect.innerHTML = '<option value="">Could not load departments</option>';
-                showToast('Error', 'Failed to load department list for forwarding.', 'danger');
+                // Marathi error message
+                targetDepartmentSelect.innerHTML = '<option value="">विभाग लोड होऊ शकले नाहीत</option>';
+                 // Marathi toast message
+                showToast('त्रुटी', 'फॉरवर्डिंगसाठी विभागांची यादी लोड करण्यात अयशस्वी.', 'danger');
             }
         }
 
 
         async function showDetailsModal(visitId) {
-            detailsModalBody.innerHTML = '<p><i class="fas fa-spinner fa-spin me-2"></i> Loading details...</p>';
+             // Marathi loading text
+            detailsModalBody.innerHTML = '<p><i class="fas fa-spinner fa-spin me-2"></i> तपशील लोड होत आहेत...</p>';
             openModal('detailsModal');
             try {
                 const data = await fetchData(`${API_BASE}/api/department/application/${visitId}`);
@@ -1371,71 +1394,73 @@
                      }
                 }
 
-                const visitDate = data.datetime ? new Date(data.datetime).toLocaleString() : 'N/A';
-                const regDate = data.registration_datetime ? new Date(data.registration_datetime).toLocaleString() : 'N/A';
-                const confirmationTime = data.confirmation_time ? new Date(data.confirmation_time).toLocaleString() : '';
-                const forwardedTime = data.forwarded_datetime ? new Date(data.forwarded_datetime).toLocaleString() : '';
+                // Marathi locale formatting
+                const visitDate = data.datetime ? new Date(data.datetime).toLocaleString('mr-IN') : 'N/A';
+                const regDate = data.registration_datetime ? new Date(data.registration_datetime).toLocaleString('mr-IN') : 'N/A';
+                const confirmationTime = data.confirmation_time ? new Date(data.confirmation_time).toLocaleString('mr-IN') : '';
+                const forwardedTime = data.forwarded_datetime ? new Date(data.forwarded_datetime).toLocaleString('mr-IN') : '';
                 const statusClass = data.status === 'completed' ? 'completed' : 'pending';
-                const documentLink = data.document_pdf ? `<a href="/api/get-visitor-document/${data.visit_id}" target="_blank" title="View PDF">View Document <i class="fas fa-external-link-alt fa-xs"></i></a>` : 'No document';
+                 // Marathi status text
+                const statusText = data.status === 'completed' ? 'पूर्ण झाले' : 'प्रलंबित';
+                 // Marathi document link text
+                const documentLink = data.document_pdf ? `<a href="/api/get-visitor-document/${data.visit_id}" target="_blank" title="पीडीएफ पहा">दस्तऐवज पहा <i class="fas fa-external-link-alt fa-xs"></i></a>` : 'दस्तऐवज नाही';
                  const capturedImagesHTML = (data.images && data.images.length > 0)
                     ? `<hr>
-                       <span class="label">Captured Images:</span>
+                       <span class="label">कॅप्चर केलेल्या प्रतिमा:</span> <!-- Marathi Label -->
                        <div class="detail-images-grid">
                            ${data.images.map(imgPath => {
                                 // Assuming path is 'facedata/UID123/img.jpg'
                                 // Construct URL like '/facedata/UID123/img.jpg'
                                 // This *REQUIRES* a route like @app.route('/facedata/<uid>/<filename>') in Flask
                                 const imageUrl = `/${imgPath}`;
-                                return `<div><img src="${imageUrl}" class="img-thumbnail" alt="Captured Image" onerror="this.style.display='none'"></div>`;
+                                // Marathi Alt Text
+                                return `<div><img src="${imageUrl}" class="img-thumbnail" alt="कॅप्चर केलेली प्रतिमा" onerror="this.style.display='none'"></div>`;
                            }).join('')}
                        </div>`
                     : '';
-
-
+                // Using Marathi labels
                 detailsModalBody.innerHTML = `
                     <div class="detail-grid">
                         <div class="text-center">
-                             <img src="${profileImgSrc}" alt="Profile" class="detail-profile-img" onerror="this.onerror=null; this.src='${defaultProfileUrl}';">
+                             <img src="${profileImgSrc}" alt="प्रोफाइल" class="detail-profile-img" onerror="this.onerror=null; this.src='${defaultProfileUrl}';">
                              <h4>${data.name || 'N/A'}</h4>
                              <p class="data">${data.email || 'N/A'}<br>${data.phone || 'N/A'}</p>
                         </div>
                         <div>
-                            <span class="label">Visit Details</span>
-                            <p class="data"><strong>ID:</strong> ${data.visit_id || 'N/A'}</p>
-                            <p class="data"><strong>Time:</strong> ${visitDate}</p>
-                            <p class="data"><strong>Purpose:</strong> ${data.purpose || 'N/A'}</p>
-                            <p class="data"><strong>Status:</strong> <span class="status-badge ${statusClass}">${data.status || 'N/A'}</span></p>
-                            <p class="data"><strong>Remark:</strong> ${data.remark || 'N/A'}</p>
+                            <span class="label">भेटीचे तपशील</span>
+                            <p class="data"><strong>आयडी:</strong> ${data.visit_id || 'N/A'}</p>
+                            <p class="data"><strong>वेळ:</strong> ${visitDate}</p>
+                            <p class="data"><strong>उद्देश:</strong> ${data.purpose || 'N/A'}</p>
+                            <p class="data"><strong>स्थिती:</strong> <span class="status-badge ${statusClass}">${statusText || 'N/A'}</span></p>
+                            <p class="data"><strong>शेरा:</strong> ${data.remark || 'N/A'}</p>
                         </div>
                         <div>
-                            <span class="label">Visitor Info</span>
-                             <p class="data"><strong>Address:</strong> ${data.address || 'N/A'}</p>
-                             <p class="data"><strong>Tahsil:</strong> ${data.tahasil || 'N/A'}</p>
-                             <p class="data"><strong>District:</strong> ${data.district || 'N/A'}</p>
-                             <p class="data"><strong>Registered:</strong> ${regDate}</p>
+                            <span class="label">अभ्यागताची माहिती</span>
+                             <p class="data"><strong>पत्ता:</strong> ${data.address || 'N/A'}</p>
+                             <p class="data"><strong>तहसील:</strong> ${data.tahasil || 'N/A'}</p>
+                             <p class="data"><strong>जिल्हा:</strong> ${data.district || 'N/A'}</p>
+                             <p class="data"><strong>नोंदणीकृत:</strong> ${regDate}</p>
                         </div>
                          <div>
-                             <span class="label">Visit Tracking</span>
-                             <p class="data"><strong>Document:</strong> ${documentLink}</p>
-                            <p class="data"><strong>Entry Confirmed:</strong> ${data.entry_confirmed ? `Yes <small>(${confirmationTime})</small>` : 'No'}</p>
+                             <span class="label">भेटीचा मागोवा</span>
+                             <p class="data"><strong>दस्तऐवज:</strong> ${documentLink}</p>
+                            <p class="data"><strong>प्रवेश निश्चित केला:</strong> ${data.entry_confirmed ? `होय <small>(${confirmationTime})</small>` : 'नाही'}</p> <!-- Marathi Yes/No -->
                          </div>
                     </div>
-
                      ${data.forwarded_from ? `
                         <hr>
-                        <span class="label">Forwarding History</span>
-                        <p class="data"><strong>Forwarded From:</strong> ${data.forwarded_from}</p>
-                        <p class="data"><strong>Forwarded At:</strong> ${forwardedTime}</p>
-                        <p class="data"><strong>Note:</strong> ${data.forwarding_note || 'N/A'}</p>
+                        <span class="label">फॉरवर्डिंग इतिहास</span>
+                        <p class="data"><strong>येथून फॉरवर्ड केले:</strong> ${data.forwarded_from}</p>
+                        <p class="data"><strong>येथे फॉरवर्ड केले:</strong> ${forwardedTime}</p>
+                        <p class="data"><strong>टीप:</strong> ${data.forwarding_note || 'N/A'}</p>
                      ` : ''}
-
                      ${capturedImagesHTML}
                 `;
             } catch (error) {
-                detailsModalBody.innerHTML = `<p class="modal-error">Error loading details: ${error.message}</p>`;
+                 // Marathi error message
+                detailsModalBody.innerHTML = `<p class="modal-error">तपशील लोड करताना त्रुटी: ${error.message}</p>`;
             }
         }
-
         function showUpdateModal(visitId, currentStatus, currentRemark) {
              updateVisitIdInput.value = visitId;
              updateStatusSelect.value = currentStatus || 'pending';
@@ -1443,18 +1468,18 @@
              updateErrorDiv.style.display = 'none';
              openModal('updateModal');
         }
-
         function showForwardModal(visitId) {
             forwardVisitIdInput.value = visitId;
             forwardNoteTextarea.value = '';
-            targetDepartmentSelect.selectedIndex = 0;
+            targetDepartmentSelect.selectedIndex = 0; // Reset dropdown
             forwardErrorDiv.style.display = 'none';
+            // Load departments if not already loaded or if list is empty/placeholder
             if (targetDepartmentSelect.options.length <= 1 || targetDepartmentSelect.firstChild.value === "") {
                  loadDepartmentsForForwarding();
              }
             openModal('forwardModal');
         }
-
+        // Add event listeners using delegation
         function addTableButtonListeners() {
              applicationsTableBody.addEventListener('click', (e) => {
                  const viewButton = e.target.closest('.view-details-btn');
@@ -1475,8 +1500,7 @@
                  }
              });
         }
-
-
+        // Filter button event
         applyFilterBtn.addEventListener('click', () => {
             const params = {
                 start_date: filterFormElements.startDate.value,
@@ -1486,24 +1510,29 @@
             loadApplications(params);
         });
 
+        // Search button event
          searchBtn.addEventListener('click', () => {
             searchApplications(searchQueryInput.value);
         });
+         // Search on Enter key press
         searchQueryInput.addEventListener('keypress', (e) => {
              if (e.key === 'Enter') {
-                 e.preventDefault();
+                 e.preventDefault(); // Prevent form submission if it were inside a form
                  searchApplications(searchQueryInput.value);
              }
          });
+        // Update form submission
         updateForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const visitId = updateVisitIdInput.value;
             const status = updateStatusSelect.value;
             const remark = updateRemarkTextarea.value;
-            updateErrorDiv.style.display = 'none';
+            updateErrorDiv.style.display = 'none'; // Hide previous errors
+
             const formData = new FormData();
             formData.append('status', status);
             formData.append('remark', remark);
+
             try {
                 const result = await fetchData(`${API_BASE}/api/department/update-application/${visitId}`, {
                     method: 'POST',
@@ -1512,28 +1541,31 @@
 
                 if (result.success) {
                     closeModal('updateModal');
-                    showToast('Success', result.message || 'Application updated successfully.', 'success');
-                    loadApplications();
-                    loadStats();
-                    loadRecentActivities();
+                    // Marathi success toast
+                    showToast('यशस्वी', result.message || 'अर्ज यशस्वीरित्या अपडेट केला.', 'success');
+                    loadApplications(); // Refresh table
+                    loadStats(); // Refresh stats
+                    loadRecentActivities(); // Refresh activities
                 } else {
-                     throw new Error(result.error || 'Unknown error during update.');
+                     throw new Error(result.error || 'अपडेट करताना अज्ञात त्रुटी.'); // Marathi Error
                 }
             } catch (error) {
-                 updateErrorDiv.textContent = `Update Failed: ${error.message}`;
+                 // Marathi error message
+                 updateErrorDiv.textContent = `अपडेट अयशस्वी: ${error.message}`;
                  updateErrorDiv.style.display = 'block';
             }
         });
-
+        // Forward form submission
         forwardForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const visitId = forwardVisitIdInput.value;
             const targetDepartment = targetDepartmentSelect.value;
             const note = forwardNoteTextarea.value;
-            forwardErrorDiv.style.display = 'none';
+            forwardErrorDiv.style.display = 'none'; // Hide previous errors
 
              if (!targetDepartment) {
-                 forwardErrorDiv.textContent = 'Please select a target department.';
+                 // Marathi error message
+                 forwardErrorDiv.textContent = 'कृपया लक्ष्य विभाग निवडा.';
                  forwardErrorDiv.style.display = 'block';
                  return;
              }
@@ -1550,42 +1582,47 @@
 
                 if (result.success) {
                     closeModal('forwardModal');
-                    showToast('Success', result.message || 'Application forwarded successfully.', 'success');
-                    loadApplications();
-                    loadStats();
-                    loadRecentActivities();
+                     // Marathi success toast
+                    showToast('यशस्वी', result.message || 'अर्ज यशस्वीरित्या फॉरवर्ड केला.', 'success');
+                    loadApplications(); // Refresh table
+                    loadStats(); // Refresh stats
+                    loadRecentActivities(); // Refresh activities
                 } else {
-                     throw new Error(result.error || 'Unknown error during forwarding.');
+                     throw new Error(result.error || 'फॉरवर्ड करताना अज्ञात त्रुटी.'); // Marathi Error
                 }
             } catch (error) {
-                 forwardErrorDiv.textContent = `Forwarding Failed: ${error.message}`;
+                 // Marathi error message
+                 forwardErrorDiv.textContent = `फॉरवर्डिंग अयशस्वी: ${error.message}`;
                  forwardErrorDiv.style.display = 'block';
             }
         });
-
-
+        // Profile dropdown toggle
         profileIcon.addEventListener('click', () => {
             dropdownMenu.classList.toggle('active');
         });
+        // Close dropdown if clicked outside
         document.addEventListener('click', (event) => {
             if (!profileIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
                 dropdownMenu.classList.remove('active');
             }
         });
+        // Logout button opens modal
         logoutBtn.addEventListener('click', () => {
             openModal('logoutModal');
-            dropdownMenu.classList.remove('active');
+            dropdownMenu.classList.remove('active'); // Close dropdown
         });
+        // Confirm logout action
         confirmLogoutBtn.addEventListener('click', () => {
+            // Redirect to the Flask logout route
             window.location.href = "{{ url_for('logout_department') }}";
         });
-
+        // Initial data load on page ready
         document.addEventListener('DOMContentLoaded', () => {
             loadStats();
             loadApplications();
             loadRecentActivities();
-            loadDepartmentsForForwarding();
-            addTableButtonListeners();
+            loadDepartmentsForForwarding(); // Pre-load departments for forward modal
+            addTableButtonListeners(); // Setup event delegation for table buttons
         });
     </script>
 </body>
