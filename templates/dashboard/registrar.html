@@ -559,19 +559,35 @@
         }
 
         .modal-close-button {
-            background: none;
-            border: none;
-            font-size: 2.1rem;
-            cursor: pointer;
-            color: #aaa;
-            padding: 0 8px;
-            line-height: 1;
-            transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
-        }
-         .modal-close-button:hover {
-            color: var(--danger-red);
-            transform: rotate(90deg) scale(1.1);
-         }
+        background: var(--white);
+        border: 1px solid var(--medium-grey);
+        font-size: 1rem;
+        cursor: pointer;
+        color: var(--text-light);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: all var(--transition-speed) ease;
+    }
+
+    .modal-close-button:hover {
+        color: var(--danger-red);
+        transform: rotate(90deg) scale(1.1);
+        border-color: var(--danger-red);
+        background-color: var(--danger-red-light);
+        box-shadow: 0 3px 6px rgba(231, 76, 60, 0.2);
+    }
+
+    .modal-close-button svg {
+        width: 16px;
+        height: 16px;
+    }
 
         .modal-body {
             overflow-y: auto;
@@ -703,6 +719,8 @@
              select#camera-select { height: 32px; padding: 5px 8px; padding-right: 20px; font-size: 0.8rem;}
              .profile-icon { width: 32px; height: 32px;}
              .header-controls { gap: 8px; }
+             .modal-close-button { width: 32px; height: 32px;}
+             .modal-close-button svg {width: 14px; height: 14px;}
          }
     </style>
 </head>
@@ -748,7 +766,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2>नोंदणीकृत अभ्यागत व्यवस्थापन</h2>
-                <button class="modal-close-button" id="visitor-modal-close-button">×</button>
+                <button class="modal-close-button" id="visitor-modal-close-button">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+    </svg>
+</button>
             </div>
             <div class="modal-body" id="visitor-list-container">
                  <div class="modal-loading" id="visitor-list-loading">लोड करत आहे...</div>
