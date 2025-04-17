@@ -665,6 +665,17 @@
                 "dvn": 3,
                 "entry_confirmed": true,
                 "confirmation_time": "2025-04-08 12:15:10"
+            },
+            {
+                "visit_id": "V202504160003",
+                "datetime": "2025-04-16 12:18:07",
+                "purpose": "\u0906\u0927\u093e\u0930 \u0926\u0941\u0930\u0941\u0938\u094d\u0925\u0940  \u0915\u0930\u0923\u0947",
+                "status": "pending",
+                "dvn": 2,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-04-16 12:39:04",
+                "remark": "",
+                "forwarding_department": "Other(Testing                                                                                                                                            )"
             }
         ],
         "profile_img": [
@@ -876,6 +887,181 @@
         ],
         "profile_img": [
             "profiles/UID1744095535/UID1744095535_img1.jpg"
+        ]
+    },
+    "UID1744785748": {
+        "name": "\u0935\u093f\u0937\u094d\u0923\u0942 \u0913\u0902\u0915\u093e\u0930 \u0938\u092a\u0915\u093e\u0933",
+        "phone": "9637264544",
+        "email": null,
+        "address": "\u0930\u0941\u0908\u0916\u0947\u0921 \u0924\u093e  \u0905\u0915\u094b\u091f",
+        "tahasil": "\u0905\u0915\u094b\u091f",
+        "district": "Akola",
+        "registration_datetime": "2025-04-16 12:12:28",
+        "images": [
+            "facedata/UID1744785748/UID1744785748_img1.jpg"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202504160001",
+                "datetime": "2025-04-16 12:12:29",
+                "purpose": "\u0916\u093e\u0935\u091f\u0940 \u092c\u0926\u094d\u0926\u0932",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "document_pdf": "pdf/V202504160001_1.pdf"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1744785748/UID1744785748_img1.jpg"
+        ]
+    },
+    "UID1744785927": {
+        "name": "\u0938\u0902\u0926\u0947\u0936  \u0938\u0902\u091a\u093f\u0924 \u0935\u093e\u0918\u092e\u093e\u0930\u0947",
+        "phone": "9119528127",
+        "email": null,
+        "address": "\u0916\u0926\u093e\u0928  \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-04-16 12:15:27",
+        "images": [
+            "facedata/UID1744785927/UID1744785927_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1744785927_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202504160002",
+                "datetime": "2025-04-16 12:15:27",
+                "purpose": "\u0928\u094b\u0915\u0930\u0940 \u092c\u0926\u094d\u0926\u0932 \u092d\u0947\u091f",
+                "status": "pending",
+                "dvn": 1,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-04-16 12:38:28",
+                "remark": "",
+                "forwarding_department": "Other(Testing                                                                                                                                            )"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1744785927/UID1744785927_img1.jpg"
+        ]
+    },
+    "UID1744786264": {
+        "name": "\u0935\u093f\u0920\u094d\u0920\u0932\u0930\u093e\u0935 \u092a\u0941\u0902\u0921\u0932\u093f\u0915\u0930\u093e\u0935 \u0905\u0915\u094b\u0932\u0915\u0930",
+        "phone": "7798679212",
+        "email": null,
+        "address": "\u0932\u0939\u093e\u0928 \u0909\u092e\u0930\u0940 \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-04-16 12:21:04",
+        "images": [
+            "facedata/UID1744786264/UID1744786264_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1744786264_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202504160004",
+                "datetime": "2025-04-16 12:21:04",
+                "purpose": "\u092a\u094d\u0930\u0932\u0902\u092c\u093f\u0924 \u0926\u0947\u092f\u0915 \u092c\u0926\u094d\u0926\u0932",
+                "status": "completed",
+                "document_pdf": "pdf/V202504160004_1.pdf",
+                "dvn": 3,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-04-16 12:41:00"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1744786264/UID1744786264_img1.jpg"
+        ]
+    },
+    "UID1744786421": {
+        "name": "\u0938\u0941\u0930\u0947\u0936 \u092a\u0941\u0902\u0921\u0932\u093f\u0915 \u0928\u093e\u0917\u0947",
+        "phone": "9356481087",
+        "email": null,
+        "address": "\u0924\u093e\u092e\u0938\u0940 \u0924\u093e  \u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940",
+        "tahasil": "\u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940",
+        "district": "Akola",
+        "registration_datetime": "2025-04-16 12:23:41",
+        "images": [
+            "facedata/UID1744786421/UID1744786421_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1744786421_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202504160005",
+                "datetime": "2025-04-16 12:23:42",
+                "purpose": "\u0936\u0947\u0924 \u0930\u0938\u094d\u0924\u093e \u0935 \u0905\u0924\u093f\u0915\u094d\u0930\u092e \u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202504160005_1.pdf",
+                "dvn": 4,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-04-16 12:41:32",
+                "remark": "",
+                "forwarding_department": "Tahasildar Barshitakli"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1744786421/UID1744786421_img1.jpg"
+        ]
+    },
+    "UID1744786552": {
+        "name": "\u0926\u093f\u0932\u0940\u092a \u0905\u092a\u0924\u0942\u0930\u0915\u0930",
+        "phone": "9881559061",
+        "email": null,
+        "address": "\u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-04-16 12:25:52",
+        "images": [
+            "facedata/UID1744786552/UID1744786552_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1744786552_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202504160006",
+                "datetime": "2025-04-16 12:25:53",
+                "purpose": "\u0928\u093f\u092e\u0902\u0924\u094d\u0930\u0923",
+                "status": "completed",
+                "dvn": 5,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-04-16 12:44:22"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1744786552/UID1744786552_img1.jpg"
+        ]
+    },
+    "UID1744786711": {
+        "name": "\u0930\u093e\u091c\u0947\u0936 \u0936\u093e\u0932\u093f\u0917\u094d\u0930\u093e\u092e  \u092d\u0917\u0947\u0935\u0930",
+        "phone": "8459688363",
+        "email": null,
+        "address": "\u0938\u0930\u093e\u0932\u093e \u0924\u093e  \u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940",
+        "tahasil": "\u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940",
+        "district": "Akola",
+        "registration_datetime": "2025-04-16 12:28:31",
+        "images": [
+            "facedata/UID1744786711/UID1744786711_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1744786711_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202504160007",
+                "datetime": "2025-04-16 12:28:32",
+                "purpose": "\u092a\u094b\u0932\u093f\u0936 \u092a\u093e\u091f\u0940\u0932 \u092c\u093e\u092c\u0924 \u0928\u093f\u0935\u0947\u0926\u0928 \u0926\u0947\u0923\u0947",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "dvn": 6,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-04-16 13:10:41"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1744786711/UID1744786711_img1.jpg"
         ]
     }
 }
