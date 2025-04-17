@@ -9,10 +9,24 @@
             --primary-blue: #2c3e90;
             --secondary-blue: #3498db;
             --light-blue: #e6f2ff;
+            --light-grey: #f8f9fa;
+            --medium-grey: #e9ecef;
+            --dark-grey: #ced4da;
             --white: #ffffff;
             --text-dark: #2c3e50;
-            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-            --hover-shadow: 0 15px 30px rgba(52, 152, 219, 0.15);
+            --text-light: #5a6a7a;
+            --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.07);
+            --hover-shadow: 0 12px 24px rgba(52, 152, 219, 0.1);
+            --danger-red: #e74c3c;
+            --danger-red-light: #fdedec;
+            --success-green: #2ecc71;
+            --success-green-light: #eafaf1;
+            --warning-orange: #f39c12;
+            --warning-orange-light: #fef5e7;
+            --border-radius-sm: 4px;
+            --border-radius-md: 8px;
+            --border-radius-lg: 16px;
+            --transition-speed: 0.3s;
         }
         * {
             margin: 0;
@@ -21,33 +35,43 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--light-blue) 0%, #f8fbff 100%);
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--light-grey) 100%);
             color: var(--text-dark);
             line-height: 1.6;
+            font-size: 16px;
         }
 
         .header {
             background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
             color: var(--white);
-            padding: 10px 25px;
+            padding: 0 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
             position: sticky;
             top: 0;
             z-index: 100;
-            height: 80px;
+            height: 70px;
         }
 
-        .header img {
-            height: 80px;
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .header img.logo {
+            height: 55px;
             width: auto;
-            max-height: 100%;
+            max-height: 90%;
             object-fit: contain;
         }
 
@@ -57,46 +81,118 @@
             gap: 20px;
         }
 
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+
+        .header-manage-link {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 6px 10px;
+            border-radius: var(--border-radius-sm);
+            transition: background-color var(--transition-speed) ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .header-manage-link:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+        .header-manage-link svg {
+             width: 15px; height: 15px; opacity: 0.9;
+        }
+
+        /* Camera Select Styles */
+         select#camera-select {
+             background-color: rgba(255, 255, 255, 0.1);
+             color: var(--white);
+             border: 1px solid rgba(255, 255, 255, 0.3);
+             padding: 7px 12px; /* Adjust padding */
+             border-radius: var(--border-radius-md);
+             font-size: 0.9rem;
+             height: 38px; /* Match icon button height */
+             cursor: pointer;
+             transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+             -webkit-appearance: none; /* Remove default arrow in WebKit */
+             -moz-appearance: none;    /* Remove default arrow in Firefox */
+             appearance: none;         /* Remove default arrow */
+             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23ffffff' class='bi bi-caret-down-fill' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); /* Custom white arrow */
+             background-repeat: no-repeat;
+             background-position: right 10px center;
+             padding-right: 30px; /* Space for custom arrow */
+             outline: none; /* Remove focus outline */
+         }
+
+         select#camera-select:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+         }
+        select#camera-select:focus {
+             border-color: var(--white);
+             box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+        }
+
+         select#camera-select option {
+            background-color: var(--white);
+            color: var(--text-dark);
+         }
+
+
         .profile-container {
             position: relative;
         }
 
         .profile-icon {
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             background-color: var(--white);
             color: var(--primary-blue);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: transform 0.2s ease;
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
         }
 
         .profile-icon:hover {
             transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
 
         .profile-dropdown {
             display: none;
             position: absolute;
             right: 0;
-            top: 50px;
+            top: calc(100% + 10px);
             background-color: var(--white);
             color: var(--text-dark);
             min-width: 150px;
             box-shadow: var(--card-shadow);
-            border-radius: 8px;
+            border-radius: var(--border-radius-md);
             z-index: 101;
             overflow: hidden;
+            border: 1px solid var(--medium-grey);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
         }
 
         .profile-dropdown.active {
             display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .profile-dropdown ul {
@@ -108,7 +204,7 @@
         .profile-dropdown li {
             padding: 12px 18px;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: background-color var(--transition-speed) ease;
             font-size: 0.95rem;
             display: flex;
             align-items: center;
@@ -126,72 +222,52 @@
             display: flex;
             flex: 1;
             overflow-y: auto;
-            padding-top: 15px;
+            padding: 25px;
         }
 
         .content {
             flex: 1;
-            padding: 25px;
+            padding: 0;
             display: flex;
             flex-wrap: wrap;
-            gap: 25px;
+            gap: 30px;
             justify-content: center;
+            align-items: flex-start;
         }
 
-        .webcam-container {
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: var(--white);
-            border-radius: 16px;
-            box-shadow: var(--card-shadow);
-            transition: all 0.3s ease;
-            align-self: flex-start;
-            margin-bottom: 20px;
-        }
-
-        .webcam-container:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--hover-shadow);
-        }
-
-        .registration-form, .existing-visitor-form {
+        .webcam-container, .registration-form, .existing-visitor-form {
             flex: 1;
-            min-width: 300px;
-            max-width: 450px;
-            padding: 25px;
+            min-width: 320px;
+            max-width: 580px;
+            padding: 15px;
             background-color: var(--white);
-            border-radius: 16px;
+            border-radius: var(--border-radius-lg);
             box-shadow: var(--card-shadow);
-            transition: all 0.3s ease;
-            margin-bottom: 20px;
+            transition: all var(--transition-speed) ease;
+            margin-bottom: 25px;
             position: relative;
             overflow: hidden;
-            align-self: flex-start;
+            border: 1px solid var(--medium-grey);
         }
-
-        .registration-form:hover, .existing-visitor-form:hover {
-            transform: translateY(-5px);
+        .webcam-container:hover, .registration-form:hover, .existing-visitor-form:hover {
+            transform: translateY(-6px);
             box-shadow: var(--hover-shadow);
         }
-
-        .registration-form::after, .existing-visitor-form::after, .webcam-container::after {
+        .webcam-container::after, .registration-form::after, .existing-visitor-form::after {
             content: '';
             position: absolute;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 5px;
+            height: 6px;
             background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            border-bottom-left-radius: var(--border-radius-lg);
+            border-bottom-right-radius: var(--border-radius-lg);
             transform: scaleX(0);
             transform-origin: left;
-            transition: transform 0.3s ease;
+            transition: transform var(--transition-speed) ease;
         }
-
-        .registration-form:hover::after, .existing-visitor-form:hover::after, .webcam-container:hover::after {
+         .webcam-container:hover::after, .registration-form:hover::after, .existing-visitor-form:hover::after {
             transform: scaleX(1);
         }
 
@@ -199,75 +275,92 @@
             width: 100%;
             max-width: 100%;
             height: auto;
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            margin-bottom: 15px;
+            border-radius: var(--border-radius-md);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            transform: scaleX(-1);
+            border: 1px solid var(--dark-grey);
         }
 
-        input, select, textarea {
+        input, select:not(#camera-select), textarea {
             width: 100%;
-            padding: 14px;
-            margin: 10px 0;
-            border: 1px solid var(--secondary-blue);
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            padding: 15px;
+            margin: 12px 0;
+            border: 1px solid var(--dark-grey);
+            border-radius: var(--border-radius-md);
+            transition: all var(--transition-speed) ease;
             font-size: 1rem;
+            background-color: var(--light-grey);
         }
-
-        input:focus, select:focus, textarea:focus {
+         input:focus, select:not(#camera-select):focus, textarea:focus {
             outline: none;
             border-color: var(--primary-blue);
-            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 0 0 3px rgba(44, 62, 144, 0.15);
+            background-color: var(--white);
         }
-
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
 
         #tahasil {
              color: var(--text-dark);
-             background-color: var(--white);
+             background-color: var(--light-grey);
          }
+        #tahasil:focus {
+            background-color: var(--white);
+        }
 
         button {
-            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
             color: var(--white);
             border: none;
-            padding: 14px 28px;
-            border-radius: 30px;
+            padding: 15px 30px;
+            border-radius: 50px;
             cursor: pointer;
             font-weight: 600;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            margin: 15px 0;
-            display: flex;
+            letter-spacing: 0.5px;
+            transition: all var(--transition-speed) ease;
+            margin: 20px 0 10px;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             position: relative;
             overflow: hidden;
             width: 100%;
+            box-shadow: 0 4px 10px rgba(44, 113, 144, 0.2);
+            text-transform: uppercase;
+            font-size: 1rem;
         }
 
         button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 15px rgba(44, 113, 144, 0.3);
         }
 
         button::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
-            transition: left 0.7s ease;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.15);
+            transform: translate(-50%, -50%) rotate(45deg);
+            transition: width 0.5s ease, height 0.5s ease;
+            opacity: 0;
+            pointer-events: none;
         }
-
         button:hover::before {
-            left: 100%;
+             width: 0%;
+             height: 0%;
+             opacity: 1;
+             transition: width 0s ease, height 0s ease, opacity 0.5s ease;
         }
 
         button:disabled {
              cursor: not-allowed;
-             opacity: 0.7;
+             opacity: 0.6;
              background: linear-gradient(to right, #a9b4d4, #a0c4e0);
              box-shadow: none;
              transform: none;
@@ -276,64 +369,89 @@
               display: none;
           }
 
+        button.delete-button {
+            background: var(--danger-red);
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            border-radius: var(--border-radius-md);
+            margin: 0;
+            width: auto;
+            min-width: 70px;
+            text-transform: none;
+            box-shadow: 0 2px 5px rgba(231, 76, 60, 0.3);
+        }
+         button.delete-button:hover {
+             background: #c0392b;
+             box-shadow: 0 4px 8px rgba(192, 57, 43, 0.4);
+         }
+         button.delete-button svg {
+            width: 13px;
+            height: 13px;
+            margin-right: 5px;
+         }
+
         .captured-images {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 15px;
+            margin-top: 20px;
             width: 100%;
         }
-
         .captured-images img {
             width: 100%;
             max-width: 100%;
             max-height: 300px;
             object-fit: cover;
-            border-radius: 10px;
+            border-radius: var(--border-radius-md);
             box-shadow: var(--card-shadow);
+            border: 1px solid var(--medium-grey);
         }
 
         .visitor-details {
             background: var(--light-blue);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            border-left: 4px solid var(--primary-blue);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: var(--border-radius-md);
+            border-left: 5px solid var(--primary-blue);
         }
 
         .last-visit-details {
             background: #f0f7ff;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            border-left: 4px solid var(--secondary-blue);
+            padding: 20px;
+            border-radius: var(--border-radius-md);
+            margin-top: 20px;
+            border-left: 5px solid var(--secondary-blue);
         }
 
         .error-message {
-            color: #e74c3c;
-            font-size: 0.85em;
+            color: var(--danger-red);
+            font-size: 0.9em;
             margin-top: -5px;
             margin-bottom: 10px;
         }
 
         .registration-form h2, .existing-visitor-form h2 {
             color: var(--primary-blue);
-            margin-bottom: 15px;
-            font-weight: 600;
-            font-size: 1.5rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+            font-size: 1.7rem;
+            text-align: center;
+            border-bottom: 2px solid var(--secondary-blue);
+            padding-bottom: 12px;
         }
 
         .visitor-profile-container {
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
+            gap: 15px;
         }
 
         .profile-image-container {
-            margin-right: 20px;
+            margin-right: 0;
             flex-shrink: 0;
-            margin-bottom: 10px;
+            margin-bottom: 0;
         }
 
         .profile-circle {
@@ -341,8 +459,8 @@
             height: 100px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--secondary-blue);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 4px solid var(--secondary-blue);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
         }
 
         .profile-placeholder {
@@ -360,103 +478,257 @@
         }
 
         .visitor-info-container p {
-            margin: 5px 0;
+            margin: 8px 0;
+            font-size: 0.95rem;
+            color: var(--text-light);
         }
-
-         .visitor-info-container p strong {
-             margin-right: 5px;
+        .visitor-info-container p strong {
+             margin-right: 8px;
+             color: var(--text-dark);
+             min-width: 50px;
+             display: inline-block;
          }
          .last-visit-details p strong {
-            margin-right: 5px;
+            margin-right: 8px;
+             color: var(--text-dark);
+             min-width: 130px;
+             display: inline-block;
          }
+         .last-visit-details h3, #existing-visitor-form h3 {
+            color: var(--primary-blue);
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+         }
+
+         .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            transition: opacity var(--transition-speed) ease;
+        }
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            padding: 30px 35px;
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+             transform: scale(0.95) translateY(10px);
+             opacity: 0;
+             transition: transform 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity var(--transition-speed) ease;
+        }
+        .modal-overlay.active .modal-content {
+             transform: scale(1) translateY(0);
+             opacity: 1;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--medium-grey);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: var(--primary-blue);
+            margin: 0;
+            font-size: 1.7rem;
+            font-weight: 700;
+        }
+
+        .modal-close-button {
+            background: none;
+            border: none;
+            font-size: 2.1rem;
+            cursor: pointer;
+            color: #aaa;
+            padding: 0 8px;
+            line-height: 1;
+            transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
+        }
+         .modal-close-button:hover {
+            color: var(--danger-red);
+            transform: rotate(90deg) scale(1.1);
+         }
+
+        .modal-body {
+            overflow-y: auto;
+            flex-grow: 1;
+            padding-right: 10px; /* Add padding for scrollbar */
+            margin-right: -10px; /* Compensate scrollbar width */
+        }
+        .modal-body::-webkit-scrollbar { width: 8px; } /* Refined scrollbar */
+        .modal-body::-webkit-scrollbar-track { background: var(--light-grey); border-radius: 10px; }
+        .modal-body::-webkit-scrollbar-thumb { background: var(--dark-grey); border-radius: 10px; }
+        .modal-body::-webkit-scrollbar-thumb:hover { background: var(--text-light); }
+
+        .visitor-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .visitor-item {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 15px;
+            align-items: center;
+            padding: 18px 10px;
+            border-bottom: 1px solid var(--medium-grey);
+            transition: background-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 5px;
+        }
+         .visitor-item:last-child { border-bottom: none; }
+         .visitor-item:hover {
+             background-color: var(--white);
+             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+             transform: none;
+         }
+
+        .visitor-item-info {
+            margin-right: 0;
+        }
+        .visitor-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+            font-size: 1.05rem;
+        }
+        .visitor-uid {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 6px;
+            font-family: monospace;
+        }
+
+        .visitor-status-indicators {
+             display: flex;
+             flex-wrap: wrap;
+             gap: 8px;
+             font-size: 0.8rem;
+             align-items: center;
+             margin-top: 8px;
+         }
+        .status-indicator {
+             display: inline-flex;
+             align-items: center;
+             gap: 4px;
+             padding: 4px 8px;
+             border-radius: var(--border-radius-sm);
+             font-weight: 500;
+             border: 1px solid transparent;
+         }
+         .status-ok { color: var(--success-green); background-color: var(--success-green-light); border-color: var(--success-green); }
+         .status-missing { color: var(--warning-orange); background-color: var(--warning-orange-light); border-color: var(--warning-orange); }
+         .status-indicator svg { width: 13px; height: 13px; }
+
+        .visitor-actions {
+            justify-self: end;
+        }
+
+        .modal-loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
 
 
         @media (max-width: 992px) {
-             .content {
-                 flex-direction: column;
-                 align-items: center;
-             }
-             .webcam-container,
-             .registration-form,
-             .existing-visitor-form {
-                 max-width: 500px;
-                 width: 100%;
-                 align-self: center;
-             }
+             .content { flex-direction: column; align-items: center; }
+             .webcam-container, .registration-form, .existing-visitor-form { max-width: 650px; width: 100%; align-self: center; }
+             .modal-content { max-width: 90%; }
         }
 
 
         @media (max-width: 768px) {
-            .header {
-                padding: 10px 15px;
-                height: auto;
-                flex-wrap: wrap;
-                justify-content: space-around;
-            }
-
-             .header img {
-    height: 60px;
-    width: auto;
-    max-height: 100%;
-    object-fit: contain;
-}
-
-            .header-controls {
-                 width: 100%;
-                 justify-content: flex-end;
-             }
-
-            .profile-icon {
-                width: 35px;
-                height: 35px;
-                font-size: 1rem;
-            }
-
-            .profile-dropdown {
-                top: 45px;
-            }
-
-            .content {
-                padding: 15px;
-                gap: 20px;
-            }
-
-
-            .visitor-profile-container {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .profile-image-container {
-                margin-right: 0;
-                margin-bottom: 15px;
-            }
+            .header { padding: 8px 15px; height: auto; flex-wrap: wrap; }
+            .header-left { flex-basis: 50%;}
+             .header img.logo { height: 50px; }
+            .header-controls { flex-basis: 50%; justify-content: flex-end; gap: 10px; margin-top: 0;}
+            .profile-icon { width: 35px; height: 35px; }
+            select#camera-select { height: 35px; padding: 6px 10px; padding-right: 25px; font-size: 0.85rem;}
+            .profile-dropdown, .camera-options-dropdown { top: 50px; }
+            .main { padding: 20px; }
+            .content { gap: 20px; }
+            .visitor-profile-container { flex-direction: column; text-align: center; gap: 10px; }
+            .modal-content { width: 95%; padding: 25px; max-height: 85vh; }
+             .visitor-item { grid-template-columns: 1fr; gap: 10px; padding: 15px; }
+             .visitor-item-info { margin-right: 0; }
+             .visitor-actions { justify-self: end; margin-top: 5px; }
+             .modal-header h2 { font-size: 1.4rem; }
+             .header-manage-link span { display: none; }
+             .header-manage-link { padding: 6px; border: none; background-color: transparent; }
+             .header-manage-link svg { margin-right: 0;}
+             .header-manage-link:hover { background-color: rgba(255, 255, 255, 0.1); }
         }
          @media (max-width: 480px) {
-             .header img {
-    height: 80px;
-    width: auto;
-    max-height: 100%;
-    object-fit: contain;
-}
-             .registration-form h2, .existing-visitor-form h2 {
-                font-size: 1.3rem;
-            }
-            button {
-                padding: 12px 24px;
-                font-size: 0.9rem;
-            }
-            input, select, textarea {
-                padding: 12px;
-                font-size: 0.95rem;
-            }
+             .header { padding: 10px 15px;}
+             .header-left {flex-basis: auto;}
+             .header-controls {flex-basis: auto;}
+             .header img.logo { height: 45px; }
+             .registration-form h2, .existing-visitor-form h2 { font-size: 1.5rem; }
+             button { padding: 12px 24px; font-size: 0.95rem; }
+             input, select:not(#camera-select), textarea { padding: 13px; font-size: 0.95rem; }
+             .modal-header h2 { font-size: 1.3rem; }
+             .visitor-name { font-size: 0.95rem; }
+             .header-manage-link { padding: 6px;}
+             select#camera-select { height: 32px; padding: 5px 8px; padding-right: 20px; font-size: 0.8rem;}
+             .profile-icon { width: 32px; height: 32px;}
+             .header-controls { gap: 8px; }
          }
     </style>
 </head>
 <body>
     <div class="header">
-        <img src="{{ url_for('static', filename='assets/logo/svmslogo.png') }}" alt="Smart Visitor Management System Logo">
+        <div class="header-left">
+            <img src="{{ url_for('static', filename='assets/logo/svmslogo.png') }}" alt="Smart Visitor Management System Logo" class="logo">
+
+        </div>
         <div class="header-controls">
+            <div class="header-actions">
+                 <!-- Camera Select Dropdown -->
+                 <select id="camera-select" title="कॅमेरा निवडा">
+                     <option value="">कॅमेरा निवडा...</option>
+                     <!-- Options added by JS -->
+                 </select>
+                <a href="#" class="header-manage-link" id="visitor-manage-header-link" title="नोंदणीकृत अभ्यागत पहा">
+                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
+                    <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
+                 </svg>
+                <span>नोंदणीकृत अभ्यागत</span>
+             </a>
+            </div>
+             <!-- Profile Dropdown -->
             <div class="profile-container">
                 <div class="profile-icon" id="profile-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
@@ -471,10 +743,24 @@
             </div>
         </div>
     </div>
+
+     <div class="modal-overlay" id="visitor-management-modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>नोंदणीकृत अभ्यागत व्यवस्थापन</h2>
+                <button class="modal-close-button" id="visitor-modal-close-button">×</button>
+            </div>
+            <div class="modal-body" id="visitor-list-container">
+                 <div class="modal-loading" id="visitor-list-loading">लोड करत आहे...</div>
+                 <ul class="visitor-list" id="visitor-list"></ul>
+            </div>
+        </div>
+    </div>
+
     <div class="main">
         <div class="content">
             <div class="webcam-container">
-                <video id="webcam" autoplay></video>
+                <video id="webcam" autoplay playsinline></video>
                 <div id="recognition-actions">
                     <button id="start-recognition" onclick="startFaceRecognition(this)">चेहरा ओळखणे सुरू करा</button>
                 </div>
@@ -484,14 +770,10 @@
 
             <div class="existing-visitor-form" id="existing-visitor-form" style="display:none;">
                 <h2>विद्यमान अभ्यागत</h2>
-                <div id="existing-visitor-details" class="visitor-details">
-
-                </div>
+                <div id="existing-visitor-details" class="visitor-details"></div>
                 <div id="last-visit-section" class="last-visit-details">
                     <h3>शेवटची भेट</h3>
-                    <p id="last-visit-info">
-                        <span>मागील भेटी नाहीत</span>
-                    </p>
+                    <p id="last-visit-info"><span>मागील भेटी नाहीत</span></p>
                 </div>
                 <h3>सध्याच्या भेटीचा तपशील</h3>
                 <input type="text" id="new-purpose" placeholder="सध्याच्या भेटीचे कारण" required>
@@ -524,725 +806,286 @@
 
     <script>
         const domElements = {};
-const requiredFields = [
-    { id: 'name', label: 'पूर्ण नाव' },
-    { id: 'phone', label: 'फोन नंबर' },
-    { id: 'address', label: 'पत्ता' },
-    { id: 'tahasil', label: 'तहसील' },
-    { id: 'purpose', label: 'भेटीचे कारण' }
-];
-
-let capturedFrames = [];
-let currentVisitorData = null;
-let recognizedVisitorData = null;
-let webcamStream = null;
-let faceDetectionInProgress = false;
-
-// Improved loading state management
-function showLoading(button, loadingText = "लोड करत आहे...") {
-    if (!button) return;
-    button.dataset.originalText = button.innerHTML;
-    button.innerHTML = loadingText;
-    button.disabled = true;
-    if (button.tagName === 'LI') {
-        button.style.cursor = 'not-allowed';
-        button.style.opacity = '0.7';
-    }
-}
-
-function hideLoading(button) {
-    if (!button || typeof button.dataset?.originalText === 'undefined') return;
-    button.innerHTML = button.dataset.originalText;
-    button.disabled = false;
-    if (button.tagName === 'LI') {
-        button.style.cursor = 'pointer';
-        button.style.opacity = '1';
-    }
-    delete button.dataset.originalText;
-}
-
-// Initialize DOM elements and setup event listeners
-document.addEventListener('DOMContentLoaded', () => {
-    const elementIds = [
-        'webcam', 'recognition-result', 'captured-images', 'registration-form',
-        'existing-visitor-form', 'name', 'phone', 'email', 'address', 'purpose',
-        'new-purpose', 'phone-error', 'existing-visitor-details', 'last-visit-info',
-        'profile-icon', 'profile-dropdown', 'logout-button', 'tahasil',
-        'profile-container'  // Added missing element
-    ];
-
-    elementIds.forEach(id => {
-        domElements[id] = document.getElementById(id);
-    });
-
-    // Setup profile dropdown toggle
-    if (domElements['profile-icon']) {
-        domElements['profile-icon'].addEventListener('click', (event) => {
-            event.stopPropagation();
-            domElements['profile-dropdown']?.classList.toggle('active');
-        });
-    }
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (event) => {
-        if (domElements['profile-container'] && !domElements['profile-container'].contains(event.target)) {
-            domElements['profile-dropdown']?.classList.remove('active');
-        }
-    });
-
-    // Setup logout button
-    if (domElements['logout-button']) {
-        domElements['logout-button'].addEventListener('click', (event) => confirmLogout(event.currentTarget));
-    }
-
-    // Initialize webcam
-    startWebcam();
-});
-
-// Improved webcam initialization with error handling
-async function startWebcam() {
-    try {
-        // Stop any existing stream
-        if (webcamStream) {
-            webcamStream.getTracks().forEach(track => track.stop());
-        }
-
-        const constraints = {
-            video: {
-                width: { ideal: 640 },
-                height: { ideal: 480 },
-                facingMode: "user"
-            }
-        };
-
-        webcamStream = await navigator.mediaDevices.getUserMedia(constraints);
-
-        if (domElements['webcam']) {
-            domElements['webcam'].srcObject = webcamStream;
-            domElements['webcam'].onloadedmetadata = () => {
-                domElements['webcam'].play();
-            };
-        }
-    } catch (error) {
-        console.error("Error accessing webcam:", error);
-        const errorMsg = document.createElement('p');
-        errorMsg.textContent = 'कॅमेरामध्ये प्रवेश करू शकलो नाही. कृपया परवानग्या तपासा.';
-        errorMsg.style.color = "red";
-        if (domElements['webcam'] && domElements['webcam'].parentNode) {
-            domElements['webcam'].parentNode.appendChild(errorMsg);
-        }
-    }
-}
-
-// Enhanced phone validation
-async function validatePhoneNumber(phone) {
-    const phoneRegex = /^[6-9]\d{9}$/;
-    const isValid = phoneRegex.test(phone);
-    const errorMsg = isValid ? "" : "कृपया योग्य १० अंकी फोन नंबर प्रविष्ट करा जो ६-९ ने सुरू होतो";
-    if (domElements['phone-error']) {
-        domElements['phone-error'].textContent = errorMsg;
-    }
-    return isValid;
-}
-
-// Improved formatting of last visit data
-function formatLastVisit(visitorData) {
-    if (!visitorData || !visitorData.visitor || visitorData.visitor.length === 0) {
-        return `<span>मागील भेटी नाहीत</span>`;
-    }
-
-    // Find the most recent visit
-    const lastVisit = visitorData.visitor.reduce((latest, current) =>
-        (new Date(current.datetime) > new Date(latest.datetime)) ? current : latest,
-        visitorData.visitor[0]
-    );
-
-    try {
-        const visitDate = new Date(lastVisit.datetime);
-        const formattedDate = visitDate.toLocaleString('mr-IN', { dateStyle: 'short', timeStyle: 'short' })
-            || `${visitDate.toLocaleDateString()} ${visitDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
-
-        const dateLabel = "शेवटची भेट तारीख:";
-        const purposeLabel = "शेवटच्या भेटीचे कारण:";
-
-        return `
-            <strong>${dateLabel}</strong> ${formattedDate}<br>
-            <strong>${purposeLabel}</strong> ${lastVisit.purpose || 'N/A'}
-        `;
-    } catch (error) {
-        console.error("Error formatting last visit:", error);
-        return `<span>मागील भेटी माहिती प्रदर्शित करताना त्रुटी</span>`;
-    }
-}
-
-// Reset all recognition data and form fields
-function resetRecognitionData() {
-    capturedFrames = [];
-    currentVisitorData = null;
-    recognizedVisitorData = null;
-
-    if (domElements['recognition-result']) domElements['recognition-result'].textContent = "";
-    if (domElements['captured-images']) domElements['captured-images'].innerHTML = "";
-
-    if (domElements['registration-form']) domElements['registration-form'].style.display = "none";
-    if (domElements['existing-visitor-form']) {
-        domElements['existing-visitor-form'].style.display = "none";
-        if (domElements['existing-visitor-details']) domElements['existing-visitor-details'].innerHTML = '';
-        if (domElements['last-visit-info']) {
-            domElements['last-visit-info'].innerHTML = `<span>मागील भेटी नाहीत</span>`;
-        }
-    }
-
-    // Clear all form fields
-    ['name', 'phone', 'email', 'address', 'purpose', 'new-purpose'].forEach(id => {
-        if (domElements[id]) domElements[id].value = "";
-    });
-
-    if (domElements['tahasil']) domElements['tahasil'].selectedIndex = 0;
-    if (domElements['phone-error']) domElements['phone-error'].textContent = "";
-}
-
-// Improved face recognition with debouncing
-async function startFaceRecognition(button) {
-    if (faceDetectionInProgress) return;
-
-    resetRecognitionData();
-    showLoading(button, "ओळखत आहे...");
-    faceDetectionInProgress = true;
-
-    const video = domElements['webcam'];
-    if (!video || !video.videoWidth || !video.videoHeight) {
-        console.error("Webcam not ready or dimensions are zero.");
-        const errorText = "वेबकॅम तयार नाही. कृपया प्रतीक्षा करा आणि पुन्हा प्रयत्न करा.";
-        if (domElements['recognition-result']) domElements['recognition-result'].textContent = errorText;
-        hideLoading(button);
-        faceDetectionInProgress = false;
-        return;
-    }
-
-    try {
-        // Take multiple frames for better accuracy
-        const frames = [];
-        const frameCount = 3;
-        const frameDelay = 200; // milliseconds between frames
-
-        let canvas = window.recognitionCanvas;
-        if (!canvas) {
-            canvas = window.recognitionCanvas = document.createElement("canvas");
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-        }
-
-        const ctx = canvas.getContext("2d");
-
-        // Capture first frame immediately
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const firstFrame = await new Promise(resolve => {
-            canvas.toBlob(blob => resolve(blob), "image/jpeg", 0.9);
-        });
-
-        if (!firstFrame) {
-            throw new Error("प्रतिमा कॅप्चर करण्यात त्रुटी");
-        }
-
-        frames.push(firstFrame);
-
-        // Process the first frame immediately
-        const formData = new FormData();
-        formData.append("frame", firstFrame, "frame.jpg");
-
-        const response = await fetch("/detect_face", {
-            method: "POST",
-            body: formData
-        });
-
-        if (!response.ok) {
-            try {
-                const errData = await response.json();
-                throw new Error(errData.message || `Server error: ${response.status}`);
-            } catch {
-                throw new Error(`Server error: ${response.status}`);
-            }
-        }
-
-        const result = await response.json();
-
-        if (result.recognized) {
-            const recognizedPrefix = "ओळखले: ";
-            if (domElements['recognition-result']) {
-                domElements['recognition-result'].textContent = `${recognizedPrefix}${result.user_data.name}`;
-            }
-            recognizedVisitorData = result.user_data;
-
-            // Store image for display (but don't re-send later for updates)
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            capturedFrames = [canvas.toDataURL('image/jpeg', 0.9)]; // Store initially if needed for display
-
-            displayExistingVisitorDetails(result.user_data);
-        } else {
-            const notRecognizedText = "चेहरा ओळखला नाही. नोंदणीसह पुढे जा.";
-            if (domElements['recognition-result']) {
-                domElements['recognition-result'].textContent = notRecognizedText;
-            }
-
-            // Capture frame for registration
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const frameDataUrl = canvas.toDataURL('image/jpeg', 0.9);
-            showRegistrationForm(frameDataUrl);
-        }
-    } catch (error) {
-        console.error("Recognition error:", error);
-        const errorPrefix = "ओळखण्यात त्रुटी. कृपया पुन्हा प्रयत्न करा.";
-        if (domElements['recognition-result']) {
-            domElements['recognition-result'].textContent = `${errorPrefix}${error.message}`;
-        }
-    } finally {
-        hideLoading(button);
-        faceDetectionInProgress = false;
-    }
-}
-
-// Display existing visitor details
-function displayExistingVisitorDetails(visitorData) {
-    currentVisitorData = visitorData; // Store the full data including uid
-    if (domElements['registration-form']) domElements['registration-form'].style.display = "none";
-    if (domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "block";
-
-    // Create profile image HTML
-    let profileImgHtml = '';
-    const timestamp = Date.now(); // Add timestamp to prevent caching
-
-    // Use profile_img first, then images, then placeholder
-    const profileImages = visitorData.profile_img || [];
-    const faceImages = visitorData.images || [];
-
-    if (profileImages.length > 0 && profileImages[0]) {
-         profileImgHtml = `<img src="/dashboard/${profileImages[0]}?t=${timestamp}" alt="${visitorData.name}" class="profile-circle">`;
-    } else if (faceImages.length > 0 && faceImages[0]) {
-         // Assuming faceImages paths are relative like 'facedata/UID.../img.jpg'
-         // Adjust the path if necessary based on your Flask routing for these images
-         profileImgHtml = `<img src="/${faceImages[0]}?t=${timestamp}" alt="${visitorData.name}" class="profile-circle">`;
-    }
-     else {
-        profileImgHtml = `<div class="profile-circle profile-placeholder">${visitorData.name ? visitorData.name.charAt(0).toUpperCase() : '?'}</div>`;
-    }
-
-
-    // Set labels
-    const nameLabel = "नाव:";
-    const phoneLabel = "फोन:";
-    const addressLabel = "पत्ता:";
-    const tahasilLabel = "तहसील:";
-
-    // Update visitor details
-    if (domElements['existing-visitor-details']) {
-        domElements['existing-visitor-details'].innerHTML = `
-            <div class="visitor-profile-container">
-                <div class="profile-image-container">
-                    ${profileImgHtml}
-                </div>
-                <div class="visitor-info-container">
-                    <p><strong>${nameLabel}</strong> ${visitorData.name || 'N/A'}</p>
-                    <p><strong>${phoneLabel}</strong> ${visitorData.phone || 'N/A'}</p>
-                    <p><strong>${addressLabel}</strong> ${visitorData.address || 'N/A'}</p>
-                    <p><strong>${tahasilLabel}</strong> ${visitorData.tahasil || 'N/A'}</p>
-                </div>
-            </div>
-        `;
-    }
-
-    // Update last visit info
-    const lastVisitFormatted = formatLastVisit(visitorData);
-    if (domElements['last-visit-info']) {
-        domElements['last-visit-info'].innerHTML = lastVisitFormatted;
-    }
-}
-
-// Show registration form with captured image
-function showRegistrationForm(capturedFrame) {
-    if (domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "none";
-    if (domElements['registration-form']) domElements['registration-form'].style.display = "block";
-
-    const capturedImagesDiv = domElements['captured-images'];
-    if (capturedImagesDiv) {
-        capturedImagesDiv.innerHTML = '';
-        const img = document.createElement("img");
-        img.src = capturedFrame;
-        img.style.maxWidth = "100%";
-        capturedImagesDiv.appendChild(img);
-    }
-
-    capturedFrames = [capturedFrame]; // Store frame for NEW registration
-    currentVisitorData = null;
-    recognizedVisitorData = null;
-}
-
-// Validate and save new visitor data
-async function saveVisitorData(button) {
-    // Validate all required fields
-    let isValidForm = true;
-    for (let field of requiredFields) {
-        const element = domElements[field.id];
-        if (!element) continue;
-        const value = element.value.trim();
-
-        if (!value || (field.id === 'tahasil' && element.selectedIndex === 0)) {
-            const alertMsgTemplate = "कृपया {fieldName} फील्ड भरा";
-            alert(alertMsgTemplate.replace('{fieldName}', field.label));
-            element.focus();
-            isValidForm = false;
-            break;
-        }
-
-        if (field.id === 'phone') {
-            if (!await validatePhoneNumber(value)) {
-                element.focus();
-                isValidForm = false;
-                break;
-            }
-        }
-    }
-
-    if (!isValidForm) return;
-
-    if (!capturedFrames || capturedFrames.length === 0 || !capturedFrames[0]) {
-        const alertMsg = "कृपया नोंदणी करण्यापूर्वी एक प्रतिमा कॅप्चर करा";
-        alert(alertMsg);
-        return;
-    }
-
-    // Collect visitor data - INCLUDE FRAME FOR NEW REGISTRATION
-    const visitorData = {
-        name: domElements['name']?.value.trim() ?? '',
-        phone: domElements['phone']?.value.trim() ?? '',
-        email: domElements['email']?.value.trim() || null,
-        address: domElements['address']?.value.trim() ?? '',
-        tahasil: domElements['tahasil']?.value ?? '',
-        purpose: domElements['purpose']?.value.trim() ?? '',
-        frame: capturedFrames[0] // Include frame for new registration
-    };
-
-    const confirmMsg = "तुम्हाला खात्री आहे की हा अभ्यागत डेटा जतन करायचा आहे?";
-    if (confirm(confirmMsg)) {
-        showLoading(button, "जतन करत आहे...");
-        try {
-            // Pass the data WITH frame
-            await registerVisitor(visitorData);
-        } catch (error) {
-            console.error("Error during saveVisitorData registration:", error);
-        } finally {
-            hideLoading(button);
-        }
-    } else {
-        const cancelMsg = "वापरकर्त्याने अभ्यागत डेटा जतन करणे रद्द केले.";
-        console.log(cancelMsg);
-    }
-}
-
-// Add new visit for existing visitor
-async function addNewVisitForExistingVisitor(button) {
-    const newPurpose = domElements['new-purpose']?.value.trim();
-    if (!newPurpose) {
-        const alertMsg = "कृपया सध्याच्या भेटीचे कारण प्रविष्ट करा";
-        alert(alertMsg);
-        domElements['new-purpose']?.focus();
-        return;
-    }
-
-    // Use recognizedVisitorData if available, fallback to currentVisitorData
-    const visitorDataSource = recognizedVisitorData || currentVisitorData;
-
-    if (!visitorDataSource || !visitorDataSource.name || !visitorDataSource.phone) { // Check essential fields
-        const alertMsg = "अभ्यागत डेटा आढळला नाही. कृपया आधी अभ्यागताला ओळखा.";
-        alert(alertMsg);
-        return;
-    }
-
-    const confirmMsg = "तुम्हाला खात्री आहे की या विद्यमान अभ्यागतासाठी नवीन भेट जोडायची आहे?";
-    if (confirm(confirmMsg)) {
-        showLoading(button, "भेट जोडत आहे...");
-        // Construct data WITHOUT frame
-        const newVisitData = {
-            name: visitorDataSource.name,
-            phone: visitorDataSource.phone,
-            email: visitorDataSource.email || null,
-            address: visitorDataSource.address || '',
-            tahasil: visitorDataSource.tahasil || '',
-            district: visitorDataSource.district || 'Akola', // Ensure district is included
-            purpose: newPurpose,
-            // NO 'frame' property here
-        };
-        try {
-            // Pass data WITHOUT frame
-            await registerVisitor(newVisitData);
-        } catch (error) {
-            console.error("Error during addNewVisitForExistingVisitor registration:", error);
-        } finally {
-            hideLoading(button);
-        }
-    } else {
-        const cancelMsg = "वापरकर्त्याने नवीन भेट जोडणे रद्द केले.";
-        console.log(cancelMsg);
-    }
-}
-
-// Continue existing visit
-async function continueExistingVisit(button) {
-     // Use recognizedVisitorData if available, fallback to currentVisitorData
-     const visitorDataSource = recognizedVisitorData || currentVisitorData;
-
-    if (!visitorDataSource || !visitorDataSource.visitor || !visitorDataSource.visitor.length) {
-        const alertMsg = "कोणतीही विद्यमान भेट आढळली नाही";
-        alert(alertMsg);
-        return;
-    }
-
-    // Find the most recent visit
-    const lastVisit = visitorDataSource.visitor.reduce((latest, current) =>
-        (new Date(current.datetime) > new Date(latest.datetime)) ? current : latest,
-        visitorDataSource.visitor[0]
-    );
-
-    const confirmMsg = `तुम्हाला खात्री आहे की '${lastVisit.purpose}' या कारणासाठी मागील भेट चालू ठेवायची आहे?`;
-    if (confirm(confirmMsg)) {
-        showLoading(button, "भेट सुरू ठेवत आहे...");
-        // Construct data WITHOUT frame
-        const continueVisitData = {
-            name: visitorDataSource.name,
-            phone: visitorDataSource.phone,
-            email: visitorDataSource.email || null,
-            address: visitorDataSource.address || '',
-            tahasil: visitorDataSource.tahasil || '',
-            district: visitorDataSource.district || 'Akola',
-            purpose: lastVisit.purpose, // Use purpose from the last visit
-            // NO 'frame' property here
-        };
-        try {
-             // Pass data WITHOUT frame
-            await registerVisitor(continueVisitData);
-        } catch (error) {
-            console.error("Error during continueExistingVisit registration:", error);
-        } finally {
-            hideLoading(button);
-        }
-    } else {
-        const cancelMsg = "वापरकर्त्याने मागील भेट सुरू ठेवणे रद्द केले.";
-        console.log(cancelMsg);
-    }
-}
-
-// Register a visitor (new or existing)
-// This function now just sends the data it receives. The decision to include 'frame'
-// is made *before* calling this function.
-async function registerVisitor(visitorData) {
-    // visitorData might or might not have the 'frame' property depending on the flow.
-    try {
-        const response = await fetch("/register_visitor", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(visitorData) // Send data as received
-        });
-
-        if (!response.ok) {
-            let errorData;
-            try {
-                errorData = await response.json();
-            } catch {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            throw new Error(errorData.error || `HTTP error! Status: ${response.status}`); // Use error field from backend
-        }
-
-        const result = await response.json();
-
-        if (result.success) {
-            const uid = result.uid;
-            const visitId = result.visit_id;
-            let successMsgTemplate = "अभ्यागत यशस्वीरित्या नोंदणीकृत झाला!\n\nअभ्यागत तपशील:\n- भेट आयडी: {visit_id}\n- युनिक वापरकर्ता आयडी: {uid}\n- नाव: {name}\n- कारण: {purpose}";
-            successMsgTemplate = successMsgTemplate
-                .replace('{visit_id}', visitId)
-                .replace('{uid}', uid)
-                .replace('{name}', visitorData.name) // Use name from the data sent
-                .replace('{purpose}', visitorData.purpose); // Use purpose from the data sent
-            alert(successMsgTemplate);
-
-            // Process profile image ONLY IF a frame was included (i.e., new registration)
-            if (visitorData.frame && uid) {
-                setTimeout(() => {
-                    processProfileImage(visitorData.frame, uid)
-                        .catch(err => console.error("Background profile processing failed:", err));
-                }, 300);
-            }
-
-            // Get updated visitor details to refresh the UI
-            try {
-                const detailsResponse = await fetch(`/get_visitor_details?uid=${uid}`, {
-                    cache: "no-store",
-                     headers: { // Add cache control headers
-                        'Cache-Control': 'no-cache, no-store, must-revalidate',
-                        'Pragma': 'no-cache',
-                        'Expires': '0'
-                    }
-                });
-
-                if (!detailsResponse.ok) {
-                    let errorData;
-                    try {
-                        errorData = await detailsResponse.json();
-                    } catch {
-                        throw new Error(`Details fetch failed: ${detailsResponse.status}`);
-                    }
-                    throw new Error(errorData.message || `Details fetch failed: ${detailsResponse.status}`);
-                }
-
-                const visitorDetails = await detailsResponse.json();
-
-                if (visitorDetails.success && visitorDetails.visitor_data) {
-                    recognizedVisitorData = visitorDetails.visitor_data; // Update recognized data
-                    currentVisitorData = visitorDetails.visitor_data; // Also update current data
-                    displayExistingVisitorDetails(visitorDetails.visitor_data); // Refresh display
-                    if (domElements['registration-form']) domElements['registration-form'].style.display = "none";
-                    if (domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "block";
-                    if (domElements['new-purpose']) domElements['new-purpose'].value = "";
-
-                    // Clear captured images display area (frame data itself is handled)
-                    if (domElements['captured-images']) domElements['captured-images'].innerHTML = "";
-
-                    // Optionally Reset forms after delay (maybe not ideal UX for existing)
-                    // Consider if you want to reset immediately or keep the existing form visible
-                    // setTimeout(resetForms, 5000); // Commented out for potentially better UX
-                } else {
-                    throw new Error(visitorDetails.message || "Failed to fetch updated visitor details.");
-                }
-            } catch (detailsError) {
-                console.error("Error fetching visitor details after registration:", detailsError);
-                 // Even if details fetch fails, registration might have been successful
-                 // Maybe just reset forms or show a generic success message
-                 // setTimeout(resetForms, 5000);
-            }
-        } else {
-            throw new Error(result.error || "Registration failed (unknown reason)"); // Use error field
-        }
-    } catch (error) {
-        console.error("Registration process error:", error);
-        const errorPrefix = "नोंदणी अयशस्वी: ";
-        alert(`${errorPrefix}${error.message}`);
-        throw error; // Re-throw to be caught by callers if needed
-    }
-}
-
-
-// Process and upload profile image
-// This should ONLY be called for new registrations where a frame exists.
-function processProfileImage(imageDataUrl, uid) {
-    if (!imageDataUrl || !uid) {
-        console.error("Missing image data or UID for profile processing.");
-        return Promise.reject("Missing image data or UID");
-    }
-
-    return fetch(imageDataUrl)
-        .then(res => res.blob())
-        .then(blob => {
-            if (!blob) {
-                throw new Error("Failed to convert data URL to blob.");
-            }
-            const formData = new FormData();
-            formData.append('image', blob, 'profile.jpg');
-            formData.append('uid', uid);
-
-            return fetch('/process_profile_image', {
-                method: 'POST',
-                body: formData
-            });
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(errData => {
-                    throw new Error(errData.message || `Profile processing failed: ${response.status}`);
-                }).catch(() => {
-                    throw new Error(`Profile processing failed: ${response.status}`);
-                });
-            }
-            return response.json();
-        })
-        .then(result => {
-            if (result.success) {
-                console.log('Profile image processed successfully:', result);
-                // Optionally trigger a silent refresh of details if needed elsewhere
-                // But primary refresh is handled after registerVisitor call
-                return result;
+        const requiredFields = [
+            { id: 'name', label: 'पूर्ण नाव' },
+            { id: 'phone', label: 'फोन नंबर' },
+            { id: 'address', label: 'पत्ता' },
+            { id: 'tahasil', label: 'तहसील' },
+            { id: 'purpose', label: 'भेटीचे कारण' }
+        ];
+
+        let capturedFrames = [];
+        let currentVisitorData = null;
+        let recognizedVisitorData = null;
+        let webcamStream = null;
+        let faceDetectionInProgress = false;
+        let currentCameraId = localStorage.getItem('preferredCameraId') || null;
+        let availableCameras = [];
+
+        function showLoading(button, loadingText = "लोड करत आहे...") {
+            if (!button) return;
+            button.dataset.originalText = button.innerHTML;
+            if (button.classList.contains('delete-button')) {
+                const icon = button.querySelector('svg')?.outerHTML || '';
+                button.innerHTML = `${icon} ${loadingText}`;
             } else {
-                console.error('Profile image processing failed on server:', result.message);
-                throw new Error(result.message);
+                button.innerHTML = loadingText;
             }
-        })
-        .catch(error => {
-            console.error('Error in processProfileImage function:', error);
-            // Don't reject the main flow if background processing fails
-            // return Promise.reject(error);
-            return null; // Indicate failure gracefully
+            button.disabled = true;
+            if (button.tagName === 'LI') {
+                button.style.cursor = 'not-allowed';
+                button.style.opacity = '0.7';
+            }
+        }
+
+        function hideLoading(button) {
+            if (!button || typeof button.dataset?.originalText === 'undefined') return;
+            button.innerHTML = button.dataset.originalText;
+            button.disabled = false;
+            if (button.tagName === 'LI') {
+                button.style.cursor = 'pointer';
+                button.style.opacity = '1';
+            }
+            delete button.dataset.originalText;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const elementIds = [
+                'webcam', 'recognition-result', 'captured-images', 'registration-form',
+                'existing-visitor-form', 'name', 'phone', 'email', 'address', 'purpose',
+                'new-purpose', 'phone-error', 'existing-visitor-details', 'last-visit-info',
+                'profile-icon', 'profile-dropdown', 'logout-button', 'tahasil',
+                'profile-container',
+                'camera-select', // Use select ID
+                'visitor-manage-header-link',
+                'visitor-management-modal-overlay', 'visitor-modal-close-button',
+                'visitor-list-container', 'visitor-list-loading', 'visitor-list'
+            ];
+
+            elementIds.forEach(id => {
+                domElements[id] = document.getElementById(id);
+                 if (!domElements[id]) {
+                     console.warn(`DOM element with ID '${id}' not found.`);
+                 }
+            });
+
+            if (domElements['profile-icon']) {
+                domElements['profile-icon'].addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    domElements['profile-dropdown']?.classList.toggle('active');
+                    closeVisitorManagementModal();
+                });
+            }
+
+            // Camera Select Listener
+            if (domElements['camera-select']) {
+                domElements['camera-select'].addEventListener('change', (event) => {
+                     selectCamera(event.target.value);
+                 });
+                 // Hide initially until cameras are loaded
+                 domElements['camera-select'].style.display = 'none';
+             }
+
+
+             if (domElements['visitor-manage-header-link']) {
+                domElements['visitor-manage-header-link'].addEventListener('click', (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    openVisitorManagementModal();
+                     domElements['profile-dropdown']?.classList.remove('active');
+                     // Don't hide camera select
+                });
+             }
+
+             if (domElements['visitor-modal-close-button']) {
+                 domElements['visitor-modal-close-button'].addEventListener('click', closeVisitorManagementModal);
+             }
+             if (domElements['visitor-management-modal-overlay']) {
+                 domElements['visitor-management-modal-overlay'].addEventListener('click', (event) => {
+                     if (event.target === domElements['visitor-management-modal-overlay']) {
+                         closeVisitorManagementModal();
+                     }
+                 });
+             }
+              if (domElements['visitor-list']) {
+                 domElements['visitor-list'].addEventListener('click', (event) => {
+                     const deleteButton = event.target.closest('.delete-visitor-button');
+                     if (deleteButton) {
+                         const uid = deleteButton.dataset.uid;
+                         const name = deleteButton.dataset.name || 'या अभ्यागताला';
+                         if (uid) {
+                             handleDeleteVisitor(uid, name, deleteButton);
+                         }
+                     }
+                 });
+              }
+
+            document.addEventListener('click', (event) => {
+                // Close profile dropdown only
+                if (domElements['profile-container'] && !domElements['profile-container'].contains(event.target) && !event.target.closest('.profile-dropdown')) {
+                    domElements['profile-dropdown']?.classList.remove('active');
+                }
+                // Note: Camera select doesn't need explicit closing on outside click
+            });
+
+            if (domElements['logout-button']) {
+                domElements['logout-button'].addEventListener('click', (event) => confirmLogout(event.currentTarget));
+            }
+
+            initializeCameraSelection();
         });
-}
 
-// Reset all forms and data
-function resetForms() {
-    if (domElements['registration-form']) domElements['registration-form'].style.display = "none";
-    if (domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "none";
-    if (domElements['recognition-result']) domElements['recognition-result'].textContent = "";
-    if (domElements['captured-images']) domElements['captured-images'].innerHTML = "";
-    if (domElements['phone-error']) domElements['phone-error'].textContent = "";
-    if (domElements['existing-visitor-details']) domElements['existing-visitor-details'].innerHTML = '';
-    if (domElements['last-visit-info']) {
-        domElements['last-visit-info'].innerHTML = `<span>मागील भेटी नाहीत</span>`;
-    }
+         function openVisitorManagementModal() {
+             const overlay = domElements['visitor-management-modal-overlay'];
+             if (overlay) {
+                 overlay.classList.add('active');
+                 setTimeout(() => { overlay.querySelector('.modal-content')?.classList.add('active'); }, 10);
+                 loadVisitorStatusPopup();
+             }
+         }
 
-    // Clear all form fields
-    ['name', 'phone', 'email', 'address', 'purpose', 'new-purpose'].forEach(id => {
-        if (domElements[id]) {
-            domElements[id].value = "";
-        }
-    });
+         function closeVisitorManagementModal() {
+            const overlay = domElements['visitor-management-modal-overlay'];
+             if (overlay) {
+                  overlay.querySelector('.modal-content')?.classList.remove('active');
+                  overlay.classList.remove('active');
+                 setTimeout(() => {
+                     if (domElements['visitor-list']) domElements['visitor-list'].innerHTML = '';
+                     if (domElements['visitor-list-loading']) domElements['visitor-list-loading'].style.display = 'block';
+                 }, 300);
+             }
+         }
 
-    if (domElements['tahasil']) {
-        domElements['tahasil'].selectedIndex = 0;
-    }
+         async function loadVisitorStatusPopup() {
+             const listElement = domElements['visitor-list'];
+             const loadingElement = domElements['visitor-list-loading'];
+             if (!listElement || !loadingElement) return;
+             listElement.innerHTML = ''; loadingElement.style.display = 'flex';
+             try {
+                 const response = await fetch('/api/visitor_file_status');
+                 if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); }
+                 const data = await response.json();
+                 if (data.success && data.visitors) { populateVisitorList(data.visitors); }
+                 else { listElement.innerHTML = '<li style="text-align: center; padding: 20px; color: var(--text-light);">माहिती लोड करण्यात अयशस्वी झाले.</li>'; console.error("Failed to load visitor status:", data.message); }
+             } catch (error) { listElement.innerHTML = '<li style="text-align: center; padding: 20px; color: var(--danger-red);">माहिती लोड करताना त्रुटी आली.</li>'; console.error("Error fetching visitor status:", error); }
+             finally { loadingElement.style.display = 'none'; }
+         }
 
-    capturedFrames = [];
-    currentVisitorData = null;
-    recognizedVisitorData = null;
-}
+         function populateVisitorList(visitors) {
+            const listElement = domElements['visitor-list']; if (!listElement) return; listElement.innerHTML = '';
+            if (visitors.length === 0) { listElement.innerHTML = '<li style="text-align: center; padding: 20px; color: var(--text-light);">कोणतेही नोंदणीकृत अभ्यागत आढळले नाहीत.</li>'; return; }
+            visitors.forEach(visitor => {
+                const li = document.createElement('li'); li.classList.add('visitor-item'); li.dataset.uid = visitor.uid;
+                const encodingStatus = visitor.has_encodings ? `<span class="status-indicator status-ok"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg> एन्कोडिंग</span>` : `<span class="status-indicator status-missing"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg> एन्कोडिंग</span>`;
+                const profileImgStatus = visitor.has_profile_img ? `<span class="status-indicator status-ok"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg> प्रोफाइल इमेज</span>` : `<span class="status-indicator status-missing"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg> प्रोफाइल इमेज</span>`;
+                li.innerHTML = ` <div class="visitor-item-info"> <div class="visitor-name">${visitor.name}</div> <div class="visitor-uid">UID: ${visitor.uid}</div> <div class="visitor-status-indicators"> ${encodingStatus} ${profileImgStatus} </div> </div> <div class="visitor-actions"> <button class="delete-button delete-visitor-button" data-uid="${visitor.uid}" data-name="${visitor.name}" title="${visitor.uid} हटवा"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16"> <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/> </svg> हटवा </button> </div> `;
+                listElement.appendChild(li);
+            });
+         }
 
-// Confirm and execute logout
-function confirmLogout(button) {
-    const confirmMsg = "तुम्हाला खात्री आहे की तुम्हाला लॉगआउट करायचे आहे?";
-    if (confirm(confirmMsg)) {
-        showLoading(button, "लॉगआऊट करत आहे...");
-        logout().finally(() => hideLoading(button));
-    }
-}
+          async function handleDeleteVisitor(uid, name, buttonElement) {
+             const confirmation = confirm(`तुम्ही खात्रीपूर्वक '${name}' (UID: ${uid}) ला हटवू इच्छिता? त्यांची सर्व माहिती आणि फाइल्स कायमच्या हटवल्या जातील.`); if (!confirmation) { return; }
+             showLoading(buttonElement, "हटवत आहे...");
+             try {
+                 const response = await fetch('/api/admin/delete_user', { method: 'POST', headers: { 'Content-Type': 'application/json', }, body: JSON.stringify({ uid: uid }), });
+                 const result = await response.json();
+                 if (response.ok && result.success) {
+                     alert(result.message || 'अभ्यागत यशस्वीरित्या हटवला.');
+                     const listItem = domElements['visitor-list']?.querySelector(`li[data-uid="${uid}"]`);
+                     if (listItem) { listItem.style.transition = 'opacity 0.3s ease'; listItem.style.opacity = '0'; setTimeout(() => {listItem.remove(); if (domElements['visitor-list']?.children.length === 0) {populateVisitorList([]);} }, 300); }
+                 } else { throw new Error(result.message || 'अभ्यागत हटवण्यात अयशस्वी.'); }
+             } catch (error) { console.error('Error deleting visitor:', error); alert(`अभ्यागत हटवताना त्रुटी: ${error.message}`); }
+             finally { hideLoading(buttonElement); }
+          }
 
-// Logout user and redirect to home
-async function logout() {
-    try {
-        // Stop webcam stream before logout
-        if (webcamStream) {
-            webcamStream.getTracks().forEach(track => track.stop());
-            webcamStream = null;
-        }
+        async function initializeCameraSelection() { await enumerateCameras(); startWebcam(currentCameraId); }
+        async function enumerateCameras() {
+            const cameraSelect = domElements['camera-select'];
+            if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices || !cameraSelect) {
+                 console.warn("Camera select element or API not available.");
+                 if (cameraSelect) cameraSelect.style.display = 'none';
+                 return;
+            }
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                availableCameras = devices.filter(device => device.kind === 'videoinput');
 
-        const response = await fetch("/logout");
-        localStorage.removeItem("user"); // Assuming user info is stored here
-        window.location.href = "/"; // Redirect to login/home page
-        // return response; // Not strictly needed after redirection
-    } catch (error) {
-        console.error("Logout failed:", error);
-        localStorage.removeItem("user"); // Still try to clear local storage
-        window.location.href = "/"; // Still try to redirect
-        // return Promise.reject(error); // Not strictly needed after redirection
-    }
-}
+                if (availableCameras.length <= 1) {
+                     cameraSelect.style.display = 'none'; // Hide select if 0 or 1 cameras
+                     if(availableCameras.length === 1 && !currentCameraId) {
+                         currentCameraId = availableCameras[0].deviceId;
+                         localStorage.setItem('preferredCameraId', currentCameraId);
+                     }
+                } else {
+                    cameraSelect.style.display = 'inline-block'; // Show select
+                    cameraSelect.innerHTML = '<option value="">कॅमेरा निवडा...</option>'; // Clear previous options and add default
+                    availableCameras.forEach((camera, index) => {
+                        const option = document.createElement('option');
+                        option.value = camera.deviceId;
+                        option.textContent = camera.label || `Camera ${index + 1}`;
+                        if (camera.deviceId === currentCameraId) {
+                            option.selected = true;
+                        }
+                        cameraSelect.appendChild(option);
+                    });
+                     // Ensure current selection is reflected if preference exists
+                     if(currentCameraId) {
+                         cameraSelect.value = currentCameraId;
+                     }
+                 }
+
+            } catch (err) {
+                 console.error("Error enumerating devices:", err);
+                 cameraSelect.style.display = 'none';
+            }
+         }
+
+
+        function selectCamera(deviceId) {
+            if (deviceId === currentCameraId || !deviceId) return; // Prevent action if same or empty value selected
+            console.log(`Switching to camera: ${deviceId}`);
+            currentCameraId = deviceId;
+            localStorage.setItem('preferredCameraId', deviceId);
+            updateSelectedCameraUI(); // Reflect change in select element
+            startWebcam(deviceId);
+         }
+
+
+        function updateSelectedCameraUI() {
+            const cameraSelect = domElements['camera-select'];
+            if (cameraSelect) {
+                 // Ensure the correct option is selected if currentCameraId exists
+                 if (currentCameraId && Array.from(cameraSelect.options).some(opt => opt.value === currentCameraId)) {
+                     cameraSelect.value = currentCameraId;
+                 } else {
+                     // If currentCameraId is null or not in options, reset to default
+                     cameraSelect.value = "";
+                     if (currentCameraId) { // If ID was previously set but now invalid
+                        localStorage.removeItem('preferredCameraId');
+                        currentCameraId = null;
+                     }
+                 }
+            }
+         }
+
+        async function startWebcam(requestedDeviceId = null) { try { if (webcamStream) { webcamStream.getTracks().forEach(track => track.stop()); webcamStream = null; console.log("Stopped previous webcam stream."); } let deviceIdToUse = requestedDeviceId || currentCameraId; const baseConstraints = { video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: "user" } }; let finalConstraints; if (deviceIdToUse) { finalConstraints = { video: { deviceId: { exact: deviceIdToUse }, width: { ideal: 640 }, height: { ideal: 480 } } }; console.log("Attempting to use specific device ID:", deviceIdToUse); } else { if (availableCameras.length > 0) { const externalCamera = availableCameras.find(d => d.label.toLowerCase().includes('external')); if (externalCamera) { deviceIdToUse = externalCamera.deviceId; console.log("Using external camera by default:", externalCamera.label); } else { const frontCamera = availableCameras.find(d => d.label.toLowerCase().includes('front')) || availableCameras[0]; deviceIdToUse = frontCamera.deviceId; console.log("Using fallback camera:", frontCamera.label); } finalConstraints = { video: { deviceId: { exact: deviceIdToUse }, width: { ideal: 640 }, height: { ideal: 480 } } }; } else { finalConstraints = baseConstraints; console.log("No specific device ID, using default facingMode constraints."); } } try { webcamStream = await navigator.mediaDevices.getUserMedia(finalConstraints); } catch (error) { console.warn(`getUserMedia failed for constraints ${JSON.stringify(finalConstraints)}: ${error.message}. Trying fallback.`); if (finalConstraints.video?.deviceId) { delete finalConstraints.video.deviceId; finalConstraints.video.facingMode = 'user'; console.log("Retrying with facingMode constraint."); try { webcamStream = await navigator.mediaDevices.getUserMedia(finalConstraints); } catch (error2) { console.error("Fallback getUserMedia also failed:", error2); throw error2; } } else { throw error; } } if (webcamStream) { const currentTrack = webcamStream.getVideoTracks()[0]; const actualDeviceId = currentTrack.getSettings().deviceId; console.log("Successfully started stream with deviceId:", actualDeviceId); if (actualDeviceId && actualDeviceId !== currentCameraId) { currentCameraId = actualDeviceId; updateSelectedCameraUI(); } } if (domElements['webcam']) { domElements['webcam'].srcObject = webcamStream; await new Promise(resolve => { domElements['webcam'].onloadedmetadata = () => { domElements['webcam'].play().then(resolve).catch(e => { console.error("Error playing video:", e); resolve(); }); }; }); console.log("Webcam stream assigned and playing."); if (domElements['start-recognition']) domElements['start-recognition'].disabled = false; } } catch (error) { console.error("Error accessing webcam:", error); const errorMsg = document.createElement('p'); errorMsg.textContent = 'कॅमेरामध्ये प्रवेश करू शकलो नाही. कृपया परवानग्या तपासा.'; errorMsg.style.color = "red"; errorMsg.style.marginTop = '10px'; if (domElements['webcam'] && domElements['webcam'].parentNode) { const existingError = domElements['webcam'].parentNode.querySelector('.webcam-error'); if(existingError) existingError.remove(); errorMsg.classList.add('webcam-error'); domElements['webcam'].parentNode.appendChild(errorMsg); } if (domElements['start-recognition']) domElements['start-recognition'].disabled = true; } }
+        async function validatePhoneNumber(phone) { const phoneRegex = /^[6-9]\d{9}$/; const isValid = phoneRegex.test(phone); const errorMsg = isValid ? "" : "कृपया योग्य १० अंकी फोन नंबर प्रविष्ट करा जो ६-९ ने सुरू होतो"; if (domElements['phone-error']) { domElements['phone-error'].textContent = errorMsg; } return isValid; }
+        function formatLastVisit(visitorData) { if (!visitorData || !visitorData.visitor || visitorData.visitor.length === 0) { return `<span>मागील भेटी नाहीत</span>`; } const lastVisit = visitorData.visitor.reduce((latest, current) => (new Date(current.datetime) > new Date(latest.datetime)) ? current : latest, visitorData.visitor[0]); try { const visitDate = new Date(lastVisit.datetime); const formattedDate = visitDate.toLocaleString('mr-IN', { dateStyle: 'short', timeStyle: 'short' }) || `${visitDate.toLocaleDateString()} ${visitDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`; const dateLabel = "शेवटची भेट तारीख:"; const purposeLabel = "शेवटच्या भेटीचे कारण:"; return `<strong>${dateLabel}</strong> ${formattedDate}<br><strong>${purposeLabel}</strong> ${lastVisit.purpose || 'N/A'}`; } catch (error) { console.error("Error formatting last visit:", error); return `<span>मागील भेटी माहिती प्रदर्शित करताना त्रुटी</span>`; } }
+        function resetRecognitionData() { capturedFrames = []; currentVisitorData = null; recognizedVisitorData = null; if (domElements['recognition-result']) domElements['recognition-result'].textContent = ""; if (domElements['captured-images']) domElements['captured-images'].innerHTML = ""; if (domElements['registration-form']) domElements['registration-form'].style.display = "none"; if (domElements['existing-visitor-form']) { domElements['existing-visitor-form'].style.display = "none"; if (domElements['existing-visitor-details']) domElements['existing-visitor-details'].innerHTML = ''; if (domElements['last-visit-info']) { domElements['last-visit-info'].innerHTML = `<span>मागील भेटी नाहीत</span>`; } } ['name', 'phone', 'email', 'address', 'purpose', 'new-purpose'].forEach(id => { if (domElements[id]) domElements[id].value = ""; }); if (domElements['tahasil']) domElements['tahasil'].selectedIndex = 0; if (domElements['phone-error']) domElements['phone-error'].textContent = ""; }
+        async function startFaceRecognition(button) { if (faceDetectionInProgress) return; resetRecognitionData(); showLoading(button, "ओळखत आहे..."); faceDetectionInProgress = true; const video = domElements['webcam']; if (!video || !video.srcObject || video.readyState < video.HAVE_CURRENT_DATA || !video.videoWidth || !video.videoHeight) { console.error("Webcam not ready or dimensions are zero. State:", video?.readyState); const errorText = "वेबकॅम तयार नाही. कृपया प्रतीक्षा करा आणि पुन्हा प्रयत्न करा."; if (domElements['recognition-result']) domElements['recognition-result'].textContent = errorText; if (!webcamStream || video.readyState < video.HAVE_CURRENT_DATA) { console.log("Attempting to restart webcam..."); await startWebcam(currentCameraId); } hideLoading(button); faceDetectionInProgress = false; return; } try { let canvas = window.recognitionCanvas; if (!canvas) { canvas = window.recognitionCanvas = document.createElement("canvas"); } canvas.width = video.videoWidth; canvas.height = video.videoHeight; const ctx = canvas.getContext("2d", { willReadFrequently: true }); ctx.translate(canvas.width, 0); ctx.scale(-1, 1); ctx.drawImage(video, 0, 0, canvas.width, canvas.height); ctx.setTransform(1, 0, 0, 1, 0, 0); const frameBlob = await new Promise(resolve => { canvas.toBlob(blob => resolve(blob), "image/jpeg", 0.9); }); if (!frameBlob) { throw new Error("प्रतिमा कॅप्चर करण्यात त्रुटी"); } const formData = new FormData(); formData.append("frame", frameBlob, "frame.jpg"); const response = await fetch("/detect_face", { method: "POST", body: formData }); if (!response.ok) { try { const errData = await response.json(); throw new Error(errData.message || `Server error: ${response.status}`); } catch { throw new Error(`Server error: ${response.status}`); } } const result = await response.json(); const frameDataUrl = canvas.toDataURL('image/jpeg', 0.9); if (result.recognized) { const recognizedPrefix = "ओळखले: "; if (domElements['recognition-result']) { domElements['recognition-result'].textContent = `${recognizedPrefix}${result.user_data.name}`; } recognizedVisitorData = result.user_data; capturedFrames = [frameDataUrl]; displayExistingVisitorDetails(result.user_data); } else { const notRecognizedText = "चेहरा ओळखला नाही. नोंदणीसह पुढे जा."; if (domElements['recognition-result']) { domElements['recognition-result'].textContent = notRecognizedText; } showRegistrationForm(frameDataUrl); } } catch (error) { console.error("Recognition error:", error); const errorPrefix = "ओळखण्यात त्रुटी. कृपया पुन्हा प्रयत्न करा."; if (domElements['recognition-result']) { domElements['recognition-result'].textContent = `${errorPrefix}${error.message}`; } } finally { hideLoading(button); faceDetectionInProgress = false; } }
+        function displayExistingVisitorDetails(visitorData) { currentVisitorData = visitorData; if (domElements['registration-form']) domElements['registration-form'].style.display = "none"; if (domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "block"; let profileImgHtml = ''; const timestamp = Date.now(); const profileImages = visitorData.profile_img || []; const faceImages = visitorData.images || []; if (profileImages.length > 0 && profileImages[0]) { profileImgHtml = `<img src="/dashboard/${profileImages[0]}?t=${timestamp}" alt="${visitorData.name}" class="profile-circle">`; } else if (faceImages.length > 0 && faceImages[0]) { profileImgHtml = `<img src="/${faceImages[0]}?t=${timestamp}" alt="${visitorData.name}" class="profile-circle">`; } else { profileImgHtml = `<div class="profile-circle profile-placeholder">${visitorData.name ? visitorData.name.charAt(0).toUpperCase() : '?'}</div>`; } const nameLabel = "नाव:"; const phoneLabel = "फोन:"; const addressLabel = "पत्ता:"; const tahasilLabel = "तहसील:"; if (domElements['existing-visitor-details']) { domElements['existing-visitor-details'].innerHTML = `<div class="visitor-profile-container"><div class="profile-image-container">${profileImgHtml}</div><div class="visitor-info-container"><p><strong>${nameLabel}</strong> ${visitorData.name || 'N/A'}</p><p><strong>${phoneLabel}</strong> ${visitorData.phone || 'N/A'}</p><p><strong>${addressLabel}</strong> ${visitorData.address || 'N/A'}</p><p><strong>${tahasilLabel}</strong> ${visitorData.tahasil || 'N/A'}</p></div></div>`; } const lastVisitFormatted = formatLastVisit(visitorData); if (domElements['last-visit-info']) { domElements['last-visit-info'].innerHTML = lastVisitFormatted; } if (domElements['new-purpose']) domElements['new-purpose'].value = ""; }
+        function showRegistrationForm(capturedFrameDataUrl) { if (domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "none"; if (domElements['registration-form']) domElements['registration-form'].style.display = "block"; const capturedImagesDiv = domElements['captured-images']; if (capturedImagesDiv) { capturedImagesDiv.innerHTML = ''; const img = document.createElement("img"); img.src = capturedFrameDataUrl; img.style.maxWidth = "100%"; capturedImagesDiv.appendChild(img); } capturedFrames = [capturedFrameDataUrl]; currentVisitorData = null; recognizedVisitorData = null; resetRegistrationFormFields(); }
+        function resetRegistrationFormFields() { ['name', 'phone', 'email', 'address', 'purpose'].forEach(id => { if (domElements[id]) domElements[id].value = ""; }); if (domElements['tahasil']) domElements['tahasil'].selectedIndex = 0; if (domElements['phone-error']) domElements['phone-error'].textContent = ""; }
+        async function saveVisitorData(button) { let isValidForm = true; for (let field of requiredFields) { const element = domElements[field.id]; if (!element) continue; const value = element.value.trim(); if (!value || (field.id === 'tahasil' && element.selectedIndex === 0)) { const alertMsgTemplate = "कृपया {fieldName} फील्ड भरा"; alert(alertMsgTemplate.replace('{fieldName}', field.label)); element.focus(); isValidForm = false; break; } if (field.id === 'phone') { if (!await validatePhoneNumber(value)) { element.focus(); isValidForm = false; break; } } } if (!isValidForm) return; if (!capturedFrames || capturedFrames.length === 0 || !capturedFrames[0]) { const alertMsg = "कृपया नोंदणी करण्यापूर्वी एक प्रतिमा कॅप्चर करा"; alert(alertMsg); return; } const visitorData = { name: domElements['name']?.value.trim() ?? '', phone: domElements['phone']?.value.trim() ?? '', email: domElements['email']?.value.trim() || null, address: domElements['address']?.value.trim() ?? '', tahasil: domElements['tahasil']?.value ?? '', purpose: domElements['purpose']?.value.trim() ?? '', frame: capturedFrames[0] }; const confirmMsg = "तुम्हाला खात्री आहे की हा अभ्यागत डेटा जतन करायचा आहे?"; if (confirm(confirmMsg)) { showLoading(button, "जतन करत आहे..."); try { await registerVisitor(visitorData); } catch (error) { console.error("Error during saveVisitorData registration:", error); } finally { hideLoading(button); } } else { console.log("वापरकर्त्याने अभ्यागत डेटा जतन करणे रद्द केले."); } }
+        async function addNewVisitForExistingVisitor(button) { const newPurpose = domElements['new-purpose']?.value.trim(); if (!newPurpose) { const alertMsg = "कृपया सध्याच्या भेटीचे कारण प्रविष्ट करा"; alert(alertMsg); domElements['new-purpose']?.focus(); return; } const visitorDataSource = recognizedVisitorData || currentVisitorData; if (!visitorDataSource || !visitorDataSource.name || !visitorDataSource.phone) { const alertMsg = "अभ्यागत डेटा आढळला नाही. कृपया आधी अभ्यागताला ओळखा."; alert(alertMsg); return; } const confirmMsg = "तुम्हाला खात्री आहे की या विद्यमान अभ्यागतासाठी नवीन भेट जोडायची आहे?"; if (confirm(confirmMsg)) { showLoading(button, "भेट जोडत आहे..."); const newVisitData = { name: visitorDataSource.name, phone: visitorDataSource.phone, email: visitorDataSource.email || null, address: visitorDataSource.address || '', tahasil: visitorDataSource.tahasil || '', district: visitorDataSource.district || 'Akola', purpose: newPurpose, }; try { await registerVisitor(newVisitData); } catch (error) { console.error("Error during addNewVisitForExistingVisitor registration:", error); } finally { hideLoading(button); } } else { console.log("वापरकर्त्याने नवीन भेट जोडणे रद्द केले."); } }
+        async function continueExistingVisit(button) { const visitorDataSource = recognizedVisitorData || currentVisitorData; if (!visitorDataSource || !visitorDataSource.visitor || !visitorDataSource.visitor.length) { const alertMsg = "कोणतीही विद्यमान भेट आढळली नाही"; alert(alertMsg); return; } const lastVisit = visitorDataSource.visitor.reduce((latest, current) => (new Date(current.datetime) > new Date(latest.datetime)) ? current : latest, visitorDataSource.visitor[0]); if (!lastVisit || !lastVisit.purpose) { const alertMsg = "मागील भेटीचे कारण आढळले नाही."; alert(alertMsg); return; } const confirmMsg = `तुम्हाला खात्री आहे की '${lastVisit.purpose}' या कारणासाठी मागील भेट चालू ठेवायची आहे?`; if (confirm(confirmMsg)) { showLoading(button, "भेट सुरू ठेवत आहे..."); const continueVisitData = { name: visitorDataSource.name, phone: visitorDataSource.phone, email: visitorDataSource.email || null, address: visitorDataSource.address || '', tahasil: visitorDataSource.tahasil || '', district: visitorDataSource.district || 'Akola', purpose: lastVisit.purpose, }; try { await registerVisitor(continueVisitData); } catch (error) { console.error("Error during continueExistingVisit registration:", error); } finally { hideLoading(button); } } else { console.log("वापरकर्त्याने मागील भेट सुरू ठेवणे रद्द केले."); } }
+        async function registerVisitor(visitorData) { try { const response = await fetch("/register_visitor", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(visitorData) }); if (!response.ok) { let errorData; try { errorData = await response.json(); } catch { throw new Error(`HTTP error! Status: ${response.status}`); } throw new Error(errorData.error || errorData.message || `HTTP error! Status: ${response.status}`); } const result = await response.json(); if (result.success) { const uid = result.uid; const visitId = result.visit_id; let successMsgTemplate = "अभ्यागत यशस्वीरित्या नोंदणीकृत झाला!\n\nअभ्यागत तपशील:\n- भेट आयडी: {visit_id}\n- युनिक वापरकर्ता आयडी: {uid}\n- नाव: {name}\n- कारण: {purpose}"; successMsgTemplate = successMsgTemplate.replace('{visit_id}', visitId).replace('{uid}', uid).replace('{name}', visitorData.name).replace('{purpose}', visitorData.purpose); alert(successMsgTemplate); if (visitorData.frame && uid) { setTimeout(() => { processProfileImage(visitorData.frame, uid).catch(err => console.error("Background profile processing failed:", err)); }, 100); } try { const detailsResponse = await fetch(`/get_visitor_details?uid=${uid}`, { cache: "no-store", headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' } }); if (!detailsResponse.ok) { let errorData; try { errorData = await detailsResponse.json(); } catch { /* ignore */ } throw new Error(errorData?.message || `Details fetch failed: ${detailsResponse.status}`); } const visitorDetails = await detailsResponse.json(); if (visitorDetails.success && visitorDetails.visitor_data) { recognizedVisitorData = visitorDetails.visitor_data; currentVisitorData = visitorDetails.visitor_data; displayExistingVisitorDetails(visitorDetails.visitor_data); if (domElements['registration-form']) domElements['registration-form'].style.display = "none"; if (domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "block"; if (domElements['captured-images']) domElements['captured-images'].innerHTML = ""; capturedFrames = []; } else { throw new Error(visitorDetails.message || "Failed to parse updated visitor details."); } } catch (detailsError) { console.error("Error fetching/updating visitor details after registration:", detailsError); resetForms(); alert("नोंदणी यशस्वी झाली, परंतु तपशील रिफ्रेश करताना त्रुटी आली."); } } else { throw new Error(result.error || result.message || "Registration failed (unknown reason)"); } } catch (error) { console.error("Registration process error:", error); const errorPrefix = "नोंदणी अयशस्वी: "; alert(`${errorPrefix}${error.message}`); throw error; } }
+        function processProfileImage(imageDataUrl, uid) { if (!imageDataUrl || !uid) { console.error("Missing image data or UID for profile processing."); return Promise.reject("Missing image data or UID"); } return fetch(imageDataUrl).then(res => res.blob()).then(blob => { if (!blob) { throw new Error("Failed to convert data URL to blob."); } const formData = new FormData(); formData.append('image', blob, 'profile.jpg'); formData.append('uid', uid); console.log(`Sending profile image for UID: ${uid}, size: ${blob.size} bytes`); return fetch('/process_profile_image', { method: 'POST', body: formData }); }).then(response => { if (!response.ok) { return response.json().then(errData => { console.error('Server error response (profile processing):', errData); throw new Error(errData.message || errData.error || `Profile processing failed: ${response.status}`); }).catch(() => { throw new Error(`Profile processing failed: ${response.status} ${response.statusText}`); }); } return response.json(); }).then(result => { if (result.success) { console.log('Profile image processed successfully:', result); return result; } else { console.error('Profile image processing failed on server:', result.message || result.error); throw new Error(result.message || result.error || 'Unknown server error during profile processing'); } }).catch(error => { console.error('Error in processProfileImage function:', error); return null; }); }
+        function resetForms() { if (domElements['registration-form']) domElements['registration-form'].style.display = "none"; if (domElements['existing-visitor-form']) domElements['existing-visitor-form'].style.display = "none"; if (domElements['recognition-result']) domElements['recognition-result'].textContent = ""; if (domElements['captured-images']) domElements['captured-images'].innerHTML = ""; if (domElements['phone-error']) domElements['phone-error'].textContent = ""; if (domElements['existing-visitor-details']) domElements['existing-visitor-details'].innerHTML = ''; if (domElements['last-visit-info']) { domElements['last-visit-info'].innerHTML = `<span>मागील भेटी नाहीत</span>`; } resetRegistrationFormFields(); if (domElements['new-purpose']) domElements['new-purpose'].value = ""; capturedFrames = []; currentVisitorData = null; recognizedVisitorData = null; if (domElements['start-recognition']) { domElements['start-recognition'].disabled = false; } }
+        function confirmLogout(button) { const confirmMsg = "तुम्हाला खात्री आहे की तुम्हाला लॉगआउट करायचे आहे?"; if (confirm(confirmMsg)) { showLoading(button, "लॉगआऊट करत आहे..."); logout().finally(() => hideLoading(button)); } }
+        async function logout() { try { if (webcamStream) { webcamStream.getTracks().forEach(track => track.stop()); webcamStream = null; console.log("Stopped webcam stream on logout."); } await fetch("/logout"); localStorage.removeItem("user"); localStorage.removeItem("preferredCameraId"); window.location.href = "/"; } catch (error) { console.error("Logout failed:", error); localStorage.removeItem("user"); localStorage.removeItem("preferredCameraId"); window.location.href = "/"; } }
+        window.addEventListener('beforeunload', () => { if (webcamStream) { webcamStream.getTracks().forEach(track => track.stop()); console.log("Stopped webcam stream on page unload."); } });
+
     </script>
 </body>
 </html>

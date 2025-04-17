@@ -585,415 +585,515 @@
 
 
     <script>
-       const videoFeed = document.getElementById('videoFeed');
-const visitorDetails = document.getElementById('visitorDetails');
-const visitorName = document.getElementById('visitorName');
-const visitorID = document.getElementById('visitorID');
-const dailyVisitorNumber = document.getElementById('dailyVisitorNumber');
-const confirmEntryBtn = document.getElementById('confirmEntryBtn');
-const noMatchMessage = document.getElementById('noMatchMessage');
-const entryTime = document.getElementById('entryTime');
+        const elements = {
+  videoFeed: document.getElementById('videoFeed'),
+  visitorDetails: document.getElementById('visitorDetails'),
+  visitorName: document.getElementById('visitorName'),
+  visitorID: document.getElementById('visitorID'),
+  dailyVisitorNumber: document.getElementById('dailyVisitorNumber'),
+  confirmEntryBtn: document.getElementById('confirmEntryBtn'),
+  noMatchMessage: document.getElementById('noMatchMessage'),
+  entryTime: document.getElementById('entryTime'),
+  userMenu: document.getElementById('userMenu'),
+  dropdownMenu: document.getElementById('dropdownMenu'),
+  logoutBtn: document.getElementById('logoutBtn'),
+  logoutModal: document.getElementById('logoutModal'),
+  cancelLogoutBtn: document.getElementById('cancelLogoutBtn'),
+  confirmLogoutBtn: document.getElementById('confirmLogoutBtn'),
+  confirmationPopup: document.getElementById('confirmationPopup'),
+  popupDvnValue: document.getElementById('popupDvnValue'),
+  closeConfirmationPopupBtn: document.getElementById('closeConfirmationPopupBtn')
+};
 
-const userMenu = document.getElementById('userMenu');
-const dropdownMenu = document.getElementById('dropdownMenu');
-const logoutBtn = document.getElementById('logoutBtn');
-
-const logoutModal = document.getElementById('logoutModal');
-const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
-const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
-
-const confirmationPopup = document.getElementById('confirmationPopup');
-const popupDvnValue = document.getElementById('popupDvnValue');
-const closeConfirmationPopupBtn = document.getElementById('closeConfirmationPopupBtn');
-
-
+// State variables
 let recognitionInterval;
 let currentVisitorData = null;
 let isProcessing = false;
 let confirmationPopupTimeout;
 let lastDisplayedVisitorId = null;
+let touchStartY = 0;
+let isRefreshing = false;
+let frameCounter = 0;
+let lastDetectionTime = 0;
+let canvasContext = null;
+let canvasElement = null;
+let pendingDetectionRequest = null;
 
-userMenu.addEventListener('click', (e) => {
-    dropdownMenu.classList.toggle('active');
+// Face detection configuration
+const DETECTION_INTERVAL = 500; // Faster detection interval (ms)
+const FRAME_SKIP = 1; // Process every other frame
+const MAX_CONCURRENT_REQUESTS = 1; // Limit concurrent detection requests
+const IMAGE_QUALITY = 0.7; // Slightly lower quality for faster transfer
+const RESIZE_FACTOR = 0.8; // Resize image for faster processing
+
+// Event listener setup
+function setupEventListeners() {
+  elements.userMenu.addEventListener('click', (e) => {
+    elements.dropdownMenu.classList.toggle('active');
     e.stopPropagation();
-});
+  });
 
-document.addEventListener('click', () => {
-    dropdownMenu.classList.remove('active');
-});
+  document.addEventListener('click', () => {
+    elements.dropdownMenu.classList.remove('active');
+  });
 
-logoutBtn.addEventListener('click', () => {
-    logoutModal.classList.add('active');
-});
+  elements.logoutBtn.addEventListener('click', () => {
+    elements.logoutModal.classList.add('active');
+  });
 
-cancelLogoutBtn.addEventListener('click', () => {
-    logoutModal.classList.remove('active');
-});
+  elements.cancelLogoutBtn.addEventListener('click', () => {
+    elements.logoutModal.classList.remove('active');
+  });
 
-confirmLogoutBtn.addEventListener('click', () => {
-    logout();
-});
+  elements.confirmLogoutBtn.addEventListener('click', logout);
 
-if (closeConfirmationPopupBtn) {
-    closeConfirmationPopupBtn.addEventListener('click', () => {
-        confirmationPopup.classList.remove('active');
-        if(confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
-    });
+  if (elements.closeConfirmationPopupBtn) {
+    elements.closeConfirmationPopupBtn.addEventListener('click', closeConfirmationPopup);
+  }
+
+  document.addEventListener('keydown', handleKeydown);
+  document.addEventListener('touchstart', handleTouchStart, { passive: true });
+  document.addEventListener('touchmove', handleTouchMove, { passive: false });
+  window.addEventListener('online', handleOnline);
+  window.addEventListener('offline', handleOffline);
+  window.addEventListener('beforeunload', stopCamera);
 }
 
+// Helper functions
+function closeConfirmationPopup() {
+  elements.confirmationPopup.classList.remove('active');
+  if (confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
+}
 
-function generateDailyVisitorNumber() {
-    const today = new Date();
-    const dateKey = today.toISOString().split('T')[0];
+function handleKeydown(e) {
+  if (e.key === 'Escape') {
+    elements.logoutModal.classList.remove('active');
+    elements.dropdownMenu.classList.remove('active');
+    elements.confirmationPopup.classList.remove('active');
+    if (confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
+  }
+}
 
-    let dailyVisitorTracker = JSON.parse(localStorage.getItem('dailyVisitorTracker') || '{}');
-    let currentNumber = dailyVisitorTracker[dateKey] || 0;
-    currentNumber = Math.min(currentNumber + 1, 1000);
-    dailyVisitorTracker[dateKey] = currentNumber;
+function handleTouchStart(e) {
+  // Only track touch start if at the very top
+  if (document.documentElement.scrollTop === 0 || document.body.scrollTop === 0) {
+    touchStartY = e.touches[0].clientY;
+  } else {
+    touchStartY = 0; // Reset if not at top
+  }
+}
 
-    localStorage.setItem('dailyVisitorTracker', JSON.stringify(dailyVisitorTracker));
-    return currentNumber;
+function handleTouchMove(e) {
+  const touchY = e.touches[0].clientY;
+  const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+
+  // Check if pull-to-refresh gesture
+  if (touchStartY > 0 && scrollTop === 0 && touchY > touchStartY + 70 && !isRefreshing) {
+    isRefreshing = true;
+    touchStartY = 0; // Reset to prevent multiple triggers
+    refreshCamera();
+    e.preventDefault(); // Prevent default pull-to-refresh
+  }
+}
+
+function handleOnline() {
+  console.log("Status: Online. Restarting camera.");
+  restartCamera();
+}
+
+function handleOffline() {
+  console.log("Status: Offline.");
+  stopCamera();
+  showOfflineMessage();
+}
+
+function showOfflineMessage() {
+  elements.noMatchMessage.innerHTML = `
+    <i class="fas fa-wifi-slash" style="font-size: 2rem; margin-bottom: 15px;"></i>
+    <p>तुम्ही ऑफलाइन आहात. कृपया तुमचे कनेक्शन तपासा.</p>
+  `;
+  elements.noMatchMessage.style.display = 'block';
+  resetUIState();
+}
+
+function resetUIState() {
+  elements.visitorDetails.style.display = 'none';
+  elements.confirmEntryBtn.style.display = 'none';
+  elements.confirmationPopup.classList.remove('active');
+  if (confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
+  lastDisplayedVisitorId = null;
+}
+
+function refreshCamera() {
+  elements.noMatchMessage.innerHTML = `
+    <i class="fas fa-sync fa-spin" style="font-size: 2rem; margin-bottom: 15px;"></i>
+    <p>कॅमेरा रिफ्रेश करत आहे...</p>
+  `;
+  elements.noMatchMessage.style.display = 'block';
+  resetUIState();
+
+  stopCamera();
+  setTimeout(() => {
+    startCamera();
+    setTimeout(() => { isRefreshing = false; }, 500);
+  }, 1000);
+}
+
+function restartCamera() {
+  stopCamera();
+  startCamera();
+}
+
+// Core functionality
+function generateDailyVisitorNumber(visitorId) {
+  const today = new Date().toISOString().split('T')[0];
+  let tracker = JSON.parse(localStorage.getItem('dailyVisitorTracker') || '{}');
+
+  if (!tracker[today]) tracker[today] = {};
+  let todayVisitors = tracker[today];
+
+  if (todayVisitors[visitorId]) return todayVisitors[visitorId];
+
+  const numbers = Object.values(todayVisitors);
+  const nextNumber = numbers.length ? Math.max(...numbers) + 1 : 1;
+  todayVisitors[visitorId] = nextNumber;
+  tracker[today] = todayVisitors;
+
+  localStorage.setItem('dailyVisitorTracker', JSON.stringify(tracker));
+  return nextNumber;
+}
+
+function initializeCanvas() {
+  // Pre-create and initialize canvas for reuse
+  canvasElement = document.createElement('canvas');
+  canvasContext = canvasElement.getContext('2d', { alpha: false }); // Disable alpha for better performance
 }
 
 function startCamera() {
-    navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'user' }
-    })
-    .then(stream => {
-        videoFeed.srcObject = stream;
-        resetInitialDisplay();
+  navigator.mediaDevices.getUserMedia({
+    video: {
+      facingMode: 'user',
+      width: { ideal: 640 }, // Constrain video size for better performance
+      height: { ideal: 480 }
+    }
+  })
+  .then(stream => {
+    elements.videoFeed.srcObject = stream;
+    resetInitialDisplay();
 
-        setTimeout(() => {
-            if (recognitionInterval) clearInterval(recognitionInterval);
-            recognitionInterval = setInterval(detectFace, 1000);
-        }, 1500);
-    })
-    .catch(error => {
-        console.error('Camera access error:', error);
-        noMatchMessage.innerHTML = '<i class="fas fa-camera-slash" style="font-size: 2rem; margin-bottom: 15px;"></i><p>कॅमेरा प्रवेश नाकारला</p>';
-        noMatchMessage.style.display = 'block';
-        visitorDetails.style.display = 'none';
-        confirmEntryBtn.style.display = 'none';
-        confirmationPopup.classList.remove('active');
-    });
+    // Initialize canvas once for reuse
+    initializeCanvas();
+
+    // Wait for video to initialize before starting detection
+    setTimeout(() => {
+      if (recognitionInterval) clearInterval(recognitionInterval);
+      // Use requestAnimationFrame for smoother detection
+      startFaceDetection();
+    }, 1000);
+  })
+  .catch(error => {
+    console.error('Camera access error:', error);
+    showCameraError();
+  });
+}
+
+function startFaceDetection() {
+  // Clear existing interval if any
+  if (recognitionInterval) {
+    clearInterval(recognitionInterval);
+  }
+
+  // Use performance optimized approach - combination of requestAnimationFrame and intervals
+  recognitionInterval = setInterval(() => {
+    if (!isProcessing) {
+      requestAnimationFrame(detectFace);
+    }
+  }, DETECTION_INTERVAL);
+}
+
+function showCameraError() {
+  elements.noMatchMessage.innerHTML = '<i class="fas fa-camera-slash" style="font-size: 2rem; margin-bottom: 15px;"></i><p>कॅमेरा प्रवेश नाकारला</p>';
+  elements.noMatchMessage.style.display = 'block';
+  resetUIState();
 }
 
 function detectFace() {
-    if (isProcessing || !videoFeed.srcObject || videoFeed.paused || videoFeed.ended || videoFeed.readyState < 3) {
-         if (videoFeed.readyState < 3 && videoFeed.srcObject) {
-            // console.log("Video not ready, skipping frame.");
-         }
-        return;
-    }
+  // Skip processing if video not ready
+  if (!elements.videoFeed.srcObject ||
+      elements.videoFeed.paused ||
+      elements.videoFeed.ended ||
+      elements.videoFeed.readyState < 3) {
+    return;
+  }
 
+  // Process only every FRAME_SKIP frames for performance
+  frameCounter++;
+  if (frameCounter % FRAME_SKIP !== 0) {
+    return;
+  }
 
-    isProcessing = true;
+  // Avoid excessive processing - check if we've processed too recently
+  const now = performance.now();
+  if (now - lastDetectionTime < DETECTION_INTERVAL * 0.8) {
+    return;
+  }
+  lastDetectionTime = now;
 
-    const canvas = document.createElement('canvas');
-    const videoWidth = videoFeed.videoWidth;
-    const videoHeight = videoFeed.videoHeight;
+  isProcessing = true;
 
-    if (videoWidth === 0 || videoHeight === 0) {
-        isProcessing = false;
-        return;
-    }
+  // Use pre-initialized canvas
+  const videoWidth = Math.floor(elements.videoFeed.videoWidth * RESIZE_FACTOR);
+  const videoHeight = Math.floor(elements.videoFeed.videoHeight * RESIZE_FACTOR);
 
+  if (videoWidth === 0 || videoHeight === 0) {
+    isProcessing = false;
+    return;
+  }
 
-    canvas.width = videoWidth;
-    canvas.height = videoHeight;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(videoFeed, 0, 0, canvas.width, canvas.height);
+  // Update canvas dimensions if needed
+  if (canvasElement.width !== videoWidth || canvasElement.height !== videoHeight) {
+    canvasElement.width = videoWidth;
+    canvasElement.height = videoHeight;
+  }
 
-    canvas.toBlob(blob => {
-        if (!blob) {
-           isProcessing = false;
-           return;
-        }
-        const formData = new FormData();
-        formData.append('frame', blob, 'frame.jpg');
+  // Draw resized image to canvas
+  canvasContext.drawImage(elements.videoFeed, 0, 0, videoWidth, videoHeight);
 
-        fetch('/detect_face', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-             }
-             return response.json();
-         })
-        .then(data => {
-            if (data.recognized) {
-                // Only update if it's a new visitor or the same visitor being redisplayed
-                if (lastDisplayedVisitorId !== data.user_data.visitor[0]?.visit_id) {
-                     handleSuccessfulDetection(data.user_data);
-                     lastDisplayedVisitorId = data.user_data.visitor[0]?.visit_id;
-                 } else {
-                    // Keep showing the same visitor, maybe refresh popup timer?
-                    // For now, do nothing to avoid constant re-rendering/popup flashing
-                 }
-            } else {
-                // If no face is recognized, reset the display
-                if (lastDisplayedVisitorId !== null) {
-                    resetDisplay();
-                    lastDisplayedVisitorId = null;
-                }
-            }
-            isProcessing = false;
-        })
-        .catch(error => {
-            console.error('Face detection error:', error);
-             if (lastDisplayedVisitorId !== null) {
-                 resetDisplay();
-                 lastDisplayedVisitorId = null;
-             }
-            isProcessing = false;
-        });
-    }, 'image/jpeg', 0.8);
+  // Convert to blob with optimized quality
+  canvasElement.toBlob(
+    blob => sendFrameForDetection(blob),
+    'image/jpeg',
+    IMAGE_QUALITY
+  );
 }
 
-function generateDailyVisitorNumber(visitorId) {
-    const today = new Date().toISOString().split('T')[0];
-    let tracker = JSON.parse(localStorage.getItem('dailyVisitorTracker') || '{}');
-    if (!tracker[today]) tracker[today] = {};
-    let todayVisitors = tracker[today];
-    if (todayVisitors[visitorId]) return todayVisitors[visitorId];
-    let numbers = Object.values(todayVisitors);
-    let nextNumber = numbers.length ? Math.max(...numbers) + 1 : 1;
-    todayVisitors[visitorId] = nextNumber;
-    tracker[today] = todayVisitors;
-    localStorage.setItem('dailyVisitorTracker', JSON.stringify(tracker));
-    return nextNumber;
+function sendFrameForDetection(blob) {
+  if (!blob) {
+    isProcessing = false;
+    return;
+  }
+
+  if (pendingDetectionRequest && typeof pendingDetectionRequest.abort === 'function') {
+    pendingDetectionRequest.abort();
+  }
+
+  const formData = new FormData();
+  formData.append('frame', blob, 'frame.jpg');
+
+  const abortController = new AbortController();
+  pendingDetectionRequest = abortController;
+
+  fetch('/detect_face', {
+    method: 'POST',
+    body: formData,
+    signal: abortController.signal,
+    // Optimization: deprioritize detection requests
+    priority: 'low'
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    pendingDetectionRequest = null;
+
+    if (data.recognized) {
+      // Only update if it's a new visitor or the same visitor being redisplayed
+      if (lastDisplayedVisitorId !== data.user_data.visitor[0]?.visit_id) {
+        handleSuccessfulDetection(data.user_data);
+        lastDisplayedVisitorId = data.user_data.visitor[0]?.visit_id;
+      }
+      // Else: keep showing same visitor
+    } else {
+      // If no face is recognized, reset the display
+      if (lastDisplayedVisitorId !== null) {
+        resetDisplay();
+        lastDisplayedVisitorId = null;
+      }
+    }
+    isProcessing = false;
+  })
+  .catch(error => {
+    pendingDetectionRequest = null;
+
+    // Don't log aborted requests as errors
+    if (error.name !== 'AbortError') {
+      console.error('Face detection error:', error);
+      if (lastDisplayedVisitorId !== null) {
+        resetDisplay();
+        lastDisplayedVisitorId = null;
+      }
+    }
+    isProcessing = false;
+  });
 }
 
 async function handleSuccessfulDetection(userData) {
-    const today = new Date().toISOString().split('T')[0];
-    const todayVisits = userData.visitor ? userData.visitor.filter(visit => visit.datetime && visit.datetime.startsWith(today)) : [];
+  const today = new Date().toISOString().split('T')[0];
+  const todayVisits = userData.visitor ? userData.visitor.filter(visit => visit.datetime && visit.datetime.startsWith(today)) : [];
 
-    if (!todayVisits.length) {
-        resetDisplay();
-        lastDisplayedVisitorId = null;
-        return;
+  if (!todayVisits.length) {
+    resetDisplay();
+    lastDisplayedVisitorId = null;
+    return;
+  }
+
+  const visitData = todayVisits[0];
+  let finalDVN = visitData.dvn;
+  let needsServerUpdate = false;
+
+  if (!finalDVN) {
+    finalDVN = generateDailyVisitorNumber(visitData.visit_id);
+    needsServerUpdate = true;
+  }
+
+  displayVisitorDetails(userData.name, visitData.visit_id, finalDVN, visitData.datetime);
+  showConfirmationPopup(finalDVN);
+
+  if (needsServerUpdate) {
+    try {
+      const confirmationData = {
+        visitId: visitData.visit_id,
+        dvn: finalDVN,
+        name: userData.name
+      };
+
+      // Use Promise.race to implement a timeout for the confirmation request
+      const timeout = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Request timeout')), 3000)
+      );
+
+      const fetchPromise = fetch('/confirm_visitor_entry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(confirmationData)
+      });
+
+      const response = await Promise.race([fetchPromise, timeout]);
+      const data = await response.json();
+      if (!data.success) console.warn('Server confirmation failed for DVN:', finalDVN);
+    } catch (error) {
+      console.error('Error confirming DVN to server:', error);
+      // Still keep the visitor displayed even if server confirmation fails
     }
-
-    const visitData = todayVisits[0];
-    let finalDVN = visitData.dvn;
-    let needsServerUpdate = false;
-
-    if (!finalDVN) {
-        finalDVN = generateDailyVisitorNumber(visitData.visit_id);
-        needsServerUpdate = true;
-    }
-
-    displayVisitorDetails(userData.name, visitData.visit_id, finalDVN, visitData.datetime);
-    showConfirmationPopup(finalDVN);
-
-    if (needsServerUpdate) {
-        try {
-            const confirmationData = {
-                visitId: visitData.visit_id,
-                dvn: finalDVN,
-                name: userData.name
-            };
-            const response = await fetch('/confirm_visitor_entry', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(confirmationData)
-            });
-            const data = await response.json();
-            if (!data.success) console.warn('Server confirmation failed for DVN:', finalDVN);
-        } catch (error) {
-            console.error('Error confirming DVN to server:', error);
-        }
-    }
+  }
 }
 
 function displayVisitorDetails(name, visitId, dvn, entryDatetime) {
-     visitorName.textContent = name || 'N/A';
-     visitorID.textContent = visitId || '-';
-     dailyVisitorNumber.textContent = dvn || '-';
-     const entryDateTimeObj = new Date(entryDatetime);
-     entryTime.textContent = !isNaN(entryDateTimeObj) ? entryDateTimeObj.toLocaleTimeString('mr-IN') : '-';
+  // Batch DOM updates to minimize repaints
+  requestAnimationFrame(() => {
+    elements.visitorName.textContent = name || 'N/A';
+    elements.visitorID.textContent = visitId || '-';
+    elements.dailyVisitorNumber.textContent = dvn || '-';
 
-     confirmEntryBtn.style.display = 'none'; // Button is never needed now
-     visitorDetails.style.display = 'block';
-     noMatchMessage.style.display = 'none';
+    const entryDateTimeObj = new Date(entryDatetime);
+    elements.entryTime.textContent = !isNaN(entryDateTimeObj) ? entryDateTimeObj.toLocaleTimeString('mr-IN') : '-';
+
+    elements.confirmEntryBtn.style.display = 'none'; // Button is never needed now
+    elements.visitorDetails.style.display = 'block';
+    elements.noMatchMessage.style.display = 'none';
+  });
 }
-
 
 function showConfirmationPopup(dvn) {
-    if (confirmationPopup && popupDvnValue) {
-        popupDvnValue.textContent = dvn || '-';
-        confirmationPopup.classList.add('active');
+  if (elements.confirmationPopup && elements.popupDvnValue) {
+    requestAnimationFrame(() => {
+      elements.popupDvnValue.textContent = dvn || '-';
+      elements.confirmationPopup.classList.add('active');
+    });
 
-        if (confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
-        confirmationPopupTimeout = setTimeout(() => {
-            confirmationPopup.classList.remove('active');
-        }, 5000); // Auto-close after 5 seconds
-    }
-}
-
-
-function confirmVisitorEntry() {
-   // This function is not used anymore as confirmation is automatic
-   console.log("Manual confirmation button clicked - Deprecated.");
+    if (confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
+    confirmationPopupTimeout = setTimeout(() => {
+      elements.confirmationPopup.classList.remove('active');
+    }, 5000); // Auto-close after 5 seconds
+  }
 }
 
 function resetInitialDisplay() {
-     noMatchMessage.innerHTML = `
-         <div class="skeleton-loading skeleton-text" style="height: 30px; width: 60%; margin: auto auto 10px;"></div>
-         <div class="skeleton-loading skeleton-text" style="height: 20px; width: 80%; margin: auto;"></div>
-     `;
-     noMatchMessage.style.display = 'block';
-     visitorDetails.style.display = 'none';
-     confirmEntryBtn.style.display = 'none';
-     confirmationPopup.classList.remove('active');
-     if(confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
-     lastDisplayedVisitorId = null; // Reset last displayed visitor
+  elements.noMatchMessage.innerHTML = `
+    <div class="skeleton-loading skeleton-text" style="height: 30px; width: 60%; margin: auto auto 10px;"></div>
+    <div class="skeleton-loading skeleton-text" style="height: 20px; width: 80%; margin: auto;"></div>
+  `;
+  elements.noMatchMessage.style.display = 'block';
+  resetUIState();
 }
 
-
 function resetDisplay() {
-    // Only reset if something was actually displayed
-    if (visitorDetails.style.display !== 'none' || noMatchMessage.style.display === 'none') {
-        visitorDetails.style.display = 'none';
-        confirmEntryBtn.style.display = 'none';
-        confirmationPopup.classList.remove('active');
-        if(confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
+  // Only reset if something was actually displayed
+  if (elements.visitorDetails.style.display !== 'none' || elements.noMatchMessage.style.display === 'none') {
+    requestAnimationFrame(() => {
+      elements.visitorDetails.style.display = 'none';
+      elements.confirmEntryBtn.style.display = 'none';
+      elements.confirmationPopup.classList.remove('active');
+      if(confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
 
-        noMatchMessage.innerHTML = '<i class="fas fa-user-slash" style="font-size: 2rem; margin-bottom: 15px;"></i><p>ओळखलेला अभ्यागत नाही</p>';
-        noMatchMessage.style.display = 'block';
+      elements.noMatchMessage.innerHTML = '<i class="fas fa-user-slash" style="font-size: 2rem; margin-bottom: 15px;"></i><p>ओळखलेला अभ्यागत नाही</p>';
+      elements.noMatchMessage.style.display = 'block';
 
-        // Clear detail fields
-        visitorName.textContent = '-';
-        visitorID.textContent = '-';
-        dailyVisitorNumber.textContent = '-';
-        entryTime.textContent = '-';
+      // Clear detail fields
+      elements.visitorName.textContent = '-';
+      elements.visitorID.textContent = '-';
+      elements.dailyVisitorNumber.textContent = '-';
+      elements.entryTime.textContent = '-';
 
-        currentVisitorData = null; // Clear any potentially stale data
-    }
-     lastDisplayedVisitorId = null; // Reset last displayed visitor
+      currentVisitorData = null; // Clear potentially stale data
+    });
+  }
+  lastDisplayedVisitorId = null; // Reset last displayed visitor
 }
 
 function stopCamera() {
-    if (recognitionInterval) {
-        clearInterval(recognitionInterval);
-        recognitionInterval = null;
-    }
-    if (videoFeed.srcObject) {
-        videoFeed.srcObject.getTracks().forEach(track => track.stop());
-        videoFeed.srcObject = null;
-    }
-     isProcessing = false;
-     lastDisplayedVisitorId = null; // Reset on stop
+  if (recognitionInterval) {
+    clearInterval(recognitionInterval);
+    recognitionInterval = null;
+  }
+
+  if (pendingDetectionRequest && typeof pendingDetectionRequest.abort === 'function') {
+    pendingDetectionRequest.abort();
+    pendingDetectionRequest = null;
+  }
+
+  if (elements.videoFeed.srcObject) {
+    elements.videoFeed.srcObject.getTracks().forEach(track => track.stop());
+    elements.videoFeed.srcObject = null;
+  }
+
+  isProcessing = false;
+  frameCounter = 0;
+  lastDetectionTime = 0;
+  lastDisplayedVisitorId = null;
 }
 
 function logout() {
-    confirmLogoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-    confirmLogoutBtn.disabled = true;
+  elements.confirmLogoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  elements.confirmLogoutBtn.disabled = true;
 
-    fetch("/logout")
-        .then(response => response.json())
-        .then(() => {
-            localStorage.removeItem("user");
-            localStorage.removeItem("dailyVisitorTracker"); // Clear tracker on logout
-            window.location.href = "/";
-        })
-        .catch(error => {
-            console.error('Logout error:', error);
-            localStorage.removeItem("user");
-            localStorage.removeItem("dailyVisitorTracker"); // Clear tracker on logout
-            window.location.href = "/";
-        });
+  fetch("/logout")
+    .then(response => response.json())
+    .then(() => {
+      localStorage.removeItem("user");
+      localStorage.removeItem("dailyVisitorTracker");
+      window.location.href = "/";
+    })
+    .catch(error => {
+      console.error('Logout error:', error);
+      localStorage.removeItem("user");
+      localStorage.removeItem("dailyVisitorTracker");
+      window.location.href = "/";
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
-        startCamera();
-    } else {
-        noMatchMessage.innerHTML = '<i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 15px; color: #f8d7da;"></i><p>कॅमेरा समर्थित नाही</p>';
-        noMatchMessage.style.display = 'block';
-    }
-});
+  setupEventListeners();
 
-window.addEventListener('beforeunload', () => {
-    stopCamera();
-});
-
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        logoutModal.classList.remove('active');
-        dropdownMenu.classList.remove('active');
-        confirmationPopup.classList.remove('active');
-         if(confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
-    }
-});
-
-let touchStartY = 0;
-let isRefreshing = false;
-
-document.addEventListener('touchstart', (e) => {
-    // Only track touch start if the user is at the very top
-    if (document.documentElement.scrollTop === 0 || document.body.scrollTop === 0) {
-        touchStartY = e.touches[0].clientY;
-    } else {
-        touchStartY = 0; // Reset if not at top
-    }
-}, { passive: true });
-
-document.addEventListener('touchmove', (e) => {
-    const touchY = e.touches[0].clientY;
-    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-
-    // Check if we started at the top, pulled down significantly, and not already refreshing
-    if (touchStartY > 0 && scrollTop === 0 && touchY > touchStartY + 70 && !isRefreshing) {
-        isRefreshing = true;
-        touchStartY = 0; // Reset start Y to prevent multiple triggers
-
-        noMatchMessage.innerHTML = `
-            <i class="fas fa-sync fa-spin" style="font-size: 2rem; margin-bottom: 15px;"></i>
-            <p>कॅमेरा रिफ्रेश करत आहे...</p>
-        `;
-        noMatchMessage.style.display = 'block';
-        visitorDetails.style.display = 'none';
-        confirmEntryBtn.style.display = 'none';
-        confirmationPopup.classList.remove('active');
-        if(confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
-        lastDisplayedVisitorId = null;
-
-
-        stopCamera();
-
-        setTimeout(() => {
-            startCamera();
-            // Make sure isRefreshing is reset *after* camera starts to avoid race conditions
-             setTimeout(() => { isRefreshing = false; }, 500);
-        }, 1000);
-
-        // Prevent default pull-to-refresh behavior if we handled it
-        e.preventDefault();
-    }
-}, { passive: false }); // Need non-passive to prevent default
-
-window.addEventListener('online', () => {
-    console.log("Status: Online. Restarting camera.");
-    stopCamera();
+  if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
     startCamera();
-});
-
-window.addEventListener('offline', () => {
-    console.log("Status: Offline.");
-    stopCamera();
-    noMatchMessage.innerHTML = `
-        <i class="fas fa-wifi-slash" style="font-size: 2rem; margin-bottom: 15px;"></i>
-        <p>तुम्ही ऑफलाइन आहात. कृपया तुमचे कनेक्शन तपासा.</p>
-    `;
-    noMatchMessage.style.display = 'block';
-    visitorDetails.style.display = 'none';
-    confirmEntryBtn.style.display = 'none';
-    confirmationPopup.classList.remove('active');
-     if(confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
-     lastDisplayedVisitorId = null;
+  } else {
+    elements.noMatchMessage.innerHTML = '<i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 15px; color: #f8d7da;"></i><p>कॅमेरा समर्थित नाही</p>';
+    elements.noMatchMessage.style.display = 'block';
+  }
 });
     </script>
 </body>

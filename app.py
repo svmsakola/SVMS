@@ -1,4 +1,5 @@
 import os, io, sys, uuid, json, random, signal, base64
+import traceback
 from datetime import datetime, timedelta
 from functools import wraps
 import bcrypt, cv2, numpy as np, face_recognition
@@ -20,6 +21,10 @@ UPLOAD_FOLDER = 'uploads/docimg'
 PDF_FOLDER = 'pdf'
 DATA_FILE = 'data/facedata/facedata.json'
 DEPARTMENTS_FILE = 'JSON/departments.json'
+ALLOWED_EXTENSIONS = {'pdf'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(PDF_FOLDER, exist_ok=True)
@@ -760,41 +765,93 @@ def registered_visitor_today():
                      print(f"Warning: Missing or invalid 'datetime' for visit in user {uid}")
     return jsonify({'visitors': today_visitors})
 
+@app.route('/api/visitor_file_status')
+def get_visitor_file_status():
+    try:
+        today = datetime.today().strftime('%Y-%m-%d')
+        data = load_face_data()
+        visitors = []
+        for uid, u in data.items():
+            if not isinstance(u, dict): continue
+            dt = u.get('registration_datetime', '')
+            try:
+                if datetime.fromisoformat(dt).strftime('%Y-%m-%d') != today: continue
+            except: continue
+            enc = any(os.path.exists(p) for p in u.get('face_encodings', []) if isinstance(p, str))
+            img = any(os.path.exists(os.path.join('data', p)) for p in u.get('profile_img', []) if isinstance(p, str))
+            visitors.append({"uid": uid, "name": u.get('name', 'N/A'), "has_encodings": enc, "has_profile_img": img})
+        return jsonify({"success": True, "visitors": sorted(visitors, key=lambda x: x['name'])})
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"success": False, "message": f"Server error: {str(e)}"}), 500
+
 @app.route('/api/upload-visitor-document/<visit_id>', methods=['POST'])
 def upload_visitor_document(visit_id):
-    if 'document' not in request.files:
-        return jsonify({'error': 'No document provided'}), 400
+    if 'document' not in request.files: return jsonify({'success': False, 'error': 'No document file part in the request'}), 400
     file = request.files['document']
-    if file.filename == '':
-        return jsonify({'error': 'No file selected'}), 400
-    if not file.filename.lower().endswith('.pdf'):
-        return jsonify({'error': 'Only PDF files are allowed'}), 400
+    if file.filename == '': return jsonify({'success': False, 'error': 'No file selected'}), 400
+    if not file or not allowed_file(file.filename): return jsonify({'success': False, 'error': 'Invalid file type. Only PDF allowed.'}), 400
     try:
-        filename = f"{visit_id}_1.pdf"
+        face_data = load_face_data()
+        found_visit = None
+        for uid, user_data in face_data.items():
+            if isinstance(user_data, dict) and 'visitor' in user_data and isinstance(user_data['visitor'], list):
+                for visit in user_data['visitor']:
+                    if isinstance(visit, dict) and visit.get('visit_id') == visit_id:
+                        found_visit = visit
+                        break
+            if found_visit: break
+        if not found_visit: return jsonify({'success': False, 'error': 'Visitor ID not found'}), 404
+        existing_pdf_path = found_visit.get('document_pdf')
+        if existing_pdf_path and isinstance(existing_pdf_path, str) and os.path.exists(existing_pdf_path):
+            abs_existing_path = os.path.abspath(existing_pdf_path)
+            abs_pdf_folder = os.path.abspath(PDF_FOLDER)
+            if abs_existing_path.startswith(abs_pdf_folder): os.remove(existing_pdf_path)
+        from werkzeug.utils import secure_filename
+        filename = f"{secure_filename(visit_id)}_doc.pdf"
         filepath = os.path.join(PDF_FOLDER, filename)
         file.save(filepath)
-        face_data = load_face_data()
-        updated = False
-        for uid, user_data in face_data.items():
-            if 'visitor' in user_data:
-                for visit in user_data['visitor']:
-                    if visit['visit_id'] == visit_id:
-                        visit['document_pdf'] = filepath
-                        updated = True
-                        break
-            if updated:
-                break
-        if updated:
-            save_face_data(face_data)
-            return jsonify({
-                'success': True,
-                'message': 'Document uploaded successfully',
-                'pdf_path': filepath
-            })
-        else:
-            return jsonify({'error': 'Visitor ID not found'}), 404
+        found_visit['document_pdf'] = filepath
+        save_face_data(face_data)
+        return jsonify({'success': True, 'message': 'Document uploaded successfully', 'pdf_path': filepath})
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        import traceback; traceback.print_exc()
+        return jsonify({'success': False, 'error': f'An internal error occurred: {str(e)}'}), 500
+
+@app.route('/api/delete-visitor-document/<visit_id>', methods=['POST'])
+def delete_visitor_document(visit_id):
+    try:
+        face_data = load_face_data()
+        found_visit = None
+        for uid, user_data in face_data.items():
+            if isinstance(user_data, dict) and 'visitor' in user_data and isinstance(user_data['visitor'], list):
+                for visit in user_data['visitor']:
+                    if isinstance(visit, dict) and visit.get('visit_id') == visit_id:
+                        found_visit = visit
+                        break
+            if found_visit: break
+        if not found_visit: return jsonify({'success': False, 'message': 'Visitor ID not found'}), 404
+        pdf_path_to_delete = found_visit.get('document_pdf')
+        if not pdf_path_to_delete or not isinstance(pdf_path_to_delete, str): return jsonify({'success': False, 'message': 'No document found associated with this visit entry'}), 404
+        file_deleted = False
+        if os.path.exists(pdf_path_to_delete):
+            try:
+                abs_delete_path = os.path.abspath(pdf_path_to_delete)
+                abs_pdf_folder = os.path.abspath(PDF_FOLDER)
+                if abs_delete_path.startswith(abs_pdf_folder):
+                    os.remove(pdf_path_to_delete)
+                    file_deleted = True
+            except FileNotFoundError: file_deleted = True
+            except OSError as e: return jsonify({'success': False, 'message': f'Error deleting file: {e}'}), 500
+        else: file_deleted = True
+        if file_deleted:
+            found_visit['document_pdf'] = None
+            if save_face_data(face_data): return jsonify({'success': True, 'message': 'Document reference removed and file deleted successfully (if it existed).'})
+            else: return jsonify({'success': False, 'message': 'File deleted but failed to update visitor record.'}), 500
+        else: return jsonify({'success': False, 'message': 'File deletion was prevented or failed.'}), 500
+    except Exception as e:
+        import traceback; traceback.print_exc()
+        return jsonify({'success': False, 'message': f'An internal server error occurred: {str(e)}'}), 500
 
 @app.route('/api/get-visitor-document/<visit_id>')
 def get_visitor_document(visit_id):
@@ -850,58 +907,61 @@ def upload_image():
 @app.route('/api/generate-pdf', methods=['POST'])
 def generate_pdf():
     if 'images' not in request.json or 'visit_id' not in request.json:
-        return jsonify({'error': 'No images or visit ID provided'}), 400
+        return jsonify({'success': False, 'error': 'No images or visit ID provided'}), 400
+    image_paths_to_delete = []
     try:
         image_ids = request.json['images']
         visit_id = request.json['visit_id']
-        pdf_filename = f"{visit_id}_1.pdf"
+        if not visit_id: return jsonify({'success': False, 'error': 'Visit ID is missing'}), 400
+        if not image_ids: return jsonify({'success': False, 'error': 'No image IDs provided for PDF generation'}), 400
+        from werkzeug.utils import secure_filename
+        pdf_filename = f"{secure_filename(visit_id)}_doc.pdf"
         pdf_path = os.path.join(PDF_FOLDER, pdf_filename)
+        if os.path.exists(pdf_path):
+            try: os.remove(pdf_path)
+            except OSError as e: pass
         c = canvas.Canvas(pdf_path, pagesize=letter)
         letter_width, letter_height = letter
-        image_paths = []
         for image_id in image_ids:
             img_path = os.path.join(UPLOAD_FOLDER, image_id)
             if os.path.exists(img_path):
-                image_paths.append(img_path)
-                img = Image.open(img_path)
-                width, height = img.size
-                scale = min(letter_width / width, letter_height / height) * 0.9
-                img_width = width * scale
-                img_height = height * scale
-                x = (letter_width - img_width) / 2
-                y = (letter_height - img_height) / 2
-                c.drawImage(img_path, x, y, width=img_width, height=img_height)
-                c.showPage()
+                image_paths_to_delete.append(img_path)
+                try:
+                    img = Image.open(img_path)
+                    width, height = img.size
+                    scale = min(letter_width / width, letter_height / height) * 0.9
+                    img_width = width * scale
+                    img_height = height * scale
+                    x = (letter_width - img_width) / 2
+                    y = (letter_height - img_height) / 2
+                    c.drawImage(img_path, x, y, width=img_width, height=img_height, preserveAspectRatio=True, mask='auto')
+                    c.showPage()
+                except: pass
         c.save()
-        for img_path in image_paths:
-            if os.path.exists(img_path):
-                os.remove(img_path)
-        for filename in os.listdir(UPLOAD_FOLDER):
-            file_path = os.path.join(UPLOAD_FOLDER, filename)
+        for img_path in image_paths_to_delete:
             try:
-                if os.path.isfile(file_path):
-                    os.remove(file_path)
-            except Exception as e:
-                print(f"Error deleting {file_path}: {e}")
+                if os.path.isfile(img_path): os.remove(img_path)
+            except: pass
         face_data = load_face_data()
         updated = False
         for uid, user_data in face_data.items():
-            if 'visitor' in user_data:
+            if isinstance(user_data, dict) and 'visitor' in user_data and isinstance(user_data['visitor'], list):
                 for visit in user_data['visitor']:
-                    if visit['visit_id'] == visit_id:
+                    if isinstance(visit, dict) and visit.get('visit_id') == visit_id:
                         visit['document_pdf'] = pdf_path
                         updated = True
                         break
-            if updated:
-                break
+            if updated: break
         if updated:
-            save_face_data(face_data)
-        return jsonify({
-            'success': True,
-            'pdf_url': f'/api/get-visitor-document/{visit_id}'
-        })
+            if save_face_data(face_data): pass
+        return jsonify({'success': True, 'message': 'PDF generated successfully from scanned images.', 'pdf_url': f'/api/get-visitor-document/{visit_id}'})
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        import traceback; traceback.print_exc()
+        try:
+            for img_path in image_paths_to_delete:
+                if os.path.exists(img_path): os.remove(img_path)
+        except: pass
+        return jsonify({'success': False, 'error': f'Failed to generate PDF: {str(e)}'}), 500
 
 @app.route('/api/cleanup', methods=['POST'])
 def cleanup_images():
@@ -1583,18 +1643,15 @@ def generate_visitor_report():
             "Forwarded To", "Remark"
         ]
         ws.append(headers)
-
         header_font = Font(bold=True, color="FFFFFF")
         header_fill = openpyxl.styles.PatternFill(start_color="2C3E90", end_color="2C3E90", fill_type="solid")
         for cell in ws[1]:
             cell.font = header_font
             cell.fill = header_fill
             cell.alignment = Alignment(horizontal='center', vertical='center')
-
         for entry in report_data:
             row_data = [entry.get(header, 'N/A') for header in headers]
             ws.append(row_data)
-
         for col_idx, column_letter in enumerate(openpyxl.utils.get_column_letter(i) for i in range(1, len(headers) + 1)):
             max_length = 0
             column = ws[column_letter]

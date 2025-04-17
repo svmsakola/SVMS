@@ -17,17 +17,8 @@
             --success-green: #2ecc71;
             --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
         }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            height: 100%;
-            overscroll-behavior: none;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; overscroll-behavior: none; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--light-blue);
@@ -36,178 +27,124 @@
             display: flex;
             flex-direction: column;
         }
-
-        .dashboard-container {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            min-height: 0;
-        }
-
-        /* --- Header --- */
+        .dashboard-container { display: flex; flex-direction: column; flex-grow: 1; min-height: 0; }
         .header {
             background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
-            color: var(--white);
-            padding: 8px 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            flex-shrink: 0;
+            color: var(--white); padding: 8px 15px; display: flex; justify-content: space-between;
+            align-items: center; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); position: sticky;
+            top: 0; z-index: 1000; flex-shrink: 0;
         }
-
-        .header-left img {
-            height: 50px; width: auto; max-height: 100%; object-fit: contain;
-        }
-
+        .header-left img { height: 50px; width: auto; max-height: 100%; object-fit: contain; }
         .profile-container { position: relative; }
-
         .profile-icon {
-            width: 40px; height: 40px; border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: background 0.3s ease;
+            width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, 0.2);
+            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.3s ease;
         }
         .profile-icon:hover { background: rgba(255, 255, 255, 0.3); }
         .profile-icon i { font-size: 1.2rem; }
-
         .dropdown-menu {
-            position: absolute; top: 55px; right: 0;
-            background-color: var(--white); border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            min-width: 220px; z-index: 1001; /* Ensure above content */
-            opacity: 0; visibility: hidden;
-            transform: translateY(-10px); transition: all 0.3s ease;
+            position: absolute; top: 55px; right: 0; background-color: var(--white); border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); min-width: 220px; z-index: 1001;
+            opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease;
         }
         .dropdown-menu.active { opacity: 1; visibility: visible; transform: translateY(0); }
-
         .dropdown-item {
-            padding: 12px 15px; display: flex; align-items: center;
-            gap: 10px; color: var(--text-dark); cursor: pointer;
-            transition: background-color 0.2s ease;
+            padding: 12px 15px; display: flex; align-items: center; gap: 10px; color: var(--text-dark);
+            cursor: pointer; transition: background-color 0.2s ease;
         }
         .dropdown-item:first-child { border-top-left-radius: 8px; border-top-right-radius: 8px; }
         .dropdown-item:last-child { border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
         .dropdown-item:hover { background-color: var(--light-blue); }
         .dropdown-item i { width: 20px; text-align: center; color: var(--primary-blue); }
-
         .divider { height: 1px; background-color: #e0e0e0; margin: 5px 0; }
-
         .user-info {
-            padding: 15px; display: flex; align-items: center;
-            gap: 10px; border-bottom: 1px solid #e0e0e0;
+            padding: 15px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #e0e0e0;
         }
         .user-avatar {
-            width: 40px; height: 40px; border-radius: 50%;
-            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-weight: bold; font-size: 1.1rem;
+            width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.1rem;
         }
         .user-details h3 { font-size: 1rem; margin-bottom: 3px; }
         .user-details p { font-size: 0.8rem; color: #7f8c8d; }
-
-        /* --- Main Content --- */
-        .main-wrapper {
-            flex-grow: 1;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .main-content {
-            padding: 20px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        /* --- Visitor List Styles --- */
-        #visitorListContainer { /* Default view */ }
-
+        .main-wrapper { flex-grow: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+        .main-content { padding: 20px; max-width: 1300px; margin: 0 auto; }
+        #visitorListContainer { }
         .content-card {
-            background-color: var(--white); border-radius: 12px;
-            box-shadow: var(--card-shadow); padding: 20px; margin-bottom: 30px;
+            background-color: var(--white); border-radius: 12px; box-shadow: var(--card-shadow);
+            padding: 15px; margin-bottom: 30px;
         }
-
         .card-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 20px; flex-wrap: wrap; gap: 10px;
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+            flex-wrap: wrap; gap: 10px;
         }
         .card-title { font-size: 1.4rem; color: var(--primary-blue); font-weight: 600; }
         .card-actions button {
             background-color: var(--light-blue); color: var(--primary-blue); border: none;
-            border-radius: 6px; padding: 8px 12px; cursor: pointer;
-            transition: all 0.3s ease; display: inline-flex; align-items: center;
-            gap: 5px; font-size: 0.9rem;
+            border-radius: 6px; padding: 8px 12px; cursor: pointer; transition: all 0.3s ease;
+            display: inline-flex; align-items: center; gap: 5px; font-size: 0.9rem;
         }
         .card-actions button:hover { background-color: #d1e6f9; }
         .card-actions button:disabled { background-color: #e0e0e0; cursor: default; }
-
         .visitors-table {
             width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.95rem;
         }
         .visitors-table th, .visitors-table td {
-            padding: 10px 12px; text-align: left; border-bottom: 1px solid #e0e0e0;
-            vertical-align: middle;
+            padding: 10px 12px; text-align: left; border-bottom: 1px solid #e0e0e0; vertical-align: middle;
         }
         .visitors-table th {
-            background-color: #f8f9fa; color: var(--text-dark); font-weight: 600;
-            white-space: nowrap;
+            background-color: #f8f9fa; color: var(--text-dark); font-weight: 600; white-space: nowrap;
         }
         .visitors-table tr:last-child td { border-bottom: none; }
         .visitors-table tr:hover { background-color: #f8f9fa; }
-
         .action-btn {
-            background-color: var(--secondary-blue); color: white; border: none;
-            border-radius: 4px; padding: 6px 10px; cursor: pointer;
-            transition: all 0.3s ease; font-size: 0.85rem; display: inline-flex;
-            align-items: center; gap: 5px; margin-right: 5px; margin-bottom: 5px;
+            background-color: var(--secondary-blue); color: white; border: none; border-radius: 4px;
+            padding: 6px 10px; cursor: pointer; transition: all 0.3s ease; font-size: 0.85rem;
+            display: inline-flex; align-items: center; gap: 5px; margin-right: 5px; margin-bottom: 5px;
         }
         .action-btn:hover { background-color: #2980b9; }
         .action-btn.view-pdf-btn { background-color: var(--success-green); }
         .action-btn.view-pdf-btn:hover { background-color: #27ae60; }
         .action-btn.scan-doc-btn { background-color: var(--primary-blue); }
         .action-btn.scan-doc-btn:hover { background-color: #1e2f6d; }
-
+        .action-btn.upload-pdf-btn { background-color: #f39c12; }
+        .action-btn.upload-pdf-btn:hover { background-color: #d68910; }
+        .action-btn.delete-doc-btn { background-color: var(--danger-red); }
+        .action-btn.delete-doc-btn:hover { background-color: #c0392b; }
         .status {
-            padding: 3px 8px; border-radius: 12px; font-size: 0.8rem;
-            font-weight: 500; display: inline-block; white-space: nowrap;
+            padding: 3px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: 500;
+            display: inline-block; white-space: nowrap;
         }
         .status-registered { background-color: #e6f2ff; color: var(--primary-blue); border: 1px solid var(--primary-blue);}
         .status-checkedin { background-color: #e8f8f5; color: #1abc9c; border: 1px solid #1abc9c;}
         .status-checkedout { background-color: #fdedec; color: var(--danger-red); border: 1px solid var(--danger-red); }
         .status-pending { background-color: #fef9e7; color: #f39c12; border: 1px solid #f39c12; }
-
         .empty-state { text-align: center; padding: 40px 0; color: #7f8c8d; }
         .empty-state i { font-size: 3rem; margin-bottom: 15px; color: #bdc3c7; }
-
-        /* --- Scanner Styles --- */
         #scannerContainer { display: none; padding: 20px; }
         .scanner-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #e0e0e0;
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;
+            padding-bottom: 10px; border-bottom: 1px solid #e0e0e0;
         }
         .scanner-title { font-size: 1.3rem; color: var(--primary-blue); font-weight: 600; }
         .scanner-visitor-info { font-size: 0.95rem; text-align: right;}
         .scanner-visitor-info strong { color: var(--primary-blue); }
-
         #backToListBtn {
-            background-color: #7f8c8d; color: white; padding: 8px 12px; border: none;
-            border-radius: 5px; cursor: pointer; display: inline-flex;
-            align-items: center; gap: 5px; font-size: 0.9rem;
+            background-color: #7f8c8d; color: white; padding: 8px 12px; border: none; border-radius: 5px;
+            cursor: pointer; display: inline-flex; align-items: center; gap: 5px; font-size: 0.9rem;
         }
         #backToListBtn:hover { background-color: #626567; }
-
         .scanner-area {
-            background-color: var(--white); padding: 20px; border-radius: 10px;
-            box-shadow: var(--card-shadow);
+            background-color: var(--white); padding: 20px; border-radius: 10px; box-shadow: var(--card-shadow);
         }
         .camera-container { width: 100%; border: 1px solid #ccc; position: relative; background-color: #000; border-radius: 8px; overflow: hidden; margin-bottom: 15px; }
         #video { width: 100%; height: auto; display: block; max-height: 50vh; }
         #canvas { display: none; }
         .controls { display: flex; justify-content: center; gap: 10px; margin: 15px 0; flex-wrap: wrap; }
-        .scanner-area button, .scanner-area .btn { padding: 10px 15px; cursor: pointer; background: var(--secondary-blue); color: white; border: none; border-radius: 5px; font-size: 0.9rem; font-weight: 500; transition: background-color 0.3s ease, transform 0.1s ease; display: inline-flex; align-items: center; gap: 5px; }
+        .scanner-area button, .scanner-area .btn {
+            padding: 10px 15px; cursor: pointer; background: var(--secondary-blue); color: white; border: none;
+            border-radius: 5px; font-size: 0.9rem; font-weight: 500; transition: background-color 0.3s ease, transform 0.1s ease;
+            display: inline-flex; align-items: center; gap: 5px;
+        }
         .scanner-area button:hover, .scanner-area .btn:hover { background-color: #2980b9; }
         .scanner-area button:active, .scanner-area .btn:active { transform: scale(0.98); }
         .scanner-area button:disabled, .scanner-area .btn:disabled { background: #bdc3c7; color: #7f8c8d; cursor: not-allowed; transform: none; }
@@ -215,50 +152,37 @@
         .scanner-area #retake:hover, .scanner-area #clearAll:hover { background-color: #d35400; }
         .scanner-area #confirmCrop { background-color: #27ae60; }
         .scanner-area #confirmCrop:hover { background-color: #229954; }
-
         .preview-container { display: none; border: 1px solid #ccc; margin-top: 20px; border-radius: 8px; overflow: hidden; }
         .cropper-container { margin-bottom: 10px; }
         #preview { display: block; max-width: 100%; }
-
         .thumbnails { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; padding: 10px; background-color: #f8f9fa; border-radius: 8px; border: 1px solid #e0e0e0; min-height: 80px; }
         .thumbnail { width: 80px; height: 120px; border: 1px solid #ddd; position: relative; overflow: hidden; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); flex-shrink: 0; }
         .thumbnail img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .thumbnail .remove { position: absolute; top: 2px; right: 2px; background: rgba(231, 76, 60, 0.8); color: white; width: 18px; height: 18px; border-radius: 50%; text-align: center; line-height: 18px; cursor: pointer; font-size: 12px; font-weight: bold; transition: background-color 0.2s ease; }
         .thumbnail .remove:hover { background: rgba(192, 57, 43, 1); }
-
         .final-actions { margin-top: 25px; padding-top: 20px; border-top: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
-
-        /* --- Loading Spinner --- */
         .loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; color: white; font-size: 1.5rem; z-index: 9999; display: none; }
         .loading span { background-color: rgba(0,0,0,0.8); padding: 15px 25px; border-radius: 8px; }
-
-        /* --- Modals --- */
         .modal {
-            display: none; position: fixed; z-index: 1050; /* Above header */
-            left: 0; top: 0; width: 100%; height: 100%;
-            overflow: auto; background-color: rgba(0,0,0,0.5);
-            align-items: center; justify-content: center;
+            display: none; position: fixed; z-index: 1050; left: 0; top: 0; width: 100%; height: 100%;
+            overflow: auto; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center;
         }
         .modal-content {
-            background-color: #fefefe; margin: auto; padding: 20px;
-            border: 1px solid #888; width: 90%; max-width: 400px;
-            border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            background-color: #fefefe; margin: auto; padding: 20px; border: 1px solid #888; width: 90%;
+            max-width: 400px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         .modal-header { padding-bottom: 10px; border-bottom: 1px solid #eee; margin-bottom: 15px; }
         .modal-title { font-size: 1.2rem; font-weight: 600; color: var(--primary-blue); }
         .modal-body p { margin-bottom: 20px; font-size: 1rem; }
         .modal-footer { display: flex; justify-content: flex-end; gap: 10px; }
         .modal-btn {
-             padding: 8px 15px; border-radius: 5px; cursor: pointer;
-             font-weight: 500; transition: background-color 0.2s ease;
-             border: none; font-size: 0.9rem;
+             padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 500;
+             transition: background-color 0.2s ease; border: none; font-size: 0.9rem;
         }
         .modal-btn-cancel { background-color: #aaa; color: white; }
         .modal-btn-cancel:hover { background-color: #888; }
         .modal-btn-confirm { background-color: var(--danger-red); color: white; }
         .modal-btn-confirm:hover { background-color: #c0392b; }
-
-        /* --- Mobile Adjustments --- */
         @media (max-width: 768px) {
             .main-content { padding: 10px; }
             .card-title { font-size: 1.2rem; }
@@ -267,7 +191,6 @@
             .action-btn { font-size: 0.75rem; padding: 5px 8px; gap: 3px; }
             .action-btn i { font-size: 0.8em; }
             .status { font-size: 0.7rem; padding: 2px 6px; }
-
             #scannerContainer { padding: 10px; }
             .scanner-title { font-size: 1.1rem; }
             .scanner-visitor-info { font-size: 0.85rem; }
@@ -284,7 +207,7 @@
             .visitors-table th, .visitors-table td { white-space: nowrap; }
             .scanner-header { flex-direction: column; align-items: flex-start; gap: 5px;}
             .scanner-visitor-info { text-align: left; }
-            #backToListBtn { position: absolute; top: 70px; right: 10px; /* Adjust as needed */ }
+            #backToListBtn { position: absolute; top: 70px; right: 10px; }
              .profile-icon { width: 35px; height: 35px; }
              .profile-icon i { font-size: 1rem; }
              .dropdown-menu { top: 50px; }
@@ -303,9 +226,9 @@
                 </div>
                 <div class="dropdown-menu" id="dropdownMenu">
                     <div class="user-info">
-                        <div class="user-avatar" id="userAvatar">JD</div> <!-- Placeholder -->
+                        <div class="user-avatar" id="userAvatar">S</div>
                         <div class="user-details">
-                            <p id="userRole">Administrator</p> <!-- Placeholder -->
+                            <p id="userRole">Scanner</p>
                         </div>
                     </div>
                     <div class="dropdown-item" id="profileBtn">
@@ -328,7 +251,6 @@
         <div class="main-wrapper">
             <div class="main-content">
 
-                <!-- Visitor List View -->
                 <div id="visitorListContainer">
                     <div class="content-card">
                         <div class="card-header">
@@ -357,7 +279,6 @@
                     </div>
                 </div>
 
-                <!-- Scanner View -->
                 <div id="scannerContainer">
                      <div class="scanner-header">
                          <div>
@@ -393,10 +314,9 @@
                     </div>
                 </div>
 
-            </div> <!-- End main-content -->
-        </div> <!-- End main-wrapper -->
+            </div>
+        </div>
 
-        <!-- Logout Modal -->
         <div class="modal" id="logoutModal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -412,14 +332,14 @@
             </div>
         </div>
 
-    </div> <!-- End dashboard-container -->
+    </div>
 
     <div class="loading" id="loading"><span>Processing...</span></div>
+    <input type="file" id="pdfUploader" accept=".pdf" style="display: none;">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- DOM Elements ---
             const visitorListContainer = document.getElementById('visitorListContainer');
             const scannerContainer = document.getElementById('scannerContainer');
             const visitorsTableBody = document.getElementById('visitorsTableBody');
@@ -427,24 +347,15 @@
             const refreshVisitorsBtn = document.getElementById('refreshVisitorsBtn');
             const refreshBtnText = document.getElementById('refreshBtnText');
             const backToListBtn = document.getElementById('backToListBtn');
-
-            // Header Elements
             const profileContainer = document.getElementById('profileContainer');
             const profileIcon = document.getElementById('profileIcon');
             const dropdownMenu = document.getElementById('dropdownMenu');
-            const profileBtn = document.getElementById('profileBtn'); // Added ID for potential future use
-            const settingsBtn = document.getElementById('settingsBtn'); // Added ID for potential future use
-            const logoutBtn = document.getElementById('logoutBtn'); // In dropdown
+            const profileBtn = document.getElementById('profileBtn');
+            const settingsBtn = document.getElementById('settingsBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
             const logoutModal = document.getElementById('logoutModal');
             const cancelLogout = document.getElementById('cancelLogout');
             const confirmLogout = document.getElementById('confirmLogout');
-
-             // User Info Placeholders (optional: fetch real data if needed)
-             // const userAvatar = document.getElementById('userAvatar');
-             // const userName = document.getElementById('userName');
-             // const userRole = document.getElementById('userRole');
-
-            // Scanner Elements
             const video = document.getElementById('video');
             const canvas = document.getElementById('canvas');
             const preview = document.getElementById('preview');
@@ -461,8 +372,8 @@
             const loading = document.getElementById('loading');
             const scannerVisitorName = document.getElementById('scannerVisitorName');
             const scannerVisitId = document.getElementById('scannerVisitId');
+            const pdfUploaderInput = document.getElementById('pdfUploader');
 
-            // --- State Variables ---
             let stream;
             let cropper;
             let capturedImages = [];
@@ -472,7 +383,6 @@
             let currentVisitId = null;
             let currentVisitorName = null;
 
-            // --- API Interaction ---
             async function fetchVisitors() {
                 showLoading("Fetching visitors...");
                 refreshVisitorsBtn.disabled = true;
@@ -493,7 +403,6 @@
                 }
             }
 
-            // --- Visitor List Management ---
             function populateVisitorsTable(visitors) {
                 visitorsTableBody.innerHTML = '';
                 if (!visitors || visitors.length === 0) {
@@ -504,7 +413,6 @@
                     visitorsTableBody.closest('table').style.display = 'table';
                     visitors.forEach(visitor => {
                         const row = visitorsTableBody.insertRow();
-                        // Use .get for safety when accessing potentially missing keys
                         const name = visitor.name || 'N/A';
                         const phone = visitor.phone || 'N/A';
                         const purpose = visitor.purpose || 'N/A';
@@ -512,35 +420,46 @@
                         const status = visitor.status || 'Unknown';
                         const pdf_path = visitor.pdf_path || '';
 
+                        let actionButtonsHTML = '';
+
+                        if (pdf_path) {
+                            actionButtonsHTML = `
+                                <a href="/api/get-visitor-document/${visit_id}" target="_blank" class="action-btn view-pdf-btn" title="View attached PDF">
+                                    <i class="fas fa-file-pdf"></i> View PDF
+                                 </a>
+                                 <button class="action-btn delete-doc-btn" data-visit-id="${visit_id}" data-name="${name}" title="Delete attached document">
+                                     <i class="fas fa-trash-alt"></i> Delete Doc
+                                 </button>
+                            `;
+                        } else {
+                            actionButtonsHTML = `
+                                <button class="action-btn scan-doc-btn" data-visit-id="${visit_id}" data-name="${name}" title="Scan and attach document">
+                                    <i class="fas fa-camera"></i> Scan Doc
+                                </button>
+                                <button class="action-btn upload-pdf-btn" data-visit-id="${visit_id}" data-name="${name}" title="Upload existing PDF">
+                                    <i class="fas fa-upload"></i> Upload PDF
+                                </button>
+                            `;
+                        }
+
                         row.innerHTML = `
                             <td>${name}</td>
                             <td>${phone}</td>
                             <td>${purpose}</td>
                             <td>${visit_id}</td>
                             <td><span class="status status-${status.toLowerCase()}">${status}</span></td>
-                            <td>
-                                <button class="action-btn scan-doc-btn" data-visit-id="${visit_id}" data-name="${name}" title="Scan and attach document">
-                                    <i class="fas fa-camera"></i> Scan Doc
-                                </button>
-                                ${pdf_path ?
-                                    `<a href="/api/get-visitor-document/${visit_id}" target="_blank" class="action-btn view-pdf-btn" title="View attached PDF">
-                                        <i class="fas fa-file-pdf"></i> View PDF
-                                     </a>`
-                                    : ''
-                                }
-                            </td>
+                            <td>${actionButtonsHTML}</td>
                         `;
                     });
                 }
             }
 
-            // --- View Switching ---
             function showVisitorListView() {
                 visitorListContainer.style.display = 'block';
                 scannerContainer.style.display = 'none';
                 stopCameraStream();
                 resetScannerState();
-                fetchVisitors(); // Refresh list on return
+                fetchVisitors();
             }
 
             function showScannerView(visitId, visitorName) {
@@ -555,8 +474,7 @@
                 updateScannerButtonStates();
             }
 
-            // --- Scanner Initialization and Control ---
-            async function getCameras() { /* ... (same as before) ... */
+            async function getCameras() {
                  try {
                     const devices = await navigator.mediaDevices.enumerateDevices();
                     cameras = devices.filter(device => device.kind === 'videoinput');
@@ -564,7 +482,7 @@
                 } catch (err) { console.error("Error enumerating devices:", err); switchCameraBtn.disabled = true; }
             }
 
-            async function startCamera(deviceId = null) { /* ... (same as before, includes checks) ... */
+            async function startCamera(deviceId = null) {
                  if (scannerContainer.style.display !== 'block') return;
                  stopCameraStream();
                  const constraints = { video: { deviceId: deviceId ? { exact: deviceId } : undefined, facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false };
@@ -576,40 +494,38 @@
                  } catch (err) { console.error('Error starting camera:', err); alert(`Failed to start camera: ${err.message}. Check permissions.`); }
             }
 
-            function stopCameraStream() { /* ... (same as before) ... */
+            function stopCameraStream() {
                  if (stream) { stream.getTracks().forEach(track => track.stop()); stream = null; isCameraActive = false; console.log("Camera stream stopped."); }
                  video.srcObject = null;
             }
 
-            switchCameraBtn.addEventListener('click', async () => { /* ... (same as before) ... */
+            switchCameraBtn.addEventListener('click', async () => {
                 if (cameras.length > 1) { currentCameraIndex = (currentCameraIndex + 1) % cameras.length; await startCamera(cameras[currentCameraIndex].deviceId); }
             });
 
-            // --- Scanner Sub-View Management ---
-            function showCameraSubView() { /* ... (same as before) ... */
+            function showCameraSubView() {
                  cameraView.style.display = 'block'; cameraControls.style.display = 'flex'; previewView.style.display = 'none';
                  if (cropper) { cropper.destroy(); cropper = null; }
                  if (!isCameraActive && stream === null) { startCamera(cameras[currentCameraIndex]?.deviceId); }
             }
-            function showPreviewSubView() { /* ... (same as before) ... */
+            function showPreviewSubView() {
                  cameraView.style.display = 'none'; cameraControls.style.display = 'none'; previewView.style.display = 'block';
             }
 
-            // --- Photo Capture and Cropping ---
-            takePhotoBtn.addEventListener('click', () => { /* ... (same as before) ... */
+            takePhotoBtn.addEventListener('click', () => {
                  if (!isCameraActive || !video.srcObject || video.videoWidth === 0) { alert("Camera not ready."); return; }
                  canvas.width = video.videoWidth; canvas.height = video.videoHeight;
                  canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
                  const dataURL = canvas.toDataURL('image/jpeg', 0.9); preview.src = dataURL;
                  showPreviewSubView(); stopCameraStream();
                  if (cropper) cropper.destroy();
-                 cropper = new Cropper(preview, { viewMode: 1, autoCropArea: 0.95, /* other options */ });
+                 cropper = new Cropper(preview, { viewMode: 1, autoCropArea: 0.95, });
             });
 
-            confirmCropBtn.addEventListener('click', async () => { /* ... (same as before) ... */
+            confirmCropBtn.addEventListener('click', async () => {
                 if (!cropper) return; showLoading("Processing...");
                 try {
-                    const croppedCanvas = cropper.getCroppedCanvas({ /* options */ });
+                    const croppedCanvas = cropper.getCroppedCanvas({});
                     const croppedImageBase64 = croppedCanvas.toDataURL('image/jpeg', 0.85);
                     const response = await fetch('/api/upload-image', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ image: croppedImageBase64 }) });
                     if (!response.ok) throw new Error(`Upload failed: ${response.statusText}`);
@@ -622,8 +538,7 @@
 
             retakeBtn.addEventListener('click', showCameraSubView);
 
-            // --- Scanner Image List ---
-            function addScannerImageToList(imageUrl, imageId) { /* ... (same as before) ... */
+            function addScannerImageToList(imageUrl, imageId) {
                  capturedImages.push({ id: imageId, url: imageUrl });
                  const thumbnailDiv = document.createElement('div'); thumbnailDiv.className = 'thumbnail'; thumbnailDiv.dataset.id = imageId;
                  thumbnailDiv.innerHTML = `<img src="${imageUrl}" alt="Thumbnail"><span class="remove" data-id="${imageId}" title="Remove">×</span>`;
@@ -632,11 +547,12 @@
                  updateScannerButtonStates();
             }
 
-            function removeScannerImage(imageId, element) { /* ... (same as before) ... */
+            function removeScannerImage(imageId, element) {
                  imageList.removeChild(element); capturedImages = capturedImages.filter(img => img.id !== imageId);
                  console.log(`Scanner image ${imageId} removed.`); updateScannerButtonStates();
             }
-            generatePdfBtn.addEventListener('click', async () => { /* ... (same as before, uses currentVisitId) ... */
+
+            generatePdfBtn.addEventListener('click', async () => {
                  if (capturedImages.length === 0 || !currentVisitId) { alert("Capture images first."); return; }
                  showLoading("Generating PDF...");
                  try {
@@ -645,13 +561,12 @@
                     const data = await response.json();
                     if (!data.success || !data.pdf_url) throw new Error(data.error || 'PDF generation failed');
                     alert(`PDF generated for ${currentVisitorName} (ID: ${currentVisitId})!`);
-                    showVisitorListView(); // Go back to list
+                    showVisitorListView();
                  } catch (err) { console.error('Error generating PDF:', err); alert(`Failed: ${err.message}`); }
                  finally { hideLoading(); }
             });
 
-            // --- Scanner State Reset and Cleanup ---
-            function resetScannerState() { /* ... (same as before) ... */
+            function resetScannerState() {
                  if (isCameraActive) stopCameraStream();
                  if (cropper) { cropper.destroy(); cropper = null; }
                  imageList.innerHTML = ''; capturedImages = []; currentVisitId = null; currentVisitorName = null;
@@ -659,42 +574,120 @@
                  showCameraSubView(); updateScannerButtonStates(); console.log("Scanner state reset.");
             }
 
-            clearAllBtn.addEventListener('click', () => { /* ... (same as before, UI clear only) ... */
+            clearAllBtn.addEventListener('click', () => {
                  if (capturedImages.length === 0) return;
                  if (!confirm('Clear all images in this session?')) return;
                  imageList.innerHTML = ''; capturedImages = []; updateScannerButtonStates();
                  console.log("Scanner session images cleared.");
             });
 
-            // --- UI State Updates ---
-            function updateScannerButtonStates() { /* ... (same as before) ... */
+            function updateScannerButtonStates() {
                  const hasImages = capturedImages.length > 0;
                  clearAllBtn.disabled = !hasImages; generatePdfBtn.disabled = !hasImages;
             }
-            function showLoading(message = "Processing...") { /* ... (same as before) ... */
+
+            function showLoading(message = "Processing...") {
                  loading.querySelector('span').textContent = message; loading.style.display = 'flex';
             }
-            function hideLoading() { /* ... (same as before) ... */
+            function hideLoading() {
                  loading.style.display = 'none';
             }
 
-            // --- Event Listeners ---
+             async function handlePdfUpload(event) {
+                const file = event.target.files[0];
+                const visitId = event.target.getAttribute('data-current-visit-id');
+                const visitorName = event.target.getAttribute('data-current-visitor-name');
+
+                event.target.value = null;
+                event.target.removeAttribute('data-current-visit-id');
+                event.target.removeAttribute('data-current-visitor-name');
+
+                if (!file || !visitId) {
+                    console.log("Upload cancelled or visit ID missing.");
+                    return;
+                }
+                if (file.type !== 'application/pdf') {
+                    alert('Invalid file type. Please select a PDF file.');
+                    return;
+                }
+                const formData = new FormData();
+                formData.append('document', file);
+                showLoading(`Uploading PDF for ${visitorName}...`);
+                try {
+                    const response = await fetch(`/api/upload-visitor-document/${visitId}`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await response.json();
+                    if (!response.ok || !data.success) {
+                        throw new Error(data.error || `Upload failed with status ${response.status}`);
+                    }
+                    alert(`PDF uploaded successfully for ${visitorName}!`);
+                    fetchVisitors();
+                } catch (error) {
+                    console.error('Error uploading PDF:', error);
+                    alert(`Failed to upload PDF: ${error.message}`);
+                } finally {
+                    hideLoading();
+                }
+            }
+
+            async function handleDeleteDocument(visitId, visitorName) {
+                if (!confirm(`Are you sure you want to delete the document for ${visitorName} (Visit ID: ${visitId})? This cannot be undone.`)) {
+                    return;
+                }
+                showLoading(`Deleting document for ${visitorName}...`);
+                try {
+                    const response = await fetch(`/api/delete-visitor-document/${visitId}`, {
+                        method: 'POST'
+                    });
+                    const data = await response.json();
+                    if (!response.ok || !data.success) {
+                        throw new Error(data.message || `Deletion failed with status ${response.status}`);
+                    }
+                    alert(data.message || `Document deleted successfully for ${visitorName}.`);
+                    fetchVisitors();
+                } catch (error) {
+                    console.error('Error deleting document:', error);
+                    alert(`Failed to delete document: ${error.message}`);
+                } finally {
+                    hideLoading();
+                }
+            }
+
             refreshVisitorsBtn.addEventListener('click', fetchVisitors);
             backToListBtn.addEventListener('click', showVisitorListView);
 
-            // Delegated event listener for scan buttons
             visitorsTableBody.addEventListener('click', (event) => {
                 const scanButton = event.target.closest('.scan-doc-btn');
+                const uploadButton = event.target.closest('.upload-pdf-btn');
+                const deleteButton = event.target.closest('.delete-doc-btn');
+
                 if (scanButton) {
                     const visitId = scanButton.dataset.visitId;
                     const name = scanButton.dataset.name;
-                    if (visitId && visitId !== 'N/A') { // Check for valid ID
+                    if (visitId && visitId !== 'N/A') {
                         showScannerView(visitId, name);
-                    } else { alert("Error: Valid Visit ID not found."); }
+                    } else { alert("Error: Valid Visit ID not found for scanning."); }
+                } else if (uploadButton) {
+                     const visitId = uploadButton.dataset.visitId;
+                     const name = uploadButton.dataset.name;
+                     if (visitId && visitId !== 'N/A') {
+                        pdfUploaderInput.setAttribute('data-current-visit-id', visitId);
+                        pdfUploaderInput.setAttribute('data-current-visitor-name', name);
+                        pdfUploaderInput.click();
+                     } else { alert("Error: Valid Visit ID not found for upload."); }
+                } else if (deleteButton) {
+                    const visitId = deleteButton.dataset.visitId;
+                    const name = deleteButton.dataset.name;
+                    if (visitId && visitId !== 'N/A') {
+                        handleDeleteDocument(visitId, name);
+                    } else { alert("Error: Valid Visit ID not found for deletion."); }
                 }
             });
 
-            // Header Dropdown Logic
+            pdfUploaderInput.addEventListener('change', handlePdfUpload);
+
             profileIcon.addEventListener('click', () => {
                 dropdownMenu.classList.toggle('active');
             });
@@ -703,43 +696,34 @@
                 if (!profileContainer.contains(event.target) && dropdownMenu.classList.contains('active')) {
                     dropdownMenu.classList.remove('active');
                 }
-                 // Close modal if clicking outside content
                  if (event.target === logoutModal) {
                      logoutModal.style.display = 'none';
                  }
             });
 
-            // Logout Modal Logic
             logoutBtn.addEventListener('click', () => {
                 logoutModal.style.display = 'flex';
-                dropdownMenu.classList.remove('active'); // Close dropdown
+                dropdownMenu.classList.remove('active');
             });
 
             cancelLogout.addEventListener('click', () => {
                 logoutModal.style.display = 'none';
             });
 
-            // --- USER PROVIDED LOGOUT CODE ---
             confirmLogout.addEventListener('click', function() {
-                showLoading("Logging out..."); // Optional feedback
-                fetch("/logout") // Assuming you have a /logout endpoint in Flask
+                showLoading("Logging out...");
+                fetch("/logout")
                     .then(response => {
                         if (!response.ok) {
                             console.error("Logout request failed:", response.statusText);
-                            // Handle failed logout if necessary
                         }
-                        // Proceed regardless of server response for immediate UI change
-                        localStorage.removeItem("user"); // Or any other relevant session data
-                        window.location.href = "/"; // Redirect to login or home page
+                        localStorage.removeItem("user");
+                        window.location.href = "/";
                     })
                     .catch(error => {
                         console.error("Error during logout fetch:", error);
                         localStorage.removeItem("user");
                         window.location.href = "/";
-                    })
-                    .finally(() => {
-                        // Hide loading indicator even if redirect hasn't happened yet
-                        // hideLoading(); // Might not be visible after redirect starts
                     });
             });
 
