@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="static/assets/logo/favicon.png" type="image/png">
+    <link rel="icon" href="{{ url_for('static', filename='assets/logo/favicon.png') }}" type="image/png">
     <title>Department Login</title>
     <style>
         :root {
@@ -125,12 +125,11 @@
             display: flex;
             align-items: center;
             color: var(--text-muted);
-            z-index: 2; /* Ensure icon is above select arrow */
-            pointer-events: none; /* Allow clicking through icon */
+            z-index: 2;
+            pointer-events: none;
         }
 
-        /* Style for the select dropdown */
-        select {
+        input[type="email"] {
             width: 100%;
             padding: 15px 16px 15px 45px; /* Adjust padding for icon */
             border: 2px solid #e2e8f0;
@@ -140,28 +139,12 @@
             outline: none;
             color: var(--text-dark);
             background-color: #f8fafc;
-            appearance: none; /* Remove default system appearance */
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-image: url('data:image/svg+xml;utf8,<svg fill="%236c757d" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* Custom dropdown arrow */
-            background-repeat: no-repeat;
-            background-position: right 16px center;
-            cursor: pointer;
         }
 
-        select:focus {
+        input[type="email"]:focus {
             border-color: var(--accent-blue);
             background-color: var(--white);
             box-shadow: 0 0 0 4px rgba(91, 164, 230, 0.15);
-        }
-
-        select:required:invalid { /* Style for the default disabled option */
-            color: #a0aec0;
-        }
-
-        option {
-             color: var(--text-dark); /* Ensure options have dark text */
-             background-color: var(--white); /* Optional: set background for options */
         }
 
         button {
@@ -260,14 +243,13 @@
 <body>
     <div class="container">
         <div class="logo-container">
-            <!-- Make sure the static path is correct for your project structure -->
             <img src="{{ url_for('static', filename='assets/logo/svmslogo.png') }}" alt="Smart Visitor Management System Logo" class="logo">
         </div>
         <div class="login-card">
             <h1>Department Login</h1>
-            <p class="subtitle">Select your department to receive a secure OTP</p>
+            <p class="subtitle">Enter your registered department email to receive a secure OTP</p>
 
-            <!-- Flash Messages Display (Moved above form) -->
+            <!-- Flash Messages Display -->
             {% with messages = get_flashed_messages(with_categories=true) %}
               {% if messages %}
                 {% for category, message in messages %}
@@ -279,7 +261,7 @@
                       {% elif category == 'info' %}<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
                       {% endif %}
                     </div>
-                    <div>{{ message }}</div> <!-- Wrapped message in div -->
+                    <div>{{ message }}</div>
                   </div>
                 {% endfor %}
               {% endif %}
@@ -288,24 +270,13 @@
             <form method="POST" action="{{ url_for('login_department') }}">
                 <div class="input-group">
                     <div class="input-icon">
-                        <!-- Building Icon for Department Selection -->
+                        <!-- Mail Icon for Email Input -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                            <line x1="3" y1="9" x2="21" y2="9"></line>
-                            <line x1="9" y1="21" x2="9" y2="9"></line>
+                           <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                           <polyline points="22,6 12,13 2,6"></polyline>
                         </svg>
                     </div>
-                    <select name="department_name" required>
-                        <option value="" disabled selected>-- Select Department --</option>
-                        <!-- Loop through departments passed from Flask -->
-                        {% if departments %}
-                            {% for dept in departments %}
-                                <option value="{{ dept.name }}">{{ dept.name }}</option>
-                            {% endfor %}
-                        {% else %}
-                            <option value="" disabled>No departments configured</option>
-                        {% endif %}
-                    </select>
+                    <input type="email" name="department_email" placeholder="Enter Department Email" required>
                 </div>
                 <button type="submit">Send OTP</button>
             </form>
