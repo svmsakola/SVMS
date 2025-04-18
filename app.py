@@ -1776,9 +1776,4 @@ def delete_user():
         return jsonify({"success": False, "message": f"An server error occurred during user deletion: {str(e)}"}), 500
 
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', port=5100, debug=True)
-
-
-
-
-# gunicorn --workers 3 --bind 0.0.0.0:8080 app:app
+    app.run()
