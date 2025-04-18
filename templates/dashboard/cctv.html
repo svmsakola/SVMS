@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='assets/logo/favicon.png') }}" type="image/png">
     <title>अभ्यागत प्रवेश पुष्टी</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <style>
@@ -1081,7 +1082,7 @@ function logout() {
       console.error('Logout error:', error);
       localStorage.removeItem("user");
       localStorage.removeItem("dailyVisitorTracker");
-      window.location.href = "/";
+      window.location.href = "/login";
     });
 }
 

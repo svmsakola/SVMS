@@ -203,20 +203,15 @@ def detect_person_and_face(frame):
 def login():
     if "user" in session:
         return redirect(url_for("dashboard", role=session["user"]["role"]))
-
     if request.method == "POST":
-        # Handle JSON API requests for login
         if request.is_json:
             data = request.json
             if not data:
                 return jsonify(success=False, message="Invalid request format")
-
             username = data.get("username")
             password = data.get("password")
-
             if not username or not password:
                 return jsonify(success=False, message="Username and password are required")
-
             users = load_users()
             if username in users and bcrypt.checkpw(password.encode('utf-8'),
                                                     users[username]["password"].encode('utf-8')):
@@ -225,42 +220,33 @@ def login():
                 return jsonify(success=True, redirect_url=url_for("dashboard", role=role))
 
             return jsonify(success=False, message="Invalid credentials")
-
-        # Handle form-based login for traditional form submission
         else:
             username = request.form.get("username")
             password = request.form.get("password")
-
             if not username or not password:
                 flash("Username and password are required", "error")
                 return render_template("login.html")
-
             users = load_users()
             if username in users and bcrypt.checkpw(password.encode('utf-8'),
                                                     users[username]["password"].encode('utf-8')):
                 role = users[username]["role"]
                 session["user"] = {"username": username, "role": role}
                 return redirect(url_for("dashboard", role=role))
-
             flash("Invalid credentials", "error")
             return render_template("login.html")
-
     requested_path = request.path
     if requested_path == "/":
         return render_template("index.html")
     else:
         return render_template("login.html")
 
-
 @app.route("/login", methods=["GET", "POST"])
 def login_page():
-    # Redirect to the main login function
     return login()
 
 @app.route('/sw/sw.js')
 def service_worker():
     return app.send_static_file('sw/sw.js')
-
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -268,7 +254,6 @@ def register():
         data = request.json
         if not data:
             return jsonify(success=False, message="Invalid request format")
-
         username = data.get("username")
         password = data.get("password")
         role = data.get("role")
@@ -304,7 +289,7 @@ def dashboard(role):
         "scanner": "dashboard/scanner.html"
     }
     if role not in templates:
-        return render_template("unauthorized.html")
+        return render_template("index.html")
     return render_template(templates[role])
 
 @app.route("/logout")
