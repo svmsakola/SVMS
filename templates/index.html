@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Visitor Management System - Login</title>
+    <link rel="manifest" href="static/sw/manifest.json">
+
+    <title>SVMS Akola</title>
+    <link rel="icon" href="static/assets/logo/favicon.png" type="image/png">
     <style>
         :root {
             --primary-blue: #2c3e90;
@@ -11,9 +14,8 @@
             --light-blue: #e6f2ff;
             --white: #ffffff;
             --text-dark: #2c3e50;
-            --border-radius: 12px;
-            --box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            --transition: all 0.3s ease;
+            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            --hover-shadow: 0 15px 30px rgba(52, 152, 219, 0.15);
         }
 
         * {
@@ -23,164 +25,488 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--light-blue) 0%, var(--white) 100%);
-            color: var(--text-dark);
-            line-height: 1.6;
+            font-family: Arial, sans-serif;
+            position: relative;
+            min-height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 100%;
             height: 100vh;
-        }
-
-        .login-container {
-            width: 450px;
-            background-color: var(--white);
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
             overflow: hidden;
-            transition: var(--transition);
+            margin-top: 70px; /* Add margin to account for fixed header height */
         }
 
-        .login-container:hover {
-            transform: translateY(-5px);
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
         }
 
-        .login-header {
+        .slide.active {
+            opacity: 1;
+            animation: zoomOut 5s ease-in-out forwards;
+        }
+
+        @keyframes zoomOut {
+            0% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Header Styles with Responsive Logo */
+        .header {
             background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
             color: var(--white);
-            padding: 25px 20px;
+            padding: 10px 15px;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            width: 100%;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Default logo size for mobile */
+        .logo {
+            height: 60px;
+            max-width: 100%;
+            transition: height 0.3s ease;
+        }
+
+
+        @media screen and (min-width: 768px) {
+            .logo {
+                height: 60px;
+            }
+
+            .header {
+                padding: 5px 20px;
+            }
+        }
+
+
+        @media screen and (min-width: 1200px) {
+            .logo {
+                height: 70px;
+            }
+
+            .header {
+                padding: 5px 30px;
+            }
+        }
+
+        .login-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .login-links a {
+            color: var(--white);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.2);
+            transition: background 0.3s ease, transform 0.2s ease;
             text-align: center;
+            white-space: nowrap;
         }
 
-        .login-header img {
-            max-width: 300px;
-            height: auto;
+        .login-links a:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
         }
 
-        .login-form {
-            padding: 30px;
+        /* Mobile menu button */
+        .mobile-menu-button {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            width: 60px;
+            height: 60px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--text-dark);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            background-color: var(--light-blue);
-            border: 1px solid rgba(0,0,0,0.05);
-            border-radius: 8px;
-            font-size: 16px;
-            color: var(--text-dark);
-            transition: var(--transition);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--secondary-blue);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-        }
-
-        .login-btn {
-            width: 100%;
+        /* Footer Styles - Matching Header Theme */
+        .footer {
             background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
             color: var(--white);
-            border: none;
-            padding: 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            letter-spacing: 1px;
-            transition: var(--transition);
+            padding: 40px 20px;
+            margin-top: auto;
+            width: 100%;
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .footer-section h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--white);
+            border-bottom: 2px solid var(--white);
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+
+        .footer-section p {
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .quick-links ul {
+            list-style: none;
+        }
+
+        .quick-links ul li {
+            margin-bottom: 10px;
+        }
+
+        .quick-links ul li a {
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s ease, transform 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .quick-links ul li a:hover {
+            transform: translateX(5px);
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        .quick-links ul li a:before {
+            content: "→";
+            margin-right: 8px;
+            color: var(--white);
+        }
+
+        .contact-info p {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .contact-info p strong {
+            margin-right: 10px;
+            color: var(--white);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .developer-info {
+            font-size: 12px;
+            opacity: 0.9;
             margin-top: 10px;
         }
 
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        /* Mobile Drawer Styles */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
 
-        .error-message {
-            color: #e74c3c;
-            text-align: center;
-            margin-top: 15px;
-            font-size: 14px;
+        .drawer-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
 
-        .register-link {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
+        .drawer {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            z-index: 1002;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+            transition: left 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
         }
 
-        .register-link a {
-            color: var(--secondary-blue);
+        .drawer.active {
+            left: 0;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .drawer-close {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .drawer-content {
+            padding: 20px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .drawer-nav {
+            list-style: none;
+        }
+
+        .drawer-nav li {
+            margin-bottom: 15px;
+        }
+
+        .drawer-nav a {
+            color: var(--white);
             text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
+            font-size: 16px;
+            font-weight: 500;
+            display: block;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background 0.3s ease;
         }
 
-        .register-link a:hover {
-            color: var(--primary-blue);
-            text-decoration: underline;
+        .drawer-nav a:hover,
+        .drawer-nav a:active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Responsive media queries */
+        @media screen and (max-width: 768px) {
+            .footer-container {
+                flex-direction: column;
+            }
+
+            .footer-section {
+                margin-bottom: 20px;
+            }
+        }
+
+        @media screen and (max-width: 576px) {
+            .header {
+                justify-content: center;
+                position: fixed;  /* Ensure fixed on mobile */
+                top: 0;
+                left: 0;
+                width: 100%;
+                z-index: 1000;
+            }
+
+            .mobile-menu-button {
+                display: block;
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 60px;
+                height: 60px;
+                z-index: 1001;
+            }
+
+            .logo-container {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .login-links {
+                display: none;
+            }
+
+            .footer {
+                padding: 30px 15px;
+            }
+
+            .copyright {
+                font-size: 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-header">
-            <img src="static/assets/logo/svmslogo.png" alt="Smart Visitor Management System Logo">
+    <!-- Header with Responsive Logo -->
+    <header class="header">
+        <button class="mobile-menu-button" id="mobileMenuToggle">☰</button>
+
+        <div class="logo-container">
+            <img src="static/assets/logo/svmslogo.png" alt="SVMS Logo" class="logo">
         </div>
-        <div class="login-form">
-            <form id="login-form">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" class="form-control" placeholder="Enter your username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
-                </div>
-                <button type="submit" class="login-btn">Login</button>
-                <p id="error-message" class="error-message"></p>
-            </form>
-            <p class="register-link">Don't have an account? <a href="/register">Register Here</a></p>
+
+        <div class="login-links" id="loginLinks">
+            <a href="/login">कार्यालय लॉगिन</a>
+            <a href="/department/login">विभाग लॉगिन</a>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer Menu -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <div class="drawer" id="drawer">
+        <div class="drawer-header">
+            <img src="static/assets/logo/svmslogo.png" alt="SVMS Logo" style="height: 40px;">
+            <button class="drawer-close" id="drawerClose">×</button>
+        </div>
+        <div class="drawer-content">
+            <ul class="drawer-nav">
+                <li><a href="/">मुख्यपृष्ठ</a></li>
+                <li><a href="/login">कार्यालय लॉगिन</a></li>
+                <li><a href="/department/login">विभाग लॉगिन</a></li>
+                <li><a href="/register">नोंदणी</a></li>
+            </ul>
         </div>
     </div>
 
+    <!-- Slider -->
+    <div class="slider-container">
+        <div class="slide" style="background-image: url('static/slider/1.jpeg');"></div>
+        <div class="slide" style="background-image: url('static/slider/2.jpeg');"></div>
+    </div>
+
+    <!-- Footer with Header Theme -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section about-us">
+                <h3>थोडक्यात आमच्याविषयी</h3>
+                <p>सदर संकेतस्थळ स्मार्ट व्हिजिटर मॅनेजमेंट सिस्टिम (SVMS) हे जिल्हाधिकारी कार्यालय अकोला येथे भेट देणाऱ्या नागरिकांच्या नोंदणीसाठी विकसित करण्यात आले आहे. या प्रणालीच्या माध्यमातून नागरिक त्यांची भेट पूर्वनियोजित करू शकतात तसेच कार्यालयीन भेटींची प्रक्रिया अधिक सुलभ व कार्यक्षम बनवता येते.</p>
+            </div>
+
+            <div class="footer-section quick-links">
+                <h3>जलद दुवे</h3>
+                <ul>
+                    <li><a href="/">मुख्यपृष्ठ</a></li>
+                    <li><a href="/login">लॉगीन</a></li>
+                    <li><a href="/register">नोंदणी करा</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section contact-info">
+                <h3>सपंर्क करा</h3>
+                <p><strong>ई-मेल:</strong> info@svmsakola.in</p>
+                <p><strong>दूरध्वनी:</strong> +91 1234567890</p>
+            </div>
+        </div>
+
+        <div class="copyright">
+            <p>© २०२५ खनिकर्म शाखा, जिल्हाधिकारी कार्यालय, अकोला. सर्व हक्क राखीव.</p>
+            <p class="developer-info">© हे संकेतस्थळ स्मार्ट व्हिजिटर मॅनेजमेंट सिस्टिम (SVMS) रोहित इंगळे, काजक इनोव्हेशन अँड टेक्निकल सोल्यूशन्स, अकोला यांच्याकडून विकसित करण्यात आले आहे.</p>
+        </div>
+    </footer>
+
     <script>
-        document.getElementById("login-form").addEventListener("submit", function(event) {
-            event.preventDefault();
+        document.addEventListener('DOMContentLoaded', function() {
+            // Slider functionality
+            const slides = document.querySelectorAll('.slide');
+            let currentSlideIndex = 0;
 
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
+            function showSlide(index) {
+                slides.forEach(slide => {
+                    slide.classList.remove('active');
+                });
+                slides[index].classList.add('active');
+            }
 
-            fetch("/", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, password })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.href = data.redirect_url;
-                } else {
-                    document.getElementById("error-message").textContent = "Invalid credentials. Please try again.";
+            showSlide(currentSlideIndex);
+
+            function nextSlide() {
+                currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+                showSlide(currentSlideIndex);
+            }
+
+            setInterval(nextSlide, 8000);
+
+            // Mobile drawer functionality
+            const mobileMenuButton = document.getElementById('mobileMenuToggle');
+            const drawer = document.getElementById('drawer');
+            const drawerOverlay = document.getElementById('drawerOverlay');
+            const drawerClose = document.getElementById('drawerClose');
+
+            function openDrawer() {
+                drawer.classList.add('active');
+                drawerOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeDrawer() {
+                drawer.classList.remove('active');
+                drawerOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            mobileMenuButton.addEventListener('click', openDrawer);
+            drawerClose.addEventListener('click', closeDrawer);
+            drawerOverlay.addEventListener('click', closeDrawer);
+
+            // Close drawer on window resize (if switching to desktop)
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 576) {
+                    closeDrawer();
                 }
-            })
-            .catch(error => {
-                document.getElementById("error-message").textContent = "An error occurred. Please try again later.";
             });
         });
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw/sw.js').then(() => {
+                console.log('Service Worker registered');
+            });
+        }
     </script>
 </body>
 </html>
