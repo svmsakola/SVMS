@@ -1768,5 +1768,144 @@ def delete_user():
         traceback.print_exc()
         return jsonify({"success": False, "message": f"An server error occurred during user deletion: {str(e)}"}), 500
 
+@app.route('/data/facedata/<uid>/<filename>')
+def get_registration_image(uid, filename):
+    facedata_image_dir = os.path.join('data', 'facedata')
+    user_image_dir = os.path.join(facedata_image_dir, uid)
+    if not os.path.exists(os.path.join(user_image_dir, filename)):
+        if not os.path.exists(os.path.join(facedata_image_dir, filename)):
+             return jsonify({'success': False, 'message': 'Image not found'}), 404
+        return send_from_directory(facedata_image_dir, filename)
+    return send_from_directory(user_image_dir, filename)
+
+@app.route('/api/visitor-status/<visit_id>', methods=['GET'])
+def get_visitor_status(visit_id):
+    if not visit_id:
+        return jsonify({'success': False, 'message': 'Visit ID is required'}), 400
+    try:
+        face_data = load_face_data()
+        found_visitor_data = None
+        target_visit = None
+        visitor_uid = None
+        for uid, user_data in face_data.items():
+            if isinstance(user_data, dict) and 'visitor' in user_data and isinstance(user_data['visitor'], list):
+                for visit in user_data['visitor']:
+                    if isinstance(visit, dict) and visit.get('visit_id') == visit_id:
+                        target_visit = visit
+                        found_visitor_data = user_data
+                        visitor_uid = uid
+                        break
+            if target_visit:
+                break
+        if not found_visitor_data or not target_visit:
+            return jsonify({'success': False, 'message': 'Visitor ID not found'}), 404
+        profile_image_url = None
+        profile_imgs = found_visitor_data.get('profile_img', [])
+        if profile_imgs and isinstance(profile_imgs, list) and profile_imgs[0]:
+             profile_image_url = url_for('get_profile_image', uid=visitor_uid, filename=os.path.basename(profile_imgs[0]), _external=False)
+        else:
+            reg_images = found_visitor_data.get('images', [])
+            if reg_images and isinstance(reg_images, list) and reg_images[0]:
+                 profile_image_url = url_for('get_registration_image', uid=visitor_uid, filename=os.path.basename(reg_images[0]), _external=False)
+        response_data = {
+            'success': True,
+            'uid': visitor_uid,
+            'name': found_visitor_data.get('name', 'N/A'),
+            'phone': found_visitor_data.get('phone', 'N/A'),
+            'tahasil': found_visitor_data.get('tahasil', 'N/A'),
+            'district': found_visitor_data.get('district', 'N/A'),
+            'visit_id': target_visit.get('visit_id', 'N/A'),
+            'datetime': target_visit.get('datetime', 'N/A'),
+            'purpose': target_visit.get('purpose', 'N/A'),
+            'status': target_visit.get('status', 'N/A'),
+            'forwarding_department': target_visit.get('forwarding_department', ''),
+            'profile_image_url': profile_image_url,
+            'face_encoding_paths': found_visitor_data.get('face_encodings', []),
+            'image_paths': found_visitor_data.get('images', [])
+        }
+        return jsonify(response_data)
+    except FileNotFoundError:
+        return jsonify({'success': False, 'message': 'Visitor data file not found.'}), 500
+    except json.JSONDecodeError:
+         return jsonify({'success': False, 'message': 'Error reading visitor data.'}), 500
+    except Exception as e:
+        print(f"Error in /api/visitor-status/{visit_id}: {e}")
+        traceback.print_exc()
+        return jsonify({'success': False, 'message': f'An internal server error occurred: {str(e)}'}), 500
+
+@app.route('/api/validate-visitor-face', methods=['POST'])
+def validate_visitor_face():
+    data = request.get_json()
+    if not data or 'uid' not in data or 'image' not in data:
+        return jsonify({'success': False, 'message': 'Missing uid or image data'}), 400
+    uid = data['uid']
+    image_data_uri = data['image']
+    try:
+        if ',' not in image_data_uri:
+             return jsonify({'success': False, 'message': 'Invalid image data format'}), 400
+        header, encoded = image_data_uri.split(',', 1)
+        image_bytes = base64.b64decode(encoded)
+        nparr = np.frombuffer(image_bytes, np.uint8)
+        captured_frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        if captured_frame is None:
+             return jsonify({'success': False, 'message': 'Could not decode image'}), 400
+        rgb_captured_frame = cv2.cvtColor(captured_frame, cv2.COLOR_BGR2RGB)
+        face_data = load_face_data()
+        user_data = face_data.get(uid)
+        if not user_data:
+            return jsonify({'success': False, 'message': 'User ID not found'}), 404
+        known_encodings = []
+        encoding_paths = user_data.get('face_encodings', [])
+        if encoding_paths:
+            for path in encoding_paths:
+                if os.path.exists(path):
+                    try:
+                        known_encodings.append(np.load(path))
+                    except Exception as e:
+                        print(f"Warning: Could not load encoding {path}: {e}")
+                else:
+                     print(f"Warning: Encoding file not found: {path}")
+        if not known_encodings:
+            image_paths = user_data.get('images', [])
+            if not image_paths:
+                 return jsonify({'success': False, 'message': 'No face data (encodings or images) found for this user to compare.'}), 404
+            print(f"Generating temporary encodings from images for validation for UID {uid}")
+            for img_path_rel in image_paths:
+                 img_path_abs = os.path.join('data', img_path_rel)
+                 if os.path.exists(img_path_abs):
+                      try:
+                          known_image = face_recognition.load_image_file(img_path_abs)
+                          encs = face_recognition.face_encodings(known_image, model=face_recognition_model)
+                          if encs:
+                              known_encodings.append(encs[0])
+                      except Exception as e:
+                          print(f"Warning: Could not process image {img_path_abs} for encoding: {e}")
+                 else:
+                     print(f"Warning: Image file not found for encoding generation: {img_path_abs}")
+        if not known_encodings:
+             return jsonify({'success': False, 'message': 'Could not load or generate any known face encodings for comparison.'}), 404
+        face_locations = face_recognition.face_locations(rgb_captured_frame, model=face_recognition_model)
+        if not face_locations:
+            return jsonify({'success': False, 'message': 'No face detected in the provided image.'})
+        captured_encodings = face_recognition.face_encodings(rgb_captured_frame, face_locations, model=face_recognition_model)
+        if not captured_encodings:
+             return jsonify({'success': False, 'message': 'Could not generate encoding from the detected face.'})
+        match_found = False
+        for captured_encoding in captured_encodings:
+            matches = face_recognition.compare_faces(known_encodings, captured_encoding, tolerance=0.45)
+            if True in matches:
+                match_found = True
+                break
+        if match_found:
+            return jsonify({'success': True, 'message': 'Face validation successful.'})
+        else:
+            return jsonify({'success': False, 'message': 'Face validation failed. No match found.'})
+    except Exception as e:
+        print(f"Error during face validation for UID {uid}: {e}")
+        traceback.print_exc()
+        return jsonify({'success': False, 'message': f'An internal server error occurred during face validation: {str(e)}'}), 500
+    finally:
+        cleanup_memory()
+
 if __name__ == "__main__":
-    app.run()
+    app.run(debug= True)
