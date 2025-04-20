@@ -24,7 +24,7 @@
             --success-color: #27ae60;
             --error-color: #c0392b;
             --warning-color: #f39c12;
-            --info-color: #2980b9; /* Added info color */
+            --info-color: #2980b9;
             --status-pending-bg: #f9e79f;
             --status-pending-text: #b7791f;
             --status-completed-bg: #d1f2eb;
@@ -41,8 +41,8 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; position: relative; min-height: 100vh; display: flex; flex-direction: column; background-color: #f4f7f6; color: var(--text-dark); }
         .slider-container { position: relative; width: 100%; height: 88vh; overflow: hidden; margin-top: 70px; }
         .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 2s ease-in-out; background-position: center; background-size: cover; background-repeat: no-repeat; }
-        .slide.active { opacity: 1; animation: zoomOut 5s ease-in-out forwards; }
-        @keyframes zoomOut { 0% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        .slide.active { opacity: 1; animation: zoomOut 8s ease-in-out forwards; } /* Increased duration */
+        @keyframes zoomOut { 0% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
          .header { background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue)); color: var(--white); padding: 10px 15px; height: 70px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); position: fixed; top: 0; left: 0; right: 0; z-index: 1000; width: 100%; }
          .logo-container { display: flex; align-items: center; }
@@ -55,14 +55,80 @@
          .login-links a:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-2px); }
          .mobile-menu-button { display: none; background: none; border: none; color: var(--white); font-size: 24px; cursor: pointer; padding: 5px; width: 60px; height: 60px; }
 
-         .visitor-tracking { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100; width: 90%; max-width: 500px; background: rgba(64, 64, 64, 0.25); backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(10px); border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.3); padding: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); text-align: center; color: white; }
-         .visitor-tracking h2 { font-size: 32px; margin-bottom: 20px; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); }
-         .face-scanner { width: 150px; height: 150px; margin: 0 auto 20px; opacity: 0.9; filter: drop-shadow(0 0 10px rgba(52, 152, 219, 0.7)); }
-         .tracking-input { width: 100%; background: rgba(26, 26, 26, 0.4); border: 1px solid rgba(255, 255, 255, 0.8); padding: 12px 15px; border-radius: 5px; color: white; font-size: 16px; margin-bottom: 15px; }
+         .overlay-content-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 20px; /* Add padding for spacing from edges */
+            box-sizing: border-box;
+            display: block; /* Default for absolute positioning */
+         }
+
+         .visitor-tracking {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 100; width: 90%; max-width: 450px; /* Slightly reduced max-width */
+            background: rgba(64, 64, 64, 0.05);
+            backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(5px);
+            border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 25px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center; color: white;
+         }
+         .visitor-tracking h2 { font-size: 28px; margin-bottom: 15px; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); }
+         .face-scanner { width: 120px; height: 120px; margin: 0 auto 15px; opacity: 0.9; filter: drop-shadow(0 0 10px rgba(52, 152, 219, 0.7)); }
+         .tracking-input { width: 100%; background: rgba(26, 26, 26, 0.5); border: 1px solid rgba(255, 255, 255, 0.8); padding: 12px 15px; border-radius: 5px; color: white; font-size: 16px; margin-bottom: 15px; }
          .tracking-input::placeholder { color: rgba(255, 255, 255, 0.7); }
          .track-button { background: var(--primary-blue); color: white; border: none; padding: 12px 30px; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: transform 0.3s ease, background 0.3s ease; }
          .track-button:hover { background: var(--secondary-blue); transform: translateY(-2px); }
          .track-button:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+
+
+         .profile-container {
+             position: absolute;
+             top: 50%;
+             transform: translateY(-50%);
+             z-index: 100;
+             width: 28%; /* Adjusted width */
+             max-width: 320px; /* Max width */
+             background: rgba(64, 64, 64, 0.05);
+             backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+             border-radius: 15px;
+             border: 1px solid rgba(255, 255, 255, 0.3);
+             padding: 20px; /* Adjusted padding */
+             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+             text-align: center;
+             color: white;
+         }
+         .profile-left { left: 3%; } /* Adjusted position */
+         .profile-right { right: 3%; } /* Adjusted position */
+
+         .profile-container img {
+             width: 100px; /* Adjusted size */
+             height: 100px;
+             border-radius: 50%;
+             margin-bottom: 15px;
+             object-fit: cover;
+             border: 3px solid var(--white);
+             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+             background-color: var(--light-blue); /* Placeholder bg */
+         }
+         .profile-container .title {
+             font-size: 0.9em;
+             font-weight: bold;
+             margin-bottom: 8px; /* Increased margin */
+             line-height: 1.3;
+             color: var(--white);
+             text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+         }
+         .profile-container .name {
+             font-size: 1.0em; /* Slightly smaller */
+             font-weight: 600;
+             color: var(--white);
+             text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+         }
+
+        .profiles-wrapper { display: none; } /* Hide on desktop */
 
 
         .footer { background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue)); color: var(--white); padding: 40px 20px; margin-top: auto; width: 100%; box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2); }
@@ -82,10 +148,10 @@
 
         .popup-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(44, 62, 80, 0.75); /* Slightly darker overlay */
+            background-color: rgba(44, 62, 80, 0.75);
             z-index: 1050;
             display: none; align-items: center; justify-content: center;
-            backdrop-filter: blur(6px); /* Slightly more blur */
+            backdrop-filter: blur(6px);
              animation: fadeInOverlay 0.3s ease-out forwards;
          }
          @keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
@@ -93,13 +159,13 @@
         .popup-container {
             background: var(--popup-bg);
             color: var(--text-dark);
-            border-radius: 16px; /* More rounded */
+            border-radius: 16px;
             box-shadow: var(--popup-shadow);
-            width: 90%; max-width: 800px; /* Wider for better layout */
+            width: 90%; max-width: 800px;
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
-            padding: 30px 35px; /* Adjusted padding */
+            padding: 30px 35px;
             display: flex;
             flex-direction: column;
              border-top: 6px solid var(--primary-blue);
@@ -109,8 +175,8 @@
 
 
         .popup-close {
-            position: absolute; top: 15px; right: 15px; /* Adjusted position */
-            font-size: 30px; /* Larger */
+            position: absolute; top: 15px; right: 15px;
+            font-size: 30px;
             font-weight: bold; color: #95a5a6;
             background: transparent; border: none; cursor: pointer;
             line-height: 1; padding: 0; transition: color 0.2s ease, transform 0.2s ease;
@@ -118,42 +184,42 @@
         .popup-close:hover { color: var(--error-color); transform: rotate(90deg); }
 
         .popup-title {
-             font-size: 28px; /* Larger */
-             margin-bottom: 20px; /* Adjusted margin */
+             font-size: 28px;
+             margin-bottom: 20px;
              color: var(--primary-blue);
              text-align: center;
              font-weight: 600;
              padding-bottom: 10px;
-             border-bottom: 1px solid var(--border-color); /* Subtle separator */
+             border-bottom: 1px solid var(--border-color);
         }
 
         .popup-message {
              text-align: center;
-             margin-bottom: 25px; /* More space */
-             padding: 12px 18px; /* More padding */
-             border-radius: 8px; /* Rounded */
+             margin-bottom: 25px;
+             padding: 12px 18px;
+             border-radius: 8px;
              font-size: 16px;
              border-width: 1px;
              border-style: solid;
-             font-weight: 500; /* Slightly bolder messages */
-             display: none; /* Hide initially */
+             font-weight: 500;
+             display: none;
          }
          .popup-message.error { color: var(--error-color); border-color: #e5a0a0; background-color: #fadfdf; }
          .popup-message.success { color: var(--success-color); border-color: #a8dfc2; background-color: #eafaf1; }
-         .popup-message.info { color: var(--info-color); border-color: #a9d6f0; background-color: #e8f4fc; } /* Use info color */
-         .popup-message.warning { color: #b7791f; border-color: var(--status-pending-bg); background-color: var(--status-pending-bg); } /* Aligned with pending status */
+         .popup-message.info { color: var(--info-color); border-color: #a9d6f0; background-color: #e8f4fc; }
+         .popup-message.warning { color: #b7791f; border-color: var(--status-pending-bg); background-color: var(--status-pending-bg); }
 
         .validation-section {
              padding: 25px 0;
              border-top: 1px solid var(--border-color);
              border-bottom: 1px solid var(--border-color);
              margin-bottom: 25px;
-             background-color: rgba(255,255,255, 0.6); /* Slightly more opaque */
+             background-color: rgba(255,255,255, 0.6);
              border-radius: 8px;
         }
          .validation-section p { font-weight: 600 !important; text-align: center; margin-bottom: 20px; color: var(--text-dark); }
          .validation-options { display: flex; justify-content: space-around; align-items: flex-start; gap: 25px; flex-wrap: wrap; }
-         .validation-option { text-align: center; flex: 1; min-width: 240px; /* Min width */ padding: 20px; border-radius: 10px; /* More rounded */ background-color: #f8f9fa; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); transition: transform 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease; border: 1px solid transparent; }
+         .validation-option { text-align: center; flex: 1; min-width: 240px; padding: 20px; border-radius: 10px; background-color: #f8f9fa; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); transition: transform 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease; border: 1px solid transparent; }
          .validation-option h4 { margin-bottom: 18px; color: var(--text-dark); font-size: 18px; font-weight: 600;}
          .validation-option button, .validation-option input { width: 100%; padding: 12px; margin-top: 10px; border-radius: 6px; font-size: 16px; }
          .validation-option input { border: 1px solid var(--border-color); transition: border-color 0.2s ease, box-shadow 0.2s ease; }
@@ -161,26 +227,25 @@
          .validation-option button { background-color: var(--secondary-blue); color: white; border: none; cursor: pointer; transition: background-color 0.3s, transform 0.2s; font-weight: 500;}
          .validation-option button:hover:not(:disabled) { background-color: var(--primary-blue); transform: translateY(-2px); }
          .validation-option button:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; opacity: 0.7; }
-         #face-scan-video, #face-scan-canvas { display: none; margin: 15px auto; border: 2px solid var(--border-color); border-radius: 8px; /* Rounded corners for video */ max-width: 100%;}
+         #face-scan-video, #face-scan-canvas { display: none; margin: 15px auto; border: 2px solid var(--border-color); border-radius: 8px; max-width: 100%;}
 
         .validation-option.recommended {
             border: 2px solid var(--primary-blue);
-             box-shadow: 0 0 12px rgba(44, 62, 144, 0.25); /* Stronger shadow */
+             box-shadow: 0 0 12px rgba(44, 62, 144, 0.25);
              background-color: var(--light-blue);
          }
         .validation-option.fallback-active {
              border: 2px solid var(--warning-color);
-             box-shadow: 0 0 10px rgba(243, 156, 18, 0.4); /* Adjusted shadow */
+             box-shadow: 0 0 10px rgba(243, 156, 18, 0.4);
              animation: pulseBorder 1.5s infinite;
          }
          @keyframes pulseBorder { 0%, 100% { box-shadow: 0 0 5px rgba(243, 156, 18, 0.3); } 50% { box-shadow: 0 0 15px rgba(243, 156, 18, 0.7); } }
 
-        /* --- Professional Details Section --- */
         .details-section {
              display: none;
-             padding-top: 15px; /* Space from top */
+             padding-top: 15px;
              animation: fadeInDetails 0.5s ease-out forwards;
-             background-color: #fdfefe; /* Very light background */
+             background-color: #fdfefe;
              border-radius: 10px;
              padding: 25px;
              border: 1px solid var(--border-color);
@@ -190,7 +255,7 @@
 
         .visitor-info-container {
              display: flex;
-             flex-direction: column; /* Stack profile and grid on small screens */
+             flex-direction: column;
              gap: 25px;
         }
 
@@ -205,12 +270,12 @@
          }
 
         .visitor-profile-pic img {
-            width: 140px; /* Larger photo */
+            width: 140px;
             height: 140px;
              border-radius: 50%;
              object-fit: cover;
-            border: 5px solid var(--white); /* Thicker border */
-             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+            border: 5px solid var(--white);
+             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
              background-color: var(--light-blue);
          }
 
@@ -219,7 +284,7 @@
         }
 
         .visitor-main-info .name {
-             font-size: 1.6em; /* Larger name */
+             font-size: 1.6em;
              font-weight: 600;
              color: var(--primary-blue);
              margin-bottom: 5px;
@@ -230,16 +295,15 @@
              margin-bottom: 15px;
         }
 
-        /* More Professional Status Badge */
         .status-badge-pro {
              display: inline-block;
-             padding: 6px 15px; /* Adjusted padding */
-             border-radius: 20px; /* Pill shape */
-             font-size: 0.95em; /* Slightly larger */
+             padding: 6px 15px;
+             border-radius: 20px;
+             font-size: 0.95em;
              font-weight: 600;
              text-align: center;
              text-transform: capitalize;
-             border: 1px solid transparent; /* Base border */
+             border: 1px solid transparent;
              letter-spacing: 0.5px;
         }
         .status-pending { background-color: var(--status-pending-bg); color: var(--status-pending-text); border-color: var(--status-pending-text);}
@@ -251,56 +315,162 @@
 
         .visitor-details-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
-            gap: 18px; /* Grid gap */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 18px;
         }
 
         .detail-card {
             background-color: var(--white);
-            padding: 18px; /* Card padding */
+            padding: 18px;
             border-radius: 8px;
-            border: 1px solid #e8e8e8; /* Lighter border for cards */
-            box-shadow: 0 3px 6px rgba(0,0,0,0.04); /* Subtle card shadow */
+            border: 1px solid #e8e8e8;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.04);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .detail-card strong {
             display: block; margin-bottom: 8px;
-            color: var(--primary-blue); font-size: 0.85em; /* Smaller label */
+            color: var(--primary-blue); font-size: 0.85em;
             font-weight: 600;
-             text-transform: uppercase; letter-spacing: 0.6px; /* More spacing */
-             opacity: 0.8; /* Slightly faded label */
+             text-transform: uppercase; letter-spacing: 0.6px;
+             opacity: 0.8;
          }
         .detail-card span {
-            font-size: 1.0em; /* Standard text size */
+            font-size: 1.0em;
             color: var(--text-dark);
             word-break: break-word;
-            line-height: 1.4; /* Improved line height */
+            line-height: 1.4;
         }
 
 
         @media screen and (min-width: 768px) {
              .visitor-info-container {
-                 flex-direction: row; /* Side-by-side layout on larger screens */
-                 align-items: flex-start; /* Align items to top */
+                 flex-direction: row;
+                 align-items: flex-start;
              }
              .visitor-profile-header {
-                 flex: 0 0 200px; /* Fixed width for profile section */
+                 flex: 0 0 200px;
                  padding-right: 25px;
                  margin-right: 25px;
-                 border-right: 1px dashed var(--border-color); /* Vertical separator */
-                 border-bottom: none; /* Remove bottom border */
+                 border-right: 1px dashed var(--border-color);
+                 border-bottom: none;
                  margin-bottom: 0;
                  padding-bottom: 0;
-                 align-items: center; /* Center items within the fixed width */
+                 align-items: center;
              }
              .visitor-details-grid {
-                 flex: 1; /* Allow details grid to take remaining space */
+                 flex: 1;
              }
              .visitor-main-info .name { font-size: 1.7em; }
-             .visitor-profile-pic img { width: 150px; height: 150px; } /* Slightly larger on desktop */
+             .visitor-profile-pic img { width: 150px; height: 150px; }
         }
-         @media screen and (max-width: 768px) { .footer-container { flex-direction: column; } .footer-section { margin-bottom: 20px; } .visitor-tracking { padding: 20px; } .visitor-tracking h2 { font-size: 29px; } .face-scanner { width: 100px; height: 100px; } .popup-container { width: 95%; padding: 25px; } .popup-title { font-size: 24px; } } /* Increased title size slightly */
-        @media screen and (max-width: 576px) { .header { justify-content: center; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; } .mobile-menu-button { display: block; position: absolute; left: 15px; top: 50%; transform: translateY(-50%); width: 60px; height: 60px; z-index: 1001; } .logo-container { position: absolute; left: 50%; transform: translateX(-50%); } .login-links { display: none; } .footer { padding: 30px 15px; } .copyright { font-size: 12px; } .visitor-tracking { padding: 15px; width: 95%; } .validation-options { flex-direction: column; align-items: stretch;} .validation-option { min-width: unset; width: 100%; margin-bottom: 15px;} .visitor-details-grid { grid-template-columns: 1fr; } }
+
+        @media screen and (max-width: 992px) {
+            .overlay-content-wrapper {
+                position: absolute;
+                top: 0; left: 0;
+                width: 100%; height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                padding: 80px 15px 20px 15px;
+                box-sizing: border-box;
+                overflow-y: auto;
+            }
+            .visitor-tracking {
+                position: relative; /* Change from absolute */
+                top: auto; left: auto;
+                transform: none; /* Reset transform */
+                width: 95%; /* Increase width */
+                max-width: 500px;
+                margin-bottom: 20px; /* Space below tracking */
+                order: 1; /* Ensure tracking is first */
+                padding: 20px; /* Adjust padding */
+            }
+             .visitor-tracking h2 { font-size: 24px; }
+             .face-scanner { width: 100px; height: 100px; }
+
+            .profiles-wrapper {
+                display: flex; /* Make profiles wrapper visible and flex */
+                justify-content: space-around; /* Distribute space */
+                align-items: flex-start; /* Align items to top */
+                width: 100%;
+                max-width: 600px; /* Limit max width */
+                gap: 15px; /* Space between profiles */
+                flex-wrap: wrap; /* Allow wrapping if needed */
+                order: 2; /* Ensure profiles are below tracking */
+            }
+
+            .profile-container {
+                position: relative; /* Change from absolute */
+                top: auto; left: auto; right: auto;
+                transform: none; /* Reset transform */
+                width: 45%; /* Adjust width for side-by-side */
+                max-width: 250px;
+                margin-bottom: 15px; /* Add margin */
+                flex: 1 1 200px; /* Flex properties */
+                padding: 15px; /* Adjust padding */
+            }
+            .profile-container img {
+                 width: 120px;
+                 height: 120px;
+                 margin-bottom: 10px;
+            }
+            .profile-container .title { font-size: 0.8em; margin-bottom: 5px;}
+            .profile-container .name { font-size: 0.9em; }
+
+            .profile-left, .profile-right { /* Reset desktop positioning */
+                left: auto;
+                right: auto;
+            }
+        }
+         @media screen and (max-width: 768px) {
+            .footer-container { flex-direction: column; } .footer-section { margin-bottom: 20px; }
+            .popup-container { width: 95%; padding: 25px; }
+            .popup-title { font-size: 24px; }
+            .visitor-details-grid { grid-template-columns: 1fr; } /* Stack details on smaller screens */
+         }
+
+        @media screen and (max-width: 576px) {
+            .header { justify-content: center; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; }
+            .mobile-menu-button { display: block; position: absolute; left: 15px; top: 50%; transform: translateY(-50%); width: 60px; height: 60px; z-index: 1001; }
+            .logo-container { position: absolute; left: 50%; transform: translateX(-50%); }
+            .login-links { display: none; }
+            .footer { padding: 30px 15px; }
+            .copyright { font-size: 12px; }
+
+            .overlay-content-wrapper {
+                padding: 75px 10px 15px 10px; /* Adjust padding for smallest screens */
+                justify-content: flex-start; /* Keep top alignment */
+            }
+             .visitor-tracking { width: 95%; padding: 15px; margin-bottom: 15px;}
+             .visitor-tracking h2 { font-size: 22px; }
+             .face-scanner { width: 90px; height: 90px; margin-bottom: 10px;}
+             .tracking-input { font-size: 15px; padding: 10px 12px;}
+             .track-button { font-size: 15px; padding: 10px 25px;}
+
+            .profiles-wrapper {
+                gap: 10px; /* Reduce gap */
+                justify-content: center; /* Center items when they wrap */
+            }
+            .profile-container {
+                 width: 80%; /* Allow profiles to take more width if they wrap */
+                 max-width: 280px;
+                 padding: 12px;
+                 margin-bottom: 10px;
+            }
+            .profile-container img {
+                 width: 70px;
+                 height: 70px;
+                 margin-bottom: 8px;
+            }
+            .profile-container .title { font-size: 0.75em; }
+            .profile-container .name { font-size: 0.85em; }
+            .validation-options { flex-direction: column; align-items: stretch;}
+            .validation-option { min-width: unset; width: 100%; margin-bottom: 15px;}
+            .popup-container { padding: 20px;}
+            .popup-title { font-size: 22px;}
+        }
 
     </style>
 </head>
@@ -336,11 +506,37 @@
         <div class="slide active" style="background-image: url('static/slider/1.jpeg');"></div>
         <div class="slide" style="background-image: url('static/slider/2.jpeg');"></div>
 
-        <div class="visitor-tracking">
-            <img src="static/assets/logo/facescanner.png" alt="Face Scanner" class="face-scanner">
-            <h2>व्हिजिटर स्थिती तपासा</h2>
-            <input type="text" class="tracking-input" placeholder="आपला व्हिजिट आयडी प्रविष्ट करा (उदा. V2024...)" id="visitorTrackingInput">
-            <button class="track-button" id="trackButton">स्थिती तपासा</button>
+        <div class="overlay-content-wrapper">
+            <div class="visitor-tracking">
+                <img src="static/assets/logo/facescanner.png" alt="Face Scanner" class="face-scanner">
+                <h2>व्हिजिटर स्थिती तपासा</h2>
+                <input type="text" class="tracking-input" placeholder="आपला व्हिजिट आयडी प्रविष्ट करा (उदा. V2024...)" id="visitorTrackingInput">
+                <button class="track-button" id="trackButton">स्थिती तपासा</button>
+            </div>
+
+            <div class="profiles-wrapper">
+                 <div class="profile-container profile-left">
+                     <img src="static/assets/profile/palakmantri.jpg" alt="पालकमंत्री">
+                     <p class="name">श्री. आकाश पांडुरंग फुंडकर</p>
+                     <p class="title">मा. पालकमंत्री अकोला</p>
+                 </div>
+                 <div class="profile-container profile-right">
+                     <img src="static/assets/profile/dm.jpg" alt="जिल्हाधिकारी">
+                     <p class="name">श्री. अजित कुंभार (भा.प्र.से)</p>
+                     <p class="title">मा. जिल्हाधिकारी अकोल</p>
+                 </div>
+            </div>
+             <!-- Standalone profiles for desktop absolute positioning -->
+             <div class="profile-container profile-left desktop-profile">
+                 <img src="static/assets/profile/palakmantri.jpg" alt="पालकमंत्री">
+                 <p class="name">श्री. आकाश पांडुरंग फुंडकर</p>
+                 <p class="title">मा. पालकमंत्री अकोला</p>
+             </div>
+             <div class="profile-container profile-right desktop-profile">
+                 <img src="static/assets/profile/dm.jpg" alt="जिल्हाधिकारी">
+                 <p class="name">श्री. अजित कुंभार (भा.प्र.से)</p>
+                 <p class="title">मा. जिल्हाधिकारी अकोल</p>
+             </div>
         </div>
     </div>
 
@@ -371,7 +567,6 @@
         </div>
     </footer>
 
-    <!-- Status Popup -->
     <div class="popup-overlay" id="statusPopupOverlay">
         <div class="popup-container" id="statusPopupContainer">
             <button class="popup-close" id="statusPopupClose">×</button>
@@ -396,7 +591,6 @@
                  </div>
             </div>
 
-            <!-- Improved Details Section -->
             <div class="details-section" id="detailsSection">
                  <div class="visitor-info-container">
                      <div class="visitor-profile-header">
@@ -406,7 +600,7 @@
                          <div class="visitor-main-info">
                              <div id="visitorName" class="name"></div>
                              <div id="visitorVisitId" class="visit-id"></div>
-                             <span id="visitorStatus" class="status-badge-pro"></span> <!-- Professional Status Badge -->
+                             <span id="visitorStatus" class="status-badge-pro"></span>
                          </div>
                      </div>
                      <div class="visitor-details-grid">
@@ -418,17 +612,22 @@
                      </div>
                  </div>
             </div>
-            <!-- End Improved Details Section -->
 
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Slider and Drawer remain unchanged
             const slides = document.querySelectorAll('.slide');
             let currentSlideIndex = 0;
-            function showSlide(index) { slides.forEach(slide => slide.classList.remove('active')); slides[index].classList.add('active'); }
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.remove('active');
+                    if (i === index) {
+                        slide.classList.add('active');
+                    }
+                });
+             }
             showSlide(currentSlideIndex);
             function nextSlide() { currentSlideIndex = (currentSlideIndex + 1) % slides.length; showSlide(currentSlideIndex); }
             setInterval(nextSlide, 8000);
@@ -442,9 +641,8 @@
             mobileMenuButton.addEventListener('click', openDrawer);
             drawerClose.addEventListener('click', closeDrawer);
             drawerOverlay.addEventListener('click', closeDrawer);
-            window.addEventListener('resize', function() { if (window.innerWidth > 576) closeDrawer(); });
+            window.addEventListener('resize', function() { if (window.innerWidth > 992) closeDrawer(); }); // Adjusted breakpoint
 
-            // Visitor Status Popup Logic Elements
             const trackButton = document.getElementById('trackButton');
             const trackingInput = document.getElementById('visitorTrackingInput');
             const statusPopupOverlay = document.getElementById('statusPopupOverlay');
@@ -462,19 +660,17 @@
             const mobileInput = document.getElementById('mobileInput');
             const validateMobileBtn = document.getElementById('validateMobileBtn');
 
-            // State variables
             let currentVisitorData = null;
             let faceStream = null;
             let faceValidationTimeoutId = null;
             let faceRetryCount = 0;
-            const MAX_FACE_RETRIES = 1; // Allow one automatic retry
-            const FACE_VALIDATION_TIMEOUT_MS = 20000; // 20 seconds
+            const MAX_FACE_RETRIES = 1;
+            const FACE_VALIDATION_TIMEOUT_MS = 20000;
 
-            // Helper Functions
              function showPopupMessage(message, type = 'info') {
                 popupMessage.textContent = message;
                 popupMessage.className = 'popup-message ' + type;
-                 popupMessage.style.display = message ? 'block' : 'none'; // Show/hide message element
+                 popupMessage.style.display = message ? 'block' : 'none';
             }
 
              function resetPopup() {
@@ -484,37 +680,32 @@
                  mobileInput.value = '';
                  mobileInput.disabled = true;
                  validateMobileBtn.disabled = true;
-                 validateMobileBtn.textContent = 'मोबाईल नंबर सत्यापित करा'; // Reset button text
+                 validateMobileBtn.textContent = 'मोबाईल नंबर सत्यापित करा';
                  stopFaceScan();
                  clearTimeout(faceValidationTimeoutId);
                  faceValidationTimeoutId = null;
                  currentVisitorData = null;
                  faceRetryCount = 0;
 
-                 validateFaceBtn.style.display = 'inline-block'; // Show default face button
+                 validateFaceBtn.style.display = 'inline-block';
                  validateFaceBtn.textContent = 'चेहरा सत्यापित करत आहे...';
                  validateFaceBtn.disabled = true;
-                 startFaceScanBtn.style.display = 'none'; // Hide manual retry button
+                 startFaceScanBtn.style.display = 'none';
                  startFaceScanBtn.disabled = true;
 
                  faceValidationOption.classList.remove('recommended', 'fallback-active');
                  mobileValidationOption.classList.remove('recommended', 'fallback-active');
 
-                 // Reset professional details view
                  document.getElementById('visitorProfileImg').src = 'static/assets/logo/default-avatar.png';
                  document.getElementById('visitorName').textContent = '';
                  document.getElementById('visitorVisitId').textContent = '';
                  document.getElementById('visitorStatus').textContent = '';
-                 document.getElementById('visitorStatus').className = 'status-badge-pro'; // Reset class
-                 // Removed Phone reset
-                 // Removed Email reset
-                 // Removed Address reset
+                 document.getElementById('visitorStatus').className = 'status-badge-pro';
                  document.getElementById('visitorTahasil').textContent = '';
                  document.getElementById('visitorDistrict').textContent = '';
                  document.getElementById('visitorDatetime').textContent = '';
                  document.getElementById('visitorPurpose').textContent = '';
                  document.getElementById('visitorForwardingDept').textContent = '';
-                 // Removed Remark reset
 
 
                  trackingInput.value = '';
@@ -539,14 +730,12 @@
                  }
             });
 
-            // Main Tracking Button Logic
             trackButton.addEventListener('click', async function() {
                 const visitId = trackingInput.value.trim();
                  if (!visitId || !visitId.toUpperCase().startsWith('V')) {
                      alert('कृपया वैध व्हिजिट आयडी प्रविष्ट करा (उदा. V2024...).');
                      return;
                  }
-
                 trackButton.disabled = true;
                 resetPopup();
                 openPopup();
@@ -554,7 +743,7 @@
 
                 try {
                     const response = await fetch(`/api/visitor-status/${visitId}`);
-                    if (!response.ok) { // Handle HTTP errors (4xx, 5xx)
+                    if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     const data = await response.json();
@@ -565,13 +754,13 @@
                         validationSection.style.display = 'block';
                         detailsSection.style.display = 'none';
 
-                        faceRetryCount = 0; // Reset retry count
+                        faceRetryCount = 0;
                         faceValidationOption.classList.add('recommended');
                         mobileValidationOption.classList.remove('recommended', 'fallback-active');
                         mobileInput.disabled = true;
                         validateMobileBtn.disabled = true;
 
-                        attemptFaceValidation(); // Start the first attempt
+                        attemptFaceValidation();
 
                     } else {
                         showPopupMessage(data.message || 'व्हिजिटर आयडी आढळला नाही किंवा त्रुटी आली.', 'error');
@@ -584,9 +773,7 @@
                 }
             });
 
-            // Face Scan and Validation Flow
             async function attemptFaceValidation() {
-                // Prevent multiple runs if validation already succeeded or went to fallback
                 if (!currentVisitorData || faceValidationTimeoutId === 'completed' || faceValidationTimeoutId === 'fallback') return;
 
                 const isRetry = faceRetryCount > 0;
@@ -598,33 +785,27 @@
                 faceValidationOption.classList.add('recommended');
                 mobileValidationOption.classList.remove('fallback-active');
 
-                clearTimeout(faceValidationTimeoutId); // Clear previous timeout if any
+                clearTimeout(faceValidationTimeoutId);
 
-                // Set a new timeout for this attempt
                 faceValidationTimeoutId = setTimeout(() => {
                     handleValidationTimeout(isRetry);
                 }, FACE_VALIDATION_TIMEOUT_MS);
 
                  try {
-                    // 1. Start Camera
                     if (faceStream) stopFaceScan(false);
                     faceStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
                     faceVideo.srcObject = faceStream;
                     faceVideo.style.display = 'block';
                     await new Promise(resolve => faceVideo.onloadedmetadata = resolve);
-
-                    // 2. Capture Frame
-                    await new Promise(resolve => setTimeout(resolve, 500)); // Allow stabilization
+                    await new Promise(resolve => setTimeout(resolve, 500));
                     if (!faceStream) throw new Error("Camera stream stopped unexpectedly.");
-
                     const context = faceCanvas.getContext('2d');
                     faceCanvas.width = faceVideo.videoWidth;
                     faceCanvas.height = faceVideo.videoHeight;
                     context.drawImage(faceVideo, 0, 0, faceCanvas.width, faceCanvas.height);
                     const imageDataURL = faceCanvas.toDataURL('image/jpeg');
-                    stopFaceScan(false); // Stop camera immediately after capture
+                    stopFaceScan(false);
 
-                    // 3. Send for Validation
                     showPopupMessage('चेहऱ्याची पडताळणी करत आहे...', 'info');
                     const validationResponse = await fetch('/api/validate-visitor-face', {
                         method: 'POST',
@@ -635,9 +816,8 @@
                         })
                     });
 
-                    // Response received, clear the timeout
                     clearTimeout(faceValidationTimeoutId);
-                    faceValidationTimeoutId = 'processing'; // Mark as processing done (prevents timeout handler)
+                    faceValidationTimeoutId = 'processing';
 
                     if (!validationResponse.ok) {
                         let errorMsg = `HTTP त्रुटी: ${validationResponse.status}`;
@@ -648,7 +828,7 @@
                     const result = await validationResponse.json();
 
                     if (result.success) {
-                        faceValidationTimeoutId = 'completed'; // Mark success
+                        faceValidationTimeoutId = 'completed';
                         showPopupMessage('चेहरा यशस्वीरित्या सत्यापित झाला!', 'success');
                         faceValidationOption.classList.remove('recommended');
                         displayVisitorDetails();
@@ -662,9 +842,9 @@
                     }
 
                  } catch (err) {
-                     if (faceValidationTimeoutId !== 'completed' && faceValidationTimeoutId !== 'fallback') { // Only handle if not already completed/fallbacked
+                     if (faceValidationTimeoutId !== 'completed' && faceValidationTimeoutId !== 'fallback') {
                          clearTimeout(faceValidationTimeoutId);
-                         faceValidationTimeoutId = 'processing'; // Mark processing done
+                         faceValidationTimeoutId = 'processing';
                          console.error("Face validation attempt error: ", err);
                          stopFaceScan(false);
 
@@ -681,14 +861,13 @@
             }
 
             function handleFaceDetectionFailure(wasRetry) {
-                 // Check if already handled
                 if (faceValidationTimeoutId === 'completed' || faceValidationTimeoutId === 'fallback') return;
 
                 stopFaceScan(false);
                  if (!wasRetry && faceRetryCount < MAX_FACE_RETRIES) {
                      faceRetryCount++;
                      showPopupMessage('चेहरा आढळला नाही. पुन्हा प्रयत्न करत आहे...', 'warning');
-                     setTimeout(attemptFaceValidation, 1000); // Retry after 1 sec
+                     setTimeout(attemptFaceValidation, 1000);
                  } else {
                      showPopupMessage('चेहरा आढळला नाही. कृपया मोबाईल नंबर वापरून सत्यापित करा.', 'warning');
                      activateMobileFallback();
@@ -696,24 +875,22 @@
              }
 
             function handleValidationTimeout(wasRetry) {
-                 // Check if already handled or currently processing backend response
                  if (faceValidationTimeoutId === 'completed' || faceValidationTimeoutId === 'fallback' || faceValidationTimeoutId === 'processing') {
                     return;
                  }
                  console.log("Face validation timed out.");
                  stopFaceScan(false);
-                 faceValidationTimeoutId = 'processing'; // Mark timeout processed
+                 faceValidationTimeoutId = 'processing';
 
                  if (!wasRetry && faceRetryCount < MAX_FACE_RETRIES) {
                      faceRetryCount++;
                      showPopupMessage('चेहरा स्कॅन वेळ समाप्त. पुन्हा प्रयत्न करत आहे...', 'warning');
-                     setTimeout(attemptFaceValidation, 500); // Quick retry on timeout
+                     setTimeout(attemptFaceValidation, 500);
                  } else {
                      showPopupMessage('चेहरा स्कॅन वेळ समाप्त. कृपया मोबाईल नंबर वापरा.', 'warning');
                      activateMobileFallback();
                  }
              }
-
 
             function stopFaceScan(resetButtons = true) {
                  if (faceStream) {
@@ -730,21 +907,17 @@
                  }
             }
 
-            // Manual Retry Button (shown only in fallback mode)
             startFaceScanBtn.addEventListener('click', () => {
-                 // Reset state flags before manual retry
                  clearTimeout(faceValidationTimeoutId);
                  faceValidationTimeoutId = null;
                  faceRetryCount = 0;
                  attemptFaceValidation();
             });
 
-            // Mobile Number Validation / Fallback Activation
             function activateMobileFallback() {
-                 // Only activate if not already completed
                  if (faceValidationTimeoutId === 'completed') return;
 
-                faceValidationTimeoutId = 'fallback'; // Mark fallback as active state
+                faceValidationTimeoutId = 'fallback';
                 stopFaceScan(false);
                 faceValidationOption.classList.remove('recommended');
                 mobileValidationOption.classList.add('fallback-active');
@@ -756,9 +929,6 @@
                 validateFaceBtn.style.display = 'none';
 
                 mobileInput.focus();
-                // A relevant message (timeout, no face, mismatch) should already be displayed
-                // You could add a generic fallback message here if needed:
-                // showPopupMessage('कृपया मोबाईल नंबर वापरून सत्यापित करा.', 'warning');
             }
 
             validateMobileBtn.addEventListener('click', function() {
@@ -767,17 +937,14 @@
                      showPopupMessage('कृपया नोंदणीकृत मोबाईल नंबर टाका.', 'error');
                      return;
                  }
-                 // Corrected check: Ensure currentVisitorData exists *before* accessing phone
                 if (!currentVisitorData) {
                     showPopupMessage('व्हिजिटर डेटा उपलब्ध नाही. कृपया पुन्हा लोड करा.', 'error');
                     return;
                  }
-                 // Now check if phone exists *on* the loaded data
                  if (!currentVisitorData.phone) {
                     showPopupMessage('या व्हिजिटरसाठी नोंदणीकृत मोबाईल नंबर नाही.', 'error');
                     return;
                  }
-
 
                 validateMobileBtn.disabled = true;
                 validateMobileBtn.textContent = 'तपासत आहे...';
@@ -786,21 +953,18 @@
                  const enteredPhoneClean = enteredMobile.replace(/\D/g, '');
 
                  if (storedPhoneClean === enteredPhoneClean || storedPhoneClean.slice(-10) === enteredPhoneClean.slice(-10)) {
-                     faceValidationTimeoutId = 'completed'; // Mark as completed via mobile
+                     faceValidationTimeoutId = 'completed';
                      showPopupMessage('मोबाईल नंबर यशस्वीरित्या सत्यापित झाला!', 'success');
                      mobileValidationOption.classList.remove('fallback-active');
                      displayVisitorDetails();
                  } else {
                      showPopupMessage('मोबाईल नंबर जुळत नाही. पुन्हा प्रयत्न करा.', 'error');
-                      validateMobileBtn.disabled = false; // Re-enable on failure
+                      validateMobileBtn.disabled = false;
                      validateMobileBtn.textContent = 'मोबाईल नंबर सत्यापित करा';
                  }
              });
 
-
-             // Display Details Function (Uses new structure and badge)
              function displayVisitorDetails() {
-                 // Only proceed if data is available
                 if (!currentVisitorData) {
                     console.error("Attempted to display details but currentVisitorData is null.");
                     showPopupMessage('व्हिजिटर तपशील दर्शविण्यासाठी डेटा उपलब्ध नाही.', 'error');
@@ -808,48 +972,49 @@
                 }
                 validationSection.style.display = 'none';
                 stopFaceScan();
-                 clearTimeout(faceValidationTimeoutId); // Ensure no lingering timeout
+                 clearTimeout(faceValidationTimeoutId);
 
                 document.getElementById('visitorProfileImg').src = currentVisitorData.profile_image_url || 'static/assets/logo/default-avatar.png';
                 document.getElementById('visitorName').textContent = currentVisitorData.name || '-';
                 document.getElementById('visitorVisitId').textContent = `भेट आयडी: ${currentVisitorData.visit_id || '-'}`;
-                // Removed Phone display
-                // Removed Email display
-                // Removed Address display
                 document.getElementById('visitorTahasil').textContent = currentVisitorData.tahasil || '-';
                 document.getElementById('visitorDistrict').textContent = currentVisitorData.district || '-';
                 document.getElementById('visitorDatetime').textContent = currentVisitorData.datetime || '-';
                 document.getElementById('visitorPurpose').textContent = currentVisitorData.purpose || '-';
                 document.getElementById('visitorForwardingDept').textContent = currentVisitorData.forwarding_department || '-';
-                 // Removed Remark display
 
-                // Set professional status badge
                 const statusSpan = document.getElementById('visitorStatus');
                 let statusText = currentVisitorData.status || 'Unknown';
                 statusSpan.textContent = statusText.replace(/_/g, ' ');
-                let statusClass = 'status-unknown'; // Default class
+                let statusClass = 'status-unknown';
                 const statusLower = statusText.toLowerCase().replace(/[\s_]/g, '');
                  if (statusLower.includes('pending')) statusClass = 'status-pending';
                  else if (statusLower.includes('completed')) statusClass = 'status-completed';
-                 else if (statusLower.includes('नवीनअभ्यागत')) statusClass = 'status-नवीनअभ्यागत'; // Matches 'नवीन अभ्यागत'
-                 else if (statusLower.includes('पुनरावृत्तीअभ्यागत')) statusClass = 'status-पुनरावृत्तीअभ्यागत'; // Matches 'पुनरावृत्ती अभ्यागत'
-                 else if (statusLower.includes('registered')) statusClass = 'status-registered'; // Matches 'registered'
-
-                statusSpan.className = 'status-badge-pro ' + statusClass; // Use new class structure
-
-
+                 else if (statusLower.includes('नवीनअभ्यागत')) statusClass = 'status-नवीनअभ्यागत';
+                 else if (statusLower.includes('पुनरावृत्तीअभ्यागत')) statusClass = 'status-पुनरावृत्तीअभ्यागत';
+                 else if (statusLower.includes('registered')) statusClass = 'status-registered';
+                statusSpan.className = 'status-badge-pro ' + statusClass;
                 detailsSection.style.display = 'block';
-                 // Ensure a success message is shown if validation was just completed
                  if (!popupMessage.classList.contains('success')) {
                     showPopupMessage('पडताळणी यशस्वी. आपली माहिती खाली दिली आहे.', 'success');
                  }
              }
-
-
-        }); // End DOMContentLoaded
+            function handleProfileVisibility() {
+                const desktopProfiles = document.querySelectorAll('.desktop-profile');
+                const mobileProfileWrapper = document.querySelector('.profiles-wrapper');
+                if (window.innerWidth > 992) {
+                    desktopProfiles.forEach(p => p.style.display = 'block');
+                    if(mobileProfileWrapper) mobileProfileWrapper.style.display = 'none';
+                } else {
+                    desktopProfiles.forEach(p => p.style.display = 'none');
+                    if(mobileProfileWrapper) mobileProfileWrapper.style.display = 'flex';
+                }
+            }
+            handleProfileVisibility();
+            window.addEventListener('resize', handleProfileVisibility);
+        });
     </script>
     <script>
-        // Service Worker Registration
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw/sw.js').then(() => {
                 console.log('Service Worker registered');
