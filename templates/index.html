@@ -138,7 +138,21 @@
         .footer-section p { line-height: 1.6; margin-bottom: 10px; }
         .quick-links ul { list-style: none; } .quick-links ul li { margin-bottom: 10px; } .quick-links ul li a { color: var(--white); text-decoration: none; transition: color 0.3s ease, transform 0.2s ease; display: flex; align-items: center; } .quick-links ul li a:hover { transform: translateX(5px); text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); } .quick-links ul li a:before { content: "→"; margin-right: 8px; color: var(--white); }
         .contact-info p { display: flex; align-items: flex-start; margin-bottom: 15px; } .contact-info p strong { margin-right: 10px; color: var(--white); }
-        .copyright { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.2); font-size: 14px; width: 100%; }
+        .footer-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-top: 30px;
+            padding-bottom: 20px;
+            width: 100%; /* Ensure it takes full width */
+        }
+        .footer-logo {
+            max-height: 65px;
+            width: auto;
+            opacity: 0.9;
+        }
+        .copyright { text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.2); font-size: 14px; width: 100%; }
         .developer-info { font-size: 12px; opacity: 0.9; margin-top: 10px; }
 
         .drawer-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); z-index: 1001; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; } .drawer-overlay.active { opacity: 1; visibility: visible; }
@@ -423,6 +437,8 @@
                 left: auto;
                 right: auto;
             }
+            .desktop-profile { display: none !important; } /* Ensure desktop profiles are hidden on smaller screens */
+
         }
          @media screen and (max-width: 768px) {
             .footer-container { flex-direction: column; } .footer-section { margin-bottom: 20px; }
@@ -470,6 +486,8 @@
             .validation-option { min-width: unset; width: 100%; margin-bottom: 15px;}
             .popup-container { padding: 20px;}
             .popup-title { font-size: 22px;}
+            .footer-logo { max-height: 35px; } /* Smaller logos on mobile */
+            .footer-logos { gap: 20px; }
         }
 
     </style>
@@ -561,18 +579,20 @@
                 <p><strong>पत्ता:</strong> जिल्हाधिकारी कार्यालय, अकोला</p>
             </div>
         </div>
+        <div class="footer-logos">
+            <img src="static/assets/logo/nicLogo.png" alt="NIC Logo" class="footer-logo">
+            <img src="static/assets/logo/kitslogo.png" alt="KITS Logo" class="footer-logo">
+        </div>
         <div class="copyright">
             <p>© २०२४ स्मार्ट व्हिजिटर मॅनेजमेंट सिस्टिम (svmsakola.in), जिल्हाधिकारी कार्यालय, अकोला. सर्व हक्क राखीव.</p>
             <p class="developer-info">© हे संकेतस्थळ स्मार्ट व्हिजिटर मॅनेजमेंट सिस्टिम (SVMS) रोहित इंगळे, काजल इनोव्हेशन अँड टेक्निकल सोल्यूशन, अकोला यांच्याकडून विकसित करण्यात आले आहे.</p>
         </div>
     </footer>
-
     <div class="popup-overlay" id="statusPopupOverlay">
         <div class="popup-container" id="statusPopupContainer">
             <button class="popup-close" id="statusPopupClose">×</button>
             <h3 class="popup-title" id="popupTitle">व्हिजिटर स्थिती</h3>
             <p class="popup-message" id="popupMessage"></p>
-
             <div class="validation-section" id="validationSection">
                  <p>ओळखीसाठी कृपया खालीलपैकी एक पद्धत वापरा:</p>
                  <div class="validation-options">
@@ -672,7 +692,6 @@
                 popupMessage.className = 'popup-message ' + type;
                  popupMessage.style.display = message ? 'block' : 'none';
             }
-
              function resetPopup() {
                  showPopupMessage('');
                  validationSection.style.display = 'none';
