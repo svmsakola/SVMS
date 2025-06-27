@@ -1,0 +1,11 @@
+Flask
+flask-cors
+bcrypt
+opencv-python-headless
+numpy
+face_recognition
+Pillow
+openpyxl
+reportlab
+ultralytics
+
