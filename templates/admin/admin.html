@@ -25,18 +25,16 @@
             --error-red: #e74c3c;
             --action-delete-bg: #e74c3c;
             --action-delete-hover-bg: #c0392b;
-            --action-delete-user-bg: #9b211b; /* Darker red for user delete */
+            --action-delete-user-bg: #9b211b;
             --action-delete-user-hover-bg: #781a14;
             --report-button-bg: #1abc9c;
             --report-button-hover-bg: #16a085;
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--light-blue);
@@ -45,14 +43,12 @@
             margin: 0;
             padding: 0;
         }
-
         .dashboard-container {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
             background: linear-gradient(135deg, #e6f2ff 0%, #f8fbff 100%);
         }
-
         .header {
             background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
             color: var(--white);
@@ -67,24 +63,42 @@
             right: 0;
             z-index: 1000;
         }
-
         .header-left {
             display: flex;
             align-items: center;
         }
-
         .header img {height: 60px; width: auto; max-height: 100%; object-fit: contain;}
-
         .header-subtitle {
             font-size: 0.9rem;
             opacity: 0.8;
             margin-top: 5px;
         }
-
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .header-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-btn:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
         .profile-container {
             position: relative;
         }
-
         .profile-icon {
             width: 40px;
             height: 40px;
@@ -96,15 +110,12 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
         .profile-icon:hover {
             background: rgba(255, 255, 255, 0.3);
         }
-
         .profile-icon i {
             font-size: 1.2rem;
         }
-
         .dropdown-menu {
             position: absolute;
             top: 50px;
@@ -119,13 +130,11 @@
             transform: translateY(-10px);
             transition: all 0.3s ease;
         }
-
         .dropdown-menu.active {
             opacity: 1;
             visibility: visible;
             transform: translateY(0);
         }
-
         .dropdown-item {
             padding: 12px 15px;
             display: flex;
@@ -135,32 +144,26 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-
         .dropdown-item:first-child {
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
         }
-
         .dropdown-item:last-child {
             border-bottom-left-radius: 8px;
             border-bottom-right-radius: 8px;
         }
-
         .dropdown-item:hover {
             background-color: var(--light-blue);
         }
-
         .dropdown-item i {
             width: 20px;
             text-align: center;
         }
-
         .divider {
             height: 1px;
             background-color: #e0e0e0;
             margin: 5px 0;
         }
-
         .user-info {
             padding: 15px;
             display: flex;
@@ -168,7 +171,6 @@
             gap: 10px;
             border-bottom: 1px solid #e0e0e0;
         }
-
         .user-avatar {
             width: 40px;
             height: 40px;
@@ -181,71 +183,59 @@
             font-weight: bold;
             font-size: 1.1rem;
         }
-
         .user-details h3 {
             font-size: 1rem;
             margin-bottom: 3px;
         }
-
         .user-details p {
             font-size: 0.8rem;
             color: var(--text-gray);
         }
-
         .main-wrapper {
             display: flex;
             flex: 1;
-            margin-top: 70px; /* Adjust based on header height */
+            margin-top: 80px;
         }
-
         .main-content {
             flex: 1;
             padding: 30px;
-            margin-left: 0; /* Removed fixed sidebar margin */
-            overflow-y: auto; /* Allow content to scroll if needed */
+            margin-left: 0;
+            overflow-y: auto;
         }
-
-        /* ---- Visitor Log Styles ---- */
         .visitor-log-container {
             background-color: var(--white);
             padding: 25px;
             border-radius: 12px;
             box-shadow: var(--card-shadow);
         }
-
         .log-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            flex-wrap: wrap;
             gap: 15px;
         }
-
         .log-header h2 {
             color: var(--primary-blue);
             font-size: 1.5rem;
             font-weight: 600;
         }
-
-        .log-controls { /* New container for date and report button */
+        .log-controls {
              display: flex;
              align-items: center;
-             gap: 20px; /* Space between date filter and report button */
+             gap: 20px;
              flex-wrap: wrap;
          }
-
         .date-filter {
             display: flex;
             align-items: center;
             gap: 10px;
         }
-
         .date-filter label {
             font-weight: 500;
             font-size: 0.9rem;
         }
-
         .date-filter input[type="date"] {
             padding: 8px 12px;
             border: 1px solid var(--border-color);
@@ -255,8 +245,7 @@
             color: var(--text-dark);
             cursor: pointer;
         }
-
-        .report-btn { /* Style for the new report button */
+        .report-btn {
              padding: 8px 15px;
              background-color: var(--report-button-bg);
              color: white;
@@ -276,46 +265,40 @@
          .report-btn:hover {
              background-color: var(--report-button-hover-bg);
          }
-
         .table-container {
-            overflow-x: auto; /* Allow horizontal scrolling for the table */
+            overflow-x: auto;
         }
-
         .visitor-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 15px;
             font-size: 0.9rem;
         }
-
         .visitor-table th,
         .visitor-table td {
             padding: 12px 15px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
-            white-space: nowrap; /* Prevent text wrapping in cells */
-            vertical-align: middle; /* Align content vertically */
+            white-space: nowrap;
+            vertical-align: middle;
         }
-
         .visitor-table thead th {
             background-color: var(--table-header-bg);
             color: var(--primary-blue);
             font-weight: 600;
             position: sticky;
-            top: 0; /* Stick header to top on scroll */
+            top: 0;
             z-index: 10;
         }
-
         .visitor-table tbody tr:hover {
             background-color: var(--light-blue);
         }
-
         .visitor-table td .profile-img-container {
             width: 40px;
             height: 40px;
             border-radius: 50%;
             overflow: hidden;
-            display: inline-block; /* Aligns better in table cell */
+            display: inline-block;
             vertical-align: middle;
             background-color: var(--placeholder-bg);
             text-align: center;
@@ -324,13 +307,11 @@
             color: var(--placeholder-text);
             font-size: 1rem;
         }
-
         .visitor-table td .profile-img-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
         .status-badge {
             padding: 4px 10px;
             border-radius: 12px;
@@ -340,36 +321,30 @@
             color: var(--white);
             display: inline-block;
         }
-
         .status-new { background-color: var(--secondary-blue); }
         .status-pending { background-color: var(--warning-orange); }
         .status-completed { background-color: var(--success-green); }
         .status-default { background-color: var(--text-gray); }
-
         .confirmation-icon {
             font-size: 1.1rem;
             vertical-align: middle;
         }
         .confirmation-icon.yes { color: var(--success-green); }
         .confirmation-icon.no { color: var(--error-red); }
-
         .loading-message, .no-data-message {
             text-align: center;
             padding: 30px;
             color: var(--text-gray);
             font-style: italic;
         }
-
-        /* Styles for File Status and Actions */
         .file-status-icons span {
             display: inline-block;
             margin-right: 8px;
             font-size: 1.1rem;
-            cursor: default; /* Indicate they are not clickable */
+            cursor: default;
         }
         .file-status-icons .fa-check-circle { color: var(--success-green); }
         .file-status-icons .fa-times-circle { color: var(--error-red); }
-
         .action-btn {
             background: none;
             border: none;
@@ -377,7 +352,7 @@
             font-size: 1.1rem;
             padding: 5px;
             transition: color 0.2s ease;
-            vertical-align: middle; /* Align buttons nicely */
+            vertical-align: middle;
         }
         .view-pdf-btn-table {
              background-color: var(--secondary-blue);
@@ -389,65 +364,56 @@
              font-size: 0.8rem;
              transition: background-color 0.2s ease;
              vertical-align: middle;
-             display: inline-flex; /* Helps align icon and text */
+             display: inline-flex;
              align-items: center;
              gap: 4px;
         }
-        .view-pdf-btn-table i { line-height: 1; } /* Adjust icon alignment if needed */
+        .view-pdf-btn-table i { line-height: 1; }
         .view-pdf-btn-table:hover { background-color: var(--primary-blue); }
         .view-pdf-btn-table:disabled { background-color: var(--text-gray); cursor: not-allowed; }
-
-        /* Action Column Styles */
         .visitor-table td.actions-cell {
-            white-space: nowrap; /* Prevent buttons wrapping */
-            text-align: center; /* Center buttons in the cell */
+            white-space: nowrap;
+            text-align: center;
         }
-        .delete-visit-btn { color: var(--action-delete-bg); margin-right: 10px; } /* Add margin */
+        .delete-visit-btn { color: var(--action-delete-bg); margin-right: 10px; }
         .delete-visit-btn:hover { color: var(--action-delete-hover-bg); }
-
-        .delete-user-btn { color: var(--action-delete-user-bg); } /* Distinct color */
+        .delete-user-btn { color: var(--action-delete-user-bg); }
         .delete-user-btn:hover { color: var(--action-delete-user-hover-bg); }
-        /* End Action Column Styles */
-
-
-        /* --- Modal Styles --- */
         .modal {
-            display: none; /* Hidden by default */
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* Darker overlay */
-            z-index: 1050; /* Ensure modal is above table header */
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1050;
             justify-content: center;
             align-items: center;
             backdrop-filter: blur(3px);
-            opacity: 0; /* Start hidden for transition */
+            opacity: 0;
              transition: opacity 0.3s ease;
         }
         .modal.active {
-            display: flex; /* Use flex to center content */
-            opacity: 1; /* Fade in */
+            display: flex;
+            opacity: 1;
          }
-
         .modal-content {
             background-color: var(--white);
             border-radius: 10px;
             padding: 30px;
-            width: 90%; /* Responsive width */
-            max-width: 450px; /* Max width for larger modals */
+            width: 90%;
+            max-width: 450px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            text-align: center; /* Center basic text */
-             transform: scale(0.95); /* Start slightly smaller */
+            text-align: center;
+             transform: scale(0.95);
              transition: transform 0.3s ease;
         }
         .modal.active .modal-content {
-             transform: scale(1); /* Scale up when active */
+             transform: scale(1);
          }
-
         .modal-title {
-            font-size: 1.3rem; /* Larger title */
+            font-size: 1.3rem;
             color: var(--primary-blue);
             margin-bottom: 15px;
             font-weight: 600;
@@ -458,55 +424,47 @@
             line-height: 1.5;
             font-size: 0.95rem;
         }
-         .modal-content strong { /* Style for highlighting visitor ID */
+         .modal-content strong {
              color: var(--primary-blue);
              font-weight: bold;
          }
-
         .modal-buttons {
             display: flex;
             justify-content: center;
-            gap: 15px; /* Increased gap */
+            gap: 15px;
             margin-top: 25px;
         }
-
         .modal-btn {
-            padding: 10px 25px; /* More padding */
+            padding: 10px 25px;
             border-radius: 6px;
             cursor: pointer;
-            font-weight: 600; /* Bolder */
+            font-weight: 600;
             transition: all 0.3s ease;
             font-size: 0.9rem;
             border: none;
         }
-
         .modal-btn-confirm {
             background-color: var(--primary-blue);
             color: white;
         }
-        .modal-btn-confirm.delete-visit { background-color: var(--action-delete-bg); } /* Style for visit delete */
-        .modal-btn-confirm.delete-user { background-color: var(--action-delete-user-bg); } /* Style for user delete */
-        .modal-btn-confirm.generate-report { background-color: var(--report-button-bg); } /* Style for report generate */
+        .modal-btn-confirm.delete-visit { background-color: var(--action-delete-bg); }
+        .modal-btn-confirm.delete-user { background-color: var(--action-delete-user-bg); }
+        .modal-btn-confirm.generate-report { background-color: var(--report-button-bg); }
         .modal-btn-confirm:hover { background-color: var(--secondary-blue); }
         .modal-btn-confirm.delete-visit:hover { background-color: var(--action-delete-hover-bg); }
         .modal-btn-confirm.delete-user:hover { background-color: var(--action-delete-user-hover-bg); }
         .modal-btn-confirm.generate-report:hover { background-color: var(--report-button-hover-bg); }
-
         .modal-btn-cancel {
             background-color: #e0e0e0;
             color: var(--text-dark);
         }
         .modal-btn-cancel:hover { background-color: #c7ced4; }
-
         .modal-btn:disabled {
             opacity: 0.7;
             cursor: not-allowed;
         }
-        /* --- End Generic Modal Styles --- */
-
-        /* --- Report Modal Specific Styles --- */
         #reportModal .modal-content {
-             text-align: left; /* Align content left for form */
+             text-align: left;
         }
         .report-options {
              margin-bottom: 20px;
@@ -520,11 +478,11 @@
         }
         .report-options input[type="radio"] {
              margin-right: 8px;
-             accent-color: var(--primary-blue); /* Style radio button */
+             accent-color: var(--primary-blue);
         }
         .date-input-group {
              margin-top: 15px;
-             padding-left: 25px; /* Indent date inputs */
+             padding-left: 25px;
         }
         .date-input-group label {
              display: block;
@@ -541,12 +499,12 @@
              margin-bottom: 10px;
         }
         #reportDateRangeInputs {
-             display: none; /* Hide date range initially */
+             display: none;
         }
         #reportStatus {
             margin-top: 15px;
             font-size: 0.9rem;
-            min-height: 1.2em; /* Reserve space */
+            min-height: 1.2em;
             color: var(--text-gray);
         }
          #reportStatus.error {
@@ -556,9 +514,6 @@
          #reportStatus.success {
              color: var(--success-green);
          }
-        /* --- End Report Modal Specific Styles --- */
-
-        /* PDF Viewer Popup Styles */
         .pdf-popup-overlay {
             position: fixed;
             top: 0;
@@ -566,22 +521,22 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.8);
-            display: none; /* Hidden by default */
+            display: none;
             justify-content: center;
             align-items: center;
-            z-index: 1100; /* Higher than other popups */
+            z-index: 1100;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
         .pdf-popup-overlay.active {
-            display: flex; /* Show when active */
+            display: flex;
             opacity: 1;
         }
         .pdf-popup-content {
             position: relative;
             width: 95%;
             height: 95%;
-            max-width: 1200px; /* Max width for large screens */
+            max-width: 1200px;
             background-color: #333;
             border-radius: 5px;
             overflow: hidden;
@@ -612,19 +567,125 @@
             height: 100%;
             border: none;
         }
-        /* --- End PDF Popup Styles --- */
-
+        #departmentModal .modal-content {
+            max-width: 600px;
+            text-align: left;
+        }
+        .department-list-container {
+            margin-bottom: 20px;
+        }
+        .department-list-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary-blue);
+        }
+        .department-list {
+            list-style: none;
+            padding: 0;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        .department-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s;
+        }
+        .department-item:last-child {
+            border-bottom: none;
+        }
+        .department-item:hover {
+            background-color: #fafcff;
+        }
+        .department-details {
+            flex-grow: 1;
+        }
+        .department-details strong {
+            display: block;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+        }
+        .department-details span {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+        }
+        .department-actions .action-btn {
+            margin-left: 10px;
+        }
+        .department-actions .edit-btn { color: var(--secondary-blue); }
+        .department-actions .delete-btn { color: var(--error-red); }
+        .department-form {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        #departmentFormTitle {
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+        .form-submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        .form-submit-btn:hover {
+            opacity: 0.9;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+        }
+        .form-submit-btn:disabled {
+            background: var(--text-gray);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        #departmentStatus {
+            min-height: 1.2em;
+            margin-top: -5px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        #departmentStatus.error { color: var(--error-red); font-weight: bold; }
+        #departmentStatus.success { color: var(--success-green); }
 
         @media (max-width: 768px) {
             .header { padding: 6px 10px; }
             .header img {height: 50px;}
-            .header-subtitle { font-size: 0.8rem; }
+            .main-wrapper { margin-top: 70px; }
+            .header-btn { padding: 7px 10px; font-size: 0.8rem; }
+            .header-btn span { display: none; }
             .dropdown-menu { right: -10px; min-width: 220px; }
             .main-content { padding: 15px; }
-            .main-wrapper { margin-top: 60px; }
             .visitor-log-container { padding: 15px; }
             .log-header { flex-direction: column; align-items: flex-start; }
-             .log-controls { width: 100%; justify-content: space-between;} /* Adjust controls layout */
+             .log-controls { width: 100%; justify-content: space-between;}
              .report-btn { padding: 7px 12px; font-size: 0.85rem;}
             .log-header h2 { font-size: 1.3rem; }
             .visitor-table th, .visitor-table td { padding: 10px 12px; font-size: 0.85rem; }
@@ -633,16 +694,15 @@
              .file-status-icons span { font-size: 1rem; margin-right: 5px;}
              .modal-content { padding: 20px; }
         }
-
         @media (max-width: 480px) {
             .header img {height: 45px;}
+            .main-wrapper { margin-top: 60px; }
             .header-subtitle { display: none; }
-            .main-wrapper { margin-top: 55px; }
             .visitor-table td .profile-img-container { width: 35px; height: 35px; line-height: 35px; font-size: 0.9rem; }
             .status-badge { padding: 3px 8px; font-size: 0.75rem; }
              .view-pdf-btn-table { padding: 3px 6px; font-size: 0.7rem; }
              .file-status-icons span { margin-right: 4px;}
-             .delete-visit-btn { margin-right: 5px; } /* Adjust spacing for small screens */
+             .delete-visit-btn { margin-right: 5px; }
              .log-controls { flex-direction: column; align-items: stretch; gap: 10px;}
              .date-filter { width: 100%; }
              .report-btn { width: 100%; justify-content: center; }
@@ -658,25 +718,30 @@
             <div class="header-left">
                  <img src="{{ url_for('static', filename='assets/logo/svmslogo.png') }}" alt="Smart Visitor Management System Logo">
              </div>
-            <div class="profile-container">
-                <div class="profile-icon" id="profileIcon">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="dropdown-menu" id="dropdownMenu">
-                     <div class="user-info">
-                         <div class="user-avatar" id="userAvatar">A</div>
-                         <div class="user-details">
-                             <h3 id="userName">Admin</h3>
-                             <p id="userRole">Administrator</p>
+             <div class="header-right">
+                <button class="header-btn" id="manageDepartmentsBtn">
+                    <i class="fas fa-building"></i> <span>Manage Departments</span>
+                </button>
+                <div class="profile-container">
+                    <div class="profile-icon" id="profileIcon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="dropdown-menu" id="dropdownMenu">
+                         <div class="user-info">
+                             <div class="user-avatar" id="userAvatar">A</div>
+                             <div class="user-details">
+                                 <h3 id="userName">Admin</h3>
+                                 <p id="userRole">Administrator</p>
+                             </div>
                          </div>
-                     </div>
-                    <div class="divider"></div>
-                    <div class="dropdown-item" id="logoutBtn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Logout</span>
+                        <div class="divider"></div>
+                        <div class="dropdown-item" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+             </div>
         </header>
 
         <div class="main-wrapper">
@@ -707,17 +772,16 @@
                                     <th>Visit ID</th>
                                     <th>Date & Time</th>
                                     <th>Purpose</th>
-                                    <th>Document</th> <!-- PDF View Button -->
-                                    <th>File Status</th> <!-- Check Icons -->
-                                    <th>Status</th> <!-- Visit Status Badge -->
+                                    <th>Document</th>
+                                    <th>File Status</th>
+                                    <th>Status</th>
                                     <th>Entry Confirmed</th>
                                     <th>Forwarded To</th>
                                     <th>Remark</th>
-                                    <th>Action</th> <!-- Delete Buttons -->
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody id="visitorTableBody">
-                                <!-- Data will be loaded here by JavaScript -->
                                 <tr><td colspan="16" class="loading-message">Loading visitor data...</td></tr>
                             </tbody>
                         </table>
@@ -726,7 +790,6 @@
             </div>
         </div>
 
-        <!-- Logout Modal -->
         <div class="modal" id="logoutModal">
             <div class="modal-content">
                 <h3 class="modal-title">Confirm Logout</h3>
@@ -738,7 +801,6 @@
             </div>
         </div>
 
-        <!-- Delete Specific Visit Confirmation Modal -->
         <div class="modal" id="deleteVisitModal">
              <div class="modal-content">
                 <h3 class="modal-title">Delete Visit Entry</h3>
@@ -751,7 +813,6 @@
             </div>
         </div>
 
-        <!-- Delete Entire User Confirmation Modal -->
         <div class="modal" id="deleteUserModal">
              <div class="modal-content">
                 <h3 class="modal-title" style="color: var(--error-red);">Delete Entire User</h3>
@@ -764,7 +825,6 @@
             </div>
         </div>
 
-         <!-- Report Generation Modal -->
          <div class="modal" id="reportModal">
              <div class="modal-content">
                  <h3 class="modal-title">Generate Visitor Report</h3>
@@ -794,8 +854,6 @@
              </div>
          </div>
 
-
-        <!-- PDF Viewer Popup -->
         <div id="pdf-popup-overlay" class="pdf-popup-overlay">
             <div class="pdf-popup-content">
                 <button id="pdf-close-btn" class="pdf-close-btn">×</button>
@@ -803,11 +861,37 @@
             </div>
         </div>
 
+        <div class="modal" id="departmentModal">
+            <div class="modal-content">
+                <div class="department-list-container">
+                    <h3 class="department-list-header">Existing Departments</h3>
+                    <ul class="department-list" id="departmentList">
+                    </ul>
+                </div>
+                <div class="department-form" id="departmentForm">
+                    <h4 id="departmentFormTitle">Add New Department</h4>
+                    <input type="hidden" id="deptId" value="">
+                    <div class="form-group">
+                        <label for="deptName">Department Name</label>
+                        <input type="text" id="deptName" placeholder="e.g., Resident Deputy Collector">
+                    </div>
+                    <div class="form-group">
+                        <label for="deptEmail">Department Email</label>
+                        <input type="email" id="deptEmail" placeholder="e.g., rdc_akola@rediffmail.com">
+                    </div>
+                    <p id="departmentStatus"></p>
+                    <button class="form-submit-btn" id="departmentSubmitBtn">Add Department</button>
+                </div>
+                <div class="modal-buttons" style="justify-content: flex-end; margin-top: 15px;">
+                    <button class="modal-btn modal-btn-cancel" data-close-modal="departmentModal">Close</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- DOM Element References ---
             const profileIcon = document.getElementById('profileIcon');
             const dropdownMenu = document.getElementById('dropdownMenu');
             const logoutBtn = document.getElementById('logoutBtn');
@@ -818,50 +902,48 @@
             const userAvatar = document.getElementById('userAvatar');
             const userNameDisplay = document.getElementById('userName');
             const userRoleDisplay = document.getElementById('userRole');
-
-            // Delete Visit Modal Elements
             const deleteVisitModal = document.getElementById('deleteVisitModal');
             const deleteVisitConfirmBtn = document.getElementById('deleteVisitConfirm');
             const deleteVisitIdDisplay = document.getElementById('deleteVisitIdDisplay');
-
-            // Delete User Modal Elements
             const deleteUserModal = document.getElementById('deleteUserModal');
             const deleteUserConfirmBtn = document.getElementById('deleteUserConfirm');
             const deleteUserUidDisplay = document.getElementById('deleteUserUidDisplay');
             const deleteUserNameDisplay = document.getElementById('deleteUserNameDisplay');
-
-            // Report Modal Elements
-             const generateReportBtn = document.getElementById('generateReportBtn');
-             const reportModal = document.getElementById('reportModal');
-             const reportTypeRadios = document.querySelectorAll('input[name="reportType"]');
-             const reportSingleDateInputs = document.getElementById('reportSingleDateInputs');
-             const reportDateRangeInputs = document.getElementById('reportDateRangeInputs');
-             const reportSingleDate = document.getElementById('reportSingleDate');
-             const reportStartDate = document.getElementById('reportStartDate');
-             const reportEndDate = document.getElementById('reportEndDate');
-             const generateReportConfirmBtn = document.getElementById('generateReportConfirm');
-             const reportStatus = document.getElementById('reportStatus');
-
-            // PDF Popup Elements
+            const generateReportBtn = document.getElementById('generateReportBtn');
+            const reportModal = document.getElementById('reportModal');
+            const reportTypeRadios = document.querySelectorAll('input[name="reportType"]');
+            const reportSingleDateInputs = document.getElementById('reportSingleDateInputs');
+            const reportDateRangeInputs = document.getElementById('reportDateRangeInputs');
+            const reportSingleDate = document.getElementById('reportSingleDate');
+            const reportStartDate = document.getElementById('reportStartDate');
+            const reportEndDate = document.getElementById('reportEndDate');
+            const generateReportConfirmBtn = document.getElementById('generateReportConfirm');
+            const reportStatus = document.getElementById('reportStatus');
             const pdfPopupOverlay = document.getElementById('pdf-popup-overlay');
             const pdfCloseBtn = document.getElementById('pdf-close-btn');
             const pdfIframe = document.getElementById('pdf-iframe');
+            const manageDepartmentsBtn = document.getElementById('manageDepartmentsBtn');
+            const departmentModal = document.getElementById('departmentModal');
+            const departmentList = document.getElementById('departmentList');
+            const departmentForm = document.getElementById('departmentForm');
+            const departmentFormTitle = document.getElementById('departmentFormTitle');
+            const deptIdInput = document.getElementById('deptId');
+            const deptNameInput = document.getElementById('deptName');
+            const deptEmailInput = document.getElementById('deptEmail');
+            const departmentSubmitBtn = document.getElementById('departmentSubmitBtn');
+            const departmentStatus = document.getElementById('departmentStatus');
 
-            // --- State Variables ---
             let visitToDelete = { uid: null, visit_id: null };
             let userToDelete = { uid: null, name: null };
 
-            // --- Helper: Format Date ---
-             function formatDate(date) {
+            function formatDate(date) {
                  const year = date.getFullYear();
                  const month = String(date.getMonth() + 1).padStart(2, '0');
                  const day = String(date.getDate()).padStart(2, '0');
                  return `${year}-${month}-${day}`;
              }
-
-            // --- User Info and Dropdown Logic ---
             function setUserInfo() {
-                 const username = "Admin"; // Replace with actual data if available
+                 const username = "Admin";
                  const role = "Administrator";
                  userNameDisplay.textContent = username;
                  userRoleDisplay.textContent = role;
@@ -876,15 +958,12 @@
                 }
             });
 
-            // --- Modal Handling (Generic) ---
             function showModal(modalElement) {
                 if(modalElement) modalElement.classList.add('active');
             }
             function hideModal(modalElement) {
                 if(modalElement) modalElement.classList.remove('active');
             }
-
-            // Add listeners for generic modal close buttons
              document.querySelectorAll('[data-close-modal]').forEach(button => {
                  button.addEventListener('click', () => {
                      const modalId = button.getAttribute('data-close-modal');
@@ -892,8 +971,6 @@
                      hideModal(modalToClose);
                  });
              });
-
-            // Close modals on outside click
             window.addEventListener('click', (event) => {
                  if (event.target.classList.contains('modal')) {
                     hideModal(event.target);
@@ -902,7 +979,6 @@
                      hidePdfPopup();
                  }
              });
-            // Close modals on Escape key press
              window.addEventListener('keydown', function(event) {
                  if (event.key === 'Escape') {
                      document.querySelectorAll('.modal.active').forEach(modal => hideModal(modal));
@@ -910,8 +986,6 @@
                  }
              });
 
-
-            // --- Logout Logic ---
             logoutBtn.addEventListener('click', () => { showModal(logoutModal); dropdownMenu.classList.remove('active'); });
             confirmLogout.addEventListener('click', () => {
                 fetch("/logout").then(() => {
@@ -923,7 +997,6 @@
                 });
             });
 
-            // --- PDF Popup Logic ---
              function showPdfPopup(pdfUrl) {
                  if (pdfUrl && pdfPopupOverlay && pdfIframe) {
                      pdfIframe.src = pdfUrl;
@@ -936,12 +1009,10 @@
              function hidePdfPopup() {
                  if (pdfPopupOverlay && pdfIframe) {
                      pdfPopupOverlay.classList.remove('active');
-                     pdfIframe.src = ''; // Clear src to stop loading
+                     pdfIframe.src = '';
                  }
              }
              if(pdfCloseBtn) pdfCloseBtn.addEventListener('click', hidePdfPopup);
-
-             // --- Delete Modals Logic ---
              function showDeleteVisitPopup(uid, visitId) {
                  visitToDelete = { uid, visit_id: visitId };
                  userToDelete = { uid: null, name: null };
@@ -950,7 +1021,6 @@
                  deleteVisitConfirmBtn.disabled = false;
                  deleteVisitConfirmBtn.textContent = 'Delete Visit';
              }
-
              function showDeleteUserPopup(uid, name) {
                  userToDelete = { uid, name };
                  visitToDelete = { uid: null, visit_id: null };
@@ -960,7 +1030,6 @@
                  deleteUserConfirmBtn.disabled = false;
                  deleteUserConfirmBtn.textContent = 'Delete User Permanently';
              }
-
              if(deleteVisitConfirmBtn) deleteVisitConfirmBtn.addEventListener('click', executeDeleteVisit);
              if(deleteUserConfirmBtn) deleteUserConfirmBtn.addEventListener('click', executeDeleteUser);
 
@@ -969,7 +1038,6 @@
                 deleteVisitConfirmBtn.disabled = true;
                 deleteVisitConfirmBtn.textContent = 'Deleting...';
                 try {
-                    // Assumes endpoint '/api/admin/delete_visitor_entry' exists
                     const response = await fetch('/api/admin/delete_visitor_entry', {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(visitToDelete)
@@ -978,19 +1046,17 @@
                     if (!response.ok || !data.success) throw new Error(data.message || 'Failed to delete visit entry.');
                     alert('Visitor entry deleted successfully.');
                     hideModal(deleteVisitModal);
-                    fetchVisitorData(visitorDateInput.value); // Refresh
+                    fetchVisitorData(visitorDateInput.value);
                 } catch (error) {
                     console.error("Error deleting visit entry:", error); alert(`Error: ${error.message}`);
                     deleteVisitConfirmBtn.disabled = false; deleteVisitConfirmBtn.textContent = 'Delete Visit';
                 } finally { visitToDelete = { uid: null, visit_id: null }; }
             }
-
             async function executeDeleteUser() {
                 if (!userToDelete.uid) return;
                 deleteUserConfirmBtn.disabled = true;
                 deleteUserConfirmBtn.textContent = 'Deleting User...';
                 try {
-                     // Assumes endpoint '/api/admin/delete_user' exists
                     const response = await fetch('/api/admin/delete_user', {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ uid: userToDelete.uid })
@@ -1000,15 +1066,13 @@
                      if (!data.success) throw new Error(data.message || 'API reported failure in deleting user.');
                     alert('User and all associated data deleted successfully.');
                     hideModal(deleteUserModal);
-                    fetchVisitorData(visitorDateInput.value); // Refresh
+                    fetchVisitorData(visitorDateInput.value);
                 } catch (error) {
                     console.error("Error deleting user:", error); alert(`Error: ${error.message}`);
                     deleteUserConfirmBtn.disabled = false; deleteUserConfirmBtn.textContent = 'Delete User Permanently';
                 } finally { userToDelete = { uid: null, name: null }; }
             }
 
-
-            // --- Report Modal Logic ---
              if (generateReportBtn) {
                  generateReportBtn.addEventListener('click', () => {
                      const today = formatDate(new Date());
@@ -1017,24 +1081,21 @@
                      reportEndDate.value = today;
                      reportStatus.textContent = ''; reportStatus.className = '';
                      document.querySelector('input[name="reportType"][value="single"]').checked = true;
-                     handleReportTypeChange(); // Update visibility based on default radio
+                     handleReportTypeChange();
                      showModal(reportModal);
                  });
              }
-
              function handleReportTypeChange() {
                 const selectedType = document.querySelector('input[name="reportType"]:checked').value;
                 if (selectedType === 'single') {
                     reportSingleDateInputs.style.display = 'block';
                     reportDateRangeInputs.style.display = 'none';
-                } else { // range
+                } else {
                     reportSingleDateInputs.style.display = 'none';
                     reportDateRangeInputs.style.display = 'block';
                 }
              }
-
              reportTypeRadios.forEach(radio => { radio.addEventListener('change', handleReportTypeChange); });
-
              if(generateReportConfirmBtn) {
                  generateReportConfirmBtn.addEventListener('click', async () => {
                      const reportType = document.querySelector('input[name="reportType"]:checked').value;
@@ -1042,18 +1103,16 @@
                      let valid = true;
                      let params;
                      let filename = "visitor_report";
-
                      reportStatus.textContent = ''; reportStatus.className = '';
-
                      if (reportType === 'single') {
                          const singleDateVal = reportSingleDate.value;
                          if (!singleDateVal) {
                              reportStatus.textContent = 'Please select a date.'; reportStatus.className = 'error'; valid = false;
                          } else {
-                             params = new URLSearchParams({ start_date: singleDateVal }); // Use start_date for single date
+                             params = new URLSearchParams({ start_date: singleDateVal });
                              filename += `_${singleDateVal}.xlsx`;
                          }
-                     } else { // range
+                     } else {
                          const startDateVal = reportStartDate.value;
                          const endDateVal = reportEndDate.value;
                          if (!startDateVal || !endDateVal) {
@@ -1065,14 +1124,11 @@
                              filename += `_${startDateVal}_to_${endDateVal}.xlsx`;
                          }
                      }
-
                      if (!valid) return;
-
                      url += params.toString();
                      generateReportConfirmBtn.disabled = true;
                      generateReportConfirmBtn.textContent = 'Generating...';
                      reportStatus.textContent = 'Generating report, please wait...'; reportStatus.className = '';
-
                      try {
                          const response = await fetch(url);
                          if (!response.ok) {
@@ -1080,18 +1136,14 @@
                              try { const errorData = await response.json(); errorMsg = errorData.error || errorMsg; } catch (e) {}
                              throw new Error(errorMsg);
                          }
-
-                         // Handle the file download
                          const blob = await response.blob();
                          const downloadUrl = window.URL.createObjectURL(blob);
                          const a = document.createElement('a');
                          a.style.display = 'none'; a.href = downloadUrl; a.download = filename;
                          document.body.appendChild(a); a.click();
                          window.URL.revokeObjectURL(downloadUrl); a.remove();
-
                          reportStatus.textContent = 'Report generated successfully!'; reportStatus.className = 'success';
                          setTimeout(() => hideModal(reportModal), 1500);
-
                      } catch (error) {
                          console.error('Error generating report:', error);
                          reportStatus.textContent = `Error: ${error.message}`; reportStatus.className = 'error';
@@ -1102,8 +1154,6 @@
                  });
              }
 
-
-            // --- Visitor Log Table Logic ---
              function formatDateTimeForDisplay(dateTimeString) {
                  if (!dateTimeString) return 'N/A';
                  try {
@@ -1114,35 +1164,24 @@
                      });
                  } catch (e) { console.error("Error formatting date:", e); return dateTimeString; }
              }
-
             function getProfileImageHtml(visitorData) {
                  let imageUrl = visitorData?.profile_img?.[0] || visitorData?.images?.[0] || null;
                  const initials = (visitorData?.name?.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || '?');
                  const altText = visitorData?.name || 'Visitor';
                  const timestamp = Date.now();
-                 // --- Adjust Base Path Logic ---
-                 let basePath = '/dashboard/'; // Default if path is unexpected
+                 let basePath = '/';
                  let finalImageName = null;
 
                  if (imageUrl && typeof imageUrl === 'string') {
                      if (imageUrl.startsWith('profiles/')) {
-                         finalImageName = imageUrl.substring('profiles/'.length);
-                         basePath = '/dashboard/profiles/';
+                         finalImageName = imageUrl;
+                         basePath = '/dashboard/';
                      } else if (imageUrl.startsWith('facedata/')) {
-                         // Assuming facedata route exists: /dashboard/facedata/<uid>/<filename>
-                         // Need to extract UID and filename if not already part of the path
-                         // If imageUrl is like 'facedata/UID123/img1.jpg'
-                         const parts = imageUrl.split('/');
-                         if (parts.length >= 3) {
-                             finalImageName = `${parts[1]}/${parts[2]}`; // Keep "UID/filename" part
-                             basePath = '/dashboard/facedata/'; // Base route for facedata
-                         }
+                         finalImageName = imageUrl;
+                         basePath = '/';
                      }
-                     // Add more conditions here if you have other image storage structures
                  }
-                 // --- End Adjust Base Path Logic ---
-
-                 const finalImageUrl = finalImageName ? `${basePath}${finalImageName}?t=${timestamp}` : null;
+                 const finalImageUrl = finalImageName ? `${basePath}${finalImageName}?t=${timestamp}`.replace(/\\/g, '/') : null;
 
                  return `<div class="profile-img-container">
                              ${finalImageUrl
@@ -1151,38 +1190,31 @@
                              }
                           </div>`;
              }
-
              function getStatusBadge(status) {
                  let badgeClass = 'status-default';
                  let statusText = status || 'unknown';
                  switch (status?.toLowerCase()) {
-                     case 'new': badgeClass = 'status-new'; break;
+                     case 'नवीन अभ्यागत': badgeClass = 'status-new'; break;
+                     case 'पुनरावृत्ती अभ्यागत': badgeClass = 'status-new'; break;
                      case 'pending': badgeClass = 'status-pending'; break;
                      case 'completed': badgeClass = 'status-completed'; break;
                  }
                  return `<span class="status-badge ${badgeClass}">${statusText}</span>`;
             }
-
              function getConfirmationIcon(confirmed) {
                  const iconClass = confirmed ? 'fas fa-check-circle yes' : 'fas fa-times-circle no';
                  return `<i class="confirmation-icon ${iconClass}"></i>`;
              }
-
              function renderFileStatusIcons(visitorData) {
                  let iconsHtml = '';
                  const checkIcon = '<span title="Available"><i class="fas fa-check-circle"></i></span>';
                  const crossIcon = '<span title="Missing"><i class="fas fa-times-circle"></i></span>';
-                 // Check profile image
                  iconsHtml += (visitorData?.profile_img && visitorData.profile_img.length > 0) ? checkIcon : crossIcon;
-                 // Check other images
                  iconsHtml += (visitorData?.images && visitorData.images.length > 0) ? checkIcon : crossIcon;
-                 // Check face encodings
                  iconsHtml += (visitorData?.face_encodings && visitorData.face_encodings.length > 0) ? checkIcon : crossIcon;
-                 // Check document PDF
                   iconsHtml += (visitorData?.document_pdf) ? checkIcon : crossIcon;
                  return `<div class="file-status-icons">${iconsHtml}</div>`;
              }
-
              async function fetchVisitorData(selectedDate) {
                  visitorTableBody.innerHTML = `<tr><td colspan="16" class="loading-message">Fetching data for ${selectedDate}...</td></tr>`;
                  try {
@@ -1195,7 +1227,6 @@
                      visitorTableBody.innerHTML = `<tr><td colspan="16" class="no-data-message">Error loading data: ${error.message}</td></tr>`;
                  }
              }
-
              function renderVisitorTable(visitors) {
                  if (!visitors || visitors.length === 0) {
                      visitorTableBody.innerHTML = `<tr><td colspan="16" class="no-data-message">No visitors found for the selected date.</td></tr>`;
@@ -1208,8 +1239,7 @@
                          const pdfUrl = visit.visit_id ? `/api/get-visitor-document/${visit.visit_id}` : '#';
                          pdfButton = `<button class="action-btn view-pdf-btn-table" data-pdf-url="${pdfUrl}" title="View Document" ${!visit.visit_id ? 'disabled' : ''}><i class="fas fa-file-pdf"></i></button>`;
                      }
-                      const remarkText = visit.forwarding_note || visit.remark || '-'; // Use forwarding_note first, fallback to remark
-
+                      const remarkText = visit.forwarding_note || visit.remark || '-';
                      tableHtml += `
                          <tr>
                              <td>${getProfileImageHtml(visit)}</td>
@@ -1240,13 +1270,9 @@
                  });
                  visitorTableBody.innerHTML = tableHtml;
              }
-
-            // --- Event Delegation for Table Buttons ---
             visitorTableBody.addEventListener('click', function(event) {
-                const targetButton = event.target.closest('button.action-btn'); // Target only action buttons
-
-                if (!targetButton) return; // Exit if click wasn't on an action button or its icon
-
+                const targetButton = event.target.closest('button.action-btn');
+                if (!targetButton) return;
                 if (targetButton.classList.contains('view-pdf-btn-table')) {
                     const pdfUrl = targetButton.dataset.pdfUrl;
                     if (pdfUrl && pdfUrl !== '#') {
@@ -1273,15 +1299,134 @@
                 }
             });
 
+            function setDepartmentFormState(mode = 'add', data = {}) {
+                if (mode === 'add') {
+                    departmentFormTitle.textContent = 'Add New Department';
+                    departmentSubmitBtn.textContent = 'Add Department';
+                    deptIdInput.value = '';
+                    deptNameInput.value = '';
+                    deptEmailInput.value = '';
+                    deptNameInput.focus();
+                } else {
+                    departmentFormTitle.textContent = 'Update Department';
+                    departmentSubmitBtn.textContent = 'Update Department';
+                    deptIdInput.value = data.id || '';
+                    deptNameInput.value = data.name || '';
+                    deptEmailInput.value = data.email || '';
+                    deptNameInput.focus();
+                }
+            }
 
-            // --- Initialization ---
-            const todayStr = formatDate(new Date());
-            visitorDateInput.value = todayStr;
-            fetchVisitorData(todayStr); // Fetch data for today on load
-            visitorDateInput.addEventListener('change', function() { // Update table view on date change
-                fetchVisitorData(this.value);
+            async function loadAndRenderDepartments() {
+                departmentList.innerHTML = '<li>Loading departments...</li>';
+                try {
+                    const response = await fetch('/api/admin/departments');
+                    const departments = await response.json();
+                    departmentList.innerHTML = '';
+                    if (departments.length === 0) {
+                        departmentList.innerHTML = '<li>No departments found.</li>';
+                        return;
+                    }
+                    departments.forEach(dept => {
+                        const li = document.createElement('li');
+                        li.className = 'department-item';
+                        li.dataset.id = dept.id;
+                        li.innerHTML = `
+                            <div class="department-details">
+                                <strong>${dept.name}</strong>
+                                <span>${dept.email}</span>
+                            </div>
+                            <div class="department-actions">
+                                <button class="action-btn edit-btn" title="Edit"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete-btn" title="Delete"><i class="fas fa-trash"></i></button>
+                            </div>
+                        `;
+                        departmentList.appendChild(li);
+                    });
+                } catch (error) {
+                    departmentList.innerHTML = '<li>Error loading departments.</li>';
+                    console.error('Failed to load departments:', error);
+                }
+            }
+
+            manageDepartmentsBtn.addEventListener('click', () => {
+                setDepartmentFormState('add');
+                departmentStatus.textContent = '';
+                loadAndRenderDepartments();
+                showModal(departmentModal);
             });
 
+            departmentList.addEventListener('click', async (event) => {
+                const target = event.target.closest('button');
+                if (!target) return;
+                const li = target.closest('.department-item');
+                const id = li.dataset.id;
+                const name = li.querySelector('.department-details strong').textContent;
+                const email = li.querySelector('.department-details span').textContent;
+
+                if (target.classList.contains('edit-btn')) {
+                    setDepartmentFormState('update', { id, name, email });
+                } else if (target.classList.contains('delete-btn')) {
+                    if (confirm(`Are you sure you want to delete the department "${name}"?`)) {
+                        try {
+                            const response = await fetch(`/api/admin/departments/${id}`, { method: 'DELETE' });
+                            const result = await response.json();
+                            if (!result.success) throw new Error(result.message);
+                            loadAndRenderDepartments();
+                        } catch (error) {
+                            alert('Error deleting department: ' + error.message);
+                        }
+                    }
+                }
+            });
+
+            departmentSubmitBtn.addEventListener('click', async () => {
+                const id = deptIdInput.value;
+                const name = deptNameInput.value.trim();
+                const email = deptEmailInput.value.trim();
+
+                if (!name || !email) {
+                    departmentStatus.textContent = 'Name and Email are required.';
+                    departmentStatus.className = 'department-status error';
+                    return;
+                }
+                departmentStatus.textContent = '';
+                departmentStatus.className = 'department-status';
+                departmentSubmitBtn.disabled = true;
+
+                const isUpdate = !!id;
+                const url = isUpdate ? `/api/admin/departments/${id}` : '/api/admin/departments';
+                const method = isUpdate ? 'PUT' : 'POST';
+                const body = JSON.stringify({ name, email });
+
+                try {
+                    const response = await fetch(url, {
+                        method,
+                        headers: { 'Content-Type': 'application/json' },
+                        body
+                    });
+                    const result = await response.json();
+                    if (!result.success) throw new Error(result.message);
+
+                    departmentStatus.textContent = result.message;
+                    departmentStatus.className = 'department-status success';
+
+                    loadAndRenderDepartments();
+                    setDepartmentFormState('add');
+                } catch (error) {
+                    departmentStatus.textContent = error.message;
+                    departmentStatus.className = 'department-status error';
+                } finally {
+                    departmentSubmitBtn.disabled = false;
+                }
+            });
+
+            const todayStr = formatDate(new Date());
+            visitorDateInput.value = todayStr;
+            fetchVisitorData(todayStr);
+            visitorDateInput.addEventListener('change', function() {
+                fetchVisitorData(this.value);
+            });
         });
     </script>
 </body>

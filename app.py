@@ -23,15 +23,24 @@ DATA_FILE = 'data/facedata/facedata.json'
 DEPARTMENTS_FILE = 'JSON/departments.json'
 ALLOWED_EXTENSIONS = {'pdf'}
 
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(PDF_FOLDER, exist_ok=True)
 
+
 def is_admin_authenticated():
-    print("WARNING: delete_visitor_entry endpoint called WITHOUT proper authentication check!")
-    return True
+    # This is a placeholder. A real implementation should check admin credentials.
+    # For now, let's check the session for an admin role.
+    if "user" in session and session.get("user", {}).get("role") == "admin":
+        return True
+    # The original print statement is kept for compatibility if it was used for debugging.
+    print("WARNING: is_admin_authenticated called WITHOUT proper authentication check!")
+    return False
+
 
 def load_face_data():
     try:
@@ -40,14 +49,18 @@ def load_face_data():
     except (FileNotFoundError, json.JSONDecodeError):
         return {}
 
+
 def save_face_data(data):
     os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
     with open(DATA_FILE, 'w') as file:
         json.dump(data, file, indent=4)
+    return True
+
 
 def signal_handler(sig, frame):
     print('Shutting down gracefully...')
     sys.exit(0)
+
 
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
@@ -71,6 +84,7 @@ face_recognition_model = "hog"
 if sys.platform.startswith('linux'):
     try:
         import torch
+
         if torch.cuda.is_available():
             face_recognition_model = "cnn"
     except ImportError:
@@ -82,6 +96,7 @@ except Exception as e:
     print(f"Error loading YOLO models: {e}")
     sys.exit(1)
 
+
 def cleanup_memory():
     import gc
     gc.collect()
@@ -92,6 +107,7 @@ def cleanup_memory():
             libc.malloc_trim(0)
         except:
             pass
+
 
 def generate_visitor_id():
     today = datetime.now()
@@ -111,10 +127,12 @@ def generate_visitor_id():
     visitor_id = f"V{date_component}{str(visit_count).zfill(4)}"
     return visitor_id
 
+
 def is_marathi(text):
     if not text:
         return False
     return any('\u0900' <= c <= '\u097F' for c in text)
+
 
 def save_face_images(frame, uid):
     user_dir = f'data/facedata/{uid}'
@@ -143,6 +161,7 @@ def save_face_images(frame, uid):
                     break
     return saved_images, face_encodings
 
+
 def load_users():
     try:
         with open("JSON/auth.json", "r") as file:
@@ -153,9 +172,11 @@ def load_users():
                 json.dump({}, file)
         return {}
 
+
 def save_users(users):
     with open("JSON/auth.json", "w") as file:
         json.dump(users, file, indent=4)
+
 
 def detect_person_and_face(frame):
     white_bg = np.ones_like(frame) * 255
@@ -199,6 +220,7 @@ def detect_person_and_face(frame):
             face_output[y1:y2, x1:x2] = face_crop
     return face_output, face_crop
 
+
 @app.route("/", methods=["GET", "POST"])
 def login():
     if "user" in session:
@@ -240,13 +262,16 @@ def login():
     else:
         return render_template("login.html")
 
+
 @app.route("/login", methods=["GET", "POST"])
 def login_page():
     return login()
 
+
 @app.route('/sw/sw.js')
 def service_worker():
     return app.send_static_file('sw/sw.js')
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -277,6 +302,7 @@ def register():
         return jsonify(success=True)
     return render_template("register.html")
 
+
 @app.route("/dashboard/<role>")
 def dashboard(role):
     if "user" not in session or session["user"]["role"] != role:
@@ -292,10 +318,12 @@ def dashboard(role):
         return render_template("index.html")
     return render_template(templates[role])
 
+
 @app.route("/logout")
 def logout():
     session.pop("user", None)
     return redirect(url_for("login"))
+
 
 @app.route('/register_visitor', methods=['POST'])
 def register_visitor():
@@ -406,6 +434,7 @@ def register_visitor():
         'visit_id': visitor_id
     })
 
+
 @app.route('/search_visitors', methods=['GET'])
 def search_visitors():
     query = request.args.get('query', '').lower()
@@ -433,6 +462,7 @@ def search_visitors():
         'success': True,
         'visitors': matching_visitors
     })
+
 
 @app.route('/get_visitor_details', methods=['GET'])
 def get_visitor_details():
@@ -462,6 +492,7 @@ def get_visitor_details():
                         'visit': visit
                     })
     return jsonify({'success': False, 'message': 'Visitor not found'})
+
 
 @app.route('/detect_face', methods=['POST'])
 def detect_face():
@@ -569,6 +600,7 @@ def detect_face():
     finally:
         cleanup_memory()
 
+
 @app.route('/confirm_visitor_entry', methods=['POST'])
 def confirm_visitor_entry():
     data = request.json
@@ -598,6 +630,7 @@ def confirm_visitor_entry():
                 })
     return jsonify({'success': False, 'message': 'Visitor not found'})
 
+
 @app.route('/get_today_visitors', methods=['GET'])
 def get_today_visitors():
     today = datetime.now().strftime("%Y-%m-%d")
@@ -622,6 +655,7 @@ def get_today_visitors():
         'success': True,
         'visitors': today_visitors
     })
+
 
 @app.route('/process_profile_image', methods=['POST'])
 def process_profile_image():
@@ -677,12 +711,14 @@ def process_profile_image():
     finally:
         cleanup_memory()
 
+
 @app.route('/dashboard/profiles/<uid>/<filename>', methods=['GET'])
 def get_profile_image(uid, filename):
     profiles_dir = os.path.join('data/profiles')
     if not os.path.exists(os.path.join(profiles_dir, uid, filename)):
         return jsonify({'success': False, 'message': 'Image not found'}), 404
     return send_from_directory(os.path.join(profiles_dir, uid), filename)
+
 
 @app.route('/departments', methods=['GET'])
 def get_departments():
@@ -694,6 +730,7 @@ def get_departments():
         return jsonify({"error": "Departments file not found"}), 404
     except json.JSONDecodeError:
         return jsonify({"error": "Invalid JSON in departments file"}), 500
+
 
 @app.route('/complete_meeting', methods=['POST'])
 def complete_meeting():
@@ -722,6 +759,7 @@ def complete_meeting():
         return jsonify({"success": True, "message": f"Meeting {visit_id} marked as completed for user {uid}"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 @app.route('/visitor_action', methods=['POST'])
 def visitor_action():
@@ -764,6 +802,7 @@ def visitor_action():
     except Exception as e:
         return jsonify({"success": False, "message": f"Failed to save updated visitor data: {str(e)}"}), 500
 
+
 @app.route('/registered_visitor_today')
 def registered_visitor_today():
     face_data = load_face_data()
@@ -773,10 +812,10 @@ def registered_visitor_today():
         if 'visitor' in user_data:
             for visit in user_data['visitor']:
                 if 'datetime' in visit and isinstance(visit['datetime'], str):
-                     visit_date_str = visit['datetime'].split(' ')[0]
-                     try:
-                         datetime.strptime(visit_date_str, '%Y-%m-%d')
-                         if visit_date_str == today:
+                    visit_date_str = visit['datetime'].split(' ')[0]
+                    try:
+                        datetime.strptime(visit_date_str, '%Y-%m-%d')
+                        if visit_date_str == today:
                             today_visitors.append({
                                 'uid': uid,
                                 'name': user_data.get('name', 'N/A'),
@@ -786,11 +825,13 @@ def registered_visitor_today():
                                 'status': visit.get('status', 'Unknown'),
                                 'pdf_path': visit.get('document_pdf', '')
                             })
-                     except ValueError:
-                         print(f"Warning: Invalid date format found for visit_id {visit.get('visit_id', 'N/A')}: {visit['datetime']}")
+                    except ValueError:
+                        print(
+                            f"Warning: Invalid date format found for visit_id {visit.get('visit_id', 'N/A')}: {visit['datetime']}")
                 else:
-                     print(f"Warning: Missing or invalid 'datetime' for visit in user {uid}")
+                    print(f"Warning: Missing or invalid 'datetime' for visit in user {uid}")
     return jsonify({'visitors': today_visitors})
+
 
 @app.route('/api/visitor_file_status')
 def get_visitor_file_status():
@@ -803,7 +844,8 @@ def get_visitor_file_status():
             dt = u.get('registration_datetime', '')
             try:
                 if datetime.fromisoformat(dt).strftime('%Y-%m-%d') != today: continue
-            except: continue
+            except:
+                continue
             enc = any(os.path.exists(p) for p in u.get('face_encodings', []) if isinstance(p, str))
             img = any(os.path.exists(os.path.join('data', p)) for p in u.get('profile_img', []) if isinstance(p, str))
             visitors.append({"uid": uid, "name": u.get('name', 'N/A'), "has_encodings": enc, "has_profile_img": img})
@@ -812,12 +854,15 @@ def get_visitor_file_status():
         traceback.print_exc()
         return jsonify({"success": False, "message": f"Server error: {str(e)}"}), 500
 
+
 @app.route('/api/upload-visitor-document/<visit_id>', methods=['POST'])
 def upload_visitor_document(visit_id):
-    if 'document' not in request.files: return jsonify({'success': False, 'error': 'No document file part in the request'}), 400
+    if 'document' not in request.files: return jsonify(
+        {'success': False, 'error': 'No document file part in the request'}), 400
     file = request.files['document']
     if file.filename == '': return jsonify({'success': False, 'error': 'No file selected'}), 400
-    if not file or not allowed_file(file.filename): return jsonify({'success': False, 'error': 'Invalid file type. Only PDF allowed.'}), 400
+    if not file or not allowed_file(file.filename): return jsonify(
+        {'success': False, 'error': 'Invalid file type. Only PDF allowed.'}), 400
     try:
         face_data = load_face_data()
         found_visit = None
@@ -842,8 +887,10 @@ def upload_visitor_document(visit_id):
         save_face_data(face_data)
         return jsonify({'success': True, 'message': 'Document uploaded successfully', 'pdf_path': filepath})
     except Exception as e:
-        import traceback; traceback.print_exc()
+        import traceback;
+        traceback.print_exc()
         return jsonify({'success': False, 'error': f'An internal error occurred: {str(e)}'}), 500
+
 
 @app.route('/api/delete-visitor-document/<visit_id>', methods=['POST'])
 def delete_visitor_document(visit_id):
@@ -859,7 +906,8 @@ def delete_visitor_document(visit_id):
             if found_visit: break
         if not found_visit: return jsonify({'success': False, 'message': 'Visitor ID not found'}), 404
         pdf_path_to_delete = found_visit.get('document_pdf')
-        if not pdf_path_to_delete or not isinstance(pdf_path_to_delete, str): return jsonify({'success': False, 'message': 'No document found associated with this visit entry'}), 404
+        if not pdf_path_to_delete or not isinstance(pdf_path_to_delete, str): return jsonify(
+            {'success': False, 'message': 'No document found associated with this visit entry'}), 404
         file_deleted = False
         if os.path.exists(pdf_path_to_delete):
             try:
@@ -868,17 +916,26 @@ def delete_visitor_document(visit_id):
                 if abs_delete_path.startswith(abs_pdf_folder):
                     os.remove(pdf_path_to_delete)
                     file_deleted = True
-            except FileNotFoundError: file_deleted = True
-            except OSError as e: return jsonify({'success': False, 'message': f'Error deleting file: {e}'}), 500
-        else: file_deleted = True
+            except FileNotFoundError:
+                file_deleted = True
+            except OSError as e:
+                return jsonify({'success': False, 'message': f'Error deleting file: {e}'}), 500
+        else:
+            file_deleted = True
         if file_deleted:
             found_visit['document_pdf'] = None
-            if save_face_data(face_data): return jsonify({'success': True, 'message': 'Document reference removed and file deleted successfully (if it existed).'})
-            else: return jsonify({'success': False, 'message': 'File deleted but failed to update visitor record.'}), 500
-        else: return jsonify({'success': False, 'message': 'File deletion was prevented or failed.'}), 500
+            if save_face_data(face_data):
+                return jsonify({'success': True,
+                                'message': 'Document reference removed and file deleted successfully (if it existed).'})
+            else:
+                return jsonify({'success': False, 'message': 'File deleted but failed to update visitor record.'}), 500
+        else:
+            return jsonify({'success': False, 'message': 'File deletion was prevented or failed.'}), 500
     except Exception as e:
-        import traceback; traceback.print_exc()
+        import traceback;
+        traceback.print_exc()
         return jsonify({'success': False, 'message': f'An internal server error occurred: {str(e)}'}), 500
+
 
 @app.route('/api/get-visitor-document/<visit_id>')
 def get_visitor_document(visit_id):
@@ -890,8 +947,8 @@ def get_visitor_document(visit_id):
                 if visit.get('visit_id') == visit_id and 'document_pdf' in visit:
                     full_pdf_path = visit['document_pdf']
                     if full_pdf_path and isinstance(full_pdf_path, str):
-                       pdf_filename = os.path.basename(full_pdf_path)
-                       break
+                        pdf_filename = os.path.basename(full_pdf_path)
+                        break
         if pdf_filename:
             break
     if pdf_filename:
@@ -904,14 +961,15 @@ def get_visitor_document(visit_id):
                 mimetype='application/pdf'
             )
         except FileNotFoundError:
-             print(f"Error: File not found at expected location: {os.path.join(PDF_FOLDER, pdf_filename)}")
-             return jsonify({'error': 'Document file not found on server.'}), 404
+            print(f"Error: File not found at expected location: {os.path.join(PDF_FOLDER, pdf_filename)}")
+            return jsonify({'error': 'Document file not found on server.'}), 404
         except Exception as e:
-             print(f"Error sending file: {e}")
-             return jsonify({'error': 'An error occurred while retrieving the document.'}), 500
+            print(f"Error sending file: {e}")
+            return jsonify({'error': 'An error occurred while retrieving the document.'}), 500
     else:
         print(f"Document reference not found in JSON data for visit_id: {visit_id}")
         return jsonify({'error': 'Document reference not found for this visitor ID.'}), 404
+
 
 @app.route('/api/upload-image', methods=['POST'])
 def upload_image():
@@ -931,6 +989,7 @@ def upload_image():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
 @app.route('/api/generate-pdf', methods=['POST'])
 def generate_pdf():
     if 'images' not in request.json or 'visit_id' not in request.json:
@@ -945,8 +1004,10 @@ def generate_pdf():
         pdf_filename = f"{secure_filename(visit_id)}_doc.pdf"
         pdf_path = os.path.join(PDF_FOLDER, pdf_filename)
         if os.path.exists(pdf_path):
-            try: os.remove(pdf_path)
-            except OSError as e: pass
+            try:
+                os.remove(pdf_path)
+            except OSError as e:
+                pass
         c = canvas.Canvas(pdf_path, pagesize=letter)
         letter_width, letter_height = letter
         for image_id in image_ids:
@@ -961,14 +1022,17 @@ def generate_pdf():
                     img_height = height * scale
                     x = (letter_width - img_width) / 2
                     y = (letter_height - img_height) / 2
-                    c.drawImage(img_path, x, y, width=img_width, height=img_height, preserveAspectRatio=True, mask='auto')
+                    c.drawImage(img_path, x, y, width=img_width, height=img_height, preserveAspectRatio=True,
+                                mask='auto')
                     c.showPage()
-                except: pass
+                except:
+                    pass
         c.save()
         for img_path in image_paths_to_delete:
             try:
                 if os.path.isfile(img_path): os.remove(img_path)
-            except: pass
+            except:
+                pass
         face_data = load_face_data()
         updated = False
         for uid, user_data in face_data.items():
@@ -981,14 +1045,18 @@ def generate_pdf():
             if updated: break
         if updated:
             if save_face_data(face_data): pass
-        return jsonify({'success': True, 'message': 'PDF generated successfully from scanned images.', 'pdf_url': f'/api/get-visitor-document/{visit_id}'})
+        return jsonify({'success': True, 'message': 'PDF generated successfully from scanned images.',
+                        'pdf_url': f'/api/get-visitor-document/{visit_id}'})
     except Exception as e:
-        import traceback; traceback.print_exc()
+        import traceback;
+        traceback.print_exc()
         try:
             for img_path in image_paths_to_delete:
                 if os.path.exists(img_path): os.remove(img_path)
-        except: pass
+        except:
+            pass
         return jsonify({'success': False, 'error': f'Failed to generate PDF: {str(e)}'}), 500
+
 
 @app.route('/api/cleanup', methods=['POST'])
 def cleanup_images():
@@ -1004,11 +1072,12 @@ def cleanup_images():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
 def load_departments():
     try:
         if not os.path.exists(DEPARTMENTS_FILE):
-             print(f"Error: Departments file not found at {DEPARTMENTS_FILE}")
-             return []
+            print(f"Error: Departments file not found at {DEPARTMENTS_FILE}")
+            return []
 
         with open(DEPARTMENTS_FILE, 'r', encoding='utf-8') as f:
             content = f.read().strip()
@@ -1031,6 +1100,27 @@ def load_departments():
     except Exception as e:
         print(f"Error: Failed to load departments from {DEPARTMENTS_FILE}: {e}")
         return []
+
+
+# Helper to load the entire departments JSON structure for admin edits
+def load_departments_data():
+    try:
+        with open(DEPARTMENTS_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        # If file is missing or corrupt, create a default structure
+        return {"departments": []}
+
+
+# Helper to save the entire departments JSON structure after admin edits
+def save_departments_data(data):
+    try:
+        with open(DEPARTMENTS_FILE, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)
+        return True
+    except Exception as e:
+        print(f"Error saving departments data: {e}")
+        return False
 
 
 def send_otp_email(recipient_email, otp):
@@ -1117,6 +1207,33 @@ def send_otp_email(recipient_email, otp):
         print(f"Email error: {str(e)}")
         return False
 
+
+# --- DECORATORS ---
+def admin_login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "user" not in session or session.get("user", {}).get("role") != "admin":
+            return jsonify({"success": False, "message": "Admin access required."}), 403
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
+def department_login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        print(">>> Decorator: Checking session:", session)
+        if 'department' not in session:
+            flash('Please login to access this page.', 'warning')
+            print(">>> Decorator: Redirecting to login, 'department' not found.")
+            return redirect(url_for('login_department'))
+        print(">>> Decorator: 'department' found, allowing access.")
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
+# --- DEPARTMENT AUTH & DASHBOARD ROUTES ---
 @app.route('/department/login', methods=['GET', 'POST'])
 def login_department():
     if 'department' in session:
@@ -1151,6 +1268,7 @@ def login_department():
             flash('Email address not registered for any department.', 'danger')
             return render_template('department/auth/login_department.html')
     return render_template('department/auth/login_department.html')
+
 
 @app.route('/department/verify-otp', methods=['GET', 'POST'])
 def verify_otp():
@@ -1190,23 +1308,13 @@ def verify_otp():
             flash('Invalid OTP entered. Please try again.', 'danger')
     return render_template('department/auth/verify_otp.html', email=display_email, department_name=department_name)
 
-def department_login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        print(">>> Decorator: Checking session:", session)
-        if 'department' not in session:
-            flash('Please login to access this page.', 'warning')
-            print(">>> Decorator: Redirecting to login, 'department' not found.")
-            return redirect(url_for('login_department'))
-        print(">>> Decorator: 'department' found, allowing access.")
-        return f(*args, **kwargs)
-    return decorated_function
 
 @app.route('/department/dashboard')
 @department_login_required
 def department_dashboard():
     department = session.get('department')
     return render_template('department/dashboard/department_dashboard.html', department=department)
+
 
 @app.route('/department/logout')
 def logout_department():
@@ -1217,6 +1325,8 @@ def logout_department():
     flash('You have been logged out successfully.', 'info')
     return redirect(url_for('login_department'))
 
+
+# --- DEPARTMENT-FACING API ROUTES ---
 @app.route('/api/department/applications', methods=['GET'])
 @department_login_required
 def get_department_applications():
@@ -1265,6 +1375,7 @@ def get_department_applications():
 
     return jsonify(applications)
 
+
 @app.route('/api/department/application/<visit_id>', methods=['GET'])
 @department_login_required
 def get_application_details(visit_id):
@@ -1304,6 +1415,7 @@ def get_application_details(visit_id):
                     return jsonify({"error": "Unauthorized access"}), 403
     return jsonify({"error": "Application not found"}), 404
 
+
 @app.route('/api/department/update-application/<visit_id>', methods=['POST'])
 @department_login_required
 def update_application(visit_id):
@@ -1339,6 +1451,7 @@ def update_application(visit_id):
     else:
         return jsonify({"error": "Application not found or unauthorized"}), 404
 
+
 @app.route('/api/department/application-stats', methods=['GET'])
 @department_login_required
 def get_application_stats():
@@ -1352,7 +1465,7 @@ def get_application_stats():
     total_count = 0
     pending_count = 0
     completed_count = 0
-    today = datetime.now().date() # Corrected
+    today = datetime.now().date()
     today_count = 0
     for uid, user_data in facedata.items():
         for visit in user_data.get('visitor', []):
@@ -1363,7 +1476,7 @@ def get_application_stats():
                 elif visit.get('status') == 'completed':
                     completed_count += 1
                 try:
-                    visit_date = datetime.strptime(visit.get('datetime'), '%Y-%m-%d %H:%M:%S').date() # Corrected
+                    visit_date = datetime.strptime(visit.get('datetime'), '%Y-%m-%d %H:%M:%S').date()
                     if visit_date == today:
                         today_count += 1
                 except ValueError:
@@ -1375,6 +1488,7 @@ def get_application_stats():
         'today': today_count
     }
     return jsonify(stats)
+
 
 @app.route('/api/department/forward-application/<visit_id>', methods=['POST'])
 @department_login_required
@@ -1402,7 +1516,7 @@ def forward_application(visit_id):
                     user_data['visitor'][i]['status'] = 'pending'
                     user_data['visitor'][i]['forwarding_note'] = note
                     user_data['visitor'][i]['forwarded_from'] = current_department_name
-                    user_data['visitor'][i]['forwarded_datetime'] = datetime.now().strftime( # Corrected
+                    user_data['visitor'][i]['forwarded_datetime'] = datetime.now().strftime(
                         '%Y-%m-%d %H:%M:%S')
                     updated = True
                     break
@@ -1420,6 +1534,7 @@ def forward_application(visit_id):
             return jsonify({'error': f'Failed to save data: {str(e)}'}), 500
     else:
         return jsonify({"error": "Application not found or unauthorized"}), 404
+
 
 @app.route('/api/department/search-applications', methods=['GET'])
 @department_login_required
@@ -1459,6 +1574,7 @@ def search_applications():
                     results.append(result)
     return jsonify(results)
 
+
 @app.route('/api/department/recent-activities', methods=['GET'])
 @department_login_required
 def get_recent_activities():
@@ -1485,12 +1601,119 @@ def get_recent_activities():
                 }
                 activities.append(activity)
     try:
-        activities.sort(key=lambda x: datetime.strptime(x['datetime'], '%Y-%m-%d %H:%M:%S'), reverse=True) # Corrected
+        activities.sort(key=lambda x: datetime.strptime(x['datetime'], '%Y-%m-%d %H:%M:%S'), reverse=True)
     except:
         pass
     return jsonify(activities[:limit])
 
+
+# --- ADMIN-FACING API ROUTES ---
+
+# --- Admin Department CRUD ---
+@app.route('/api/admin/departments', methods=['GET'])
+@admin_login_required
+def admin_get_departments():
+    data = load_departments_data()
+    return jsonify(data.get('departments', []))
+
+
+@app.route('/api/admin/departments', methods=['POST'])
+@admin_login_required
+def admin_add_department():
+    req_data = request.get_json()
+    if not req_data or not req_data.get('name') or not req_data.get('email'):
+        return jsonify({"success": False, "message": "Name and email are required."}), 400
+
+    name = req_data['name'].strip()
+    email = req_data['email'].strip()
+
+    data = load_departments_data()
+    departments = data.get('departments', [])
+
+    if any(d['name'].lower() == name.lower() for d in departments):
+        return jsonify({"success": False, "message": "A department with this name already exists."}), 409
+    if any(d['email'].lower() == email.lower() for d in departments):
+        return jsonify({"success": False, "message": "A department with this email already exists."}), 409
+
+    new_id = max([d.get('id', 0) for d in departments]) + 1 if departments else 1
+
+    new_department = {
+        "id": new_id,
+        "name": name,
+        "email": email
+    }
+    departments.append(new_department)
+    data['departments'] = departments
+
+    if save_departments_data(data):
+        return jsonify(
+            {"success": True, "message": "Department added successfully.", "department": new_department}), 201
+    else:
+        return jsonify({"success": False, "message": "Failed to save department data."}), 500
+
+
+@app.route('/api/admin/departments/<int:dept_id>', methods=['PUT'])
+@admin_login_required
+def admin_update_department(dept_id):
+    req_data = request.get_json()
+    if not req_data:
+        return jsonify({"success": False, "message": "Request body is empty."}), 400
+
+    new_name = req_data.get('name', '').strip()
+    new_email = req_data.get('email', '').strip()
+
+    if not new_name and not new_email:
+        return jsonify(
+            {"success": False, "message": "At least one field (name or email) must be provided for update."}), 400
+
+    data = load_departments_data()
+    departments = data.get('departments', [])
+
+    target_dept = next((d for d in departments if d.get('id') == dept_id), None)
+
+    if not target_dept:
+        return jsonify({"success": False, "message": "Department not found."}), 404
+
+    if new_name and any(d['name'].lower() == new_name.lower() and d['id'] != dept_id for d in departments):
+        return jsonify({"success": False, "message": "Another department with this name already exists."}), 409
+    if new_email and any(d['email'].lower() == new_email.lower() and d['id'] != dept_id for d in departments):
+        return jsonify({"success": False, "message": "Another department with this email already exists."}), 409
+
+    if new_name:
+        target_dept['name'] = new_name
+    if new_email:
+        target_dept['email'] = new_email
+
+    data['departments'] = departments
+    if save_departments_data(data):
+        return jsonify({"success": True, "message": "Department updated successfully.", "department": target_dept})
+    else:
+        return jsonify({"success": False, "message": "Failed to save updated department data."}), 500
+
+
+@app.route('/api/admin/departments/<int:dept_id>', methods=['DELETE'])
+@admin_login_required
+def admin_delete_department(dept_id):
+    data = load_departments_data()
+    departments = data.get('departments', [])
+
+    initial_len = len(departments)
+    departments = [d for d in departments if d.get('id') != dept_id]
+
+    if len(departments) == initial_len:
+        return jsonify({"success": False, "message": "Department not found."}), 404
+
+    data['departments'] = departments
+    if save_departments_data(data):
+        return jsonify({"success": True, "message": "Department deleted successfully."})
+    else:
+        return jsonify({"success": False, "message": "Failed to save updated department data."}), 500
+
+
+# --- End Admin Department CRUD ---
+
 @app.route('/api/admin/visitors')
+@admin_login_required
 def get_admin_visitors():
     selected_date_str = request.args.get('date')
     if not selected_date_str:
@@ -1514,9 +1737,8 @@ def get_admin_visitors():
                                 "address": user_data.get('address', 'N/A'),
                                 "tahasil": user_data.get('tahasil', 'N/A'),
                                 "district": user_data.get('district', 'N/A'),
-                                # Use profile_img if available, fallback to images, then empty list
-                                "profile_img": user_data.get('profile_img', user_data.get('images', [])[:1]), # Simplified fallback
-                                "images": user_data.get('images', []), # Keep original images list
+                                "profile_img": user_data.get('profile_img', user_data.get('images', [])[:1]),
+                                "images": user_data.get('images', []),
                                 "face_encodings": user_data.get('face_encodings', []),
                                 "visit_id": visit.get('visit_id', 'N/A'),
                                 "datetime": visit.get('datetime', ''),
@@ -1525,48 +1747,38 @@ def get_admin_visitors():
                                 "entry_confirmed": visit.get('entry_confirmed', False),
                                 "dvn": visit.get('dvn', None),
                                 "forwarding_department": visit.get('forwarding_department', ''),
-                                "forwarding_note": visit.get('forwarding_note', ''), # Added forwarding_note
-                                "remark": visit.get('remark', ''), # Added remark explicitly
+                                "forwarding_note": visit.get('forwarding_note', ''),
+                                "remark": visit.get('remark', ''),
                                 "document_pdf": visit.get('document_pdf', None)
                             })
                     except Exception as e:
-                        # Log errors during processing individual visits if needed
                         print(f"Error processing visit for UID {uid}, Visit {visit.get('visit_id', 'N/A')}: {e}")
                 else:
-                    # Log or handle invalid visit entries
                     print(f"Warning: Skipping invalid visit entry for UID {uid}: {visit}")
         else:
-            # Log or handle invalid user data structures
             print(f"Warning: Skipping invalid user data structure for UID {uid}")
 
-    # Sort the results by datetime
     try:
-        # Filter out entries with invalid datetime strings before sorting
-        valid_visitors = [v for v in daily_visitors if 'datetime' in v and isinstance(v['datetime'], str)]
-        invalid_visitors = [v for v in daily_visitors if not ('datetime' in v and isinstance(v['datetime'], str))]
-
-        # Sort valid visitors
+        valid_visitors = [v for v in daily_visitors if
+                          'datetime' in v and isinstance(v['datetime'], str) and v['datetime']]
+        invalid_visitors = [v for v in daily_visitors if
+                            not ('datetime' in v and isinstance(v['datetime'], str) and v['datetime'])]
         valid_visitors.sort(key=lambda x: datetime.strptime(x['datetime'], '%Y-%m-%d %H:%M:%S'))
-
-        # Combine sorted valid visitors with invalid ones (optional, puts invalid ones at the end)
         sorted_daily_visitors = valid_visitors + invalid_visitors
     except Exception as e:
-        # Log sorting errors if they occur, possibly due to unexpected data
         print(f"Warning: Could not sort visitors due to invalid data or structure: {e}")
-        sorted_daily_visitors = daily_visitors # Fallback to unsorted list
+        sorted_daily_visitors = daily_visitors
 
-    # Create response and set cache headers
     response = make_response(jsonify({"visitors": sorted_daily_visitors}))
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
     return response
 
-@app.route('/api/admin/delete_visitor_entry', methods=['POST'])
-def delete_visitor_entry():
-    if not is_admin_authenticated():
-        return jsonify({"success": False, "message": "Unauthorized access"}), 403
 
+@app.route('/api/admin/delete_visitor_entry', methods=['POST'])
+@admin_login_required
+def delete_visitor_entry():
     data = request.get_json()
     uid, visit_id = data.get('uid'), data.get('visit_id') if data else (None, None)
     if not uid or not visit_id:
@@ -1585,8 +1797,10 @@ def delete_visitor_entry():
         if pdf and isinstance(pdf, str) and pdf.strip():
             abs_path, abs_folder = os.path.abspath(pdf), os.path.abspath(PDF_FOLDER)
             if abs_path.startswith(abs_folder) and os.path.exists(pdf):
-                try: os.remove(pdf)
-                except OSError as e: print(f"PDF deletion failed: {e}")
+                try:
+                    os.remove(pdf)
+                except OSError as e:
+                    print(f"PDF deletion failed: {e}")
         if save_face_data(face_data):
             return jsonify({"success": True, "message": "Visitor entry deleted successfully"})
         return jsonify({"success": False, "message": "Failed to save changes"}), 500
@@ -1594,13 +1808,14 @@ def delete_visitor_entry():
         print(f"Error deleting visit {visit_id} for UID {uid}: {e}")
         return jsonify({"success": False, "message": f"Server error: {str(e)}"}), 500
 
+
 def safe_get(data, key, default='N/A'):
     return data.get(key, default) if data else default
 
+
 @app.route('/api/admin/generate_report')
+@admin_login_required
 def generate_visitor_report():
-    if not is_admin_authenticated():
-        return jsonify({"error": "Unauthorized access"}), 403
     start_date_str = request.args.get('start_date')
     end_date_str = request.args.get('end_date')
     if not start_date_str:
@@ -1647,9 +1862,11 @@ def generate_visitor_report():
                                 }
                                 report_data.append(report_entry)
                         except ValueError:
-                            print(f"Skipping visit due to invalid datetime format: UID {uid}, Visit {visit.get('visit_id', 'N/A')}")
+                            print(
+                                f"Skipping visit due to invalid datetime format: UID {uid}, Visit {visit.get('visit_id', 'N/A')}")
                         except Exception as e:
-                            print(f"Error processing visit row for report: UID {uid}, Visit {visit.get('visit_id', 'N/A')} - {e}")
+                            print(
+                                f"Error processing visit row for report: UID {uid}, Visit {visit.get('visit_id', 'N/A')} - {e}")
 
         report_data.sort(key=lambda x: datetime.strptime(x['Date & Time'], '%d/%m/%Y %I:%M:%S %p'))
 
@@ -1672,7 +1889,8 @@ def generate_visitor_report():
         for entry in report_data:
             row_data = [entry.get(header, 'N/A') for header in headers]
             ws.append(row_data)
-        for col_idx, column_letter in enumerate(openpyxl.utils.get_column_letter(i) for i in range(1, len(headers) + 1)):
+        for col_idx, column_letter in enumerate(
+                openpyxl.utils.get_column_letter(i) for i in range(1, len(headers) + 1)):
             max_length = 0
             column = ws[column_letter]
             for cell in column:
@@ -1700,7 +1918,9 @@ def generate_visitor_report():
         print(f"CRITICAL: Error generating Excel report: {e}")
         return jsonify({"error": f"An unexpected server error occurred while generating the report: {str(e)}"}), 500
 
+
 @app.route('/api/admin/delete_user', methods=['POST'])
+@admin_login_required
 def delete_user():
     data = request.get_json()
     if not data or 'uid' not in data:
@@ -1761,22 +1981,26 @@ def delete_user():
                             except OSError as e:
                                 print(f"Error deleting PDF {pdf_path} during user deletion: {e}")
         save_face_data(face_data)
-        return jsonify({"success": True, "message": f"User '{uid_to_delete}' and associated files deleted successfully"})
+        return jsonify(
+            {"success": True, "message": f"User '{uid_to_delete}' and associated files deleted successfully"})
     except Exception as e:
         print(f"Error deleting user {uid_to_delete}: {e}")
         import traceback
         traceback.print_exc()
         return jsonify({"success": False, "message": f"An server error occurred during user deletion: {str(e)}"}), 500
 
+
+# --- OTHER API & UTILITY ROUTES ---
 @app.route('/data/facedata/<uid>/<filename>')
 def get_registration_image(uid, filename):
     facedata_image_dir = os.path.join('data', 'facedata')
     user_image_dir = os.path.join(facedata_image_dir, uid)
     if not os.path.exists(os.path.join(user_image_dir, filename)):
         if not os.path.exists(os.path.join(facedata_image_dir, filename)):
-             return jsonify({'success': False, 'message': 'Image not found'}), 404
+            return jsonify({'success': False, 'message': 'Image not found'}), 404
         return send_from_directory(facedata_image_dir, filename)
     return send_from_directory(user_image_dir, filename)
+
 
 @app.route('/api/visitor-status/<visit_id>', methods=['GET'])
 def get_visitor_status(visit_id):
@@ -1802,11 +2026,13 @@ def get_visitor_status(visit_id):
         profile_image_url = None
         profile_imgs = found_visitor_data.get('profile_img', [])
         if profile_imgs and isinstance(profile_imgs, list) and profile_imgs[0]:
-             profile_image_url = url_for('get_profile_image', uid=visitor_uid, filename=os.path.basename(profile_imgs[0]), _external=False)
+            profile_image_url = url_for('get_profile_image', uid=visitor_uid,
+                                        filename=os.path.basename(profile_imgs[0]), _external=False)
         else:
             reg_images = found_visitor_data.get('images', [])
             if reg_images and isinstance(reg_images, list) and reg_images[0]:
-                 profile_image_url = url_for('get_registration_image', uid=visitor_uid, filename=os.path.basename(reg_images[0]), _external=False)
+                profile_image_url = url_for('get_registration_image', uid=visitor_uid,
+                                            filename=os.path.basename(reg_images[0]), _external=False)
         response_data = {
             'success': True,
             'uid': visitor_uid,
@@ -1827,11 +2053,12 @@ def get_visitor_status(visit_id):
     except FileNotFoundError:
         return jsonify({'success': False, 'message': 'Visitor data file not found.'}), 500
     except json.JSONDecodeError:
-         return jsonify({'success': False, 'message': 'Error reading visitor data.'}), 500
+        return jsonify({'success': False, 'message': 'Error reading visitor data.'}), 500
     except Exception as e:
         print(f"Error in /api/visitor-status/{visit_id}: {e}")
         traceback.print_exc()
         return jsonify({'success': False, 'message': f'An internal server error occurred: {str(e)}'}), 500
+
 
 @app.route('/api/validate-visitor-face', methods=['POST'])
 def validate_visitor_face():
@@ -1842,13 +2069,13 @@ def validate_visitor_face():
     image_data_uri = data['image']
     try:
         if ',' not in image_data_uri:
-             return jsonify({'success': False, 'message': 'Invalid image data format'}), 400
+            return jsonify({'success': False, 'message': 'Invalid image data format'}), 400
         header, encoded = image_data_uri.split(',', 1)
         image_bytes = base64.b64decode(encoded)
         nparr = np.frombuffer(image_bytes, np.uint8)
         captured_frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         if captured_frame is None:
-             return jsonify({'success': False, 'message': 'Could not decode image'}), 400
+            return jsonify({'success': False, 'message': 'Could not decode image'}), 400
         rgb_captured_frame = cv2.cvtColor(captured_frame, cv2.COLOR_BGR2RGB)
         face_data = load_face_data()
         user_data = face_data.get(uid)
@@ -1864,32 +2091,35 @@ def validate_visitor_face():
                     except Exception as e:
                         print(f"Warning: Could not load encoding {path}: {e}")
                 else:
-                     print(f"Warning: Encoding file not found: {path}")
+                    print(f"Warning: Encoding file not found: {path}")
         if not known_encodings:
             image_paths = user_data.get('images', [])
             if not image_paths:
-                 return jsonify({'success': False, 'message': 'No face data (encodings or images) found for this user to compare.'}), 404
+                return jsonify({'success': False,
+                                'message': 'No face data (encodings or images) found for this user to compare.'}), 404
             print(f"Generating temporary encodings from images for validation for UID {uid}")
             for img_path_rel in image_paths:
-                 img_path_abs = os.path.join('data', img_path_rel)
-                 if os.path.exists(img_path_abs):
-                      try:
-                          known_image = face_recognition.load_image_file(img_path_abs)
-                          encs = face_recognition.face_encodings(known_image, model=face_recognition_model)
-                          if encs:
-                              known_encodings.append(encs[0])
-                      except Exception as e:
-                          print(f"Warning: Could not process image {img_path_abs} for encoding: {e}")
-                 else:
-                     print(f"Warning: Image file not found for encoding generation: {img_path_abs}")
+                img_path_abs = os.path.join('data', img_path_rel)
+                if os.path.exists(img_path_abs):
+                    try:
+                        known_image = face_recognition.load_image_file(img_path_abs)
+                        encs = face_recognition.face_encodings(known_image, model=face_recognition_model)
+                        if encs:
+                            known_encodings.append(encs[0])
+                    except Exception as e:
+                        print(f"Warning: Could not process image {img_path_abs} for encoding: {e}")
+                else:
+                    print(f"Warning: Image file not found for encoding generation: {img_path_abs}")
         if not known_encodings:
-             return jsonify({'success': False, 'message': 'Could not load or generate any known face encodings for comparison.'}), 404
+            return jsonify({'success': False,
+                            'message': 'Could not load or generate any known face encodings for comparison.'}), 404
         face_locations = face_recognition.face_locations(rgb_captured_frame, model=face_recognition_model)
         if not face_locations:
             return jsonify({'success': False, 'message': 'No face detected in the provided image.'})
-        captured_encodings = face_recognition.face_encodings(rgb_captured_frame, face_locations, model=face_recognition_model)
+        captured_encodings = face_recognition.face_encodings(rgb_captured_frame, face_locations,
+                                                             model=face_recognition_model)
         if not captured_encodings:
-             return jsonify({'success': False, 'message': 'Could not generate encoding from the detected face.'})
+            return jsonify({'success': False, 'message': 'Could not generate encoding from the detected face.'})
         match_found = False
         for captured_encoding in captured_encodings:
             matches = face_recognition.compare_faces(known_encodings, captured_encoding, tolerance=0.45)
@@ -1903,9 +2133,11 @@ def validate_visitor_face():
     except Exception as e:
         print(f"Error during face validation for UID {uid}: {e}")
         traceback.print_exc()
-        return jsonify({'success': False, 'message': f'An internal server error occurred during face validation: {str(e)}'}), 500
+        return jsonify(
+            {'success': False, 'message': f'An internal server error occurred during face validation: {str(e)}'}), 500
     finally:
         cleanup_memory()
 
+
 if __name__ == "__main__":
-    app.run(debug= True)
+    app.run(debug=True)
