@@ -2138,6 +2138,3 @@ def validate_visitor_face():
     finally:
         cleanup_memory()
 
-
-if __name__ == "__main__":
-    app.run(debug=True)

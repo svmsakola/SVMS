@@ -33,5 +33,6 @@ jobs:
           source venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements.txt
+          sudo lsof -ti :5000 | xargs -r sudo kill -9
           sudo systemctl daemon-reload
           sudo systemctl restart svms.service
