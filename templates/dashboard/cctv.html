@@ -16,8 +16,10 @@
             --shadow-subtle: rgba(0, 0, 0, 0.1);
             --shadow-medium: rgba(0, 0, 0, 0.2);
             --accent-color: #4CAF50;
+            --accent-color-dark: #409a43;
             --text-gray: #6c757d;
             --danger-color: #dc3545;
+            --danger-color-dark: #c82333;
         }
         * {
             margin: 0;
@@ -31,7 +33,7 @@
             min-height: 100vh;
             color: var(--white);
             perspective: 1000px;
-            overflow-x: hidden;
+            overflow: hidden;
             position: relative;
         }
 
@@ -103,28 +105,90 @@
             transition: all 0.2s ease;
         }
 
-        .dropdown-menu-item i {
-            margin-right: 10px;
-            font-size: 1rem;
+        .dropdown-menu-item i { margin-right: 10px; font-size: 1rem; }
+        .dropdown-menu-item:hover { background: rgba(0, 0, 0, 0.05); }
+        .dropdown-menu-item.logout { color: var(--danger-color); border-top: 1px solid rgba(0, 0, 0, 0.1); }
+
+        .main-container {
+            display: flex;
+            padding: 100px 25px 25px;
+            gap: 25px;
+            height: 100vh;
         }
 
-        .dropdown-menu-item:hover {
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        .dropdown-menu-item.logout {
-            color: var(--danger-color);
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        .main-content {
-            padding-top: 80px;
-            padding-bottom: 20px;
+        .left-panel {
+            flex: 2;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
         }
+
+        .right-panel {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - 125px);
+        }
+
+        .right-panel h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+        }
+
+        #todayVisitorsList {
+            overflow-y: auto;
+            flex-grow: 1;
+            padding-right: 10px;
+        }
+
+        .visitor-list-item {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-left: 5px solid transparent;
+        }
+
+        .visitor-list-item.confirmed {
+            background: rgba(76, 175, 80, 0.3);
+            border-left-color: var(--accent-color);
+        }
+
+        .visitor-list-item .info .name { font-weight: 600; font-size: 1.1rem; }
+        .visitor-list-item .info .phone { font-size: 0.9rem; opacity: 0.8; }
+
+        .action-btn {
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .confirm-manual-btn { background: var(--bright-blue); }
+        .confirm-manual-btn:hover { background: var(--soft-blue); }
+
+        .remove-dvn-btn { background: var(--danger-color); }
+        .remove-dvn-btn:hover { background: var(--danger-color-dark); }
+
+
+        #todayVisitorsList::-webkit-scrollbar { width: 8px; }
+        #todayVisitorsList::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 10px;}
+        #todayVisitorsList::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.4); border-radius: 10px; }
+        #todayVisitorsList::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.6); }
 
         .container {
             width: 100%;
@@ -133,21 +197,16 @@
             background: rgba(255, 255, 255, 0.15);
             border-radius: 20px;
             backdrop-filter: blur(15px);
-            box-shadow:
-                0 15px 35px var(--shadow-subtle),
-                0 5px 15px var(--shadow-medium);
+            box-shadow: 0 15px 35px var(--shadow-subtle), 0 5px 15px var(--shadow-medium);
             border: 1px solid rgba(255, 255, 255, 0.2);
             transform-style: preserve-3d;
             transform: rotateX(5deg);
             transition: all 0.5s ease;
-            margin: 20px;
         }
 
         .container:hover {
             transform: rotateX(0deg) scale(1.02);
-            box-shadow:
-                0 20px 40px var(--shadow-medium),
-                0 10px 20px var(--shadow-subtle);
+            box-shadow: 0 20px 40px var(--shadow-medium), 0 10px 20px var(--shadow-subtle);
         }
 
         .video-container {
@@ -156,25 +215,7 @@
             border-radius: 15px;
             overflow: hidden;
             margin-bottom: 25px;
-            box-shadow:
-                0 10px 30px var(--shadow-subtle),
-                0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.4s ease;
-        }
-
-        .video-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                135deg,
-                rgba(255,255,255,0.2),
-                rgba(255,255,255,0.05)
-            );
-            z-index: 1;
+            box-shadow: 0 10px 30px var(--shadow-subtle), 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         #videoFeed {
@@ -183,7 +224,6 @@
             object-fit: cover;
             border-radius: 15px;
             transform: scale(1.02);
-            transition: transform 0.4s ease;
         }
 
         .visitor-details {
@@ -192,13 +232,7 @@
             border-radius: 15px;
             padding: 30px;
             margin-bottom: 25px;
-            box-shadow:
-                0 8px 25px var(--shadow-subtle),
-                0 4px 12px rgba(0, 0, 0, 0.08);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            box-shadow: 0 8px 25px var(--shadow-subtle), 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
         .visitor-info-header {
@@ -209,360 +243,124 @@
             border-bottom: 2px solid var(--bright-blue);
             padding-bottom: 15px;
         }
+        .visitor-info-header h2 { color: var(--bright-blue); font-weight: 600; margin: 0; font-size: 1.5rem; }
+        .visitor-info-badge { background-color: var(--accent-color); color: white; padding: 5px 10px; border-radius: 20px; font-size: 0.9rem; font-weight: 500;}
 
-        .visitor-info-header h2 {
-            color: var(--bright-blue);
-            font-weight: 600;
-            margin: 0;
-            font-size: 1.5rem;
-        }
+        .visitor-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .visitor-detail-item { display: flex; flex-direction: column; }
+        .visitor-detail-label { color: var(--text-gray); font-size: 0.9rem; margin-bottom: 5px; text-transform: uppercase; font-weight: 500; }
+        .visitor-detail-value { color: var(--text-color); font-size: 1.1rem; font-weight: 600; }
 
-        .visitor-info-badge {
-            background-color: var(--accent-color);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
+        .no-match { text-align: center; background-color: rgba(255,255,255,0.1); padding: 25px; border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
 
-        .visitor-details-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-container { background-color: white; border-radius: 12px; padding: 25px; width: 90%; max-width: 400px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); transform: scale(0.9); transition: all 0.3s ease; }
+        .modal-overlay.active .modal-container { transform: scale(1); }
+        .modal-header { margin-bottom: 20px; text-align: center; }
+        .modal-title { color: var(--text-color); font-size: 1.5rem; font-weight: 600; }
+        .modal-content { color: var(--text-gray); text-align: center; margin-bottom: 25px; }
+        .modal-actions { display: flex; justify-content: space-between; gap: 15px; }
+        .modal-btn { flex: 1; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .modal-btn-cancel { background-color: #f8f9fa; color: var(--text-color); border: 1px solid #dee2e6; }
+        .modal-btn-cancel:hover { background-color: #e9ecef; }
+        .modal-btn-confirm { background-color: var(--danger-color); color: white; border: none; }
+        .modal-btn-confirm:hover { background-color: #c82333; }
 
-        .visitor-detail-item {
-            display: flex;
-            flex-direction: column;
-        }
+        .confirmation-popup-style { width: 60% !important; max-width: 500px; background-color: var(--accent-color); color: white; }
+        .confirmation-popup-style .modal-title { color: white; }
+        .confirmation-popup-style .modal-content { color: white; font-size: 1.1rem; }
+        .confirmation-popup-style .modal-actions { justify-content: center; }
+        .confirmation-popup-style .modal-btn-close { background-color: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.5); flex: 0 1 150px; }
+        .confirmation-popup-style .modal-btn-close:hover { background-color: rgba(255, 255, 255, 0.3); }
 
-        .visitor-detail-label {
-            color: var(--text-gray);
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            font-weight: 500;
-        }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+        .skeleton-loading { animation: pulse 1.5s infinite; background-color: rgba(255, 255, 255, 0.2); border-radius: 4px; }
+        .skeleton-text { height: 15px; width: 100%; margin-bottom: 10px; }
 
-        .visitor-detail-value {
-            color: var(--text-color);
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(
-                to right,
-                var(--deep-blue),
-                var(--bright-blue)
-            );
-            color: var(--white);
-            border: none;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            letter-spacing: 1px;
-            transition: all 0.4s ease;
-            box-shadow:
-                0 8px 20px var(--shadow-subtle),
-                0 4px 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                120deg,
-                transparent,
-                rgba(255,255,255,0.3),
-                transparent
-            );
-            transition: all 0.4s ease;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn:hover {
-            transform: translateY(-5px);
-            box-shadow:
-                0 10px 25px var(--shadow-medium),
-                0 6px 15px rgba(0, 0, 0, 0.15);
-        }
-
-        .no-match {
-            text-align: center;
-            background-color: rgba(255,255,255,0.1);
-            padding: 25px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: all 0.4s ease;
-        }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal-container {
-            background-color: white;
-            border-radius: 12px;
-            padding: 25px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            transform: scale(0.9);
-            transition: all 0.3s ease;
-        }
-
-        .modal-overlay.active .modal-container {
-            transform: scale(1);
-        }
-
-        .modal-header {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .modal-title {
-            color: var(--text-color);
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
-        .modal-content {
-            color: var(--text-gray);
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .modal-actions {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-        }
-
-        .modal-btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .modal-btn-cancel {
-            background-color: #f8f9fa;
-            color: var(--text-color);
-            border: 1px solid #dee2e6;
-        }
-
-        .modal-btn-cancel:hover {
-            background-color: #e9ecef;
-        }
-
-        .modal-btn-confirm {
-            background-color: var(--danger-color);
-            color: white;
-            border: none;
-        }
-
-        .modal-btn-confirm:hover {
-            background-color: #c82333;
-        }
-
-        .confirmation-popup-style {
-             width: 60% !important;
-             max-width: 500px;
-             background-color: var(--accent-color);
-             color: white;
-        }
-
-        .confirmation-popup-style .modal-title {
-            color: white;
-        }
-
-        .confirmation-popup-style .modal-content {
-            color: white;
-            font-size: 1.1rem;
-        }
-
-         .confirmation-popup-style .modal-actions {
-            justify-content: center;
-         }
-
-        .confirmation-popup-style .modal-btn-close {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            flex: 0 1 150px;
-        }
-
-        .confirmation-popup-style .modal-btn-close:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-
-
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
-        }
-
-        .skeleton-loading {
-            animation: pulse 1.5s infinite;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-        }
-
-        .skeleton-text {
-            height: 15px;
-            width: 100%;
-            margin-bottom: 10px;
+        @media (max-width: 1024px) {
+            .main-container {
+                flex-direction: column;
+                height: auto;
+                padding-top: 100px;
+            }
+            .right-panel {
+                max-height: 300px;
+            }
         }
 
         @media (max-width: 600px) {
-            .header {
-                padding: 10px 15px;
-            }
-
-            .logo {
-                font-size: 1.2rem;
-            }
-
-            .container {
-                width: 95%;
-                padding: 15px;
-                margin: 10px;
-                transform: none !important;
-            }
-
-            .visitor-details-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .visitor-details {
-                padding: 20px;
-            }
-
-            .main-content {
-                padding-top: 70px;
-            }
-
-            .confirmation-popup-style {
-                width: 85% !important;
-            }
+            .header { padding: 10px 15px; }
+            .main-container { padding: 80px 15px 15px; gap: 15px; }
+            .container { padding: 15px; transform: none !important; }
+            .visitor-details-grid { grid-template-columns: 1fr; }
+            .visitor-details { padding: 20px; }
+            .confirmation-popup-style { width: 85% !important; }
         }
     </style>
 </head>
 <body>
     <header class="header">
         <img src="{{ url_for('static', filename='assets/logo/svmslogo.png') }}" alt="Smart Visitor Management System Logo">
-        </div>
         <div class="user-menu" id="userMenu">
-            <div class="user-icon">
-                <i class="fas fa-user"></i>
-            </div>
+            <div class="user-icon"><i class="fas fa-user"></i></div>
             <div class="dropdown-menu" id="dropdownMenu">
-                <div class="dropdown-menu-item">
-                    <i class="fas fa-user-circle"></i>
-                    <span>माझे प्रोफाइल</span>
-                </div>
-                <div class="dropdown-menu-item">
-                    <i class="fas fa-cog"></i>
-                    <span>सेटिंग्ज</span>
-                </div>
-                <div class="dropdown-menu-item">
-                    <i class="fas fa-question-circle"></i>
-                    <span>मदत आणि समर्थन</span>
-                </div>
-                <div class="dropdown-menu-item logout" id="logoutBtn">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>लॉगआउट</span>
-                </div>
+                <div class="dropdown-menu-item"><i class="fas fa-user-circle"></i><span>माझे प्रोफाइल</span></div>
+                <div class="dropdown-menu-item"><i class="fas fa-cog"></i><span>सेटिंग्ज</span></div>
+                <div class="dropdown-menu-item"><i class="fas fa-question-circle"></i><span>मदत आणि समर्थन</span></div>
+                <div class="dropdown-menu-item logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i><span>लॉगआउट</span></div>
             </div>
         </div>
     </header>
 
-    <div class="main-content">
-        <div class="container">
-            <div class="video-container">
-                <video id="videoFeed" autoplay playsinline></video>
-            </div>
-
-            <div id="visitorDetails" class="visitor-details" style="display:none;">
-                <div class="visitor-info-header">
-                    <h2>अभ्यागत प्रोफाइल</h2>
-                    <div class="visitor-info-badge">सत्यापित</div>
+    <main class="main-container">
+        <div class="left-panel">
+            <div class="container">
+                <div class="video-container">
+                    <video id="videoFeed" autoplay playsinline></video>
                 </div>
-                <div class="visitor-details-grid">
-                    <div class="visitor-detail-item">
-                        <div class="visitor-detail-label">पूर्ण नाव</div>
-                        <div id="visitorName" class="visitor-detail-value">-</div>
+                <div id="visitorDetails" class="visitor-details" style="display:none;">
+                    <div class="visitor-info-header">
+                        <h2>अभ्यागत प्रोफाइल</h2>
+                        <div class="visitor-info-badge">सत्यापित</div>
                     </div>
-                    <div class="visitor-detail-item">
-                        <div class="visitor-detail-label">अभ्यागत आयडी</div>
-                        <div id="visitorID" class="visitor-detail-value">-</div>
-                    </div>
-                    <div class="visitor-detail-item">
-                        <div class="visitor-detail-label">दैनिक अभ्यागत क्रमांक</div>
-                        <div id="dailyVisitorNumber" class="visitor-detail-value">-</div>
-                    </div>
-                    <div class="visitor-detail-item">
-                        <div class="visitor-detail-label">नोंदणीची वेळ</div>
-                        <div class="visitor-detail-value" id="entryTime">-</div>
+                    <div class="visitor-details-grid">
+                        <div class="visitor-detail-item">
+                            <div class="visitor-detail-label">पूर्ण नाव</div>
+                            <div id="visitorName" class="visitor-detail-value">-</div>
+                        </div>
+                        <div class="visitor-detail-item">
+                            <div class="visitor-detail-label">अभ्यागत आयडी</div>
+                            <div id="visitorID" class="visitor-detail-value">-</div>
+                        </div>
+                        <div class="visitor-detail-item">
+                            <div class="visitor-detail-label">दैनिक अभ्यागत क्रमांक</div>
+                            <div id="dailyVisitorNumber" class="visitor-detail-value">-</div>
+                        </div>
+                        <div class="visitor-detail-item">
+                            <div class="visitor-detail-label">नोंदणीची वेळ</div>
+                            <div class="visitor-detail-value" id="entryTime">-</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <button id="confirmEntryBtn" class="btn" style="display:none;" onclick="confirmVisitorEntry()">
-                अभ्यागत प्रवेशाची पुष्टी करा
-            </button>
-
-            <div id="noMatchMessage" class="no-match" style="display:block;">
-                 <div class="skeleton-loading skeleton-text" style="height: 30px; width: 60%; margin: auto auto 10px;"></div>
-                 <div class="skeleton-loading skeleton-text" style="height: 20px; width: 80%; margin: auto;"></div>
+                <div id="noMatchMessage" class="no-match" style="display:block;">
+                     <div class="skeleton-loading skeleton-text" style="height: 30px; width: 60%; margin: auto auto 10px;"></div>
+                     <div class="skeleton-loading skeleton-text" style="height: 20px; width: 80%; margin: auto;"></div>
+                </div>
             </div>
         </div>
-    </div>
+
+        <div class="right-panel">
+            <h3>आजचे नोंदणीकृत अभ्यागत</h3>
+            <div id="todayVisitorsList">
+            </div>
+        </div>
+    </main>
 
     <div class="modal-overlay" id="logoutModal">
         <div class="modal-container">
-            <div class="modal-header">
-                <h3 class="modal-title">लॉगआउटची पुष्टी करा</h3>
-            </div>
-            <div class="modal-content">
-                <p>तुम्हाला खात्री आहे की तुम्हाला सिस्टममधून लॉगआउट करायचे आहे?</p>
-            </div>
+            <div class="modal-header"><h3 class="modal-title">लॉगआउटची पुष्टी करा</h3></div>
+            <div class="modal-content"><p>तुम्हाला खात्री आहे की तुम्हाला सिस्टममधून लॉगआउट करायचे आहे?</p></div>
             <div class="modal-actions">
                 <button id="cancelLogoutBtn" class="modal-btn modal-btn-cancel">रद्द करा</button>
                 <button id="confirmLogoutBtn" class="modal-btn modal-btn-confirm">लॉगआउट</button>
@@ -570,532 +368,491 @@
         </div>
     </div>
 
-     <div class="modal-overlay" id="confirmationPopup">
-        <div class="modal-container confirmation-popup-style">
-            <div class="modal-header">
-                <h3 class="modal-title">अभ्यागत प्रवेशाची पुष्टी झाली</h3>
-            </div>
-            <div class="modal-content">
-                 <p>दैनिक अभ्यागत क्रमांक: <strong id="popupDvnValue" style="font-size: 1.3em;">-</strong></p>
-            </div>
+    <div class="modal-overlay" id="removeDvnModal">
+        <div class="modal-container">
+            <div class="modal-header"><h3 class="modal-title">DVN काढण्याची पुष्टी करा</h3></div>
+            <div class="modal-content"><p>तुम्हाला खात्री आहे की तुम्हाला या अभ्यागताचा दैनिक क्रमांक (DVN) काढायचा आहे? यानंतर त्यांची नोंद पुन्हा करावी लागेल.</p></div>
             <div class="modal-actions">
-                 <button id="closeConfirmationPopupBtn" class="modal-btn modal-btn-close">बंद करा</button>
+                <button id="cancelRemoveDvnBtn" class="modal-btn modal-btn-cancel">रद्द करा</button>
+                <button id="confirmRemoveDvnBtn" class="modal-btn modal-btn-confirm">काढून टाका</button>
             </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="confirmationPopup">
+        <div class="modal-container confirmation-popup-style">
+            <div class="modal-header"><h3 class="modal-title">अभ्यागत प्रवेशाची पुष्टी झाली</h3></div>
+            <div class="modal-content"><p>दैनिक अभ्यागत क्रमांक: <strong id="popupDvnValue" style="font-size: 1.3em;">-</strong></p></div>
+            <div class="modal-actions"><button id="closeConfirmationPopupBtn" class="modal-btn modal-btn-close">बंद करा</button></div>
         </div>
     </div>
 
 
     <script>
-        const elements = {
-  videoFeed: document.getElementById('videoFeed'),
-  visitorDetails: document.getElementById('visitorDetails'),
-  visitorName: document.getElementById('visitorName'),
-  visitorID: document.getElementById('visitorID'),
-  dailyVisitorNumber: document.getElementById('dailyVisitorNumber'),
-  confirmEntryBtn: document.getElementById('confirmEntryBtn'),
-  noMatchMessage: document.getElementById('noMatchMessage'),
-  entryTime: document.getElementById('entryTime'),
-  userMenu: document.getElementById('userMenu'),
-  dropdownMenu: document.getElementById('dropdownMenu'),
-  logoutBtn: document.getElementById('logoutBtn'),
-  logoutModal: document.getElementById('logoutModal'),
-  cancelLogoutBtn: document.getElementById('cancelLogoutBtn'),
-  confirmLogoutBtn: document.getElementById('confirmLogoutBtn'),
-  confirmationPopup: document.getElementById('confirmationPopup'),
-  popupDvnValue: document.getElementById('popupDvnValue'),
-  closeConfirmationPopupBtn: document.getElementById('closeConfirmationPopupBtn')
-};
+    const elements = {
+        videoFeed: document.getElementById('videoFeed'),
+        visitorDetails: document.getElementById('visitorDetails'),
+        visitorName: document.getElementById('visitorName'),
+        visitorID: document.getElementById('visitorID'),
+        dailyVisitorNumber: document.getElementById('dailyVisitorNumber'),
+        noMatchMessage: document.getElementById('noMatchMessage'),
+        entryTime: document.getElementById('entryTime'),
+        userMenu: document.getElementById('userMenu'),
+        dropdownMenu: document.getElementById('dropdownMenu'),
+        logoutBtn: document.getElementById('logoutBtn'),
+        logoutModal: document.getElementById('logoutModal'),
+        cancelLogoutBtn: document.getElementById('cancelLogoutBtn'),
+        confirmLogoutBtn: document.getElementById('confirmLogoutBtn'),
+        removeDvnModal: document.getElementById('removeDvnModal'),
+        cancelRemoveDvnBtn: document.getElementById('cancelRemoveDvnBtn'),
+        confirmRemoveDvnBtn: document.getElementById('confirmRemoveDvnBtn'),
+        confirmationPopup: document.getElementById('confirmationPopup'),
+        popupDvnValue: document.getElementById('popupDvnValue'),
+        closeConfirmationPopupBtn: document.getElementById('closeConfirmationPopupBtn'),
+        todayVisitorsList: document.getElementById('todayVisitorsList')
+    };
 
-// State variables
-let recognitionInterval;
-let currentVisitorData = null;
-let isProcessing = false;
-let confirmationPopupTimeout;
-let lastDisplayedVisitorId = null;
-let touchStartY = 0;
-let isRefreshing = false;
-let frameCounter = 0;
-let lastDetectionTime = 0;
-let canvasContext = null;
-let canvasElement = null;
-let pendingDetectionRequest = null;
+    let recognitionInterval;
+    let isProcessing = false;
+    let confirmationPopupTimeout;
+    let lastDisplayedVisitorId = null;
+    let frameCounter = 0;
+    let lastDetectionTime = 0;
+    let canvasContext = null;
+    let canvasElement = null;
+    let pendingDetectionRequest = null;
 
-// Face detection configuration
-const DETECTION_INTERVAL = 500; // Faster detection interval (ms)
-const FRAME_SKIP = 1; // Process every other frame
-const MAX_CONCURRENT_REQUESTS = 1; // Limit concurrent detection requests
-const IMAGE_QUALITY = 0.7; // Slightly lower quality for faster transfer
-const RESIZE_FACTOR = 0.8; // Resize image for faster processing
+    const DETECTION_INTERVAL = 500;
+    const FRAME_SKIP = 1;
+    const IMAGE_QUALITY = 0.7;
+    const RESIZE_FACTOR = 0.8;
 
-// Event listener setup
-function setupEventListeners() {
-  elements.userMenu.addEventListener('click', (e) => {
-    elements.dropdownMenu.classList.toggle('active');
-    e.stopPropagation();
-  });
+    function setupEventListeners() {
+        elements.userMenu.addEventListener('click', (e) => {
+            elements.dropdownMenu.classList.toggle('active');
+            e.stopPropagation();
+        });
+        document.addEventListener('click', () => elements.dropdownMenu.classList.remove('active'));
+        elements.logoutBtn.addEventListener('click', () => elements.logoutModal.classList.add('active'));
+        elements.cancelLogoutBtn.addEventListener('click', () => elements.logoutModal.classList.remove('active'));
+        elements.confirmLogoutBtn.addEventListener('click', logout);
 
-  document.addEventListener('click', () => {
-    elements.dropdownMenu.classList.remove('active');
-  });
+        elements.cancelRemoveDvnBtn.addEventListener('click', () => elements.removeDvnModal.classList.remove('active'));
+        elements.confirmRemoveDvnBtn.addEventListener('click', handleDvnRemoval);
 
-  elements.logoutBtn.addEventListener('click', () => {
-    elements.logoutModal.classList.add('active');
-  });
-
-  elements.cancelLogoutBtn.addEventListener('click', () => {
-    elements.logoutModal.classList.remove('active');
-  });
-
-  elements.confirmLogoutBtn.addEventListener('click', logout);
-
-  if (elements.closeConfirmationPopupBtn) {
-    elements.closeConfirmationPopupBtn.addEventListener('click', closeConfirmationPopup);
-  }
-
-  document.addEventListener('keydown', handleKeydown);
-  document.addEventListener('touchstart', handleTouchStart, { passive: true });
-  document.addEventListener('touchmove', handleTouchMove, { passive: false });
-  window.addEventListener('online', handleOnline);
-  window.addEventListener('offline', handleOffline);
-  window.addEventListener('beforeunload', stopCamera);
-}
-
-// Helper functions
-function closeConfirmationPopup() {
-  elements.confirmationPopup.classList.remove('active');
-  if (confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
-}
-
-function handleKeydown(e) {
-  if (e.key === 'Escape') {
-    elements.logoutModal.classList.remove('active');
-    elements.dropdownMenu.classList.remove('active');
-    elements.confirmationPopup.classList.remove('active');
-    if (confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
-  }
-}
-
-function handleTouchStart(e) {
-  // Only track touch start if at the very top
-  if (document.documentElement.scrollTop === 0 || document.body.scrollTop === 0) {
-    touchStartY = e.touches[0].clientY;
-  } else {
-    touchStartY = 0; // Reset if not at top
-  }
-}
-
-function handleTouchMove(e) {
-  const touchY = e.touches[0].clientY;
-  const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-
-  // Check if pull-to-refresh gesture
-  if (touchStartY > 0 && scrollTop === 0 && touchY > touchStartY + 70 && !isRefreshing) {
-    isRefreshing = true;
-    touchStartY = 0; // Reset to prevent multiple triggers
-    refreshCamera();
-    e.preventDefault(); // Prevent default pull-to-refresh
-  }
-}
-
-function handleOnline() {
-  console.log("Status: Online. Restarting camera.");
-  restartCamera();
-}
-
-function handleOffline() {
-  console.log("Status: Offline.");
-  stopCamera();
-  showOfflineMessage();
-}
-
-function showOfflineMessage() {
-  elements.noMatchMessage.innerHTML = `
-    <i class="fas fa-wifi-slash" style="font-size: 2rem; margin-bottom: 15px;"></i>
-    <p>तुम्ही ऑफलाइन आहात. कृपया तुमचे कनेक्शन तपासा.</p>
-  `;
-  elements.noMatchMessage.style.display = 'block';
-  resetUIState();
-}
-
-function resetUIState() {
-  elements.visitorDetails.style.display = 'none';
-  elements.confirmEntryBtn.style.display = 'none';
-  elements.confirmationPopup.classList.remove('active');
-  if (confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
-  lastDisplayedVisitorId = null;
-}
-
-function refreshCamera() {
-  elements.noMatchMessage.innerHTML = `
-    <i class="fas fa-sync fa-spin" style="font-size: 2rem; margin-bottom: 15px;"></i>
-    <p>कॅमेरा रिफ्रेश करत आहे...</p>
-  `;
-  elements.noMatchMessage.style.display = 'block';
-  resetUIState();
-
-  stopCamera();
-  setTimeout(() => {
-    startCamera();
-    setTimeout(() => { isRefreshing = false; }, 500);
-  }, 1000);
-}
-
-function restartCamera() {
-  stopCamera();
-  startCamera();
-}
-
-// Core functionality
-function generateDailyVisitorNumber(visitorId) {
-  const today = new Date().toISOString().split('T')[0];
-  let tracker = JSON.parse(localStorage.getItem('dailyVisitorTracker') || '{}');
-
-  if (!tracker[today]) tracker[today] = {};
-  let todayVisitors = tracker[today];
-
-  if (todayVisitors[visitorId]) return todayVisitors[visitorId];
-
-  const numbers = Object.values(todayVisitors);
-  const nextNumber = numbers.length ? Math.max(...numbers) + 1 : 1;
-  todayVisitors[visitorId] = nextNumber;
-  tracker[today] = todayVisitors;
-
-  localStorage.setItem('dailyVisitorTracker', JSON.stringify(tracker));
-  return nextNumber;
-}
-
-function initializeCanvas() {
-  // Pre-create and initialize canvas for reuse
-  canvasElement = document.createElement('canvas');
-  canvasContext = canvasElement.getContext('2d', { alpha: false }); // Disable alpha for better performance
-}
-
-function startCamera() {
-  navigator.mediaDevices.getUserMedia({
-    video: {
-      facingMode: 'user',
-      width: { ideal: 640 }, // Constrain video size for better performance
-      height: { ideal: 480 }
+        elements.closeConfirmationPopupBtn.addEventListener('click', closeConfirmationPopup);
+        elements.todayVisitorsList.addEventListener('click', handleSidebarClick);
+        document.addEventListener('keydown', handleKeydown);
+        window.addEventListener('online', () => restartCamera());
+        window.addEventListener('offline', handleOffline);
+        window.addEventListener('beforeunload', stopCamera);
     }
-  })
-  .then(stream => {
-    elements.videoFeed.srcObject = stream;
-    resetInitialDisplay();
 
-    // Initialize canvas once for reuse
-    initializeCanvas();
+    function handleSidebarClick(e) {
+        const button = e.target.closest('.action-btn');
+        if (!button) return;
 
-    // Wait for video to initialize before starting detection
-    setTimeout(() => {
-      if (recognitionInterval) clearInterval(recognitionInterval);
-      // Use requestAnimationFrame for smoother detection
-      startFaceDetection();
-    }, 1000);
-  })
-  .catch(error => {
-    console.error('Camera access error:', error);
-    showCameraError();
-  });
-}
+        const visitId = button.dataset.visitId;
+        const uid = button.dataset.uid;
+        const name = button.dataset.name;
 
-function startFaceDetection() {
-  // Clear existing interval if any
-  if (recognitionInterval) {
-    clearInterval(recognitionInterval);
-  }
-
-  // Use performance optimized approach - combination of requestAnimationFrame and intervals
-  recognitionInterval = setInterval(() => {
-    if (!isProcessing) {
-      requestAnimationFrame(detectFace);
+        if (button.classList.contains('confirm-manual-btn')) {
+            manualConfirmEntry(visitId, uid, name, button);
+        } else if (button.classList.contains('remove-dvn-btn')) {
+            elements.removeDvnModal.dataset.visitId = visitId;
+            elements.removeDvnModal.classList.add('active');
+        }
     }
-  }, DETECTION_INTERVAL);
-}
 
-function showCameraError() {
-  elements.noMatchMessage.innerHTML = '<i class="fas fa-camera-slash" style="font-size: 2rem; margin-bottom: 15px;"></i><p>कॅमेरा प्रवेश नाकारला</p>';
-  elements.noMatchMessage.style.display = 'block';
-  resetUIState();
-}
+    async function handleDvnRemoval() {
+        const visitId = elements.removeDvnModal.dataset.visitId;
+        if (!visitId) return;
 
-function detectFace() {
-  // Skip processing if video not ready
-  if (!elements.videoFeed.srcObject ||
-      elements.videoFeed.paused ||
-      elements.videoFeed.ended ||
-      elements.videoFeed.readyState < 3) {
-    return;
-  }
+        elements.confirmRemoveDvnBtn.disabled = true;
+        elements.confirmRemoveDvnBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
-  // Process only every FRAME_SKIP frames for performance
-  frameCounter++;
-  if (frameCounter % FRAME_SKIP !== 0) {
-    return;
-  }
+        try {
+            const response = await fetch(`/api/remove_dvn/${visitId}`, { method: 'POST' });
+            const data = await response.json();
+            if (!data.success) throw new Error(data.message || 'Failed to remove DVN.');
 
-  // Avoid excessive processing - check if we've processed too recently
-  const now = performance.now();
-  if (now - lastDetectionTime < DETECTION_INTERVAL * 0.8) {
-    return;
-  }
-  lastDetectionTime = now;
+            removeDvnFromLocalStorage(visitId);
+            updateSidebarEntryToUnconfirmed(visitId);
 
-  isProcessing = true;
-
-  // Use pre-initialized canvas
-  const videoWidth = Math.floor(elements.videoFeed.videoWidth * RESIZE_FACTOR);
-  const videoHeight = Math.floor(elements.videoFeed.videoHeight * RESIZE_FACTOR);
-
-  if (videoWidth === 0 || videoHeight === 0) {
-    isProcessing = false;
-    return;
-  }
-
-  // Update canvas dimensions if needed
-  if (canvasElement.width !== videoWidth || canvasElement.height !== videoHeight) {
-    canvasElement.width = videoWidth;
-    canvasElement.height = videoHeight;
-  }
-
-  // Draw resized image to canvas
-  canvasContext.drawImage(elements.videoFeed, 0, 0, videoWidth, videoHeight);
-
-  // Convert to blob with optimized quality
-  canvasElement.toBlob(
-    blob => sendFrameForDetection(blob),
-    'image/jpeg',
-    IMAGE_QUALITY
-  );
-}
-
-function sendFrameForDetection(blob) {
-  if (!blob) {
-    isProcessing = false;
-    return;
-  }
-
-  if (pendingDetectionRequest && typeof pendingDetectionRequest.abort === 'function') {
-    pendingDetectionRequest.abort();
-  }
-
-  const formData = new FormData();
-  formData.append('frame', blob, 'frame.jpg');
-
-  const abortController = new AbortController();
-  pendingDetectionRequest = abortController;
-
-  fetch('/detect_face', {
-    method: 'POST',
-    body: formData,
-    signal: abortController.signal,
-    // Optimization: deprioritize detection requests
-    priority: 'low'
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+        } catch (error) {
+            console.error("Error removing DVN:", error);
+            alert('DVN काढण्यात अयशस्वी.');
+        } finally {
+            elements.confirmRemoveDvnBtn.disabled = false;
+            elements.confirmRemoveDvnBtn.textContent = 'काढून टाका';
+            elements.removeDvnModal.classList.remove('active');
+        }
     }
-    return response.json();
-  })
-  .then(data => {
-    pendingDetectionRequest = null;
 
-    if (data.recognized) {
-      // Only update if it's a new visitor or the same visitor being redisplayed
-      if (lastDisplayedVisitorId !== data.user_data.visitor[0]?.visit_id) {
-        handleSuccessfulDetection(data.user_data);
-        lastDisplayedVisitorId = data.user_data.visitor[0]?.visit_id;
-      }
-      // Else: keep showing same visitor
-    } else {
-      // If no face is recognized, reset the display
-      if (lastDisplayedVisitorId !== null) {
-        resetDisplay();
+    function removeDvnFromLocalStorage(visitId) {
+        const today = new Date().toISOString().split('T')[0];
+        let tracker = JSON.parse(localStorage.getItem('dailyVisitorTracker') || '{}');
+        if (tracker[today] && tracker[today][visitId]) {
+            delete tracker[today][visitId];
+            localStorage.setItem('dailyVisitorTracker', JSON.stringify(tracker));
+        }
+    }
+
+    function updateSidebarEntryToUnconfirmed(visitId) {
+        const item = document.getElementById(`item-${visitId}`);
+        if (!item) return;
+
+        item.classList.remove('confirmed');
+        const button = item.querySelector('.action-btn');
+        if (button) {
+            button.classList.remove('remove-dvn-btn');
+            button.classList.add('confirm-manual-btn');
+            button.innerHTML = 'पुष्टी करा';
+            button.disabled = false;
+        }
+    }
+
+
+    function closeConfirmationPopup() {
+        elements.confirmationPopup.classList.remove('active');
+        if (confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
+    }
+
+    function handleKeydown(e) {
+        if (e.key === 'Escape') {
+            elements.logoutModal.classList.remove('active');
+            elements.removeDvnModal.classList.remove('active');
+            elements.dropdownMenu.classList.remove('active');
+            closeConfirmationPopup();
+        }
+    }
+
+    function handleOffline() {
+        stopCamera();
+        elements.noMatchMessage.innerHTML = `<i class="fas fa-wifi-slash" style="font-size: 2rem; margin-bottom: 15px;"></i><p>तुम्ही ऑफलाइन आहात. कृपया तुमचे कनेक्शन तपासा.</p>`;
+        elements.noMatchMessage.style.display = 'block';
+        resetUIState();
+    }
+
+    function resetUIState() {
+        elements.visitorDetails.style.display = 'none';
+        closeConfirmationPopup();
         lastDisplayedVisitorId = null;
-      }
     }
-    isProcessing = false;
-  })
-  .catch(error => {
-    pendingDetectionRequest = null;
 
-    // Don't log aborted requests as errors
-    if (error.name !== 'AbortError') {
-      console.error('Face detection error:', error);
-      if (lastDisplayedVisitorId !== null) {
-        resetDisplay();
+    function restartCamera() {
+        stopCamera();
+        startCamera();
+    }
+
+    function generateDailyVisitorNumber(visitorId) {
+        const today = new Date().toISOString().split('T')[0];
+        let tracker = JSON.parse(localStorage.getItem('dailyVisitorTracker') || '{}');
+        if (!tracker[today]) tracker[today] = {};
+        let todayVisitors = tracker[today];
+        if (todayVisitors[visitorId]) return todayVisitors[visitorId];
+        const numbers = Object.values(todayVisitors);
+        const nextNumber = numbers.length ? Math.max(0, ...numbers) + 1 : 1;
+        todayVisitors[visitorId] = nextNumber;
+        tracker[today] = todayVisitors;
+        localStorage.setItem('dailyVisitorTracker', JSON.stringify(tracker));
+        return nextNumber;
+    }
+
+    function initializeCanvas() {
+        canvasElement = document.createElement('canvas');
+        canvasContext = canvasElement.getContext('2d', { alpha: false });
+    }
+
+    function startCamera() {
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } } })
+            .then(stream => {
+                elements.videoFeed.srcObject = stream;
+                resetInitialDisplay();
+                initializeCanvas();
+                setTimeout(() => {
+                    if (recognitionInterval) clearInterval(recognitionInterval);
+                    startFaceDetection();
+                }, 1000);
+            })
+            .catch(error => {
+                console.error('Camera access error:', error);
+                elements.noMatchMessage.innerHTML = '<i class="fas fa-camera-slash" style="font-size: 2rem; margin-bottom: 15px;"></i><p>कॅमेरा प्रवेश नाकारला</p>';
+                elements.noMatchMessage.style.display = 'block';
+                resetUIState();
+            });
+    }
+
+    function startFaceDetection() {
+        if (recognitionInterval) clearInterval(recognitionInterval);
+        recognitionInterval = setInterval(() => {
+            if (!isProcessing) requestAnimationFrame(detectFace);
+        }, DETECTION_INTERVAL);
+    }
+
+    function detectFace() {
+        if (!elements.videoFeed.srcObject || elements.videoFeed.paused || elements.videoFeed.ended || elements.videoFeed.readyState < 3) return;
+        frameCounter++;
+        if (frameCounter % FRAME_SKIP !== 0) return;
+        const now = performance.now();
+        if (now - lastDetectionTime < DETECTION_INTERVAL * 0.8) return;
+        lastDetectionTime = now;
+        isProcessing = true;
+        const videoWidth = Math.floor(elements.videoFeed.videoWidth * RESIZE_FACTOR);
+        const videoHeight = Math.floor(elements.videoFeed.videoHeight * RESIZE_FACTOR);
+        if (videoWidth === 0 || videoHeight === 0) { isProcessing = false; return; }
+        if (canvasElement.width !== videoWidth || canvasElement.height !== videoHeight) {
+            canvasElement.width = videoWidth;
+            canvasElement.height = videoHeight;
+        }
+        canvasContext.drawImage(elements.videoFeed, 0, 0, videoWidth, videoHeight);
+        canvasElement.toBlob(blob => sendFrameForDetection(blob), 'image/jpeg', IMAGE_QUALITY);
+    }
+
+    function sendFrameForDetection(blob) {
+        if (!blob) { isProcessing = false; return; }
+        if (pendingDetectionRequest && typeof pendingDetectionRequest.abort === 'function') {
+            pendingDetectionRequest.abort();
+        }
+        const formData = new FormData();
+        formData.append('frame', blob, 'frame.jpg');
+        const abortController = new AbortController();
+        pendingDetectionRequest = abortController;
+        fetch('/detect_face', { method: 'POST', body: formData, signal: abortController.signal })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                pendingDetectionRequest = null;
+                if (data.recognized) {
+                    const todayVisit = data.user_data.visitor?.find(v => v.datetime?.startsWith(new Date().toISOString().split('T')[0]));
+                    if (todayVisit && lastDisplayedVisitorId !== todayVisit.visit_id) {
+                        handleSuccessfulDetection(data.user_data);
+                        lastDisplayedVisitorId = todayVisit.visit_id;
+                    }
+                } else {
+                    if (lastDisplayedVisitorId !== null) {
+                        resetDisplay();
+                        lastDisplayedVisitorId = null;
+                    }
+                }
+                isProcessing = false;
+            })
+            .catch(error => {
+                pendingDetectionRequest = null;
+                if (error.name !== 'AbortError' && lastDisplayedVisitorId !== null) {
+                    resetDisplay();
+                    lastDisplayedVisitorId = null;
+                }
+                isProcessing = false;
+            });
+    }
+
+    async function processEntryConfirmation(visitId, name) {
+        const dvn = generateDailyVisitorNumber(visitId);
+        showConfirmationPopup(dvn);
+        updateSidebarEntryToConfirmed(visitId, dvn);
+        try {
+            const response = await fetch('/confirm_visitor_entry', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ visitId, dvn, name })
+            });
+            const data = await response.json();
+            if (!data.success) console.warn('Server confirmation failed for DVN:', dvn);
+        } catch (error) {
+            console.error('Error confirming DVN to server:', error);
+        }
+        return dvn;
+    }
+
+    async function manualConfirmEntry(visitId, uid, name, buttonElement) {
+        buttonElement.disabled = true;
+        buttonElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        try {
+            const statusResponse = await fetch(`/api/visitor-status/${visitId}`);
+            if (!statusResponse.ok) throw new Error('Status check failed');
+            const currentStatus = await statusResponse.json();
+            if (currentStatus.success && currentStatus.dvn) {
+                showConfirmationPopup(currentStatus.dvn);
+                updateSidebarEntryToConfirmed(visitId, currentStatus.dvn);
+            } else {
+                await processEntryConfirmation(visitId, name);
+            }
+        } catch (error) {
+            console.error("Manual confirmation error:", error);
+            buttonElement.disabled = false;
+            buttonElement.textContent = 'पुष्टी करा';
+        }
+    }
+
+    async function handleSuccessfulDetection(userData) {
+        const today = new Date().toISOString().split('T')[0];
+        const todayVisits = userData.visitor ? userData.visitor.filter(visit => visit.datetime && visit.datetime.startsWith(today)) : [];
+        if (!todayVisits.length) {
+            resetDisplay();
+            lastDisplayedVisitorId = null;
+            return;
+        }
+        const visitData = todayVisits[0];
+        try {
+            const statusResponse = await fetch(`/api/visitor-status/${visitData.visit_id}`);
+            if (!statusResponse.ok) throw new Error('Could not fetch visitor status.');
+            const currentStatus = await statusResponse.json();
+
+            if (currentStatus.success && currentStatus.dvn) {
+                const existingDvn = currentStatus.dvn;
+                displayVisitorDetails(userData.name, visitData.visit_id, existingDvn, visitData.datetime);
+                showConfirmationPopup(existingDvn);
+                updateSidebarEntryToConfirmed(visitData.visit_id, existingDvn);
+            } else {
+                const newDvn = await processEntryConfirmation(visitData.visit_id, userData.name);
+                displayVisitorDetails(userData.name, visitData.visit_id, newDvn, visitData.datetime);
+            }
+        } catch (error) {
+            console.error("Error during successful detection handling:", error);
+            resetDisplay();
+        }
+    }
+
+    function displayVisitorDetails(name, visitId, dvn, entryDatetime) {
+        requestAnimationFrame(() => {
+            elements.visitorName.textContent = name || 'N/A';
+            elements.visitorID.textContent = visitId || '-';
+            elements.dailyVisitorNumber.textContent = dvn || '-';
+            const entryDateTimeObj = new Date(entryDatetime);
+            elements.entryTime.textContent = !isNaN(entryDateTimeObj) ? entryDateTimeObj.toLocaleTimeString('mr-IN') : '-';
+            elements.visitorDetails.style.display = 'block';
+            elements.noMatchMessage.style.display = 'none';
+        });
+    }
+
+    function showConfirmationPopup(dvn) {
+        if (elements.confirmationPopup && elements.popupDvnValue) {
+            requestAnimationFrame(() => {
+                elements.popupDvnValue.textContent = dvn || '-';
+                elements.confirmationPopup.classList.add('active');
+            });
+            if (confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
+            confirmationPopupTimeout = setTimeout(() => closeConfirmationPopup(), 5000);
+        }
+    }
+
+    function resetInitialDisplay() {
+        elements.noMatchMessage.innerHTML = `<div class="skeleton-loading skeleton-text" style="height: 30px; width: 60%; margin: auto auto 10px;"></div><div class="skeleton-loading skeleton-text" style="height: 20px; width: 80%; margin: auto;"></div>`;
+        elements.noMatchMessage.style.display = 'block';
+        resetUIState();
+    }
+
+    function resetDisplay() {
+        if (elements.visitorDetails.style.display !== 'none' || elements.noMatchMessage.style.display === 'none') {
+            requestAnimationFrame(() => {
+                elements.visitorDetails.style.display = 'none';
+                closeConfirmationPopup();
+                elements.noMatchMessage.innerHTML = '<i class="fas fa-user-slash" style="font-size: 2rem; margin-bottom: 15px;"></i><p>ओळखलेला अभ्यागत नाही</p>';
+                elements.noMatchMessage.style.display = 'block';
+                ['visitorName', 'visitorID', 'dailyVisitorNumber', 'entryTime'].forEach(id => {
+                    elements[id].textContent = '-';
+                });
+            });
+        }
         lastDisplayedVisitorId = null;
-      }
     }
-    isProcessing = false;
-  });
-}
 
-async function handleSuccessfulDetection(userData) {
-  const today = new Date().toISOString().split('T')[0];
-  const todayVisits = userData.visitor ? userData.visitor.filter(visit => visit.datetime && visit.datetime.startsWith(today)) : [];
+    async function fetchAndDisplayTodayVisitors() {
+        try {
+            const response = await fetch('/get_today_visitors');
+            const data = await response.json();
+            if (!data.success) throw new Error('Failed to fetch visitors');
 
-  if (!todayVisits.length) {
-    resetDisplay();
-    lastDisplayedVisitorId = null;
-    return;
-  }
+            let listHtml = '';
 
-  const visitData = todayVisits[0];
-  let finalDVN = visitData.dvn;
-  let needsServerUpdate = false;
+            const visitorsArray = Object.values(data.visitors).flatMap(v => v.visitor.map(visit => ({...visit, name: v.name, phone: v.phone, uid: Object.keys(data.visitors).find(key => data.visitors[key] === v)})));
 
-  if (!finalDVN) {
-    finalDVN = generateDailyVisitorNumber(visitData.visit_id);
-    needsServerUpdate = true;
-  }
+            visitorsArray.forEach(visit => {
+                const isConfirmed = visit.entry_confirmed;
+                listHtml += `
+                    <div class="visitor-list-item ${isConfirmed ? 'confirmed' : ''}" id="item-${visit.visit_id}">
+                        <div class="info">
+                            <div class="name">${visit.name}</div>
+                            <div class="phone">${visit.phone}</div>
+                        </div>
+                        <div class="actions">
+                            <button class="action-btn ${isConfirmed ? 'remove-dvn-btn' : 'confirm-manual-btn'}"
+                                    data-visit-id="${visit.visit_id}"
+                                    data-uid="${visit.uid}"
+                                    data-name="${visit.name}">
+                                ${isConfirmed ? `<i class="fas fa-times-circle"></i> DVN काढ (${visit.dvn})` : 'पुष्टी करा'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
 
-  displayVisitorDetails(userData.name, visitData.visit_id, finalDVN, visitData.datetime);
-  showConfirmationPopup(finalDVN);
-
-  if (needsServerUpdate) {
-    try {
-      const confirmationData = {
-        visitId: visitData.visit_id,
-        dvn: finalDVN,
-        name: userData.name
-      };
-
-      // Use Promise.race to implement a timeout for the confirmation request
-      const timeout = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Request timeout')), 3000)
-      );
-
-      const fetchPromise = fetch('/confirm_visitor_entry', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(confirmationData)
-      });
-
-      const response = await Promise.race([fetchPromise, timeout]);
-      const data = await response.json();
-      if (!data.success) console.warn('Server confirmation failed for DVN:', finalDVN);
-    } catch (error) {
-      console.error('Error confirming DVN to server:', error);
-      // Still keep the visitor displayed even if server confirmation fails
+            elements.todayVisitorsList.innerHTML = listHtml || '<p style="text-align:center; opacity:0.7;">आज कोणीही नोंदणीकृत नाही.</p>';
+        } catch (error) {
+            console.error("Error fetching today's visitors:", error);
+            elements.todayVisitorsList.innerHTML = '<p style="text-align:center; color: #ffcccc;">अभ्यागतांची यादी लोड करण्यात अयशस्वी.</p>';
+        }
     }
-  }
-}
 
-function displayVisitorDetails(name, visitId, dvn, entryDatetime) {
-  // Batch DOM updates to minimize repaints
-  requestAnimationFrame(() => {
-    elements.visitorName.textContent = name || 'N/A';
-    elements.visitorID.textContent = visitId || '-';
-    elements.dailyVisitorNumber.textContent = dvn || '-';
+    function updateSidebarEntryToConfirmed(visitId, dvn) {
+        const item = document.getElementById(`item-${visitId}`);
+        const button = item ? item.querySelector('.action-btn') : null;
+        if (item && button) {
+            item.classList.add('confirmed');
+            button.disabled = false;
+            button.classList.remove('confirm-manual-btn');
+            button.classList.add('remove-dvn-btn');
+            button.innerHTML = `<i class="fas fa-times-circle"></i> DVN काढ (${dvn})`;
+        }
+    }
 
-    const entryDateTimeObj = new Date(entryDatetime);
-    elements.entryTime.textContent = !isNaN(entryDateTimeObj) ? entryDateTimeObj.toLocaleTimeString('mr-IN') : '-';
+    function stopCamera() {
+        if (recognitionInterval) {
+            clearInterval(recognitionInterval);
+            recognitionInterval = null;
+        }
+        if (pendingDetectionRequest && typeof pendingDetectionRequest.abort === 'function') {
+            pendingDetectionRequest.abort();
+            pendingDetectionRequest = null;
+        }
+        if (elements.videoFeed.srcObject) {
+            elements.videoFeed.srcObject.getTracks().forEach(track => track.stop());
+            elements.videoFeed.srcObject = null;
+        }
+        isProcessing = false;
+        frameCounter = 0;
+        lastDetectionTime = 0;
+        lastDisplayedVisitorId = null;
+    }
 
-    elements.confirmEntryBtn.style.display = 'none'; // Button is never needed now
-    elements.visitorDetails.style.display = 'block';
-    elements.noMatchMessage.style.display = 'none';
-  });
-}
+    function logout() {
+        elements.confirmLogoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        elements.confirmLogoutBtn.disabled = true;
+        fetch("/logout").then(() => {
+            localStorage.removeItem("user");
+            localStorage.removeItem("dailyVisitorTracker");
+            window.location.href = "/login";
+        }).catch(error => {
+            console.error('Logout error:', error);
+            localStorage.removeItem("user");
+            localStorage.removeItem("dailyVisitorTracker");
+            window.location.href = "/login";
+        });
+    }
 
-function showConfirmationPopup(dvn) {
-  if (elements.confirmationPopup && elements.popupDvnValue) {
-    requestAnimationFrame(() => {
-      elements.popupDvnValue.textContent = dvn || '-';
-      elements.confirmationPopup.classList.add('active');
+    document.addEventListener('DOMContentLoaded', () => {
+        setupEventListeners();
+        fetchAndDisplayTodayVisitors();
+        if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+            startCamera();
+        } else {
+            elements.noMatchMessage.innerHTML = '<i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 15px; color: #f8d7da;"></i><p>कॅमेरा समर्थित नाही</p>';
+            elements.noMatchMessage.style.display = 'block';
+        }
     });
-
-    if (confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
-    confirmationPopupTimeout = setTimeout(() => {
-      elements.confirmationPopup.classList.remove('active');
-    }, 5000); // Auto-close after 5 seconds
-  }
-}
-
-function resetInitialDisplay() {
-  elements.noMatchMessage.innerHTML = `
-    <div class="skeleton-loading skeleton-text" style="height: 30px; width: 60%; margin: auto auto 10px;"></div>
-    <div class="skeleton-loading skeleton-text" style="height: 20px; width: 80%; margin: auto;"></div>
-  `;
-  elements.noMatchMessage.style.display = 'block';
-  resetUIState();
-}
-
-function resetDisplay() {
-  // Only reset if something was actually displayed
-  if (elements.visitorDetails.style.display !== 'none' || elements.noMatchMessage.style.display === 'none') {
-    requestAnimationFrame(() => {
-      elements.visitorDetails.style.display = 'none';
-      elements.confirmEntryBtn.style.display = 'none';
-      elements.confirmationPopup.classList.remove('active');
-      if(confirmationPopupTimeout) clearTimeout(confirmationPopupTimeout);
-
-      elements.noMatchMessage.innerHTML = '<i class="fas fa-user-slash" style="font-size: 2rem; margin-bottom: 15px;"></i><p>ओळखलेला अभ्यागत नाही</p>';
-      elements.noMatchMessage.style.display = 'block';
-
-      // Clear detail fields
-      elements.visitorName.textContent = '-';
-      elements.visitorID.textContent = '-';
-      elements.dailyVisitorNumber.textContent = '-';
-      elements.entryTime.textContent = '-';
-
-      currentVisitorData = null; // Clear potentially stale data
-    });
-  }
-  lastDisplayedVisitorId = null; // Reset last displayed visitor
-}
-
-function stopCamera() {
-  if (recognitionInterval) {
-    clearInterval(recognitionInterval);
-    recognitionInterval = null;
-  }
-
-  if (pendingDetectionRequest && typeof pendingDetectionRequest.abort === 'function') {
-    pendingDetectionRequest.abort();
-    pendingDetectionRequest = null;
-  }
-
-  if (elements.videoFeed.srcObject) {
-    elements.videoFeed.srcObject.getTracks().forEach(track => track.stop());
-    elements.videoFeed.srcObject = null;
-  }
-
-  isProcessing = false;
-  frameCounter = 0;
-  lastDetectionTime = 0;
-  lastDisplayedVisitorId = null;
-}
-
-function logout() {
-  elements.confirmLogoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-  elements.confirmLogoutBtn.disabled = true;
-
-  fetch("/logout")
-    .then(response => response.json())
-    .then(() => {
-      localStorage.removeItem("user");
-      localStorage.removeItem("dailyVisitorTracker");
-      window.location.href = "/";
-    })
-    .catch(error => {
-      console.error('Logout error:', error);
-      localStorage.removeItem("user");
-      localStorage.removeItem("dailyVisitorTracker");
-      window.location.href = "/login";
-    });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  setupEventListeners();
-
-  if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
-    startCamera();
-  } else {
-    elements.noMatchMessage.innerHTML = '<i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 15px; color: #f8d7da;"></i><p>कॅमेरा समर्थित नाही</p>';
-    elements.noMatchMessage.style.display = 'block';
-  }
-});
     </script>
 </body>
 </html>

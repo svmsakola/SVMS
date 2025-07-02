@@ -23,8 +23,10 @@ DATA_FILE = 'data/facedata/facedata.json'
 DEPARTMENTS_FILE = 'JSON/departments.json'
 ALLOWED_EXTENSIONS = {'pdf'}
 
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(PDF_FOLDER, exist_ok=True)
@@ -36,6 +38,7 @@ def is_admin_authenticated():
     print("WARNING: is_admin_authenticated called WITHOUT proper authentication check!")
     return False
 
+
 def load_face_data():
     try:
         with open(DATA_FILE, 'r') as file:
@@ -43,15 +46,18 @@ def load_face_data():
     except (FileNotFoundError, json.JSONDecodeError):
         return {}
 
+
 def save_face_data(data):
     os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
     with open(DATA_FILE, 'w') as file:
         json.dump(data, file, indent=4)
     return True
 
+
 def signal_handler(sig, frame):
     print('Shutting down gracefully...')
     sys.exit(0)
+
 
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
@@ -87,6 +93,7 @@ except Exception as e:
     print(f"Error loading YOLO models: {e}")
     sys.exit(1)
 
+
 def cleanup_memory():
     import gc
     gc.collect()
@@ -97,6 +104,7 @@ def cleanup_memory():
             libc.malloc_trim(0)
         except:
             pass
+
 
 def generate_visitor_id():
     today = datetime.now()
@@ -150,6 +158,7 @@ def save_face_images(frame, uid):
                     break
     return saved_images, face_encodings
 
+
 def load_users():
     try:
         with open("JSON/auth.json", "r") as file:
@@ -160,9 +169,11 @@ def load_users():
                 json.dump({}, file)
         return {}
 
+
 def save_users(users):
     with open("JSON/auth.json", "w") as file:
         json.dump(users, file, indent=4)
+
 
 def detect_person_and_face(frame):
     white_bg = np.ones_like(frame) * 255
@@ -206,6 +217,7 @@ def detect_person_and_face(frame):
             face_output[y1:y2, x1:x2] = face_crop
     return face_output, face_crop
 
+
 @app.route("/", methods=["GET", "POST"])
 def login():
     if "user" in session:
@@ -247,13 +259,16 @@ def login():
     else:
         return render_template("login.html")
 
+
 @app.route("/login", methods=["GET", "POST"])
 def login_page():
     return login()
 
+
 @app.route('/sw/sw.js')
 def service_worker():
     return app.send_static_file('sw/sw.js')
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -284,6 +299,7 @@ def register():
         return jsonify(success=True)
     return render_template("register.html")
 
+
 @app.route("/dashboard/<role>")
 def dashboard(role):
     if "user" not in session or session["user"]["role"] != role:
@@ -299,10 +315,12 @@ def dashboard(role):
         return render_template("index.html")
     return render_template(templates[role])
 
+
 @app.route("/logout")
 def logout():
     session.pop("user", None)
     return redirect(url_for("login"))
+
 
 @app.route('/register_visitor', methods=['POST'])
 def register_visitor():
@@ -409,6 +427,7 @@ def register_visitor():
         'uid': uid,
         'visit_id': visitor_id
     })
+
 
 @app.route('/search_visitors', methods=['GET'])
 def search_visitors():
@@ -586,24 +605,57 @@ def confirm_visitor_entry():
     if not visit_id or not dvn:
         return jsonify({'success': False, 'message': 'Visit ID and DVN are required'}), 400
     try:
-        with open('data/facedata/facedata.json', 'r') as f:
-            facedata = json.load(f)
-    except FileNotFoundError:
-        return jsonify({'success': False, 'message': 'Visitor data not found'})
-    for uid, user_data in facedata.items():
-        for visit in user_data.get('visitor', []):
-            if visit.get('visit_id') == visit_id:
-                visit['dvn'] = dvn
-                visit['entry_confirmed'] = True
-                visit['confirmation_time'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                with open('data/facedata/facedata.json', 'w') as f:
-                    json.dump(facedata, f, indent=4)
-                return jsonify({
-                    'success': True,
-                    'message': 'Visitor entry confirmed',
-                    'dvn': dvn
-                })
-    return jsonify({'success': False, 'message': 'Visitor not found'})
+        facedata = load_face_data()
+        found = False
+        for uid, user_data in facedata.items():
+            for visit in user_data.get('visitor', []):
+                if visit.get('visit_id') == visit_id:
+                    visit['dvn'] = dvn
+                    visit['entry_confirmed'] = True
+                    visit['confirmation_time'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    found = True
+                    break
+            if found:
+                break
+        if not found:
+            return jsonify({'success': False, 'message': 'Visitor not found'}), 404
+
+        save_face_data(facedata)
+        return jsonify({
+            'success': True,
+            'message': 'Visitor entry confirmed',
+            'dvn': dvn
+        })
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({'success': False, 'message': f'An internal server error occurred: {str(e)}'}), 500
+
+
+@app.route('/api/remove_dvn/<visit_id>', methods=['POST'])
+def remove_dvn(visit_id):
+    if "user" not in session:
+        return jsonify({"success": False, "message": "Authentication required."}), 401
+    try:
+        face_data = load_face_data()
+        found = False
+        for uid, user_data in face_data.items():
+            if isinstance(user_data, dict) and 'visitor' in user_data and isinstance(user_data['visitor'], list):
+                for visit in user_data['visitor']:
+                    if isinstance(visit, dict) and visit.get('visit_id') == visit_id:
+                        visit.pop('dvn', None)
+                        visit.pop('entry_confirmed', None)
+                        visit.pop('confirmation_time', None)
+                        found = True
+                        break
+            if found:
+                break
+        if not found:
+            return jsonify({'success': False, 'message': 'Visit ID not found'}), 404
+        save_face_data(face_data)
+        return jsonify({'success': True, 'message': 'DVN and entry confirmation have been removed.'})
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({'success': False, 'message': f'An internal server error occurred: {str(e)}'}), 500
 
 
 @app.route('/get_today_visitors', methods=['GET'])
@@ -614,21 +666,28 @@ def get_today_visitors():
             facedata = json.load(f)
     except FileNotFoundError:
         return jsonify({'success': False, 'message': 'No visitor data found', 'visitors': {}})
-    today_visitors = {}
+    today_visitors_dict = {}
     for uid, user_data in facedata.items():
-        today_visits = [
-            visit for visit in user_data.get('visitor', [])
-            if visit.get('datetime', '').startswith(today)
-        ]
-        if today_visits:
-            today_visitors[uid] = {
-                'name': user_data.get('name', 'Unknown'),
-                'phone': user_data.get('phone', 'N/A'),
-                'visitor': today_visits
-            }
+        if isinstance(user_data, dict) and 'visitor' in user_data and isinstance(user_data['visitor'], list):
+            today_visits = [
+                visit for visit in user_data.get('visitor', [])
+                if isinstance(visit, dict) and visit.get('datetime', '').startswith(today)
+            ]
+            if today_visits:
+                # Add DVN and confirmation status to each visit
+                for visit in today_visits:
+                    visit['dvn'] = visit.get('dvn')
+                    visit['entry_confirmed'] = visit.get('entry_confirmed', False)
+
+                today_visitors_dict[uid] = {
+                    'name': user_data.get('name', 'Unknown'),
+                    'phone': user_data.get('phone', 'N/A'),
+                    'visitor': today_visits
+                }
+
     return jsonify({
         'success': True,
-        'visitors': today_visitors
+        'visitors': today_visitors_dict
     })
 
 
@@ -1032,6 +1091,7 @@ def generate_pdf():
             pass
         return jsonify({'success': False, 'error': f'Failed to generate PDF: {str(e)}'}), 500
 
+
 @app.route('/api/cleanup', methods=['POST'])
 def cleanup_images():
     try:
@@ -1181,6 +1241,7 @@ def send_otp_email(recipient_email, otp):
         print(f"Email error: {str(e)}")
         return False
 
+
 def admin_login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -1203,6 +1264,7 @@ def department_login_required(f):
         return f(*args, **kwargs)
 
     return decorated_function
+
 
 @app.route('/department/login', methods=['GET', 'POST'])
 def login_department():
@@ -1235,6 +1297,7 @@ def login_department():
             flash('Email address not registered for any department.', 'danger')
             return render_template('department/auth/login_department.html')
     return render_template('department/auth/login_department.html')
+
 
 @app.route('/department/verify-otp', methods=['GET', 'POST'])
 def verify_otp():
@@ -1274,11 +1337,13 @@ def verify_otp():
             flash('Invalid OTP entered. Please try again.', 'danger')
     return render_template('department/auth/verify_otp.html', email=display_email, department_name=department_name)
 
+
 @app.route('/department/dashboard')
 @department_login_required
 def department_dashboard():
     department = session.get('department')
     return render_template('department/dashboard/department_dashboard.html', department=department)
+
 
 @app.route('/department/logout')
 def logout_department():
@@ -1288,6 +1353,7 @@ def logout_department():
     session.pop('pending_department_info', None)
     flash('You have been logged out successfully.', 'info')
     return redirect(url_for('login_department'))
+
 
 @app.route('/api/department/applications', methods=['GET'])
 @department_login_required
@@ -1377,6 +1443,7 @@ def get_application_details(visit_id):
                     return jsonify({"error": "Unauthorized access"}), 403
     return jsonify({"error": "Application not found"}), 404
 
+
 @app.route('/api/department/update-application/<visit_id>', methods=['POST'])
 @department_login_required
 def update_application(visit_id):
@@ -1411,6 +1478,7 @@ def update_application(visit_id):
             return jsonify({'error': f'Failed to save data: {str(e)}'}), 500
     else:
         return jsonify({"error": "Application not found or unauthorized"}), 404
+
 
 @app.route('/api/department/application-stats', methods=['GET'])
 @department_login_required
@@ -1495,6 +1563,7 @@ def forward_application(visit_id):
     else:
         return jsonify({"error": "Application not found or unauthorized"}), 404
 
+
 @app.route('/api/department/search-applications', methods=['GET'])
 @department_login_required
 def search_applications():
@@ -1565,11 +1634,13 @@ def get_recent_activities():
         pass
     return jsonify(activities[:limit])
 
+
 @app.route('/api/admin/departments', methods=['GET'])
 @admin_login_required
 def admin_get_departments():
     data = load_departments_data()
     return jsonify(data.get('departments', []))
+
 
 @app.route('/api/admin/departments', methods=['POST'])
 @admin_login_required
@@ -1762,8 +1833,10 @@ def delete_visitor_entry():
         print(f"Error deleting visit {visit_id} for UID {uid}: {e}")
         return jsonify({"success": False, "message": f"Server error: {str(e)}"}), 500
 
+
 def safe_get(data, key, default='N/A'):
     return data.get(key, default) if data else default
+
 
 @app.route('/api/admin/generate_report')
 @admin_login_required
@@ -1865,6 +1938,7 @@ def generate_visitor_report():
     except Exception as e:
         print(f"CRITICAL: Error generating Excel report: {e}")
         return jsonify({"error": f"An unexpected server error occurred while generating the report: {str(e)}"}), 500
+
 
 @app.route('/api/admin/delete_user', methods=['POST'])
 @admin_login_required
@@ -1994,7 +2068,8 @@ def get_visitor_status(visit_id):
             'forwarding_department': target_visit.get('forwarding_department', ''),
             'profile_image_url': profile_image_url,
             'face_encoding_paths': found_visitor_data.get('face_encodings', []),
-            'image_paths': found_visitor_data.get('images', [])
+            'image_paths': found_visitor_data.get('images', []),
+            'dvn': target_visit.get('dvn')
         }
         return jsonify(response_data)
     except FileNotFoundError:
@@ -2085,5 +2160,6 @@ def validate_visitor_face():
     finally:
         cleanup_memory()
 
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, threaded=True)
+    app.run(host="0.0.0.0", port=5001, threaded=True)
