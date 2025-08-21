@@ -19,7 +19,7 @@ app.secret_key = os.urandom(24)
 
 UPLOAD_FOLDER = 'uploads/docimg'
 PDF_FOLDER = 'pdf'
-DATA_FILE = 'data/facedata/facedata.json'
+DATA_FILE = 'JSON/facedata.json'
 DEPARTMENTS_FILE = 'JSON/departments.json'
 ALLOWED_EXTENSIONS = {'pdf'}
 
@@ -102,7 +102,7 @@ def cleanup_memory():
 def generate_visitor_id():
     today = datetime.now()
     try:
-        with open('data/facedata/facedata.json', 'r') as f:
+        with open('JSON/facedata.json', 'r') as f:
             visitors_data = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         visitors_data = {}
@@ -325,7 +325,7 @@ def register_visitor():
         return jsonify({'error': f'Missing required fields: {", ".join(missing)}'}), 400
 
     try:
-        with open('data/facedata/facedata.json', 'r') as f:
+        with open('JSON/facedata.json', 'r') as f:
             facedata = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         facedata = {}
@@ -406,7 +406,7 @@ def register_visitor():
         return jsonify({'error': 'Internal server error processing data structure.'}), 500
 
     try:
-        with open('data/facedata/facedata.json', 'w') as f:
+        with open('JSON/facedata.json', 'w') as f:
             json.dump(facedata, f, indent=4)
     except Exception as e:
         print(f"Error saving data to facedata.json: {e}")
@@ -425,7 +425,7 @@ def search_visitors():
     if not query:
         return jsonify({'success': False, 'message': 'Search query is required'})
     try:
-        with open('data/facedata/facedata.json', 'r') as f:
+        with open('JSON/facedata.json', 'r') as f:
             facedata = json.load(f)
     except FileNotFoundError:
         return jsonify({'success': False, 'message': 'No visitor data found'})
@@ -455,7 +455,7 @@ def get_visitor_details():
     if not uid and not visit_id:
         return jsonify({'success': False, 'message': 'Either uid or visit_id is required'})
     try:
-        with open('data/facedata/facedata.json', 'r') as f:
+        with open('JSON/facedata.json', 'r') as f:
             facedata = json.load(f)
     except FileNotFoundError:
         return jsonify({'success': False, 'message': 'No visitor data found'})
@@ -514,7 +514,7 @@ def detect_face():
                         continue
                     rgb_face = cv2.cvtColor(face_crop, cv2.COLOR_BGR2RGB)
                     try:
-                        with open('data/facedata/facedata.json', 'r') as f:
+                        with open('JSON/facedata.json', 'r') as f:
                             known_data = json.load(f)
                     except FileNotFoundError:
                         known_data = {}
@@ -560,7 +560,7 @@ def detect_face():
                             if encoding_paths and data_modified:
                                 user['face_encodings'] = encoding_paths
                     if data_modified:
-                        with open('data/facedata/facedata.json', 'w') as f:
+                        with open('JSON/facedata.json', 'w') as f:
                             json.dump(known_data, f, indent=2)
                     if not known_encodings:
                         continue
@@ -652,7 +652,7 @@ def remove_dvn(visit_id):
 def get_today_visitors():
     today = datetime.now().strftime("%Y-%m-%d")
     try:
-        with open('data/facedata/facedata.json', 'r') as f:
+        with open('JSON/facedata.json', 'r') as f:
             facedata = json.load(f)
     except FileNotFoundError:
         return jsonify({'success': False, 'message': 'No visitor data found', 'visitors': {}})
@@ -706,7 +706,7 @@ def process_profile_image():
         next_img_num = len(existing_images) + 1
         face_path = f'{user_dir}/{uid}_img{next_img_num}.jpg'
         cv2.imwrite(face_path, face_crop)
-        facedata_path = 'data/facedata/facedata.json'
+        facedata_path = 'JSON/facedata.json'
         os.makedirs(os.path.dirname(facedata_path), exist_ok=True)
         if os.path.exists(facedata_path):
             with open(facedata_path, 'r') as json_file:
@@ -763,7 +763,7 @@ def complete_meeting():
         uid = request.args.get('uid')
         if not visit_id or not uid:
             return jsonify({"error": "Missing visit_id or uid parameter"}), 400
-        json_file_path = 'data/facedata/facedata.json'
+        json_file_path = 'JSON/facedata.json'
         if not os.path.exists(json_file_path):
             return jsonify({"error": "Data file not found"}), 404
         with open(json_file_path, 'r') as file:
@@ -803,7 +803,7 @@ def visitor_action():
         if not forwarding_department: missing.append("forwarding_department")
         return jsonify({"success": False, "message": f"Missing required fields: {', '.join(missing)}"}), 400
     try:
-        with open('data/facedata/facedata.json', 'r') as f:
+        with open('JSON/facedata.json', 'r') as f:
             facedata = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         return jsonify({"success": False, "message": "Could not load visitor data."}), 500
@@ -820,7 +820,7 @@ def visitor_action():
     if not visit_found:
         return jsonify({"success": False, "message": f"Visit with ID '{visit_id}' not found for visitor '{uid}'."}), 404
     try:
-        with open('data/facedata/facedata.json', 'w') as f:
+        with open('JSON/facedata.json', 'w') as f:
             json.dump(facedata, f, indent=4)
         return jsonify({"success": True, "message": "Visitor action recorded successfully."}), 200
     except Exception as e:
