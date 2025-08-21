@@ -419,7 +419,6 @@ def register_visitor():
         'visit_id': visitor_id
     })
 
-
 @app.route('/search_visitors', methods=['GET'])
 def search_visitors():
     query = request.args.get('query', '').lower()
