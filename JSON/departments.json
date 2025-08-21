@@ -96,624 +96,639 @@
             "email": "rohitingle34@gmail.com"
         },
         {
-    "id": 21,
-    "name": "मुख्य कार्यकारी अधिकारी, जि.प.अकोला",
-    "email": "ceozp_akola@rediffmail.com"
-},
-{
-    "id": 22,
-    "name": "अति. मुख्य कार्यकारी अधिकारी जि.प.अकोला",
-    "email": "aceozpakola@rediffmail.com"
-},
-{
-    "id": 23,
-    "name": "जिल्हा ग्रामीण विकास यंत्रणा अकोला",
-    "email": "pddrda_akola@yahoo.co.in"
-},
-{
-    "id": 24,
-    "name": "उप मुख्य कार्यकारी अधिकारी सामान्य जि.प.अकोला",
-    "email": "dyceogzpakola@gmail.com"
-},
-{
-    "id": 25,
-    "name": "उप मुख्य कार्यकारी अधिकारी पंचायत जि.प.अकोला",
-    "email": "dyceopakola@gmail.com"
-},
-{
-    "id": 26,
-    "name": "महिला व बालविकास अधिकारी जि.प.अकोला",
-    "email": "akolaicds@gmail.com"
-},
-{
-    "id": 27,
-    "name": "उप मुख्य कार्यकारी अधिकारी जिल्हा पाणी व स्वच्छता विभाग, अकोला",
-    "email": "sbmzpakola@gmail.com"
-},
-{
-    "id": 28,
-    "name": "उप मुख्य कार्यकारी अधिकारी जिल्हा पाणी व स्वच्छता विभाग, अकोला",
-    "email": "nbazpakola@gmail.com"
-},
-{
-    "id": 29,
-    "name": "मुख्य लेखा व वित्त अधिकारी अर्थ विभाग",
-    "email": "fdzpakola@yahoo.co.in"
-},
-{
-    "id": 30,
-    "name": "कार्यकारी अभियंता बांधकाम विभाग जि.प.",
-    "email": "eeworkzp@rediffmail.com"
-},
-{
-    "id": 31,
-    "name": "कार्यकारी अभियंता जलसंधारण लघुपाटबंधारे जि.प.विभाग",
-    "email": "eemizpakola@rediffmail.com"
-},
-{
-    "id": 32,
-    "name": "कार्यकारी अभियंता,ग्रामीण पाणी पुरवठा,जि.प.अकोला",
-    "email": "eebanaakola.2011@rediffmail.com"
-},
-{
-    "id": 33,
-    "name": "कार्यकारी अभियंता,ग्रामीण पाणी पुरवठा,जि.प.अकोला",
-    "email": "eebanakola.2012@gmail.com"
-},
-{
-    "id": 34,
-    "name": "जिल्हा आरोग्य अधिकारी, जिल्हापरिषद, अकोला",
-    "email": "dhoako@rediffmail.com"
-},
-{
-    "id": 35,
-    "name": "कृषी विकास अधिकारी, जि. प. अकोला.",
-    "email": "adoakola@rediffmail.com"
-},
-{
-    "id": 36,
-    "name": "कृषी विकास अधिकारी, जि. प. अकोला.",
-    "email": "adozpakola@gmail.com"
-},
-{
-    "id": 37,
-    "name": "जिल्हा पशुसंवर्धन अधिकारी, जि.प. अकोला",
-    "email": "dahoakola@gmail.com"
-},
-{
-    "id": 38,
-    "name": "शिक्षणाधिकारी (माध्य) जि.प. अकोला",
-    "email": "eosecondaryzpakola@gmail.com"
-},
-{
-    "id": 39,
-    "name": "शिक्षणाधिकारी (माध्य) जि.प. अकोला",
-    "email": "rmsaakola@gmail.com"
-},
-{
-    "id": 40,
-    "name": "शिक्षणाधिकारी (प्राध) जि.प. अकोला",
-    "email": "mdmaakola25@gmail.com"
-},
-{
-    "id": 41,
-    "name": "शिक्षणाधिकारी निरंतर जि.प. अकोला",
-    "email": "eoceakola@gmail.com"
-},
-{
-    "id": 42,
-    "name": "समाजकल्याण अधिकारी जि.प.अकोला",
-    "email": "dswozp.akl@gmail.com"
-},
-{
-    "id": 43,
-    "name": "गटविकास अधिकारी अकोला",
-    "email": "bdopsakola@gmail.com"
-},
-{
-    "id": 44,
-    "name": "गटविकास अधिकारी अकोट",
-    "email": "bdopsakot@gmail.com"
-},
-{
-    "id": 45,
-    "name": "गटविकास अधिकारी बार्शिटाकळी",
-    "email": "barshitaklibdo@gmail.com"
-},
-{
-    "id": 46,
-    "name": "गटविकास अधिकारी तेल्हारा",
-    "email": "bdotelhara07258@gmail.com"
-},
-{
-    "id": 47,
-    "name": "गटविकास अधिकारी बाळापुर",
-    "email": "bdobalapur919@gmail.com"
-},
-{
-    "id": 48,
-    "name": "गटविकास अधिकारी पातुर",
-    "email": "bdopatur123@gmail.com"
-},
-{
-    "id": 49,
-    "name": "जिल्हा पोलीस अधिक्षक, अकोला",
-    "email": "sp.akola@mahapolice.gov.in"
-},
-{
-    "id": 50,
-    "name": "आयुक्त, महानगर पालिका, अकोला",
-    "email": "amcakola@yahoo.co.in"
-},
-{
-    "id": 51,
-    "name": "अधीक्षक अभियंता, महावितरण, अकोला",
-    "email": "seakola@mahadiscom.in"
-},
-{
-    "id": 52,
-    "name": "अधीक्षक अभियंता, महावितरण, अकोला",
-    "email": "seakola@gmail.com"
-},
-{
-    "id": 53,
-    "name": "अधीक्षक अभियंता, सार्वजनिक बांध.मंडळ,अकोला",
-    "email": "akola.se@mahapwd.com"
-},
-{
-    "id": 54,
-    "name": "जिल्हा अधीक्षक कृषि अधिकारी, अकोला",
-    "email": "dsaoakola@gmail.com"
-},
-{
-    "id": 55,
-    "name": "जिल्हा अधीक्षक कृषि अधिकारी, अकोला",
-    "email": "stat_akola@gmail.com"
-},
-{
-    "id": 56,
-    "name": "जिल्हा अधीक्षक भूमी अभिलेख, अकोला",
-    "email": "dslr_akola@yahoo.com.in"
-},
-{
-    "id": 57,
-    "name": "जिल्हा उपनिबंधक, सहकारी संस्था, अकोला",
-    "email": "ddrakl@rediffmail.com"
-},
-{
-    "id": 58,
-    "name": "जिल्हा उपनिबंधक, सहकारी संस्था, अकोला",
-    "email": "ddr_akl@gmail.com"
-},
-{
-    "id": 59,
-    "name": "उपसंचालक, आरोग्य सेवा, अकोला.",
-    "email": "ddhsako@rediffmal.com"
-},
-{
-    "id": 60,
-    "name": "मुख्याधिकारी, नगरपरिषद, तेल्हारा",
-    "email": "mctelhara@gmail.com"
-},
-{
-    "id": 61,
-    "name": "मुख्याधिकारी, नगरपरिषद, बाळापुर",
-    "email": "mcbalapur@gmail.com"
-},
-{
-    "id": 62,
-    "name": "मुख्याधिकारी, नगरपरिषद, पातुर",
-    "email": "mcpatur@gmail.com"
-},
-{
-    "id": 63,
-    "name": "मुख्याधिकारी, नगरपरिषद, मुर्तिजापुर",
-    "email": "mcmurtizapur1@gmail.com"
-},
-{
-    "id": 64,
-    "name": "मुख्याधिकारी, नगरपरिषद, अकोट",
-    "email": "mcakot@gmail.com"
-},
-{
-    "id": 65,
-    "name": "नगरपंचायत बार्शिटाकळी",
-    "email": "barshitakli@gmail.com"
-},
-{
-    "id": 66,
-    "name": "कुलसचिव,डॉ.पं.दे. कृषि विद्यापीठ, अकोला",
-    "email": "registar@pdkv.ac.in"
-},
-{
-    "id": 67,
-    "name": "सहाय्यक आयुक्त समाज कल्याण, अकोला",
-    "email": "sdswo_akl@redifmail.com"
-},
-{
-    "id": 68,
-    "name": "सहाय्यक आयुक्त मत्स्यव्यवसाय(तांत्रिक)अकोला",
-    "email": "fisheriesakola@rediffmail.com"
-},
-{
-    "id": 69,
-    "name": "प्रकल्प अधिकारी, एका.आदि.विकास प्र.अकोला",
-    "email": "poitdp.akola-mh@gov.in"
-},
-{
-    "id": 70,
-    "name": "उपसंचालक, सामाजिक वनीकरण, अकोला",
-    "email": "ddsfdakl@gmail.com"
-},
-{
-    "id": 71,
-    "name": "कार्यकारी अभियंता, सार्व.बांधकाम विभाग, अकोला",
-    "email": "akola.ee@mahapwd.com"
-},
-{
-    "id": 72,
-    "name": "कार्यकारी अभियंता,महाराष्ट्र जीवन प्राधि. अकोला",
-    "email": "eeur.akola_mjp@rediffmail.com"
-},
-{
-    "id": 73,
-    "name": "कार्यकारी अभियंता, अकोला पाटबंधारे विभाग, अकोला",
-    "email": "aklirrgation@gmail.com"
-},
-{
-    "id": 74,
-    "name": "कार्यकारी अभियंता, अकोला पाटबंधारे विभाग, अकोला",
-    "email": "akl_irrigation@dataone.in"
-},
-{
-    "id": 75,
-    "name": "कार्यकारी अभियंता,लघुसिंचनविभाग,(स्था.स्तर)अकोला",
-    "email": "akl_irrigation@dataone.in"
-},
-{
-    "id": 76,
-    "name": "कार्यकारी अभियंता, एम.आय.डी.सी, शिवणी",
-    "email": "eeakola@midcindia.org"
-},
-{
-    "id": 77,
-    "name": "जिल्हा शल्य चिकीत्सक, सामान्य रुग्णालय, अकोला",
-    "email": "csakola@rediffmail.com"
-},
-{
-    "id": 78,
-    "name": "जिल्हा शल्य चिकीत्सक, सामान्य रुग्णालय, अकोला",
-    "email": "cs_akola@rediffmail.com"
-},
-{
-    "id": 79,
-    "name": "जिल्हा हिवताप अधिकारी, अकोला",
-    "email": "dmo.akl.09@rediffmail.com"
-},
-{
-    "id": 80,
-    "name": "जिल्हा महिला व बाल विकास अधिकारी, अकोला",
-    "email": "dwcdoakl@yahoo.com"
-},
-{
-    "id": 81,
-    "name": "महाव्यवस्थापक, जिल्हा उद्योग केंद्र, अकोला",
-    "email": "didicakola@maharashtra.gov.in"
-},
-{
-    "id": 82,
-    "name": "जिल्हा क्रीडा अधिकारी, अकोला",
-    "email": "akoladso@gmail.com"
-},
-{
-    "id": 83,
-    "name": "पशुसंवर्धन उपआयुक्त, अकोला",
-    "email": "dccanakola@gmail.com"
-},
-{
-    "id": 84,
-    "name": "जिल्हा दुग्ध शाळा विकास अधिकारी, अकोला",
-    "email": "ddoakola@gmail.com"
-},
-{
-    "id": 85,
-    "name": "सहाय्यक संचालक, नगर रचना, अकोला",
-    "email": "adtp_akola@rediffmail.com"
-},
-{
-    "id": 86,
-    "name": "सहायक संचालक, कौशल्य विकास, अकोला सहायक ग्रंथालय संचालक, अमरावती",
-    "email": "asstdiremp.akola@ese.maharashtra.gov.in"
-},
-{
-    "id": 87,
-    "name": "जिल्हा ग्रंथालय अधिकारी, अकोला",
-    "email": "gdl.akola@yahoo.com"
-},
-{
-    "id": 88,
-    "name": "व्यवस्थापक, जिल्हा अग्रणी बँक, अकोला",
-    "email": "ldmakol@centralbank.co.in"
-},
-{
-    "id": 89,
-    "name": "कापुस पणन महासंघ अकोला",
-    "email": "akolazone@gmail.com"
-},
-{
-    "id": 90,
-    "name": "जिल्हा परिवहन अधिकारी,मरामापम,अकोला",
-    "email": "mh30@maharashtranscom.in"
-},
-{
-    "id": 91,
-    "name": "प्रशासक, नगर पंचायत, बाशिटाकळी",
-    "email": "barshitakli@gmail.com"
-},
-{
-    "id": 92,
-    "name": "प्रशासक, नगर पंचायत, बाशिटाकळी",
-    "email": "nagarpanchayat.barshitakali@gmail.com"
-},
-{
-    "id": 93,
-    "name": "व्यवस्थापक,अण्णाभाऊसाठे महामंडळ,अकोला",
-    "email": "apamakola.dco@gmail.com"
-},
-{
-    "id": 94,
-    "name": "उपवनसंरक्षक,अकोला वनविभाग, अकोला",
-    "email": "dfcakola@gmail.com"
-},
-{
-    "id": 95,
-    "name": "उप मुख्यकार्यकारी अधिकारी, जि.प. (पंचायत) अकोला.",
-    "email": "dyceop@gmail.com"
-},
-{
-    "id": 96,
-    "name": "अधिक्षक राज्य उत्पादन शुल्क, अकोला",
-    "email": "supseakola@gmail.com"
-},
-{
-    "id": 97,
-    "name": "सहकार आयुक्त कार्यालय, अकेाला",
-    "email": "commcoop2011@gmail.com"
-},
-{
-    "id": 98,
-    "name": "प्रदुषण नियंत्रण मंडळ, अकोला.",
-    "email": "sroakola@mtch.gov.in"
-},
-{
-    "id": 99,
-    "name": "जिल्हा सांख्यिकी अधिकारी अकोला",
-    "email": "dso.akola@hotmail.com"
-},
-{
-    "id": 100,
-    "name": "जिल्हा महिला विकास बालविकास अधिकारी, अकोला",
-    "email": "dwcdoakl@yahoo.co.in"
-},
-{
-    "id": 101,
-    "name": "जिल्हा क्रिडा अधिकारी, अकोला",
-    "email": "dsoff.akola@dsys.maharashtra.gov.in"
-},
-{
-    "id": 102,
-    "name": "कार्यकारी अभियंता महाराष्ट्र जिवन प्राधिकरण, अकोला",
-    "email": "eeurakolamjp@rediffmail.com"
-},
-{
-    "id": 103,
-    "name": "कार्यकारी अभियंता लघुपाटबंधारे विभाग क्र. २ अकोला",
-    "email": "eemid2akola@gmail.com"
-},
-{
-    "id": 104,
-    "name": "वरिष्ठ भुवैज्ञानिक,भूजल सर्वेक्षण व विकास यंत्रणा,अकोला",
-    "email": "sg_gsdaakola@rediffmail.com"
-},
-{
-    "id": 105,
-    "name": "उपवनसंरक्षक वन विभाग, अकोट",
-    "email": "dcf.akot@yahoo.com"
-},
-{
-    "id": 106,
-    "name": "उपवन संरक्षक (वन्यजिव) अकोला",
-    "email": "dcfwlakola@gmail.com"
-},
-{
-    "id": 107,
-    "name": "वन परीक्षेत्र अधिकारी (प्रा)",
-    "email": "rfoakola@gmail.com"
-},
-{
-    "id": 108,
-    "name": "व्यवस्थापक,खादी व ग्रामोद्योग,अकोला",
-    "email": "dvioakola@rediffmail.com"
-},
-{
-    "id": 109,
-    "name": "जागतिक बॅंक अकोला",
-    "email": "wbakola.ee@mahapwd.com"
-},
-{
-    "id": 110,
-    "name": "म रा विदयुत वितरण कंपनी मर्या, ग्रा वि अकोला",
-    "email": "seakola@gmail.com"
-},
-{
-    "id": 111,
-    "name": "जिल्हा नियोजन अधिकारी अकोला",
-    "email": "dpoakola@gmail.com"
-},
-{
-    "id": 112,
-    "name": "महाराष्ट्र राज्य विदयुत पारेषण कंपनी",
-    "email": "ee1610@mahatrams.co.in"
-},
-{
-    "id": 113,
-    "name": "उपअभियंता एमआयडीसी",
-    "email": "eeakola@midcindia.org"
-},
-{
-    "id": 114,
-    "name": "अतिरीक्त, सी.एस. जिल्हा स्त्री रुग्णालय, अकोला",
-    "email": "dsw_akola@rediffmail.com"
-},
-{
-    "id": 115,
-    "name": "जिल्हा सुचना विज्ञान अधिकारी अकोला",
-    "email": "mahako@nic.in"
-},
-{
-    "id": 116,
-    "name": "प्राचार्य, शासकीय अध्यापक महाविद्या, अकोला",
-    "email": "principalakola80@gmail.com"
-},
-{
-    "id": 117,
-    "name": "अधिक्षीका, स्त्री रुग्णालय अकोला",
-    "email": "dhw_akola@rediffmail.com"
-},
-{
-    "id": 118,
-    "name": "व्यवस्थापक,इ.मा.व.महामंडळ,अकोला",
-    "email": "hoadmin@mahabeej.com"
-},
-{
-    "id": 119,
-    "name": "सहाय्यक आयुक्त, औषधी प्रशासन, अकोला",
-    "email": "lobhsingh@gmail.com"
-},
-{
-    "id": 120,
-    "name": "अध्यक्ष जात पडताळणी, अकोला",
-    "email": "cvc2akola@gmail.com"
-},
-{
-    "id": 121,
-    "name": "प्रकल्प अधिकारी,मेडा, अकोला.",
-    "email": "domedaakola@mahaurja.com"
-},
-{
-    "id": 122,
-    "name": "लोकशाहीर अण्णाभाऊ साठे महामंडळ",
-    "email": "dmlasdcakola@gmail.com"
-},
-{
-    "id": 123,
-    "name": "उपविभागीय अधिकारी अकोला",
-    "email": "sdo.akola@rediffmail.com"
-},
-{
-    "id": 124,
-    "name": "उपविभागीय अधिकारी अकोट",
-    "email": "sdo.akot@rediffmail.com"
-},
-{
-    "id": 125,
-    "name": "उपविभागीय अधिकारी बाळापुर",
-    "email": "sdo.balapur@rediffmail.com"
-},
-{
-    "id": 126,
-    "name": "उपविभागीय अधिकारी मुर्तिजापुर",
-    "email": "sdo.murtizapur@rediffmail.com"
-},
-{
-    "id": 127,
-    "name": "तहसिलदार अकोला",
-    "email": "tah.akola@rediffmail.com"
-},
-{
-    "id": 128,
-    "name": "तहसिलदार बार्शिटाकळी",
-    "email": "tah.barshitakli@rediffmail.com"
-},
-{
-    "id": 129,
-    "name": "तहसिलदार अकोट",
-    "email": "tah.akot@rediffmail.com"
-},
-{
-    "id": 130,
-    "name": "तहसिलदार तेल्हारा",
-    "email": "tah.telhara@rediffmail.com"
-},
-{
-    "id": 131,
-    "name": "तहसिलदार बाळापुर",
-    "email": "tah.balapur@rediffmail.com"
-},
-{
-    "id": 132,
-    "name": "तहसिलदार पातुर",
-    "email": "tah.patur@rediffmail.com"
-},
-{
-    "id": 133,
-    "name": "तहसिलदार मुर्तिजापुर",
-    "email": "tah.murtizapur@rediffmail.com"
-},
-{
-    "id": 134,
-    "name": "निवासी उपजिल्हाधिकारी अकोला",
-    "email": "rdc_akola@rediffmail.com"
-},
-{
-    "id": 135,
-    "name": "अपर जिल्हाधिकारी अकोला",
-    "email": "adc_akola@rediffmail.com"
-},
-{
-    "id": 136,
-    "name": "उपजिल्हाधिकारी रो.ह.यो. अकोला",
-    "email": "dycollako_mh@gov.in"
-},
-{
-    "id": 137,
-    "name": "उपजिल्हाधिकारी महसुल अकोला",
-    "email": "dcrakola@rediffmail.com"
-},
-{
-    "id": 138,
-    "name": "जिल्हा खनिकर्म अधिकारी अकोला",
-    "email": "dmoakola2@gmail.com"
-},
-{
-    "id": 139,
-    "name": "कार्यकारी अभियंता, म्हाडा, अकोला.",
-    "email": "mhadaakola@gmail.com"
-},
-{
-    "id": 140,
-    "name": "जिल्हा कोषागार अधिकारी, अकोला",
-    "email": "to.akola@zillamahakosh.in"
-},
-{
-    "id": 141,
-    "name": "जिल्हा पुरवठा अधिकारी, अकोला",
-    "email": "dsoakola@gmail.com"
-},
-{
-    "id": 142,
-    "name": "जिल्हा मार्केटिंग अधिकारी अकोला",
-    "email": "dmoakola@gmail.com"
-},
-{
-    "id": 143,
-    "name": "सार्वजनिक न्यास नोंदणी तथा धर्मादाय उपआयुक्त कार्यालय अकोला",
-    "email": "supdtest.ak-mh@gov.in"
-},
-{
-    "id": 144,
-    "name": "कार्यकारी अभियंता जलसंपदा विभाग अकोला",
-    "email": "aklirrigation@gmail.com"
-}
+            "id": 21,
+            "name": "मुख्य कार्यकारी अधिकारी, जि.प.अकोला",
+            "email": "ceozp_akola@rediffmail.com"
+        },
+        {
+            "id": 22,
+            "name": "अति. मुख्य कार्यकारी अधिकारी जि.प.अकोला",
+            "email": "aceozpakola@rediffmail.com"
+        },
+        {
+            "id": 23,
+            "name": "जिल्हा ग्रामीण विकास यंत्रणा अकोला",
+            "email": "pddrda_akola@yahoo.co.in"
+        },
+        {
+            "id": 24,
+            "name": "उप मुख्य कार्यकारी अधिकारी सामान्य जि.प.अकोला",
+            "email": "dyceogzpakola@gmail.com"
+        },
+        {
+            "id": 25,
+            "name": "उप मुख्य कार्यकारी अधिकारी पंचायत जि.प.अकोला",
+            "email": "dyceopakola@gmail.com"
+        },
+        {
+            "id": 26,
+            "name": "महिला व बालविकास अधिकारी जि.प.अकोला",
+            "email": "akolaicds@gmail.com"
+        },
+        {
+            "id": 27,
+            "name": "उप मुख्य कार्यकारी अधिकारी जिल्हा पाणी व स्वच्छता विभाग, अकोला",
+            "email": "sbmzpakola@gmail.com"
+        },
+        {
+            "id": 28,
+            "name": "उप मुख्य कार्यकारी अधिकारी जिल्हा पाणी व स्वच्छता विभाग, अकोला",
+            "email": "nbazpakola@gmail.com"
+        },
+        {
+            "id": 29,
+            "name": "मुख्य लेखा व वित्त अधिकारी अर्थ विभाग",
+            "email": "fdzpakola@yahoo.co.in"
+        },
+        {
+            "id": 30,
+            "name": "कार्यकारी अभियंता बांधकाम विभाग जि.प.",
+            "email": "eeworkzp@rediffmail.com"
+        },
+        {
+            "id": 31,
+            "name": "कार्यकारी अभियंता जलसंधारण लघुपाटबंधारे जि.प.विभाग",
+            "email": "eemizpakola@rediffmail.com"
+        },
+        {
+            "id": 32,
+            "name": "कार्यकारी अभियंता,ग्रामीण पाणी पुरवठा,जि.प.अकोला",
+            "email": "eebanaakola.2011@rediffmail.com"
+        },
+        {
+            "id": 33,
+            "name": "कार्यकारी अभियंता,ग्रामीण पाणी पुरवठा,जि.प.अकोला",
+            "email": "eebanakola.2012@gmail.com"
+        },
+        {
+            "id": 34,
+            "name": "जिल्हा आरोग्य अधिकारी, जिल्हापरिषद, अकोला",
+            "email": "dhoako@rediffmail.com"
+        },
+        {
+            "id": 35,
+            "name": "कृषी विकास अधिकारी, जि. प. अकोला.",
+            "email": "adoakola@rediffmail.com"
+        },
+        {
+            "id": 36,
+            "name": "कृषी विकास अधिकारी, जि. प. अकोला.",
+            "email": "adozpakola@gmail.com"
+        },
+        {
+            "id": 37,
+            "name": "जिल्हा पशुसंवर्धन अधिकारी, जि.प. अकोला",
+            "email": "dahoakola@gmail.com"
+        },
+        {
+            "id": 38,
+            "name": "शिक्षणाधिकारी (माध्य) जि.प. अकोला",
+            "email": "eosecondaryzpakola@gmail.com"
+        },
+        {
+            "id": 39,
+            "name": "शिक्षणाधिकारी (माध्य) जि.प. अकोला",
+            "email": "rmsaakola@gmail.com"
+        },
+        {
+            "id": 40,
+            "name": "शिक्षणाधिकारी (प्राध) जि.प. अकोला",
+            "email": "mdmaakola25@gmail.com"
+        },
+        {
+            "id": 41,
+            "name": "शिक्षणाधिकारी निरंतर जि.प. अकोला",
+            "email": "eoceakola@gmail.com"
+        },
+        {
+            "id": 42,
+            "name": "समाजकल्याण अधिकारी जि.प.अकोला",
+            "email": "dswozp.akl@gmail.com"
+        },
+        {
+            "id": 43,
+            "name": "गटविकास अधिकारी अकोला",
+            "email": "bdopsakola@gmail.com"
+        },
+        {
+            "id": 44,
+            "name": "गटविकास अधिकारी अकोट",
+            "email": "bdopsakot@gmail.com"
+        },
+        {
+            "id": 45,
+            "name": "गटविकास अधिकारी बार्शिटाकळी",
+            "email": "barshitaklibdo@gmail.com"
+        },
+        {
+            "id": 46,
+            "name": "गटविकास अधिकारी तेल्हारा",
+            "email": "bdotelhara07258@gmail.com"
+        },
+        {
+            "id": 47,
+            "name": "गटविकास अधिकारी बाळापुर",
+            "email": "bdobalapur919@gmail.com"
+        },
+        {
+            "id": 48,
+            "name": "गटविकास अधिकारी पातुर",
+            "email": "bdopatur123@gmail.com"
+        },
+        {
+            "id": 49,
+            "name": "जिल्हा पोलीस अधिक्षक, अकोला",
+            "email": "sp.akola@mahapolice.gov.in"
+        },
+        {
+            "id": 50,
+            "name": "आयुक्त, महानगर पालिका, अकोला",
+            "email": "amcakola@yahoo.co.in"
+        },
+        {
+            "id": 51,
+            "name": "अधीक्षक अभियंता, महावितरण, अकोला",
+            "email": "seakola@mahadiscom.in"
+        },
+        {
+            "id": 52,
+            "name": "अधीक्षक अभियंता, महावितरण, अकोला",
+            "email": "seakola@gmail.com"
+        },
+        {
+            "id": 53,
+            "name": "अधीक्षक अभियंता, सार्वजनिक बांध.मंडळ,अकोला",
+            "email": "akola.se@mahapwd.com"
+        },
+        {
+            "id": 54,
+            "name": "जिल्हा अधीक्षक कृषि अधिकारी, अकोला",
+            "email": "dsaoakola@gmail.com"
+        },
+        {
+            "id": 55,
+            "name": "जिल्हा अधीक्षक कृषि अधिकारी, अकोला",
+            "email": "stat_akola@gmail.com"
+        },
+        {
+            "id": 56,
+            "name": "जिल्हा अधीक्षक भूमी अभिलेख, अकोला",
+            "email": "dslr_akola@yahoo.com.in"
+        },
+        {
+            "id": 57,
+            "name": "जिल्हा उपनिबंधक, सहकारी संस्था, अकोला",
+            "email": "ddrakl@rediffmail.com"
+        },
+        {
+            "id": 58,
+            "name": "जिल्हा उपनिबंधक, सहकारी संस्था, अकोला",
+            "email": "ddr_akl@gmail.com"
+        },
+        {
+            "id": 59,
+            "name": "उपसंचालक, आरोग्य सेवा, अकोला.",
+            "email": "ddhsako@rediffmal.com"
+        },
+        {
+            "id": 60,
+            "name": "मुख्याधिकारी, नगरपरिषद, तेल्हारा",
+            "email": "mctelhara@gmail.com"
+        },
+        {
+            "id": 61,
+            "name": "मुख्याधिकारी, नगरपरिषद, बाळापुर",
+            "email": "mcbalapur@gmail.com"
+        },
+        {
+            "id": 62,
+            "name": "मुख्याधिकारी, नगरपरिषद, पातुर",
+            "email": "mcpatur@gmail.com"
+        },
+        {
+            "id": 63,
+            "name": "मुख्याधिकारी, नगरपरिषद, मुर्तिजापुर",
+            "email": "mcmurtizapur1@gmail.com"
+        },
+        {
+            "id": 64,
+            "name": "मुख्याधिकारी, नगरपरिषद, अकोट",
+            "email": "mcakot@gmail.com"
+        },
+        {
+            "id": 65,
+            "name": "नगरपंचायत बार्शिटाकळी",
+            "email": "barshitakli@gmail.com"
+        },
+        {
+            "id": 66,
+            "name": "कुलसचिव,डॉ.पं.दे. कृषि विद्यापीठ, अकोला",
+            "email": "registar@pdkv.ac.in"
+        },
+        {
+            "id": 67,
+            "name": "सहाय्यक आयुक्त समाज कल्याण, अकोला",
+            "email": "sdswo_akl@redifmail.com"
+        },
+        {
+            "id": 68,
+            "name": "सहाय्यक आयुक्त मत्स्यव्यवसाय(तांत्रिक)अकोला",
+            "email": "fisheriesakola@rediffmail.com"
+        },
+        {
+            "id": 69,
+            "name": "प्रकल्प अधिकारी, एका.आदि.विकास प्र.अकोला",
+            "email": "poitdp.akola-mh@gov.in"
+        },
+        {
+            "id": 70,
+            "name": "उपसंचालक, सामाजिक वनीकरण, अकोला",
+            "email": "ddsfdakl@gmail.com"
+        },
+        {
+            "id": 71,
+            "name": "कार्यकारी अभियंता, सार्व.बांधकाम विभाग, अकोला",
+            "email": "akola.ee@mahapwd.com"
+        },
+        {
+            "id": 72,
+            "name": "कार्यकारी अभियंता,महाराष्ट्र जीवन प्राधि. अकोला",
+            "email": "eeur.akola_mjp@rediffmail.com"
+        },
+        {
+            "id": 73,
+            "name": "कार्यकारी अभियंता, अकोला पाटबंधारे विभाग, अकोला",
+            "email": "aklirrgation@gmail.com"
+        },
+        {
+            "id": 74,
+            "name": "कार्यकारी अभियंता, अकोला पाटबंधारे विभाग, अकोला",
+            "email": "akl_irrigation@dataone.in"
+        },
+        {
+            "id": 75,
+            "name": "कार्यकारी अभियंता,लघुसिंचनविभाग,(स्था.स्तर)अकोला",
+            "email": "akl_irrigation@dataone.in"
+        },
+        {
+            "id": 76,
+            "name": "कार्यकारी अभियंता, एम.आय.डी.सी, शिवणी",
+            "email": "eeakola@midcindia.org"
+        },
+        {
+            "id": 77,
+            "name": "जिल्हा शल्य चिकीत्सक, सामान्य रुग्णालय, अकोला",
+            "email": "csakola@rediffmail.com"
+        },
+        {
+            "id": 78,
+            "name": "जिल्हा शल्य चिकीत्सक, सामान्य रुग्णालय, अकोला",
+            "email": "cs_akola@rediffmail.com"
+        },
+        {
+            "id": 79,
+            "name": "जिल्हा हिवताप अधिकारी, अकोला",
+            "email": "dmo.akl.09@rediffmail.com"
+        },
+        {
+            "id": 80,
+            "name": "जिल्हा महिला व बाल विकास अधिकारी, अकोला",
+            "email": "dwcdoakl@yahoo.com"
+        },
+        {
+            "id": 81,
+            "name": "महाव्यवस्थापक, जिल्हा उद्योग केंद्र, अकोला",
+            "email": "didicakola@maharashtra.gov.in"
+        },
+        {
+            "id": 82,
+            "name": "जिल्हा क्रीडा अधिकारी, अकोला",
+            "email": "akoladso@gmail.com"
+        },
+        {
+            "id": 83,
+            "name": "पशुसंवर्धन उपआयुक्त, अकोला",
+            "email": "dccanakola@gmail.com"
+        },
+        {
+            "id": 84,
+            "name": "जिल्हा दुग्ध शाळा विकास अधिकारी, अकोला",
+            "email": "ddoakola@gmail.com"
+        },
+        {
+            "id": 85,
+            "name": "सहाय्यक संचालक, नगर रचना, अकोला",
+            "email": "adtp_akola@rediffmail.com"
+        },
+        {
+            "id": 86,
+            "name": "सहायक संचालक, कौशल्य विकास, अकोला सहायक ग्रंथालय संचालक, अमरावती",
+            "email": "asstdiremp.akola@ese.maharashtra.gov.in"
+        },
+        {
+            "id": 87,
+            "name": "जिल्हा ग्रंथालय अधिकारी, अकोला",
+            "email": "gdl.akola@yahoo.com"
+        },
+        {
+            "id": 88,
+            "name": "व्यवस्थापक, जिल्हा अग्रणी बँक, अकोला",
+            "email": "ldmakol@centralbank.co.in"
+        },
+        {
+            "id": 89,
+            "name": "कापुस पणन महासंघ अकोला",
+            "email": "akolazone@gmail.com"
+        },
+        {
+            "id": 90,
+            "name": "जिल्हा परिवहन अधिकारी,मरामापम,अकोला",
+            "email": "mh30@maharashtranscom.in"
+        },
+        {
+            "id": 91,
+            "name": "प्रशासक, नगर पंचायत, बाशिटाकळी",
+            "email": "barshitakli@gmail.com"
+        },
+        {
+            "id": 92,
+            "name": "प्रशासक, नगर पंचायत, बाशिटाकळी",
+            "email": "nagarpanchayat.barshitakali@gmail.com"
+        },
+        {
+            "id": 93,
+            "name": "व्यवस्थापक,अण्णाभाऊसाठे महामंडळ,अकोला",
+            "email": "apamakola.dco@gmail.com"
+        },
+        {
+            "id": 94,
+            "name": "उपवनसंरक्षक,अकोला वनविभाग, अकोला",
+            "email": "dfcakola@gmail.com"
+        },
+        {
+            "id": 95,
+            "name": "उप मुख्यकार्यकारी अधिकारी, जि.प. (पंचायत) अकोला.",
+            "email": "dyceop@gmail.com"
+        },
+        {
+            "id": 96,
+            "name": "अधिक्षक राज्य उत्पादन शुल्क, अकोला",
+            "email": "supseakola@gmail.com"
+        },
+        {
+            "id": 97,
+            "name": "सहकार आयुक्त कार्यालय, अकेाला",
+            "email": "commcoop2011@gmail.com"
+        },
+        {
+            "id": 98,
+            "name": "प्रदुषण नियंत्रण मंडळ, अकोला.",
+            "email": "sroakola@mtch.gov.in"
+        },
+        {
+            "id": 99,
+            "name": "जिल्हा सांख्यिकी अधिकारी अकोला",
+            "email": "dso.akola@hotmail.com"
+        },
+        {
+            "id": 100,
+            "name": "जिल्हा महिला विकास बालविकास अधिकारी, अकोला",
+            "email": "dwcdoakl@yahoo.co.in"
+        },
+        {
+            "id": 101,
+            "name": "जिल्हा क्रिडा अधिकारी, अकोला",
+            "email": "dsoff.akola@dsys.maharashtra.gov.in"
+        },
+        {
+            "id": 102,
+            "name": "कार्यकारी अभियंता महाराष्ट्र जिवन प्राधिकरण, अकोला",
+            "email": "eeurakolamjp@rediffmail.com"
+        },
+        {
+            "id": 103,
+            "name": "कार्यकारी अभियंता लघुपाटबंधारे विभाग क्र. २ अकोला",
+            "email": "eemid2akola@gmail.com"
+        },
+        {
+            "id": 104,
+            "name": "वरिष्ठ भुवैज्ञानिक,भूजल सर्वेक्षण व विकास यंत्रणा,अकोला",
+            "email": "sg_gsdaakola@rediffmail.com"
+        },
+        {
+            "id": 105,
+            "name": "उपवनसंरक्षक वन विभाग, अकोट",
+            "email": "dcf.akot@yahoo.com"
+        },
+        {
+            "id": 106,
+            "name": "उपवन संरक्षक (वन्यजिव) अकोला",
+            "email": "dcfwlakola@gmail.com"
+        },
+        {
+            "id": 107,
+            "name": "वन परीक्षेत्र अधिकारी (प्रा)",
+            "email": "rfoakola@gmail.com"
+        },
+        {
+            "id": 108,
+            "name": "व्यवस्थापक,खादी व ग्रामोद्योग,अकोला",
+            "email": "dvioakola@rediffmail.com"
+        },
+        {
+            "id": 109,
+            "name": "जागतिक बॅंक अकोला",
+            "email": "wbakola.ee@mahapwd.com"
+        },
+        {
+            "id": 110,
+            "name": "म रा विदयुत वितरण कंपनी मर्या, ग्रा वि अकोला",
+            "email": "seakola@gmail.com"
+        },
+        {
+            "id": 111,
+            "name": "जिल्हा नियोजन अधिकारी अकोला",
+            "email": "dpoakola@gmail.com"
+        },
+        {
+            "id": 112,
+            "name": "महाराष्ट्र राज्य विदयुत पारेषण कंपनी",
+            "email": "ee1610@mahatrams.co.in"
+        },
+        {
+            "id": 113,
+            "name": "उपअभियंता एमआयडीसी",
+            "email": "eeakola@midcindia.org"
+        },
+        {
+            "id": 114,
+            "name": "अतिरीक्त, सी.एस. जिल्हा स्त्री रुग्णालय, अकोला",
+            "email": "dsw_akola@rediffmail.com"
+        },
+        {
+            "id": 115,
+            "name": "जिल्हा सुचना विज्ञान अधिकारी अकोला",
+            "email": "mahako@nic.in"
+        },
+        {
+            "id": 116,
+            "name": "प्राचार्य, शासकीय अध्यापक महाविद्या, अकोला",
+            "email": "principalakola80@gmail.com"
+        },
+        {
+            "id": 117,
+            "name": "अधिक्षीका, स्त्री रुग्णालय अकोला",
+            "email": "dhw_akola@rediffmail.com"
+        },
+        {
+            "id": 118,
+            "name": "व्यवस्थापक,इ.मा.व.महामंडळ,अकोला",
+            "email": "hoadmin@mahabeej.com"
+        },
+        {
+            "id": 119,
+            "name": "सहाय्यक आयुक्त, औषधी प्रशासन, अकोला",
+            "email": "lobhsingh@gmail.com"
+        },
+        {
+            "id": 120,
+            "name": "अध्यक्ष जात पडताळणी, अकोला",
+            "email": "cvc2akola@gmail.com"
+        },
+        {
+            "id": 121,
+            "name": "प्रकल्प अधिकारी,मेडा, अकोला.",
+            "email": "domedaakola@mahaurja.com"
+        },
+        {
+            "id": 122,
+            "name": "लोकशाहीर अण्णाभाऊ साठे महामंडळ",
+            "email": "dmlasdcakola@gmail.com"
+        },
+        {
+            "id": 123,
+            "name": "उपविभागीय अधिकारी अकोला",
+            "email": "sdo.akola@rediffmail.com"
+        },
+        {
+            "id": 124,
+            "name": "उपविभागीय अधिकारी अकोट",
+            "email": "sdo.akot@rediffmail.com"
+        },
+        {
+            "id": 125,
+            "name": "उपविभागीय अधिकारी बाळापुर",
+            "email": "sdo.balapur@rediffmail.com"
+        },
+        {
+            "id": 126,
+            "name": "उपविभागीय अधिकारी मुर्तिजापुर",
+            "email": "sdo.murtizapur@rediffmail.com"
+        },
+        {
+            "id": 127,
+            "name": "तहसिलदार अकोला",
+            "email": "tah.akola@rediffmail.com"
+        },
+        {
+            "id": 128,
+            "name": "तहसिलदार बार्शिटाकळी",
+            "email": "tah.barshitakli@rediffmail.com"
+        },
+        {
+            "id": 129,
+            "name": "तहसिलदार अकोट",
+            "email": "tah.akot@rediffmail.com"
+        },
+        {
+            "id": 130,
+            "name": "तहसिलदार तेल्हारा",
+            "email": "tah.telhara@rediffmail.com"
+        },
+        {
+            "id": 131,
+            "name": "तहसिलदार बाळापुर",
+            "email": "tah.balapur@rediffmail.com"
+        },
+        {
+            "id": 132,
+            "name": "तहसिलदार पातुर",
+            "email": "tah.patur@rediffmail.com"
+        },
+        {
+            "id": 133,
+            "name": "तहसिलदार मुर्तिजापुर",
+            "email": "tah.murtizapur@rediffmail.com"
+        },
+        {
+            "id": 134,
+            "name": "निवासी उपजिल्हाधिकारी अकोला",
+            "email": "rdc_akola@rediffmail.com"
+        },
+        {
+            "id": 135,
+            "name": "अपर जिल्हाधिकारी अकोला",
+            "email": "adc_akola@rediffmail.com"
+        },
+        {
+            "id": 136,
+            "name": "उपजिल्हाधिकारी रो.ह.यो. अकोला",
+            "email": "dycollako_mh@gov.in"
+        },
+        {
+            "id": 137,
+            "name": "उपजिल्हाधिकारी महसुल अकोला",
+            "email": "dcrakola@rediffmail.com"
+        },
+        {
+            "id": 138,
+            "name": "जिल्हा खनिकर्म अधिकारी अकोला",
+            "email": "dmoakola2@gmail.com"
+        },
+        {
+            "id": 139,
+            "name": "कार्यकारी अभियंता, म्हाडा, अकोला.",
+            "email": "mhadaakola@gmail.com"
+        },
+        {
+            "id": 140,
+            "name": "जिल्हा कोषागार अधिकारी, अकोला",
+            "email": "to.akola@zillamahakosh.in"
+        },
+        {
+            "id": 141,
+            "name": "जिल्हा पुरवठा अधिकारी, अकोला",
+            "email": "dsoakola@gmail.com"
+        },
+        {
+            "id": 142,
+            "name": "जिल्हा मार्केटिंग अधिकारी अकोला",
+            "email": "dmoakola@gmail.com"
+        },
+        {
+            "id": 143,
+            "name": "सार्वजनिक न्यास नोंदणी तथा धर्मादाय उपआयुक्त कार्यालय अकोला",
+            "email": "supdtest.ak-mh@gov.in"
+        },
+        {
+            "id": 144,
+            "name": "कार्यकारी अभियंता जलसंपदा विभाग अकोला",
+            "email": "aklirrigation@gmail.com"
+        },
+        {
+            "id": 145,
+            "name": "Testing2",
+            "email": "rushikeshagre75@gmail.com"
+        },
+        {
+            "id": 146,
+            "name": "जिल्हा जलसंधारण अधिकारी, अकोला",
+            "email": "eewcdakola@gmail.com"
+        },
+        {
+            "id": 147,
+            "name": "पोलीस प्रशिक्षण केंद्र, अकोला",
+            "email": "prin.ptsakola@mahapolice.gov.in"
+        }
     ]
 }

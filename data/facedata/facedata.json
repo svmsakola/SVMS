@@ -705,6 +705,18 @@
                 "dvn": 4,
                 "entry_confirmed": true,
                 "confirmation_time": "2025-04-08 12:15:49"
+            },
+            {
+                "visit_id": "V202507180015",
+                "datetime": "2025-07-18 07:56:55",
+                "purpose": "\u0918\u0930\u0915\u0941\u0932 \u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507180015_doc.pdf",
+                "dvn": 15,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-18 07:58:14",
+                "remark": "",
+                "forwarding_department": "\u0917\u091f\u0935\u093f\u0915\u093e\u0938 \u0905\u0927\u093f\u0915\u093e\u0930\u0940 \u0905\u0915\u094b\u0932\u093e"
             }
         ],
         "profile_img": [
@@ -1163,7 +1175,10 @@
                 "entry_confirmed": true,
                 "confirmation_time": "2025-04-22 12:31:10",
                 "remark": "\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e \u0905\u0915\u094b\u091f ,\u0924\u0939\u0938\u0940\u0932\u0926\u093e\u0930 \u0905\u0915\u094b\u091f",
-                "forwarding_department": "Tahasildar Akot"
+                "forwarding_department": "\u092e\u0941\u0916\u094d\u092f\u093e\u0927\u093f\u0915\u093e\u0930\u0940, \u0928\u0917\u0930\u092a\u0930\u093f\u0937\u0926, \u0905\u0915\u094b\u091f",
+                "forwarding_note": "",
+                "forwarded_from": "Tahasildar Akot",
+                "forwarded_datetime": "2025-07-08 06:06:24"
             }
         ],
         "profile_img": [
@@ -1344,6 +1359,29 @@
                 "confirmation_time": "2025-04-22 12:42:42",
                 "remark": "DMO  \u0928\u093f\u092f\u092e\u093e\u0928\u0941\u0938\u093e\u0930  \u0915\u093e\u0930\u094d\u092f\u0935\u093e\u0939\u0940\u0938\u093e\u0920\u0940",
                 "forwarding_department": "Other(Testing)"
+            },
+            {
+                "visit_id": "V202507090002",
+                "datetime": "2025-07-09 06:13:07",
+                "purpose": "\u0936\u0947\u0924\u0940 \u0938\u0902\u0926\u0930\u094d\u092d\u093e\u0924 \u0924\u0915\u094d\u0930\u093e\u0930\u0940 \u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507090002_doc.pdf",
+                "dvn": 2,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-09 06:31:49",
+                "remark": "",
+                "forwarding_department": "SDO Akola"
+            },
+            {
+                "visit_id": "V202507180005",
+                "datetime": "2025-07-18 07:00:10",
+                "purpose": "\u0936\u0947\u0924\u0940 \u0938\u0902\u0926\u0930\u094d\u092d\u093e\u0924 \u0924\u0915\u094d\u0930\u093e\u0930\u0940 \u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "dvn": 8,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-18 07:11:16",
+                "remark": "",
+                "forwarding_department": "SDO Akola"
             }
         ],
         "profile_img": [
@@ -2108,6 +2146,30 @@
                 "confirmation_time": "2025-07-02 07:12:38",
                 "remark": "",
                 "forwarding_department": "Tahasildar Patur"
+            },
+            {
+                "visit_id": "V202507170010",
+                "datetime": "2025-07-17 06:52:37",
+                "purpose": "\u0936\u0947\u0924\u0940\u091a\u0947 \u0928\u0941\u0915\u0938\u093e\u0928 \u0928 \u0926\u093f\u0932\u0947 \u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507170010_doc.pdf",
+                "dvn": 10,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-17 06:55:16",
+                "remark": "",
+                "forwarding_department": "Tahasildar Patur"
+            },
+            {
+                "visit_id": "V202508110012",
+                "datetime": "2025-08-11 07:00:20",
+                "purpose": "\u0936\u0947\u0924\u0940\u091a\u0947 \u0928\u0941\u0915\u0938\u093e\u0928 \u0928 \u0926\u093f\u0932\u0947 \u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508110012_doc.pdf",
+                "dvn": 12,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-11 07:24:25",
+                "remark": "",
+                "forwarding_department": "Tahasildar Patur"
             }
         ],
         "profile_img": [
@@ -2257,7 +2319,7 @@
                 "entry_confirmed": true,
                 "confirmation_time": "2025-07-02 07:20:09",
                 "remark": "",
-                "forwarding_department": "गटविकास अधिकारी तेल्\u200Dहारा"
+                "forwarding_department": "\u0917\u091f\u0935\u093f\u0915\u093e\u0938 \u0905\u0927\u093f\u0915\u093e\u0930\u0940 \u0924\u0947\u0932\u094d\u200d\u0939\u093e\u0930\u093e"
             }
         ],
         "profile_img": [
@@ -2314,6 +2376,3527 @@
         ],
         "profile_img": [
             "profiles/UID1751440984/UID1751440984_img1.jpg"
+        ]
+    },
+    "UID1751609992": {
+        "name": "\u091a\u0902\u0926\u094d\u0930\u0915\u093e\u0902\u0924 \u092a\u094d\u0930\u0947\u092e\u093e\u0928\u0902\u0926 \u092d\u093f\u0938\u0947",
+        "phone": "8605044349",
+        "email": null,
+        "address": "\u0930\u093e. \u0932\u093e\u092e\u0915\u093e\u0928\u0940 \u092a\u094b. \u092e\u0941\u0902\u0921\u0917\u093e\u0935 \u0924\u093e. \u0905\u0915\u094b\u091f \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u091f",
+        "district": "Akola",
+        "registration_datetime": "2025-07-04 06:19:52",
+        "images": [
+            "facedata/UID1751609992/UID1751609992_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1751609992_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507040001",
+                "datetime": "2025-07-04 06:19:52",
+                "purpose": "\u0938\u093f\u0932\u093f\u0902\u0917 \u092a\u094d\u0930\u0915\u0930\u0923 \u0905\u0930\u094d\u091c",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "document_pdf": "pdf/V202507040001_doc.pdf",
+                "dvn": 1,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-04 06:53:58"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1751609992/UID1751609992_img1.jpg"
+        ]
+    },
+    "UID1751610245": {
+        "name": "\u0930\u0939\u093f\u092c\u0930 \u0916\u093e\u0928",
+        "phone": "8484096704",
+        "email": null,
+        "address": "\u091f\u093e\u0935\u0930 \u091a\u094c\u0915 \u0905\u0915\u094b\u0932\u093e \u0924\u093e. \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-04 06:24:05",
+        "images": [
+            "facedata/UID1751610245/UID1751610245_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1751610245_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507040002",
+                "datetime": "2025-07-04 06:24:05",
+                "purpose": "\u092a\u094d\u0930\u0915\u0930\u0923 \u0926\u093e\u0916\u0932 \u0915\u0930\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "document_pdf": "pdf/V202507040002_doc.pdf",
+                "dvn": 2,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-04 06:54:57"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1751610245/UID1751610245_img1.jpg"
+        ]
+    },
+    "UID1751610664": {
+        "name": "\u0936\u094d\u0930\u0940\u0915\u093e\u0902\u0924 \u092d\u0917\u0935\u093e\u0928\u0926\u093e\u0938 \u092a\u091f\u0947\u0932",
+        "phone": "9373976615",
+        "email": null,
+        "address": "\u0930\u093e. \u092c\u093f\u0930\u094d\u0932\u093e \u0915\u0949\u0932\u094b\u0928\u0940 \u091c\u0920\u093e\u0930\u092a\u0947\u0920 \u0905\u0915\u094b\u0932\u093e \u0924\u093e. \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-04 06:31:04",
+        "images": [
+            "facedata/UID1751610664/UID1751610664_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1751610664_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507040003",
+                "datetime": "2025-07-04 06:31:04",
+                "purpose": "\u0924\u0915\u094d\u0930\u093e\u0930 \u0915\u0930\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "document_pdf": "pdf/V202507040003_doc.pdf",
+                "dvn": 3,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-04 06:56:25"
+            },
+            {
+                "visit_id": "V202508040001",
+                "datetime": "2025-08-04 06:14:21",
+                "purpose": "\u0924\u0915\u094d\u0930\u093e\u0930 \u0915\u0930\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "dvn": 4,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-04 07:09:05",
+                "remark": "",
+                "forwarding_department": "Resident Deputy Collector"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1751610664/UID1751610664_img1.jpg"
+        ]
+    },
+    "UID1751611161": {
+        "name": "\u0926\u0940\u092a\u0915 \u092c\u093e, \u0906\u0920\u0935\u0932\u0947",
+        "phone": "8805469223",
+        "email": null,
+        "address": "\u0930\u093e. \u0927\u094b\u0924\u093e\u0930\u094d\u0921\u0940 \u0924\u093e. \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-04 06:39:21",
+        "images": [
+            "facedata/UID1751611161/UID1751611161_img1.jpg"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507040004",
+                "datetime": "2025-07-04 06:39:21",
+                "purpose": "\u0936\u0947\u0924\u0940\u0924\u0940\u0932 \u091c\u093e\u0923\u093e\u0930\u093e \u0930\u0938\u094d\u0924\u093e \u092e\u094b\u0915\u0933\u093e \u0915\u0930\u0942\u0928 \u0926\u0947\u0928\u0947\u092c\u093e\u092c\u0924",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "document_pdf": "pdf/V202507040004_doc.pdf"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1751611161/UID1751611161_img1.jpg"
+        ]
+    },
+    "UID1751869363": {
+        "name": "\u0917\u094b\u0935\u093f\u0902\u0926\u0930\u093e\u0935 \u0906\u0928\u0902\u0926\u0930\u093e\u0935 \u0926\u0947\u0936\u092e\u0941\u0916",
+        "phone": "8975653790",
+        "email": null,
+        "address": "\u0930\u093e. \u092a\u093f\u0902\u092a\u0933\u0916\u0941\u091f\u093e \u0924\u093e. \u092a\u093e\u0924\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092a\u093e\u0924\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-07-07 06:22:43",
+        "images": [
+            "facedata/UID1751869363/UID1751869363_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1751869363_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507070001",
+                "datetime": "2025-07-07 06:22:43",
+                "purpose": "\u092e\u094c\u091c\u0947 \u092a\u093f\u0902\u092a\u0933\u0916\u0941\u091f\u093e \u0938\u0930\u094d\u0935\u0947\u0915\u094d\u0937\u0923\u093e\u092e\u0927\u094d\u092f\u0947 \u0924\u093e\u0932\u093e\u0924\u094d\u092f\u093e\u0928\u0947 \u0906\u0930\u094d\u0925\u093f\u0915 \u0935\u094d\u092f\u0935\u094d\u0935\u094d\u092f\u094d\u0935\u0939\u093e\u0930 \u0915\u0930\u0942\u0928 \u0936\u0947\u0924\u0915\u0931\u094d\u092f\u093e\u0902\u0928\u093e \u0928\u0941\u0915\u0938\u093e\u0928\u0940\u0938 \u092a\u0924\u094d\u0930 \u0915\u0947\u0932\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507070001_doc.pdf",
+                "dvn": 1,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-07 06:45:16",
+                "remark": "",
+                "forwarding_department": "Tahasildar Murtizapur"
+            },
+            {
+                "visit_id": "V202507230003",
+                "datetime": "2025-07-23 06:34:01",
+                "purpose": "\u092e\u094c\u091c\u0947 \u092a\u093f\u0902\u092a\u0933\u0916\u0941\u091f\u093e \u0938\u0930\u094d\u0935\u0947\u0915\u094d\u0937\u0923\u093e\u092e\u0927\u094d\u092f\u0947 \u0924\u093e\u0932\u093e\u0924\u094d\u092f\u093e\u0928\u0947 \u0906\u0930\u094d\u0925\u093f\u0915 \u0935\u094d\u092f\u0935\u094d\u0935\u094d\u092f\u094d\u0935\u0939\u093e\u0930 \u0915\u0930\u0942\u0928 \u0936\u0947\u0924\u0915\u0931\u094d\u092f\u093e\u0902\u0928\u093e \u0928\u0941\u0915\u0938\u093e\u0928\u0940\u0938 \u092a\u0924\u094d\u0930 \u0915\u0947\u0932\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507230003_doc.pdf",
+                "dvn": 2,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-23 06:49:44",
+                "remark": "",
+                "forwarding_department": "SDO Balapur"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1751869363/UID1751869363_img1.jpg"
+        ]
+    },
+    "UID1751869524": {
+        "name": "\u0905\u0928\u094d\u0928\u092a\u0942\u0930\u094d\u0923\u093e \u0930\u093e\u092e\u0915\u0943\u0937\u094d\u0923 \u0935\u0930\u0941\u0907\u0915\u0930",
+        "phone": "8806772955",
+        "email": null,
+        "address": "\u0930\u093e. \u0916\u0902\u0921\u093e\u0933\u093e \u0924\u093e. \u0924\u0947\u0932\u094d\u0939\u093e\u0930\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0924\u0947\u0932\u094d\u0939\u093e\u0930\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-07 06:25:24",
+        "images": [
+            "facedata/UID1751869524/UID1751869524_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1751869524_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507070002",
+                "datetime": "2025-07-07 06:25:24",
+                "purpose": "\u0905\u092a\u0902\u0917 \u092a\u0917\u093e\u0930 \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507070002_doc.pdf",
+                "dvn": 2,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-07 06:46:15",
+                "remark": "",
+                "forwarding_department": "Tahasildar Telhar"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1751869524/UID1751869524_img1.jpg"
+        ]
+    },
+    "UID1751869667": {
+        "name": "\u0938\u094c. \u0928\u0940\u0932\u093f\u092e\u093e \u0938\u0941\u0930\u0947\u0936 \u0924\u093e\u092f\u0921\u0947",
+        "phone": "8237404024",
+        "email": null,
+        "address": "\u0930\u093e.\u0936\u094d\u0930\u0926\u094d\u0927\u093e \u0928\u0917\u0930 \u0928. \u0969 \u0930\u093f\u091c\u0928\u0932 \u0935\u0930\u094d\u0915 \u0936\u0949\u092a \u0938\u092e\u094b\u0930 \u0915\u094c\u0932\u0916\u0947\u0921 \u0924\u093e. \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-07 06:27:47",
+        "images": [
+            "facedata/UID1751869667/UID1751869667_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1751869667_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507070003",
+                "datetime": "2025-07-07 06:27:48",
+                "purpose": "\u0936\u0947\u0924\u0940 \u0915\u0930\u093f\u0924\u093e \u0935\u0940\u091c \u091c\u094b\u0921\u0923\u0940 \u0915\u0928\u094d\u0928\u0947\u0915\u094d\u0937\u0923 \u0928 \u0926\u093f\u0932\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507070003_doc.pdf",
+                "dvn": 3,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-07 06:46:48",
+                "remark": "See issue",
+                "forwarding_department": "\u092e \u0930\u093e \u0935\u093f\u0926\u092f\u0941\u0924 \u0935\u093f\u0924\u0930\u0923 \u0915\u0902\u092a\u0928\u0940 \u092e\u0930\u094d\u092f\u093e, \u0917\u094d\u0930\u093e \u0935\u093f \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1751869667/UID1751869667_img1.jpg"
+        ]
+    },
+    "UID1751869824": {
+        "name": "\u0938\u0902\u0924\u094b\u0937 \u0939\u0928\u094d\u0928\u0941\u0936\u093f\u0902\u0917 \u091a\u0935\u094d\u0939\u093e\u0923",
+        "phone": "8308057772",
+        "email": null,
+        "address": "\u0930\u093e. \u0906\u0930. \u091f\u0940 \u0913, \u0911\u092b\u093f\u0938 \u091c\u0935\u0933 , \u0915\u0941\u0915\u094d\u0915\u0941\u091f \u092a\u093e\u0932\u0928 \u0938\u092e\u094b\u0930, \u0917\u094c\u0924\u092e \u0928\u0917\u0930, \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-07 06:30:24",
+        "images": [
+            "facedata/UID1751869824/UID1751869824_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1751869824_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507070004",
+                "datetime": "2025-07-07 06:30:24",
+                "purpose": "\u092e\u0943\u0924\u094d\u092f\u0941\u092a\u0924\u094d\u0930\u093e\u092a\u094d\u0930\u092e\u093e\u0923\u0947 \u092b\u0947\u0930\u092b\u093e\u0930 \u0928\u094b\u0902\u0926 \u0918\u0947\u0923\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507070004_doc.pdf",
+                "dvn": 4,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-07 06:50:37",
+                "remark": "",
+                "forwarding_department": "Tahasildar Murtizapur"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1751869824/UID1751869824_img1.jpg"
+        ]
+    },
+    "UID1751870985": {
+        "name": "\u091c\u092f\u0936\u094d\u0930\u0940 \u0926\u093f\u0917\u0902\u092c\u0930 \u0915\u093e\u0924\u094d\u0930\u0947",
+        "phone": "8983773844",
+        "email": null,
+        "address": "\u0926\u0924\u094d\u0924 \u0915\u0949\u0932\u094b\u0928\u0940 \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u091f",
+        "district": "Akola",
+        "registration_datetime": "2025-07-07 06:49:45",
+        "images": [
+            "facedata/UID1751870985/UID1751870985_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1751870985_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507070005",
+                "datetime": "2025-07-07 06:49:45",
+                "purpose": "\u0936\u0947\u0924\u0940 \u0935\u093f\u0937\u092f\u0940",
+                "status": "pending",
+                "dvn": 5,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-07 06:51:45",
+                "remark": "",
+                "forwarding_department": "SDO Akot"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1751870985/UID1751870985_img1.jpg"
+        ]
+    },
+    "UID1751871046": {
+        "name": "\u092a\u094d\u0930\u0926\u0940\u092a \u0915\u0941\u092e\u093e\u0930 \u0935\u0916\u093e\u0930\u093f\u092f\u093e",
+        "phone": "9371012773",
+        "email": null,
+        "address": "\u096a\u096c \u0935\u0938\u0941\u0927\u093e \u0906\u0926\u0930\u094d\u0936 \u0915\u0949\u0932\u094b\u0928\u0940 \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-07 06:50:46",
+        "images": [
+            "facedata/UID1751871046/UID1751871046_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1751871046_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507070006",
+                "datetime": "2025-07-07 06:50:46",
+                "purpose": "\u0928\u093f\u0935\u0947\u0926\u0928 \u0926\u0947\u0923\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "completed",
+                "dvn": 6,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-07 06:52:06"
+            },
+            {
+                "visit_id": "V202507230005",
+                "datetime": "2025-07-23 06:54:44",
+                "purpose": "\u0928\u093f\u0935\u0947\u0926\u0928 \u0926\u0947\u0928\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507230005_doc.pdf",
+                "dvn": 5,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-23 06:55:54",
+                "remark": "",
+                "forwarding_department": "SDO Akola"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1751871046/UID1751871046_img1.jpg"
+        ]
+    },
+    "UID1751871120": {
+        "name": "\u0930\u093e\u091c\u0947\u0936 \u0917\u091c\u093e\u0928\u0928 \u092a\u093e\u091f\u0940\u0932",
+        "phone": "9422193209",
+        "email": null,
+        "address": "\u0928\u093f\u092c\u0902\u0927\u0947 \u092a\u094d\u0932\u0949\u091f \u091c\u0920\u093e\u0930\u092a\u0947\u0920 \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-07 06:52:00",
+        "images": [
+            "facedata/UID1751871120/UID1751871120_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1751871120_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507070007",
+                "datetime": "2025-07-07 06:52:01",
+                "purpose": "\u0936\u0947\u0924\u0940\u0935\u093e\u0937\u092f\u0940",
+                "status": "completed",
+                "dvn": 7,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-07 06:52:25"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1751871120/UID1751871120_img1.jpg"
+        ]
+    },
+    "UID1752041416": {
+        "name": "\u0924\u094d\u0930\u094d\u092f\u0902\u092c\u0915\u0930\u093e\u0935 \u0936\u0902\u0915\u0930\u0930\u093e\u0935 \u0917\u0935\u0908",
+        "phone": "9545875198",
+        "email": null,
+        "address": "\u0930\u093e. \u092a\u093e\u0930\u0926 \u092a\u094b. \u0918\u0941\u0902\u0917\u0936\u0940 \u0924\u093e. \u092e\u0941\u0930\u094d\u0924\u0940\u091c\u093e\u092a\u0942\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092e\u0941\u0930\u094d\u0924\u093f\u091c\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-07-09 06:10:16",
+        "images": [
+            "facedata/UID1752041416/UID1752041416_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752041416_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507090001",
+                "datetime": "2025-07-09 06:10:16",
+                "purpose": "\u0924\u0939\u0938\u0940\u0932\u0926\u093e\u0930 \u092e\u0941\u0930\u094d\u0924\u0940\u091c\u093e\u092a\u0942\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e \u092f\u093e\u0902\u0928\u0940 \u0926\u093f\u0928\u093e\u0902\u0915 \u0967\u096b/\u0966\u0969/\u0968\u0966\u0968\u096a \u0930\u094b\u091c\u0940 \u0915\u0947\u0932\u0947\u0932\u094d\u092f\u093e \u092c\u0947\u0915\u093e\u092f\u0926\u0947\u0936\u0940\u0930 \u0935 \u0905\u0928\u094d\u092f\u093e\u092f\u0915\u093e\u0930\u0915 \u0938\u094d\u0925\u0933 \u0928\u093f\u0930\u0940\u0915\u094d\u0937\u0923 \u0905\u0939\u0935\u093e\u0932\u093e\u091a\u0940 \u091a\u094c\u0915\u0936\u0940 \u0915\u0930\u0923\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507090001_doc.pdf",
+                "dvn": 1,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-09 06:31:37",
+                "remark": "Look at the issue and submit report",
+                "forwarding_department": "SDO Murtizapur"
+            },
+            {
+                "visit_id": "V202508110003",
+                "datetime": "2025-08-11 06:39:23",
+                "purpose": "\u0924\u0939\u0938\u0940\u0932\u0926\u093e\u0930 \u092e\u0941\u0930\u094d\u0924\u0940\u091c\u093e\u092a\u0942\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e \u092f\u093e\u0902\u0928\u0940 \u0926\u093f\u0928\u093e\u0902\u0915 \u0967\u096b/\u0966\u0969/\u0968\u0966\u0968\u096a \u0930\u094b\u091c\u0940 \u0915\u0947\u0932\u0947\u0932\u094d\u092f\u093e \u092c\u0947\u0915\u093e\u092f\u0926\u0947\u0936\u0940\u0930 \u0935 \u0905\u0928\u094d\u092f\u093e\u092f\u0915\u093e\u0930\u0915 \u0938\u094d\u0925\u0933 \u0928\u093f\u0930\u0940\u0915\u094d\u0937\u0923 \u0905\u0939\u0935\u093e\u0932\u093e\u091a\u0940 \u091a\u094c\u0915\u0936\u0940 \u0915\u0930\u0923\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "dvn": 2,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-11 07:00:48",
+                "remark": "",
+                "forwarding_department": "Resident Deputy Collector"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752041416/UID1752041416_img1.jpg"
+        ]
+    },
+    "UID1752042013": {
+        "name": "\u0938\u0902\u091c\u0940\u0935 \u0936\u093e\u092e\u0930\u093e\u0935 \u091c\u093e\u0927\u0935",
+        "phone": "8600330685",
+        "email": null,
+        "address": "\u0917\u0902\u0917\u093e\u092a\u0942\u0930 \u0924\u093e. \u0917\u0902\u0917\u093e\u092a\u0942\u0930 \u091c\u093f. \u0938\u0902\u092d\u093e\u091c\u0940 \u0928\u0917\u0930",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-09 06:20:13",
+        "images": [
+            "facedata/UID1752042013/UID1752042013_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752042013_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507090003",
+                "datetime": "2025-07-09 06:20:14",
+                "purpose": "\u0928\u093f\u0935\u0947\u0926\u0928 \u0926\u0947\u0928\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507090003_doc.pdf",
+                "dvn": 5,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-09 06:42:55",
+                "remark": "",
+                "forwarding_department": "Resident Deputy Collector"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752042013/UID1752042013_img1.jpg"
+        ]
+    },
+    "UID1752042186": {
+        "name": "\u0906\u0936\u093e \u0915\u093f\u0930\u0923 \u0915\u0902\u0915\u093e\u0933",
+        "phone": "9503935843",
+        "email": null,
+        "address": "\u0928\u094d\u092f\u0942 \u092c\u0938 \u0938\u094d\u0925\u093e\u0928\u0915 \u091a\u094d\u092f\u093e \u092a\u093e\u0920\u0940\u092e\u093e\u0917\u0947 \u0906\u0902\u092c\u0947\u0921\u0915\u0930 \u0928\u0917\u0930 \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-09 06:23:06",
+        "images": [
+            "facedata/UID1752042186/UID1752042186_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752042186_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507090004",
+                "datetime": "2025-07-09 06:23:07",
+                "purpose": "\u091a\u0941\u0915\u0940\u091a\u094d\u092f\u093e \u0917\u0941\u0928\u094d\u0939\u093e\u092c\u0926\u094d\u0926\u0932 \u092e\u093e\u0939\u093f\u0924\u0940 \u0926\u0947\u0928\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507090004_doc.pdf",
+                "dvn": 3,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-09 06:32:05",
+                "remark": "",
+                "forwarding_department": "Resident Deputy Collector"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752042186/UID1752042186_img1.jpg"
+        ]
+    },
+    "UID1752042431": {
+        "name": "\u0928\u093f\u0932\u0947\u0936 \u091c\u093e\u091c\u0942",
+        "phone": "8097341799",
+        "email": null,
+        "address": "\u0917\u094c\u0930\u0915\u094d\u0937\u0923 \u0930\u094b\u0921, \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-09 06:27:11",
+        "images": [
+            "facedata/UID1752042431/UID1752042431_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752042431_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507090005",
+                "datetime": "2025-07-09 06:27:11",
+                "purpose": "\u0928\u093f\u0935\u0947\u0926\u0928 \u0926\u0947\u0928\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "dvn": 4,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-09 06:33:03",
+                "document_pdf": "pdf/V202507090005_doc.pdf",
+                "remark": "",
+                "forwarding_department": "Resident Deputy Collector"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752042431/UID1752042431_img1.jpg"
+        ]
+    },
+    "UID1752043953": {
+        "name": "\u0930\u093e\u091c\u0947\u0936 \u091a\u093e\u0935\u0932\u093e",
+        "phone": "9422161345",
+        "email": null,
+        "address": "\u0930\u093e. \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-09 06:52:33",
+        "images": [
+            "facedata/UID1752043953/UID1752043953_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752043953_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507090006",
+                "datetime": "2025-07-09 06:52:34",
+                "purpose": "\u0905\u0915\u094b\u0932\u093e \u091c\u093f\u0932\u094d\u0939\u094d\u092f\u093e\u0924 \u092a\u0947\u091f\u094d\u0930\u094b\u0932 \u0935 \u0921\u093f\u0938\u0947\u0932 \u091a\u094d\u092f\u093e \u0928\u093e\u0935\u093e\u0916\u093e\u0932\u0940 \u0905\u0935\u0948\u0927 \u0907\u0902\u0927\u0928\u093e\u091a\u094d\u092f\u093e \u0935\u093f\u0915\u094d\u0930\u0940\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507090006_doc.pdf",
+                "dvn": 7,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-09 06:57:20",
+                "remark": "",
+                "forwarding_department": "Resident Deputy Collector"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752043953/UID1752043953_img1.jpg"
+        ]
+    },
+    "UID1752044075": {
+        "name": "\u0938\u0941\u0927\u093e\u0915\u0930 \u0938\u0939\u0926\u0947\u0935\u0930\u093e\u0935 \u092e\u094b\u0930\u0947",
+        "phone": "9422938809",
+        "email": null,
+        "address": "\u0915\u094c\u0932\u0916\u0947\u0921 \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-09 06:54:35",
+        "images": [
+            "facedata/UID1752044075/UID1752044075_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752044075_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507090007",
+                "datetime": "2025-07-09 06:54:35",
+                "purpose": "\u0936\u0948\u0915\u094d\u0937\u0923\u093f\u0915 \u092a\u094d\u0930\u0915\u0932\u094d\u092a\u0917\u094d\u0930\u0938\u094d\u0924 \u092a\u094d\u0930\u092e\u093e\u0923\u092a\u0924\u094d\u0930 \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507090007_doc.pdf",
+                "dvn": 6,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-09 06:56:45",
+                "remark": "",
+                "forwarding_department": "Addition Collector"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752044075/UID1752044075_img1.jpg"
+        ]
+    },
+    "UID1752044305": {
+        "name": "\u0921\u0949. \u0938\u0902\u0924\u094b\u0937 \u0915\u0941\u092e\u093e\u0930 \u0938\u094b\u092e\u093e\u0923\u0940",
+        "phone": "9422161822",
+        "email": null,
+        "address": "\u0930\u093e. \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-09 06:58:25",
+        "images": [
+            "facedata/UID1752044305/UID1752044305_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752044305_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507090008",
+                "datetime": "2025-07-09 06:58:25",
+                "purpose": "\u0939\u094b\u092e\u0947\u092f\u094b\u092a\u093e\u0925\u093f\u0915 \u0921\u0949\u0915\u094d\u091f\u0930 \u092f\u093e\u0902\u091a\u0947 \u0928\u094b\u0902\u0926\u0923\u0940 \u092e\u0939\u093e\u0930\u093e\u0937\u094d\u091f\u094d\u0930 \u092e\u0947\u0921\u093f\u0915\u0932 \u0915\u0949\u0928\u094d\u0938\u093f\u0932 \u0905\u0902\u0924\u0930\u094d\u0917\u0924 \u0915\u0930\u0942\u0928 \u0926\u0947\u0928\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507090008_doc.pdf",
+                "dvn": 8,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-09 07:09:57",
+                "remark": "",
+                "forwarding_department": "Addition Collector"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752044305/UID1752044305_img1.jpg"
+        ]
+    },
+    "UID1752044974": {
+        "name": "\u092e\u0902\u0917\u0932\u0915\u0941\u092e\u093e\u0930 \u0939\u0941\u0915\u0942\u092e\u091a\u0902\u0926 \u091a\u094c\u0927\u0930\u0940",
+        "phone": "7350557170",
+        "email": null,
+        "address": "\u0938\u093e\u0935\u0930\u0917\u093e\u0935 \u0924\u093e.\u092a\u093e\u0924\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092a\u093e\u0924\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-07-09 07:09:34",
+        "images": [
+            "facedata/UID1752044974/UID1752044974_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752044974_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507090009",
+                "datetime": "2025-07-09 07:09:35",
+                "purpose": "\u0928\u093f\u0935\u0947\u0926\u0928 \u0926\u0947\u0923\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507090009_doc.pdf",
+                "dvn": 9,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-09 07:10:01",
+                "remark": "",
+                "forwarding_department": "SDO Balapur"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752044974/UID1752044974_img1.jpg"
+        ]
+    },
+    "UID1752045308": {
+        "name": "\u092e\u093f\u0925\u0941\u0928 \u0926\u0947\u0936\u092e\u0941\u0916",
+        "phone": "9657249837",
+        "email": null,
+        "address": "\u0930\u093e. \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-09 07:15:08",
+        "images": [
+            "facedata/UID1752045308/UID1752045308_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752045308_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507090010",
+                "datetime": "2025-07-09 07:15:08",
+                "purpose": "\u0928\u0947\u0935\u093e\u0926\u0928 \u0926\u0947\u0928\u0947\u092c\u093e\u092c\u0924",
+                "status": "completed",
+                "dvn": 10,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-09 07:16:03",
+                "document_pdf": "pdf/V202507090010_doc.pdf"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752045308/UID1752045308_img1.jpg"
+        ]
+    },
+    "UID1752045504": {
+        "name": "\u0917\u0923\u0947\u0936 \u0926\u093f\u0917\u0902\u092c\u0930 \u092c\u093e\u092e\u0928\u0947\u091f",
+        "phone": "9527281492",
+        "email": null,
+        "address": "\u0930\u093e. \u092c\u093e\u092a\u0942\u0930 \u0928\u0917\u0930 \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-09 07:18:24",
+        "images": [
+            "facedata/UID1752045504/UID1752045504_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752045504_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507090011",
+                "datetime": "2025-07-09 07:18:24",
+                "purpose": "\u0906\u0930. \u092a\u0940. \u0924\u0940 \u090f\u0938. \u0935\u093f\u092d\u093e\u0917\u093e\u092e\u0927\u094d\u092f\u0947 \u0932\u093e\u0921 \u092a\u093e\u0917\u0947 \u0915\u092e\u0940\u091f\u0940 \u092e\u093e\u0930\u094d\u092b\u0924 \u0928\u094b\u0915\u0930\u0940 \u092e\u093f\u0932\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "dvn": 11,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-09 07:18:53",
+                "document_pdf": "pdf/V202507090011_doc.pdf",
+                "remark": "",
+                "forwarding_department": "Resident Deputy Collector"
+            },
+            {
+                "visit_id": "V202507180012",
+                "datetime": "2025-07-18 07:40:24",
+                "purpose": "\u0906\u0930. \u092a\u0940. \u0924\u0940 \u090f\u0938. \u0935\u093f\u092d\u093e\u0917\u093e\u092e\u0927\u094d\u092f\u0947 \u0932\u093e\u0921 \u092a\u093e\u0917\u0947 \u0915\u092e\u0940\u091f\u0940 \u092e\u093e\u0930\u094d\u092b\u0924 \u0928\u094b\u0915\u0930\u0940 \u092e\u093f\u0932\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507180012_doc.pdf",
+                "dvn": 12,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-18 07:42:52",
+                "remark": "",
+                "forwarding_department": "\u092a\u094b\u0932\u0940\u0938 \u092a\u094d\u0930\u0936\u093f\u0915\u094d\u0937\u0923 \u0915\u0947\u0902\u0926\u094d\u0930, \u0905\u0915\u094b\u0932\u093e"
+            },
+            {
+                "visit_id": "V202508120002",
+                "datetime": "2025-08-12 06:46:49",
+                "purpose": "\u0906\u0930. \u092a\u0940. \u0924\u0940 \u090f\u0938. \u0935\u093f\u092d\u093e\u0917\u093e\u092e\u0927\u094d\u092f\u0947 \u0932\u093e\u0921 \u092a\u093e\u0917\u0947 \u0915\u092e\u0940\u091f\u0940 \u092e\u093e\u0930\u094d\u092b\u0924 \u0928\u094b\u0915\u0930\u0940 \u092e\u093f\u0932\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "dvn": 4,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-12 07:15:12",
+                "remark": "",
+                "forwarding_department": "\u092a\u094b\u0932\u0940\u0938 \u092a\u094d\u0930\u0936\u093f\u0915\u094d\u0937\u0923 \u0915\u0947\u0902\u0926\u094d\u0930, \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752045504/UID1752045504_img1.jpg"
+        ]
+    },
+    "UID1752732972": {
+        "name": "\u092a\u0941\u0937\u094d\u092a\u093e \u0917\u094b\u0930\u0916\u0928\u093e\u0925 \u0909\u092c\u093e\u0933\u0947",
+        "phone": "8550980848",
+        "email": null,
+        "address": "\u0930\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u0935\u0947\u0938 \u0935\u093e\u0921\u0947\u0917\u093e\u0935 \u0924\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0933\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-07-17 06:16:12",
+        "images": [
+            "facedata/UID1752732972/UID1752732972_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752732972_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507170001",
+                "datetime": "2025-07-17 06:16:12",
+                "purpose": "\u0924\u0915\u094d\u0930\u093e\u0930 \u0915\u0930\u0923\u094d\u092f\u093e\u092c\u093e\u092c\u0924.",
+                "status": "pending",
+                "document_pdf": "pdf/V202507170001_doc.pdf",
+                "dvn": 2,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-17 06:47:24",
+                "remark": "",
+                "forwarding_department": "\u091c\u093f\u0932\u094d\u0939\u093e \u092a\u094b\u0932\u0940\u0938 \u0905\u0927\u093f\u0915\u094d\u0937\u0915, \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752732972/UID1752732972_img1.jpg"
+        ]
+    },
+    "UID1752733348": {
+        "name": "\u0938\u0941\u0916\u0926\u0947\u0935 \u092d\u093f\u0915\u093e\u091c\u0940 \u092c\u094b\u091f\u0947",
+        "phone": "8484871856",
+        "email": null,
+        "address": "\u0930\u093e. \u0932\u094b\u0915\u092e\u093e\u0928\u094d\u092f \u0928\u0917\u0930 \u0924\u093e. \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-17 06:22:28",
+        "images": [
+            "facedata/UID1752733348/UID1752733348_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752733348_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507170002",
+                "datetime": "2025-07-17 06:22:29",
+                "purpose": "GPF \u091a\u0947 \u092a\u0948\u0938\u0947 \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507170002_doc.pdf",
+                "dvn": 3,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-17 06:47:44",
+                "remark": "",
+                "forwarding_department": "\u0906\u092f\u0941\u0915\u094d\u0924, \u092e\u0939\u093e\u0928\u0917\u0930 \u092a\u093e\u0932\u093f\u0915\u093e, \u0905\u0915\u094b\u0932\u093e"
+            },
+            {
+                "visit_id": "V202507230004",
+                "datetime": "2025-07-23 06:43:07",
+                "purpose": "GPF \u091a\u0947 \u092a\u0948\u0938\u0947 \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507230004_doc.pdf",
+                "dvn": 4,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-23 06:51:08",
+                "remark": "",
+                "forwarding_department": "\u0906\u092f\u0941\u0915\u094d\u0924, \u092e\u0939\u093e\u0928\u0917\u0930 \u092a\u093e\u0932\u093f\u0915\u093e, \u0905\u0915\u094b\u0932\u093e"
+            },
+            {
+                "visit_id": "V202508110005",
+                "datetime": "2025-08-11 06:42:44",
+                "purpose": "GPF \u091a\u0947 \u092a\u0948\u0938\u0947 \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "dvn": 6,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-11 07:06:25",
+                "remark": "",
+                "forwarding_department": "\u0906\u092f\u0941\u0915\u094d\u0924, \u092e\u0939\u093e\u0928\u0917\u0930 \u092a\u093e\u0932\u093f\u0915\u093e, \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752733348/UID1752733348_img1.jpg"
+        ]
+    },
+    "UID1752733573": {
+        "name": "\u0938\u093e\u0917\u0930 \u092a\u094d\u0930\u092d\u093e\u0915\u0930 \u0928\u093e\u0917\u0930\u0947",
+        "phone": "9763935322",
+        "email": null,
+        "address": "\u0930\u093e. \u0926\u0947\u090a\u0933\u0917\u093e\u0935 \u0930\u093e\u091c\u093e \u0924\u093e. \u0926\u0947\u090a\u0933\u0917\u093e\u0935 \u0930\u093e\u091c\u093e \u091c\u093f. \u092c\u0941\u0932\u0922\u093e\u0923\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-17 06:26:13",
+        "images": [
+            "facedata/UID1752733573/UID1752733573_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752733573_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507170003",
+                "datetime": "2025-07-17 06:26:14",
+                "purpose": "\u0905\u0928\u0941\u0915\u0902\u092a\u093e \u0928\u093f\u092f\u0941\u0915\u094d\u0924\u0940 \u092c\u093e\u092c\u0924",
+                "status": "completed",
+                "document_pdf": "pdf/V202507170003_doc.pdf",
+                "dvn": 1,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-17 06:47:02"
+            },
+            {
+                "visit_id": "V202508110002",
+                "datetime": "2025-08-11 06:38:22",
+                "purpose": "\u0905\u0928\u0941\u0915\u0902\u092a\u093e \u0928\u093f\u092f\u0941\u0915\u094d\u0924\u0940 \u092c\u093e\u092c\u0924",
+                "status": "completed",
+                "dvn": 4,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-11 07:04:14"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752733573/UID1752733573_img1.jpg"
+        ]
+    },
+    "UID1752733755": {
+        "name": "\u0928\u0930\u0947\u0902\u0926\u094d\u0930 \u0928\u093e\u0930\u093e\u092f\u0923\u0930\u093e\u0935 \u0936\u093e\u0938\u094d\u0924\u094d\u0930\u0940",
+        "phone": "9403483428",
+        "email": null,
+        "address": "\u0924\u093e. \u091c\u0920\u093e\u0930\u092a\u0947\u0920 \u0924\u093e. \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-17 06:29:15",
+        "images": [
+            "facedata/UID1752733755/UID1752733755_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752733755_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507170004",
+                "datetime": "2025-07-17 06:29:15",
+                "purpose": "\u092a\u094d\u0932\u0949\u091f Prehold \u0915\u0930\u0923\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507170004_doc.pdf",
+                "dvn": 4,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-17 06:47:58",
+                "remark": "Solve the issue",
+                "forwarding_department": "Dy. Collector Revenue"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752733755/UID1752733755_img1.jpg"
+        ]
+    },
+    "UID1752734167": {
+        "name": "\u0938\u0902\u0924\u094b\u0937 \u0938\u0902\u092a\u0924\u0930\u093e\u0935 \u0928\u093f\u0902\u092c\u094b\u0933\u0915\u0930",
+        "phone": "9763561881",
+        "email": null,
+        "address": "\u0930\u093e. \u0938\u092e\u0928\u094d\u0935\u092f \u0928\u0917\u0930 \u0924\u093e. \u0916\u093e\u092e\u0917\u093e\u0935 \u091c\u093f. \u092c\u0941\u0932\u0922\u093e\u0923\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-17 06:36:07",
+        "images": [
+            "facedata/UID1752734167/UID1752734167_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752734167_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507170005",
+                "datetime": "2025-07-17 06:36:07",
+                "purpose": "\u0938\u094d\u0935\u0947\u091a\u094d\u091b\u093e\u0928\u093f\u0935\u0943\u0924\u094d\u0924\u0940 \u0928\u0902\u0924\u0930 \u0938\u0947\u0935\u093e\u0935\u093f\u0937\u092f\u0915 \u0932\u093e\u092d \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507170005_doc.pdf",
+                "dvn": 6,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-17 06:48:28",
+                "remark": "",
+                "forwarding_department": "Resident Deputy Collector"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752734167/UID1752734167_img1.jpg"
+        ]
+    },
+    "UID1752734395": {
+        "name": "\u0926\u0947\u0935\u093e \u0926\u0936\u0930\u0925 \u0917\u093e\u0935\u0902\u0921\u0947",
+        "phone": "9518372040",
+        "email": null,
+        "address": "\u0930\u093e. \u091c\u0941\u0928\u0947 \u0936\u0939\u0930 \u0905\u0915\u094b\u0932\u093e. \u0924. \u0905\u0915\u094b\u0932\u093e  \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-17 06:39:55",
+        "images": [
+            "facedata/UID1752734395/UID1752734395_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752734395_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507170006",
+                "datetime": "2025-07-17 06:39:55",
+                "purpose": "\u0905\u0915\u094b\u0932\u093e \u0936\u094d\u0930\u093e\u0924\u0940\u0932 \u0930\u093e\u091c \u0930\u093e\u091c\u0947\u0936\u094d\u0935\u0930 \u0938\u0947\u0924\u0942\u0935\u0930 \u092b\u0941\u0932\u093e\u0932\u093e \u0915\u0920\u0921\u0947 \u092c\u0938\u0935\u093f\u0923\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507170006_doc.pdf",
+                "dvn": 5,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-17 06:48:16",
+                "remark": "",
+                "forwarding_department": "\u0906\u092f\u0941\u0915\u094d\u0924, \u092e\u0939\u093e\u0928\u0917\u0930 \u092a\u093e\u0932\u093f\u0915\u093e, \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752734395/UID1752734395_img1.jpg"
+        ]
+    },
+    "UID1752734643": {
+        "name": "\u0938\u0940\u092e\u093e \u092a\u094d\u0930\u0915\u093e\u0936 \u092c\u093e\u092f\u0938\u094d\u0915\u0930",
+        "phone": "9860440166",
+        "email": null,
+        "address": "\u0928\u0935\u0940\u0928 \u0906\u0930. \u0938\u0940. \u092a\u094d\u0932\u0949\u091f, \u0905\u0915\u094b\u0932\u093e \u0924\u093e. \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-17 06:44:03",
+        "images": [
+            "facedata/UID1752734643/UID1752734643_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752734643_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507170007",
+                "datetime": "2025-07-17 06:44:03",
+                "purpose": "\u0906\u0926\u0947\u0936\u093e\u091a\u0940 \u092a\u094d\u0930\u092e\u093e\u0923\u093f\u0924 \u092a\u094d\u0930\u0924 \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507170007_doc.pdf",
+                "dvn": 8,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-17 06:49:44",
+                "remark": "",
+                "forwarding_department": "Addition Collector"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752734643/UID1752734643_img1.jpg"
+        ]
+    },
+    "UID1752734841": {
+        "name": "\u0938\u0902\u0924\u094b\u0937 \u092a\u0941\u0902\u091c\u093e\u091c\u0940 \u092b\u0941\u0902\u0921\u0915\u0930",
+        "phone": "8975678342",
+        "email": null,
+        "address": "\u0930\u093e. \u0916\u0930\u092a \u0916\u0941\u0930\u094d\u0926 \u0924\u093e. \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-17 06:47:21",
+        "images": [
+            "facedata/UID1752734841/UID1752734841_img1.jpg"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507170008",
+                "datetime": "2025-07-17 06:47:21",
+                "purpose": "\u0936\u093e\u0938\u0915\u093f\u092f \u0906\u0926\u0947\u0936\u093e\u091a\u0947 \u0909\u0932\u094d\u0932\u0902\u0918\u0928 \u0915\u0947\u0932\u094d\u092f\u093e\u092c\u093e\u092c\u0924 \u0924\u0915\u094d\u0930\u093e\u0930 \u0915\u0930\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507170008_doc.pdf",
+                "dvn": 7,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-17 06:49:22",
+                "remark": "",
+                "forwarding_department": "Tahasildar Akola"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752734841/UID1752734841_img1.jpg"
+        ]
+    },
+    "UID1752735072": {
+        "name": "\u0938\u0924\u0940\u0936 \u0905\u0936\u094b\u0915 \u092c\u094b\u0902\u0926\u094d\u0930\u0947",
+        "phone": "7020203216",
+        "email": null,
+        "address": "\u0930\u093e. \u0915\u093e\u0938\u094b\u0926 \u0936\u093f\u0935\u092a\u0942\u0930 \u0924\u093e. \u0905\u0915\u094b\u091f \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u091f",
+        "district": "Akola",
+        "registration_datetime": "2025-07-17 06:51:12",
+        "images": [
+            "facedata/UID1752735072/UID1752735072_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752735072_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507170009",
+                "datetime": "2025-07-17 06:51:12",
+                "purpose": "\u0915\u093e\u0938\u094b\u0926 (\u0936\u093f\u0935\u092a\u0942\u0930) \u092f\u0947\u0925\u0940\u0932 \u092c\u0902\u0927\u093e\u0930\u093e \u0926\u0941\u0930\u0941\u0938\u094d\u0924\u0940 \u0935 \u0938\u0902\u0930\u0915\u094d\u0937\u0915 \u092d\u093f\u0902\u0924\u0940\u091a\u094d\u092f\u093e \u0924\u094d\u0930\u0941\u091f\u0940, \u0935\u093f\u0932\u0902\u092c, \u091c\u0932\u0938\u0902\u0927\u093e\u0930\u0923 \u0935\u093f\u092d\u093e\u0917\u093e\u091a\u094d\u092f\u093e \u0909\u0924\u094d\u0924\u0930\u093e\u0924\u0940\u0932 \u0935\u093f\u0938\u0902\u0917\u0924\u0940 \u0924\u0938\u0947\u091a \u0938\u0926\u0930 \u092a\u094d\u0930\u0915\u0930\u0923\u093e\u091a\u0940 \u0924\u093e\u0902\u0924\u094d\u0930\u093f\u0915 \u0924\u092a\u093e\u0938\u0923\u0940 \u0915\u0930\u0942\u0928 \u0938\u0941\u0927\u093e\u0930\u0923\u093e \u0915\u093e\u0930\u094d\u092f\u0935\u093e\u0939\u0940\u0938 \u092e\u093e\u0917\u0923\u0940",
+                "status": "pending",
+                "document_pdf": "pdf/V202507170009_doc.pdf",
+                "dvn": 9,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-17 06:52:57",
+                "remark": "",
+                "forwarding_department": "\u091c\u093f\u0932\u094d\u0939\u093e \u091c\u0932\u0938\u0902\u0927\u093e\u0930\u0923 \u0905\u0927\u093f\u0915\u093e\u0930\u0940, \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752735072/UID1752735072_img1.jpg"
+        ]
+    },
+    "UID1752735298": {
+        "name": "\u0924\u0941\u0937\u093e\u0930 \u0917\u0935\u0908",
+        "phone": "9049378015",
+        "email": null,
+        "address": "\u0930\u093e. \u0930\u093e\u092e \u0928\u0917\u0930 \u0924\u093e. \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-17 06:54:58",
+        "images": [
+            "facedata/UID1752735298/UID1752735298_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752735298_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507170011",
+                "datetime": "2025-07-17 06:54:58",
+                "purpose": "\u091c\u091c\u092e\u0947\u0902\u091f \u0938\u0902\u0926\u0930\u094d\u092d\u093e\u0924 \u092d\u0947\u091f\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "completed",
+                "dvn": 11,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-17 06:55:47"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752735298/UID1752735298_img1.jpg"
+        ]
+    },
+    "UID1752735663": {
+        "name": "\u092a\u094d\u0930\u092b\u0941\u0932 \u0917\u091c\u093e\u0928\u0928 \u0915\u0930\u0935\u0924\u0947",
+        "phone": "7776912140",
+        "email": null,
+        "address": "\u0928\u093f\u092e\u094d\u092c\u0940 \u091a\u0947\u0932\u094d\u0915\u093e \u0924\u093e. \u092c\u0930\u094d\u0936\u093f\u0924\u093e\u0915\u0932\u0940 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940",
+        "district": "Akola",
+        "registration_datetime": "2025-07-17 07:01:03",
+        "images": [
+            "facedata/UID1752735663/UID1752735663_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752735663_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507170012",
+                "datetime": "2025-07-17 07:01:04",
+                "purpose": "\u0917\u093e\u0935\u093e\u0924\u0940\u0932 \u0938\u092e\u0938\u094d\u092f\u093e\u0935\u093f\u0937\u092f\u0940",
+                "status": "completed",
+                "dvn": 12,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-17 07:02:29",
+                "document_pdf": "pdf/V202507170012_doc.pdf"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752735663/UID1752735663_img1.jpg"
+        ]
+    },
+    "UID1752736806": {
+        "name": "\u092a\u0940. \u090f\u0938. \u0924\u093f\u0921\u0915\u0947",
+        "phone": "9822314605",
+        "email": null,
+        "address": "\u0930\u093e. \u0905\u0915\u094b\u0932\u093e \u0928\u0915\u093e. \u0924\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0933\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-07-17 07:20:06",
+        "images": [
+            "facedata/UID1752736806/UID1752736806_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752736806_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507170013",
+                "datetime": "2025-07-17 07:20:06",
+                "purpose": "\u0928\u093e\u092f\u092c \u0924\u0939\u0938\u0940\u0932\u0926\u093e\u0930 \u092f\u093e\u0902\u091a\u094d\u092f\u093e \u0924\u0915\u094d\u0930\u093e\u0930\u0940 \u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "dvn": 13,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-17 07:20:46",
+                "document_pdf": "pdf/V202507170013_doc.pdf",
+                "remark": "",
+                "forwarding_department": "SDO Balapur"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752736806/UID1752736806_img1.jpg"
+        ]
+    },
+    "UID1752821239": {
+        "name": "\u092e\u0941\u0930\u0932\u0940\u0927\u0930 \u0935\u093f\u0925\u094b\u092d\u093e \u092c\u0941\u0902\u0926\u0947",
+        "phone": "7083939841",
+        "email": null,
+        "address": "\u0930\u093e. \u0938\u093e\u0935\u0930\u0917\u093e\u0935 \u0924\u093e. \u092a\u093e\u0924\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092a\u093e\u0924\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-07-18 06:47:19",
+        "images": [
+            "facedata/UID1752821239/UID1752821239_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752821239_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507180001",
+                "datetime": "2025-07-18 06:47:19",
+                "purpose": "\u0917\u0948\u0930\u0905\u0930\u094d\u091c\u0926\u093e\u0930  \u092a\u093e\u0938\u0942\u0928 \u0925\u0915\u0940\u0924 \u0928\u093f\u0930\u094d\u0935\u093e\u0939 \u092d\u0924\u094d\u0924\u093e \u092e\u093f\u0933\u0924 \u0928\u0938\u0932\u094d\u092f\u093e\u092c\u093e\u092c\u0924 \u0924\u0915\u094d\u0930\u093e\u0930",
+                "status": "pending",
+                "document_pdf": "pdf/V202507180001_doc.pdf",
+                "dvn": 3,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-18 07:05:04",
+                "remark": "\u0915\u093e\u0930\u094d\u092f\u0935\u093e\u0939\u0940 \u0915\u0930\u093e\u0935\u0940",
+                "forwarding_department": "Tahasildar SGY"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752821239/UID1752821239_img1.jpg"
+        ]
+    },
+    "UID1752821443": {
+        "name": "\u091c\u094d\u092f\u094b\u0924\u0940 \u0938\u0941\u092d\u093e\u0937 \u092e\u093f\u0938\u093e\u0933",
+        "phone": "8080285540",
+        "email": null,
+        "address": "\u0930\u093e. \u0932\u094b\u0939\u093e\u0930\u093e \u0924\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0933\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-07-18 06:50:43",
+        "images": [
+            "facedata/UID1752821443/UID1752821443_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752821443_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507180002",
+                "datetime": "2025-07-18 06:50:43",
+                "purpose": "\u0930\u0938\u094d\u0924\u093e \u0905\u0921\u0935\u093f\u0932\u094d\u092f\u093e\u092c\u093e\u092c\u0924 \u0935 \u0930\u0938\u094d\u0924\u094d\u092f\u093e\u0935\u0930\u0940\u0932 \u0905\u0924\u093f\u0915\u094d\u0930\u092e\u0923 \u0939\u091f\u0935\u093f\u0923\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507180002_doc.pdf",
+                "dvn": 1,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-18 07:04:15",
+                "remark": "\u0909\u092a\u092f\u0941\u0915\u094d\u0924 \u0915\u093e\u0930\u094d\u092f\u0935\u093e\u0939\u0940 \u0915\u0930\u093e\u0935\u0940",
+                "forwarding_department": "\u0917\u091f\u0935\u093f\u0915\u093e\u0938 \u0905\u0927\u093f\u0915\u093e\u0930\u0940 \u092c\u093e\u0933\u093e\u092a\u0941\u0930"
+            },
+            {
+                "visit_id": "V202507310002",
+                "datetime": "2025-07-31 06:51:10",
+                "purpose": "\u0930\u0938\u094d\u0924\u093e \u0905\u0921\u0935\u093f\u0932\u094d\u092f\u093e\u092c\u093e\u092c\u0924 \u0935 \u0930\u0938\u094d\u0924\u094d\u092f\u093e\u0935\u0930\u0940\u0932 \u0905\u0924\u093f\u0915\u094d\u0930\u092e\u0923 \u0939\u091f\u0935\u093f\u0923\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "dvn": 1,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-31 06:52:40",
+                "remark": "",
+                "forwarding_department": "\u0917\u091f\u0935\u093f\u0915\u093e\u0938 \u0905\u0927\u093f\u0915\u093e\u0930\u0940 \u092c\u093e\u0933\u093e\u092a\u0941\u0930"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752821443/UID1752821443_img1.jpg"
+        ]
+    },
+    "UID1752821651": {
+        "name": "\u091c\u094d\u091e\u093e\u0928\u0947\u0936\u094d\u0935\u0930 \u0930\u0918\u0941\u0928\u093e\u0925 \u0915\u093e\u0933\u0947",
+        "phone": "9022367543",
+        "email": null,
+        "address": "\u092e\u0941. \u0938\u093e\u0917\u0930 \u0924\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0933\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-07-18 06:54:11",
+        "images": [
+            "facedata/UID1752821651/UID1752821651_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752821651_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507180003",
+                "datetime": "2025-07-18 06:54:11",
+                "purpose": "\u092e\u094c\u091c\u0947 \u0938\u093e\u0917\u0926 \u091f\u0947 \u0928\u093f\u0902\u092c\u093e \u0939\u093e \u0930\u0938\u094d\u0924\u093e \u0939\u093e\u0917\u0923\u0926\u093e\u0930\u0940 \u092e\u0941\u0915\u094d\u0924 \u0915\u0930\u0942\u0928 \u0930\u0938\u094d\u0924\u094d\u092f\u093e\u0935\u0930\u0940\u0932 \u0916\u0921\u094d\u0921\u0947 \u092c\u0941\u091c\u0935\u093f\u0923\u0947 \u0935 \u0915\u093e\u091f\u0947\u0930\u0940 \u091d\u0941\u0921\u0942\u092a \u0924\u094b\u0921\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "completed",
+                "document_pdf": "pdf/V202507180003_doc.pdf",
+                "dvn": 2,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-18 07:04:47"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752821651/UID1752821651_img1.jpg"
+        ]
+    },
+    "UID1752821977": {
+        "name": "\u0935\u093f\u091c\u092f\u093e \u0930\u092e\u0947\u0936 \u0906\u0921\u0947",
+        "phone": "7038140295",
+        "email": null,
+        "address": "\u0930\u093e. \u0936\u093f\u0935\u0923\u0940 \u0924\u093e. \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-18 06:59:37",
+        "images": [
+            "facedata/UID1752821977/UID1752821977_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752821977_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507180004",
+                "datetime": "2025-07-18 06:59:37",
+                "purpose": "\u0905\u0924\u093f\u0915\u094d\u0930\u092e\u0923 \u092c\u093e\u092c\u0924 \u0924\u0915\u094d\u0930\u093e\u0930 \u0915\u0930\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507180004_doc.pdf",
+                "dvn": 4,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-18 07:05:26",
+                "remark": "\u0915\u093e\u0930\u094d\u092f\u0935\u093e\u0939\u0940 \u0915\u0930\u093e\u0935\u0940",
+                "forwarding_department": "\u0906\u092f\u0941\u0915\u094d\u0924, \u092e\u0939\u093e\u0928\u0917\u0930 \u092a\u093e\u0932\u093f\u0915\u093e, \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752821977/UID1752821977_img1.jpg"
+        ]
+    },
+    "UID1752822224": {
+        "name": "\u0938\u094c. \u0938\u0941\u092e\u093f\u0924\u094d\u0930\u093e \u092d\u093e\u0938\u094d\u0915\u0930 \u092c\u094b\u0926\u0921\u0947",
+        "phone": "9405401985",
+        "email": null,
+        "address": "\u0930\u093e. \u0936\u093f\u0935\u0928\u0947\u0930\u0940 \u0928\u0917\u0930 \u0935\u093e\u0915\u094b\u0921\u0940 \u092b\u093e\u091f\u093e \u092a\u094b. \u0926\u0930\u0947\u0935\u093e\u0921\u0940 \u0924\u093e.\u091c\u093f. \u0905\u0939\u092e\u0926\u0928\u0917\u0930",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-18 07:03:44",
+        "images": [
+            "facedata/UID1752822224/UID1752822224_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752822224_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507180006",
+                "datetime": "2025-07-18 07:03:45",
+                "purpose": "\u0936\u093e\u0938\u0915\u0940\u092f \u091c\u093e\u0917\u0947\u0924 \u0936\u0939\u0940\u0926 \u0938\u094d\u092e\u093e\u0930\u0915 \u0909\u092d\u093e\u0930\u0923\u094d\u092f\u093e\u0938 \u092a\u0930\u0935\u093e\u0928\u0917\u0940 \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507180006_doc.pdf",
+                "dvn": 5,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-18 07:07:00",
+                "remark": "",
+                "forwarding_department": "Resident Deputy Collector"
+            },
+            {
+                "visit_id": "V202508140002",
+                "datetime": "2025-08-14 06:38:35",
+                "purpose": "\u0936\u093e\u0938\u0915\u0940\u092f \u091c\u093e\u0917\u0947\u0924 \u0936\u0939\u0940\u0926 \u0938\u094d\u092e\u093e\u0930\u0915 \u0909\u092d\u093e\u0930\u0923\u094d\u092f\u093e\u0938 \u092a\u0930\u0935\u093e\u0928\u0917\u0940 \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "\u092a\u0941\u0928\u0930\u093e\u0935\u0943\u0924\u094d\u0924\u0940 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "dvn": 3,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-14 07:20:39"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752822224/UID1752822224_img1.jpg"
+        ]
+    },
+    "UID1752822422": {
+        "name": "\u092d\u093f\u092e\u0930\u093e\u0935 \u0915\u0947\u0936\u0935\u0930\u093e\u0935 \u0907\u0902\u0917\u0933\u0947",
+        "phone": "7972639097",
+        "email": null,
+        "address": "\u0930\u093e. \u092d\u0947\u0921\u0917\u093e\u0935 \u0924\u093e. \u092c\u0930\u094d\u0936\u093f\u0924\u093e\u0915\u0932\u0940 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940",
+        "district": "Akola",
+        "registration_datetime": "2025-07-18 07:07:02",
+        "images": [
+            "facedata/UID1752822422/UID1752822422_img1.jpg"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507180007",
+                "datetime": "2025-07-18 07:07:02",
+                "purpose": "\u092a\u0917\u093e\u0930 \u0935 \u092a\u0947\u0928\u094d\u0936\u0928 \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507180007_doc.pdf",
+                "dvn": 6,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-18 07:10:06",
+                "remark": "",
+                "forwarding_department": "Resident Deputy Collector"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752822422/UID1752822422_img1.jpg"
+        ]
+    },
+    "UID1752822573": {
+        "name": "\u0926\u093e\u092e\u094b\u0926\u0930 \u0939\u0928\u0941\u092e\u0902\u0924 \u092d\u0917\u0923",
+        "phone": "8975527915",
+        "email": null,
+        "address": "\u0930\u093e. \u092d\u0947\u0921\u0917\u093e\u0935 \u0924\u093e. \u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940",
+        "district": "Akola",
+        "registration_datetime": "2025-07-18 07:09:33",
+        "images": [
+            "facedata/UID1752822573/UID1752822573_img1.jpg"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507180008",
+                "datetime": "2025-07-18 07:09:33",
+                "purpose": "\u092a\u0917\u093e\u0930 \u0935 \u092a\u0947\u0928\u094d\u0936\u0928 \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507180008_doc.pdf",
+                "dvn": 7,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-18 07:10:34",
+                "remark": "",
+                "forwarding_department": "Resident Deputy Collector"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752822573/UID1752822573_img1.jpg"
+        ]
+    },
+    "UID1752823786": {
+        "name": "\u092a\u0942\u091c\u093e \u092a\u094d\u0930\u092e\u094b\u0926 \u0922\u094b\u0932\u0947",
+        "phone": "8830086328",
+        "email": null,
+        "address": "\u0930\u093e. \u0938\u092e\u0930\u094d\u0925 \u092e\u0928\u094b\u0930\u0925 \u0915\u094b\u0932\u094b\u0928\u0940 \u0921\u092c\u0915\u0940 \u0930\u094b\u0921 \u0905\u0915\u094b\u0932\u093e, \u0924\u093e. \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-18 07:29:46",
+        "images": [
+            "facedata/UID1752823786/UID1752823786_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752823786_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507180009",
+                "datetime": "2025-07-18 07:29:47",
+                "purpose": "\u0930\u093e\u0936\u0928 \u0915\u093e\u0930\u094d\u0921 \u0938\u0902\u092c\u0902\u0927\u0940 \u0924\u0915\u094d\u0930\u093e\u0930\u0940 \u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507180009_doc.pdf",
+                "dvn": 9,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-18 07:30:20",
+                "remark": "",
+                "forwarding_department": "District Supply Officer"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752823786/UID1752823786_img1.jpg"
+        ]
+    },
+    "UID1752824042": {
+        "name": "\u0935\u093f\u091c\u092f \u0930\u093e\u092e\u0926\u093e\u0938 \u0935\u093e\u0928\u0916\u0921\u0947",
+        "phone": "8668628712",
+        "email": null,
+        "address": "\u0930\u093e. \u0905\u0915\u094b\u0932\u093e \u0924\u093e. \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-18 07:34:02",
+        "images": [
+            "facedata/UID1752824042/UID1752824042_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752824042_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507180010",
+                "datetime": "2025-07-18 07:34:02",
+                "purpose": "\u0905\u0915\u094b\u091f \u0928\u0917\u0930\u092a\u0930\u093f\u0937\u0926 \u092e\u0941\u0916\u094d\u092f\u093e\u0927\u093f\u0915\u093e\u0930\u0940 \u092c\u093e\u092c\u0924 \u0924\u0915\u094d\u0930\u093e\u0930 \u0915\u0930\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507180010_doc.pdf",
+                "dvn": 10,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-18 07:38:17",
+                "remark": "",
+                "forwarding_department": "\u092e\u0941\u0916\u094d\u092f\u093e\u0927\u093f\u0915\u093e\u0930\u0940, \u0928\u0917\u0930\u092a\u0930\u093f\u0937\u0926, \u0905\u0915\u094b\u091f"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752824042/UID1752824042_img1.jpg"
+        ]
+    },
+    "UID1752824292": {
+        "name": "\u0936\u094d\u092f\u093e\u092e \u0936\u0930\u094d\u092e\u093e",
+        "phone": "8788193808",
+        "email": null,
+        "address": "\u0930\u093e. \u0916\u094b\u0932\u0947\u0936\u094d\u0935\u0930 \u0930\u094b\u0921 \u0924\u093e. \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-18 07:38:12",
+        "images": [
+            "facedata/UID1752824292/UID1752824292_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752824292_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507180011",
+                "datetime": "2025-07-18 07:38:12",
+                "purpose": "\u0936\u093f\u091f \u0928. \u0968\u096e-\u0921\u0940 \u092e\u0927\u0940\u0932 \u091c\u092e\u093f\u0928\u0940\u091a\u093e \u0915\u0930\u093e\u0930\u0928\u093e\u092e\u093e \u0935 \u0907\u0924\u0930 \u0915\u093e\u0930\u094d\u092f\u0935\u093e\u0939\u0940\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "dvn": 11,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-18 07:39:19",
+                "document_pdf": "pdf/V202507180011_doc.pdf",
+                "remark": "\u0915\u093e\u0930\u094d\u092f\u0935\u093e\u0939\u0940 \u0915\u0930\u093e\u0935\u0940",
+                "forwarding_department": "Dy. Collector Revenue"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752824292/UID1752824292_img1.jpg"
+        ]
+    },
+    "UID1752824743": {
+        "name": "\u0938\u0941\u0930\u0947\u0902\u0926\u094d\u0930 \u0930\u093e\u092e\u0926\u093e\u0938 \u0909\u0917\u0932\u0947",
+        "phone": "9421747400",
+        "email": null,
+        "address": "\u0930\u093e.  \u092a\u093e\u0924\u0941\u0930 \u0924\u093e. \u092a\u093e\u0924\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092a\u093e\u0924\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-07-18 07:45:43",
+        "images": [
+            "facedata/UID1752824743/UID1752824743_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752824743_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507180013",
+                "datetime": "2025-07-18 07:45:44",
+                "purpose": "\u0924\u0915\u094d\u0930\u093e\u0930 \u0915\u0930\u0923\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507180013_doc.pdf",
+                "dvn": 13,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-18 07:48:17",
+                "remark": "",
+                "forwarding_department": "\u092e\u0941\u0916\u094d\u092f \u0915\u093e\u0930\u094d\u092f\u0915\u093e\u0930\u0940 \u0905\u0927\u093f\u0915\u093e\u0930\u0940, \u091c\u093f.\u092a.\u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752824743/UID1752824743_img1.jpg"
+        ]
+    },
+    "UID1752825230": {
+        "name": "\u0936\u0930\u0926 \u0913\u092e\u092a\u094d\u0930\u0915\u093e\u0936\u091c\u0940 \u0930\u093e\u092e\u093e\u0935\u0924",
+        "phone": "9881291103",
+        "email": null,
+        "address": "\u0930\u093e. \u0915\u0941\u0930\u0941\u092e \u0924\u093e. \u092e\u0941\u0930\u094d\u0924\u0940\u091c\u093e\u092a\u0942\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092e\u0941\u0930\u094d\u0924\u093f\u091c\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-07-18 07:53:50",
+        "images": [
+            "facedata/UID1752825230/UID1752825230_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1752825230_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507180014",
+                "datetime": "2025-07-18 07:53:50",
+                "purpose": "\u0936\u0947\u0924\u0940\u092c\u093e\u092c\u0924 \u0935\u093f\u0928\u0902\u0924\u0940 \u0905\u0930\u094d\u091c",
+                "status": "pending",
+                "document_pdf": "pdf/V202507180014_doc.pdf",
+                "dvn": 14,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-18 07:56:01",
+                "remark": "",
+                "forwarding_department": "Tahasildar Murtizapur"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1752825230/UID1752825230_img1.jpg"
+        ]
+    },
+    "UID1753167062": {
+        "name": "\u0917\u091c\u093e\u0928\u0928 \u0906\u0915\u093e\u0930\u092e\u092d\u093e\u090a \u0917\u093e\u092f\u0915\u0935\u093e\u0921",
+        "phone": "9563256059",
+        "email": null,
+        "address": "\u0924\u0947\u0932\u094d\u0939\u093e\u0930\u093e",
+        "tahasil": "\u0924\u0947\u0932\u094d\u0939\u093e\u0930\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-22 06:51:02",
+        "images": [
+            "facedata/UID1753167062/UID1753167062_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1753167062_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507220001",
+                "datetime": "2025-07-22 06:51:02",
+                "purpose": "\u0928\u093f\u0935\u0947\u0926\u0928 \u0926\u0947\u0928\u0947\u092c\u093e\u092c\u0924",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "dvn": 1,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-22 06:51:29"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1753167062/UID1753167062_img1.jpg"
+        ]
+    },
+    "UID1753252184": {
+        "name": "\u092a\u094d\u0930\u0923\u0935 \u0924\u093e\u092f\u0921\u0947",
+        "phone": "9604449635",
+        "email": null,
+        "address": "\u0936\u093e\u0938\u094d\u0924\u094d\u0930\u0940 \u0928\u0917\u0930 \u0924\u093e. \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-23 06:29:44",
+        "images": [
+            "facedata/UID1753252184/UID1753252184_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1753252184_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507230001",
+                "datetime": "2025-07-23 06:29:45",
+                "purpose": "\u0936\u0947\u0924\u0940\u092c\u093e\u092c\u0924 \u0938\u092e\u0938\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507230001_doc.pdf",
+                "dvn": 3,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-23 06:50:03",
+                "remark": "",
+                "forwarding_department": "\u0915\u0941\u0932\u0938\u091a\u093f\u0935,\u0921\u0949.\u092a\u0902.\u0926\u0947. \u0915\u0943\u0937\u093f \u0935\u093f\u0926\u094d\u092f\u093e\u092a\u0940\u0920, \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1753252184/UID1753252184_img1.jpg"
+        ]
+    },
+    "UID1753252315": {
+        "name": "\u090f\u092e. \u090f\u092e. \u0917\u0941\u091c\u0930\u093e\u0925\u0940",
+        "phone": "9850347567",
+        "email": null,
+        "address": "\u0930\u093e. \u0905\u0915\u094b\u091f \u0924\u093e. \u0905\u0915\u094b\u091f \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u091f",
+        "district": "Akola",
+        "registration_datetime": "2025-07-23 06:31:55",
+        "images": [
+            "facedata/UID1753252315/UID1753252315_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1753252315_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507230002",
+                "datetime": "2025-07-23 06:31:55",
+                "purpose": "\u0930\u093e\u0938\u094d\u0924 \u092d\u093e\u0935 \u0927\u093e\u0928\u094d\u092f \u0926\u0941\u0915\u093e\u0928 \u092c\u093e\u092c\u0924 \u0938\u092e\u0938\u094d\u092f\u093e \u0938\u094b\u0921\u0935\u093f\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507230002_doc.pdf",
+                "dvn": 1,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-23 06:49:27",
+                "remark": "",
+                "forwarding_department": "District Supply Officer"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1753252315/UID1753252315_img1.jpg"
+        ]
+    },
+    "UID1753253945": {
+        "name": "\u0907\u092c\u094d\u0930\u093e\u0939\u0940\u092e \u0916\u093e\u0928 \u0932\u093e\u0932 \u0916\u093e\u0928",
+        "phone": "8605135742",
+        "email": null,
+        "address": "\u0915\u0938\u093e\u0908 \u092c\u0947\u0917 \u092e\u0938\u094d\u091c\u093f\u0926 \u091c\u0935\u0933, \u0915\u0938\u093e\u0908 \u092c\u0947\u0917 \u0936\u0939\u0930, \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u0924\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0933\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-07-23 06:59:05",
+        "images": [
+            "facedata/UID1753253945/UID1753253945_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1753253945_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507230006",
+                "datetime": "2025-07-23 06:59:05",
+                "purpose": "\u0905\u0924\u093f\u0915\u094d\u0930\u092e\u0923 \u092c\u093e\u092c\u0924 \u0924\u0915\u094d\u0930\u093e\u0930",
+                "status": "pending",
+                "dvn": 6,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-23 06:59:07",
+                "document_pdf": "pdf/V202507230006_doc.pdf",
+                "remark": "",
+                "forwarding_department": "SDO Balapur"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1753253945/UID1753253945_img1.jpg"
+        ]
+    },
+    "UID1753685709": {
+        "name": "\u0915\u0938\u094d\u0924\u0941\u0930\u092c\u093e\u0908 \u0938\u0941\u0927\u093e\u0915\u0930 \u0916\u0902\u0921\u093e\u0930\u0947",
+        "phone": "9307359887",
+        "email": null,
+        "address": "\u0930\u093e. \u091f\u093e\u0915\u0933\u0940 \u092c\u0941. \u0924\u093e. \u0905\u0915\u094b\u091f \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u091f",
+        "district": "Akola",
+        "registration_datetime": "2025-07-28 06:55:09",
+        "images": [
+            "facedata/UID1753685709/UID1753685709_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1753685709_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507280001",
+                "datetime": "2025-07-28 06:55:10",
+                "purpose": "\u0918\u0930\u0915\u0941\u0932 \u092f\u094b\u091c\u0928\u0947\u091a\u093e \u0932\u093e\u092d \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202507280001_doc.pdf",
+                "remark": "",
+                "forwarding_department": "\u0917\u091f\u0935\u093f\u0915\u093e\u0938 \u0905\u0927\u093f\u0915\u093e\u0930\u0940 \u0905\u0915\u094b\u091f",
+                "dvn": 1,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-28 07:01:06"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1753685709/UID1753685709_img1.jpg"
+        ]
+    },
+    "UID1753685926": {
+        "name": "\u0930\u0935\u0940 \u0926\u093f\u0917\u0902\u092c\u0930 \u0938\u094b\u0928\u094b\u0928\u0947",
+        "phone": "9405893951",
+        "email": null,
+        "address": "\u092a\u093e\u0924\u0941\u0930",
+        "tahasil": "\u092a\u093e\u0924\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-07-28 06:58:46",
+        "images": [
+            "facedata/UID1753685926/UID1753685926_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1753685926_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507280002",
+                "datetime": "2025-07-28 06:58:46",
+                "purpose": "\u0928\u093f\u0935\u0947\u0926\u0928 \u0926\u0947\u0928\u0947\u092c\u093e\u092c\u0924",
+                "status": "completed",
+                "dvn": 2,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-28 06:59:19"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1753685926/UID1753685926_img1.jpg"
+        ]
+    },
+    "UID1753770440": {
+        "name": "\u0938\u0916\u0941\u092c\u093e\u0908 \u0905\u0928\u094d\u0928\u093e \u0924\u093e\u092f\u0921\u0947",
+        "phone": "9823806177",
+        "email": null,
+        "address": "\u0930\u093e. \u091f\u093e\u0915\u0933\u0940 \u0916\u094b\u091c\u092c\u094b\u0921 \u0924\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0933\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-07-29 06:27:20",
+        "images": [
+            "facedata/UID1753770440/UID1753770440_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1753770440_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507290001",
+                "datetime": "2025-07-29 06:27:21",
+                "purpose": "\u0936\u0947\u0924\u0930\u0938\u094d\u0924\u093e \u092e\u094b\u0915\u0933\u093e \u0915\u0930\u0942\u0928 \u0926\u0947\u0928\u0947\u092c\u093e\u092c\u0924",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "document_pdf": "pdf/V202507290001_doc.pdf",
+                "dvn": 1,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-29 06:44:46"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1753770440/UID1753770440_img1.jpg"
+        ]
+    },
+    "UID1753770712": {
+        "name": "\u0938\u0902\u0926\u0940\u092a \u092a\u0941\u0902\u0921\u0932\u093f\u0915 \u0918\u094b\u0902\u0917\u0947",
+        "phone": "9579501496",
+        "email": null,
+        "address": "\u0930\u093e. \u0915\u094b\u0933\u093e\u0938\u093e \u092a\u094b. \u092e\u0928\u093e\u0930\u0916\u0947\u0921 \u0924\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0933\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-07-29 06:31:52",
+        "images": [
+            "facedata/UID1753770712/UID1753770712_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1753770712_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507290002",
+                "datetime": "2025-07-29 06:31:52",
+                "purpose": "\u092a\u093e\u0930\u0938 \u0914\u0937\u094d\u0923\u093f\u0915 \u0935\u093f\u0926\u094d\u092f\u0941\u0924 \u0915\u0947\u0902\u0926\u094d\u0930 \u0935\u0947\u0938\u094d\u091f\u0947\u091f \u0905\u0936\u0921\u092e \u091a\u094d\u092f\u093e \u0938\u094d\u091f\u094b \u0921\u094d\u0930\u0947\u0928 \u091a\u0947 \u092a\u093e\u0923\u0940 \u0936\u0947\u0924\u093e\u0924 \u0936\u093f\u0930\u0942\u0928 \u0936\u0947\u0924\u0940\u0938\u0939 \u0909\u092d\u094d\u092f\u093e \u092a\u093f\u0915\u093e\u0902\u091a\u0947 \u092a\u094d\u0930\u091a\u0902\u0921 \u0928\u0941\u0915\u0938\u093e\u0928 \u091d\u093e\u0932\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "document_pdf": "pdf/V202507290002_doc.pdf",
+                "dvn": 4,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-29 06:48:54"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1753770712/UID1753770712_img1.jpg"
+        ]
+    },
+    "UID1753770927": {
+        "name": "\u0938\u094b\u0928\u0942 \u0938\u0926\u093e\u0928\u0902\u0926 \u0936\u093f\u0902\u0926\u0947",
+        "phone": "8669464663",
+        "email": null,
+        "address": "\u092e\u0939\u093e\u0915\u093e\u0932\u0940 \u0928\u0917\u0930, \u0939\u0930\u093f\u0939\u0930 \u092a\u0947\u0920, \u091c\u0941\u0928\u0947 \u0936\u0939\u0930 \u0924\u093e. \u0905\u0915\u094b\u0932\u093e  \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-29 06:35:27",
+        "images": [
+            "facedata/UID1753770927/UID1753770927_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1753770927_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507290003",
+                "datetime": "2025-07-29 06:35:27",
+                "purpose": "\u0932\u093e\u0921\u0915\u0940 \u092c\u0939\u093f\u0923 \u092f\u094b\u091c\u0928\u0947\u091a\u093e \u0932\u093e\u092d \u092e\u093f\u0933\u0923\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "document_pdf": "pdf/V202507290003_doc.pdf",
+                "dvn": 2,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-29 06:45:10"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1753770927/UID1753770927_img1.jpg"
+        ]
+    },
+    "UID1753771505": {
+        "name": "\u092c\u0941\u0917 \u092c\u0940 \u0936\u0947\u0916 \u0928\u092c\u0940",
+        "phone": "7972603318",
+        "email": null,
+        "address": "\u0930\u093e. \u0932\u094b\u0939\u093e\u0930\u093e \u0924\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0933\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-07-29 06:45:05",
+        "images": [
+            "facedata/UID1753771505/UID1753771505_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1753771505_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507290004",
+                "datetime": "2025-07-29 06:45:06",
+                "purpose": "\u0924\u0915\u094d\u0930\u093e\u0930 \u0915\u0930\u0923\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "document_pdf": "pdf/V202507290004_doc.pdf",
+                "dvn": 3,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-29 06:46:40"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1753771505/UID1753771505_img1.jpg"
+        ]
+    },
+    "UID1753772602": {
+        "name": "\u0905\u0930\u0941\u0923\u093e \u0905\u0928\u093f\u0932 \u0916\u0930\u093e\u091f\u0947",
+        "phone": "9604315785",
+        "email": null,
+        "address": "\u0930\u093e. \u0936\u094d\u0930\u0926\u094d\u0927\u093e \u0928. \u096c \u0930\u0947\u0932\u094d\u0935\u0947 \u0917\u0947\u091f \u091c\u0935\u0933, \u091c\u0941\u0928\u0947 \u0936\u0939\u0930, \u0905\u0915\u094b\u0932\u093e \u0924\u093e. \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-29 07:03:22",
+        "images": [
+            "facedata/UID1753772602/UID1753772602_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1753772602_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507290005",
+                "datetime": "2025-07-29 07:03:22",
+                "purpose": "\u0909\u092a\u094b\u0937\u0923 \u092c\u093e\u092c\u0924 \u0928\u093f\u0935\u0947\u0926\u0928",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "document_pdf": "pdf/V202507290005_doc.pdf",
+                "dvn": 5,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-29 07:21:18"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1753772602/UID1753772602_img1.jpg"
+        ]
+    },
+    "UID1753944586": {
+        "name": "\u0938\u0941\u092c\u094b\u0927 \u0921\u094b\u0902\u0917\u0930\u0947",
+        "phone": "9975403610",
+        "email": null,
+        "address": "\u0930\u093e. \u0935\u093e\u0921\u0947\u0917\u093e\u0935 \u0924\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0933\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-07-31 06:49:46",
+        "images": [
+            "facedata/UID1753944586/UID1753944586_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1753944586_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507310001",
+                "datetime": "2025-07-31 06:49:46",
+                "purpose": "\u0936\u093e\u0938\u0928 \u0928\u093f\u0930\u094d\u0923\u092f\u093e\u092c\u093e\u092c\u0924 \u091a\u0930\u094d\u091a\u0947\u0915\u0930\u093f\u0924\u093e",
+                "status": "completed",
+                "dvn": 2,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-31 06:53:51"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1753944586/UID1753944586_img1.jpg"
+        ]
+    },
+    "UID1753945328": {
+        "name": "\u0905\u0902\u092c\u0930\u0938\u093f\u0902\u0917 \u091b\u093e\u0924\u093e\u0902\u0938\u093f\u0902\u0917 \u0936\u0947\u0916\u093e\u0930\u0935\u0930",
+        "phone": "9302459397",
+        "email": null,
+        "address": "\u0930\u093e. \u0930\u093e\u091c\u092a\u0941\u0924\u092a\u0941\u0930\u093e \u0924\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0933\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-07-31 07:02:08",
+        "images": [
+            "facedata/UID1753945328/UID1753945328_img1.jpg"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507310003",
+                "datetime": "2025-07-31 07:02:09",
+                "purpose": "\u0924\u0915\u094d\u0930\u093e\u0930 \u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "dvn": 3,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-31 07:03:29",
+                "remark": "",
+                "forwarding_department": "\u092e\u0941\u0916\u094d\u092f\u093e\u0927\u093f\u0915\u093e\u0930\u0940, \u0928\u0917\u0930\u092a\u0930\u093f\u0937\u0926, \u092c\u093e\u0933\u093e\u092a\u0941\u0930"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1753945328/UID1753945328_img1.jpg"
+        ]
+    },
+    "UID1753945531": {
+        "name": "\u0930\u0935\u0940\u0902\u0926\u094d\u0930 \u0930\u093e\u092e\u0930\u093e\u0935 \u0922\u0935\u0933\u0947",
+        "phone": "9028215715",
+        "email": null,
+        "address": "\u0930\u093e. \u092c\u094b\u0930\u0917\u093e\u0935 \u092e\u0902\u091c\u0942 \u0924\u093e. \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-07-31 07:05:31",
+        "images": [
+            "facedata/UID1753945531/UID1753945531_img1.jpg"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202507310004",
+                "datetime": "2025-07-31 07:05:31",
+                "purpose": "PMKSY \u0915\u0930\u093f\u0924\u093e \u0928\u093f\u0935\u0921 \u0915\u0930\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "dvn": 4,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-07-31 07:06:05",
+                "remark": "",
+                "forwarding_department": "\u091c\u093f\u0932\u094d\u0939\u093e \u091c\u0932\u0938\u0902\u0927\u093e\u0930\u0923 \u0905\u0927\u093f\u0915\u093e\u0930\u0940, \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1753945531/UID1753945531_img1.jpg"
+        ]
+    },
+    "UID1754029911": {
+        "name": "\u0930\u0924\u094d\u0928\u0915\u0932\u093e \u0936\u094d\u0930\u0940\u0930\u093e\u092e \u0916\u0902\u0921\u093e\u0930\u0947",
+        "phone": "9209014021",
+        "email": null,
+        "address": "\u0930\u093e. \u092e\u093e\u0928\u093e \u0924\u093e. \u092e\u0941\u0930\u094d\u0924\u0940\u091c\u093e\u092a\u0942\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092e\u0941\u0930\u094d\u0924\u093f\u091c\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-08-01 06:31:51",
+        "images": [
+            "facedata/UID1754029911/UID1754029911_img1.jpg"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508010001",
+                "datetime": "2025-08-01 06:31:52",
+                "purpose": "\u0906\u092a\u0924\u094d\u0915\u093e\u0932\u0940\u0928 \u0915\u093e\u0933\u093e\u0924 \u0915\u093e\u0930\u093e\u0917\u0943\u0939\u093e\u0924 \u0905\u0938\u0932\u094d\u092f\u093e\u092c\u093e\u092c\u0924 \u092e\u093e\u0928\u0927\u0928 \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924.",
+                "status": "pending",
+                "document_pdf": "pdf/V202508010001_doc.pdf",
+                "dvn": 2,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-01 07:12:05",
+                "remark": "",
+                "forwarding_department": "\u091c\u093f\u0932\u094d\u0939\u093e \u092a\u094b\u0932\u0940\u0938 \u0905\u0927\u093f\u0915\u094d\u0937\u0915, \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754029911/UID1754029911_img1.jpg"
+        ]
+    },
+    "UID1754030130": {
+        "name": "\u0930\u0924\u094d\u0928\u093e \u092a\u0941\u0902\u0921\u0932\u093f\u0915\u0930\u093e\u0935 \u0905\u0915\u094b\u0932\u0915\u0930",
+        "phone": "9028465934",
+        "email": null,
+        "address": "\u0930\u093e. \u091c\u0920\u093e\u0930\u092a\u0947\u0920 \u0924\u093e. \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-01 06:35:30",
+        "images": [
+            "facedata/UID1754030130/UID1754030130_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754030130_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508010002",
+                "datetime": "2025-08-01 06:35:31",
+                "purpose": "\u0928\u093f\u0935\u0943\u0924\u094d\u0924\u0940 \u0935\u0947\u0924\u0928 \u092c\u093e\u092c\u0924 \u0924\u0915\u094d\u0930\u093e\u0930 \u0915\u0930\u0923\u0947\u092c\u093e\u092c\u0924.",
+                "status": "pending",
+                "document_pdf": "pdf/V202508010002_doc.pdf",
+                "dvn": 1,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-01 07:11:46",
+                "remark": "",
+                "forwarding_department": "Resident Deputy Collector"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754030130/UID1754030130_img1.jpg"
+        ]
+    },
+    "UID1754030258": {
+        "name": "\u0924\u0947\u091c\u0938\u094d\u0935\u093f\u0928\u0940 \u092a\u094d\u0930\u0936\u093e\u0902\u0924 \u0924\u0947\u0932\u0902\u0917",
+        "phone": "8600524413",
+        "email": null,
+        "address": "\u0930\u093e. \u092d\u0902\u0921\u093e\u0930\u091c \u092c\u0941. \u0924\u093e. \u092a\u093e\u0924\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092a\u093e\u0924\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-08-01 06:37:38",
+        "images": [
+            "facedata/UID1754030258/UID1754030258_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754030258_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508010003",
+                "datetime": "2025-08-01 06:37:38",
+                "purpose": "\u0905\u0924\u093f\u0915\u094d\u0930\u0923 \u092c\u093e\u092c\u0924 \u0924\u0915\u094d\u0930\u093e\u0930",
+                "status": "pending",
+                "document_pdf": "pdf/V202508010003_doc.pdf",
+                "dvn": 3,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-01 07:18:27",
+                "remark": "",
+                "forwarding_department": "\u0917\u091f\u0935\u093f\u0915\u093e\u0938 \u0905\u0927\u093f\u0915\u093e\u0930\u0940 \u092a\u093e\u0924\u0941\u0930"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754030258/UID1754030258_img1.jpg"
+        ]
+    },
+    "UID1754030465": {
+        "name": "\u0924\u0941\u0937\u093e\u0930 \u092e\u0939\u0947\u0902\u0926\u094d\u0930 \u0938\u093f\u0930\u0938\u093e\u091f",
+        "phone": "9822382234",
+        "email": null,
+        "address": "\u0930\u093e. \u0917\u093e\u0928\u094b\u0930\u0940 \u0924\u093e. \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-01 06:41:05",
+        "images": [
+            "facedata/UID1754030465/UID1754030465_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754030465_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508010004",
+                "datetime": "2025-08-01 06:41:05",
+                "purpose": "\u0968\u0969/\u0966\u096a/\u0968\u0966\u0968\u096b \u0930\u094b\u091c\u0940\u091a\u094d\u092f\u093e \u0906\u092a\u0932\u094d\u092f\u093e\u092c \u0915\u093e\u0930\u094d\u092f\u093e\u0932\u092f\u093e\u091a\u094d\u092f\u093e \u0906\u0926\u0947\u0936\u093e\u091a\u093e \u0905\u092c\u094d\u092e\u093e\u0928 \u0915\u0947\u0932\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508010004_doc.pdf",
+                "dvn": 4,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-01 07:22:23",
+                "remark": "",
+                "forwarding_department": "\u091c\u093f\u0932\u094d\u0939\u093e \u0936\u0932\u094d\u092f \u091a\u093f\u0915\u0940\u0924\u094d\u0938\u0915, \u0938\u093e\u092e\u093e\u0928\u094d\u092f \u0930\u0941\u0917\u094d\u0923\u093e\u0932\u092f, \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754030465/UID1754030465_img1.jpg"
+        ]
+    },
+    "UID1754030675": {
+        "name": "\u0930\u094b\u092e\u093f\u0932 \u0926\u093e\u0926\u093e\u0930\u093e\u0935 \u092a\u0941\u0902\u0921\u0947\u0915\u0930",
+        "phone": "9822228012",
+        "email": null,
+        "address": "\u0936\u094d\u0930\u0940. \u0915\u0949\u0932\u094b\u0928\u0940 \u0905\u0915\u094b\u0932\u093e \u0930\u094b\u0921 \u0905\u0915\u094b\u091f \u0924\u093e. \u0905\u0915\u094b\u091f \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u091f",
+        "district": "Akola",
+        "registration_datetime": "2025-08-01 06:44:35",
+        "images": [
+            "facedata/UID1754030675/UID1754030675_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754030675_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508010005",
+                "datetime": "2025-08-01 06:44:36",
+                "purpose": "\u0905\u0928\u0927\u093f\u0915\u0943\u0924 \u092c\u093e\u0902\u0927\u0915\u093e\u092e \u092c\u093e\u092c\u0924 \u0924\u0915\u094d\u0930\u093e\u0930",
+                "status": "pending",
+                "document_pdf": "pdf/V202508010005_doc.pdf",
+                "dvn": 5,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-01 07:23:16",
+                "remark": "",
+                "forwarding_department": "\u092e\u0941\u0916\u094d\u092f\u093e\u0927\u093f\u0915\u093e\u0930\u0940, \u0928\u0917\u0930\u092a\u0930\u093f\u0937\u0926, \u0905\u0915\u094b\u091f"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754030675/UID1754030675_img1.jpg"
+        ]
+    },
+    "UID1754031111": {
+        "name": "\u092e\u094b\u0939\u092e\u094d\u092e\u0926 \u091c\u092b\u0930 \u092e\u094b. \u0939\u0936\u092e",
+        "phone": "9096532223",
+        "email": null,
+        "address": "\u0930\u093e. \u0938\u093e\u0926\u093f\u0915 \u0928\u0917\u0930 \u0924\u093e. \u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940",
+        "district": "Akola",
+        "registration_datetime": "2025-08-01 06:51:51",
+        "images": [
+            "facedata/UID1754031111/UID1754031111_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754031111_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508010006",
+                "datetime": "2025-08-01 06:51:51",
+                "purpose": "\u0905\u0924\u093f\u0915\u094d\u0930\u092e\u0923 \u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508010006_doc.pdf",
+                "dvn": 6,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-01 07:26:05",
+                "remark": "",
+                "forwarding_department": "Resident Deputy Collector"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754031111/UID1754031111_img1.jpg"
+        ]
+    },
+    "UID1754031275": {
+        "name": "\u092f\u094b\u0917\u0947\u0936\u094d\u0935\u0930 \u0927\u0928\u094b\u0915\u093e\u0930",
+        "phone": "7030619955",
+        "email": null,
+        "address": "\u0930\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u0924\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0933\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-08-01 06:54:35",
+        "images": [
+            "facedata/UID1754031275/UID1754031275_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754031275_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508010007",
+                "datetime": "2025-08-01 06:54:36",
+                "purpose": "\u092e\u093e\u0917\u093f\u0932 \u092d\u0947\u091f\u0940 \u0938\u0902\u0926\u0930\u094d\u092d\u093e\u0924 \u091a\u0930\u094d\u091a\u0947\u0915\u0930\u093f\u0924\u093e",
+                "status": "completed",
+                "dvn": 7,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-01 07:26:31"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754031275/UID1754031275_img1.jpg"
+        ]
+    },
+    "UID1754031618": {
+        "name": "\u092a\u0935\u0928 \u092d\u093f\u0915\u093e\u091c\u093f \u0918\u094b\u0902\u0917\u0947",
+        "phone": "8459275543",
+        "email": null,
+        "address": "\u0930\u093e. \u0915\u094b\u0933\u0938\u093e \u0924\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0933\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-08-01 07:00:18",
+        "images": [
+            "facedata/UID1754031618/UID1754031618_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754031618_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508010008",
+                "datetime": "2025-08-01 07:00:19",
+                "purpose": "\u092a\u093e\u0930\u0938 \u0935\u093f\u0926\u094d\u092f\u0941\u0924 \u0915\u0947\u0902\u0926\u094d\u0930 \u092e\u0927\u0940\u0932 \u0938\u093e\u0902\u0921\u092a\u093e\u0923\u0940 \u0936\u0947\u0924\u093e\u0924 \u091c\u093e\u0924 \u0905\u0938\u0932\u094d\u092f\u093e\u092e\u0941\u0933\u0947 \u0928\u0941\u0915\u0938\u093e\u0928\u0940\u092c\u093e\u092c\u0924 \u0924\u0915\u094d\u0930\u093e\u0930",
+                "status": "pending",
+                "document_pdf": "pdf/V202508010008_doc.pdf",
+                "dvn": 8,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-01 07:31:47",
+                "remark": "",
+                "forwarding_department": "Resident Deputy Collector"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754031618/UID1754031618_img1.jpg"
+        ]
+    },
+    "UID1754032316": {
+        "name": "\u0938\u0941\u0930\u0947\u0936 \u092e\u093e\u0930\u094b\u0924\u0940\u0930\u093e\u0935 \u0926\u093f\u0915\u094d\u0915\u0930",
+        "phone": "9370143825",
+        "email": null,
+        "address": "\u0936\u093f\u0935\u0930 \u0924\u093e. \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-01 07:11:56",
+        "images": [
+            "facedata/UID1754032316/UID1754032316_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754032316_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508010009",
+                "datetime": "2025-08-01 07:11:57",
+                "purpose": "\u0918\u0930\u0915\u0941\u0932 \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924 \u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508010009_doc.pdf",
+                "dvn": 9,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-01 07:33:34",
+                "remark": "",
+                "forwarding_department": "\u0906\u092f\u0941\u0915\u094d\u0924, \u092e\u0939\u093e\u0928\u0917\u0930 \u092a\u093e\u0932\u093f\u0915\u093e, \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754032316/UID1754032316_img1.jpg"
+        ]
+    },
+    "UID1754288386": {
+        "name": "\u0939\u0930\u0940\u0936 \u0930\u093e\u092e\u092c\u0930\u094b\u0938 \u0938\u0948\u0935\u093e\u0932",
+        "phone": "8888121665",
+        "email": null,
+        "address": "\u0930\u093e. \u0930\u093f\u0927\u094b\u0930\u093e \u0924\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0933\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-08-04 06:19:46",
+        "images": [
+            "facedata/UID1754288386/UID1754288386_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754288386_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508040002",
+                "datetime": "2025-08-04 06:19:47",
+                "purpose": "\u0918\u0930\u093e\u0938\u092e\u094b\u0930\u0940\u0932 NHAI No. 6 \u0932\u093e \u0932\u093e\u0917\u0942\u0928 \u0905\u0938\u0932\u0947\u0932\u094d\u092f\u093e \u0926\u0915\u094d\u0937\u093f\u0923\u0947\u0915\u0921\u0940\u0932 \u0928\u0933\u0940 \u0905\u092a\u0942\u0930\u094d\u0923 \u0905\u0938\u0942\u0928 \u0924\u0947 \u092a\u0942\u0930\u094d\u0923 \u0915\u0930\u0923\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508040002_doc.pdf",
+                "dvn": 1,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-04 07:06:58",
+                "remark": "",
+                "forwarding_department": "\u0905\u0927\u0940\u0915\u094d\u0937\u0915 \u0905\u092d\u093f\u092f\u0902\u0924\u093e, \u0938\u093e\u0930\u094d\u0935\u091c\u0928\u093f\u0915 \u092c\u093e\u0902\u0927.\u092e\u0902\u0921\u0933,\u0905\u0915\u094b\u0932\u093e"
+            },
+            {
+                "visit_id": "V202508110007",
+                "datetime": "2025-08-11 06:45:09",
+                "purpose": "\u0918\u0930\u093e\u0938\u092e\u094b\u0930\u0940\u0932 NHAI No. 6 \u0932\u093e \u0932\u093e\u0917\u0942\u0928 \u0905\u0938\u0932\u0947\u0932\u094d\u092f\u093e \u0926\u0915\u094d\u0937\u093f\u0923\u0947\u0915\u0921\u0940\u0932 \u0928\u0933\u0940 \u0905\u092a\u0942\u0930\u094d\u0923 \u0905\u0938\u0942\u0928 \u0924\u0947 \u092a\u0942\u0930\u094d\u0923 \u0915\u0930\u0923\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "dvn": 8,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-11 07:21:00",
+                "remark": "",
+                "forwarding_department": "Resident Deputy Collector"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754288386/UID1754288386_img1.jpg"
+        ]
+    },
+    "UID1754288772": {
+        "name": "\u092c\u093e\u0933\u093e\u0938\u093e\u0939\u0947\u092c \u0921\u094b\u0902\u0917\u0930\u0947",
+        "phone": "9881787428",
+        "email": null,
+        "address": "\u0930\u093e. \u0917\u0940\u0924\u093e \u0928\u0917\u0930 \u0924\u093e. \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-04 06:26:12",
+        "images": [
+            "facedata/UID1754288772/UID1754288772_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754288772_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508040003",
+                "datetime": "2025-08-04 06:26:13",
+                "purpose": "\u091c\u093e\u0917\u0924\u093f\u0915 \u0906\u0926\u093f\u0935\u093e\u0938\u0940 \u0926\u093f\u0928\u093e\u091a\u094d\u092f\u093e \u092a\u0942\u0930\u094d\u0935\u0938\u0902\u0927\u094d\u092f\u093e \u091a\u094d\u092f\u093e \u0915\u093e\u0930\u094d\u092f\u0915\u094d\u0930\u092e\u093e\u0924 \u092c\u093e\u092c\u0924\u0940\u0924 \u0928\u093f\u092e\u0902\u0924\u094d\u0930\u0923 \u0926\u0947\u0928\u0947\u092c\u093e\u092c\u0924",
+                "status": "completed",
+                "dvn": 3,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-04 07:08:02"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754288772/UID1754288772_img1.jpg"
+        ]
+    },
+    "UID1754288884": {
+        "name": "\u092a\u094d\u0930\u0924\u093f\u091c\u094d\u091e\u093e \u092d\u0940\u092e\u0930\u093e\u0935 \u0935\u093e\u0928\u0916\u0921\u0947",
+        "phone": "9637637482",
+        "email": null,
+        "address": "\u0930\u093e. \u0935\u093e\u0930\u0916\u0947\u0921 \u0924\u093e. \u0924\u0947\u0932\u094d\u0939\u093e\u0930\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0924\u0947\u0932\u094d\u0939\u093e\u0930\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-04 06:28:04",
+        "images": [
+            "facedata/UID1754288884/UID1754288884_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754288884_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508040004",
+                "datetime": "2025-08-04 06:28:04",
+                "purpose": "\u0906\u0927\u093e\u0930 \u0915\u093e\u0930\u094d\u0921 \u0905\u092a\u0921\u0947\u091f \u091a\u094d\u092f\u093e \u0924\u0915\u094d\u0930\u093e\u0930 \u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508040004_doc.pdf",
+                "dvn": 2,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-04 07:07:29",
+                "remark": "",
+                "forwarding_department": "Resident Deputy Collector"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754288884/UID1754288884_img1.jpg"
+        ]
+    },
+    "UID1754291051": {
+        "name": "\u0938\u094c. \u0930\u0902\u091c\u0928\u093e \u092a\u094d\u0930\u0935\u0940\u0923 \u091a\u094c\u0927\u0930\u0940 (\u0938\u0930\u092a\u0902\u091a)",
+        "phone": "8788972104",
+        "email": null,
+        "address": "\u0930\u093e. \u0935\u093f\u091d\u094b\u0930\u093e \u0924\u093e. \u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940",
+        "district": "Akola",
+        "registration_datetime": "2025-08-04 07:04:11",
+        "images": [
+            "facedata/UID1754291051/UID1754291051_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754291051_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508040005",
+                "datetime": "2025-08-04 07:04:11",
+                "purpose": "\u0913\u092c\u0947\u0930\u0949\u092f \u0938\u0902\u0938\u094d\u0925\u093e \u092f\u093e\u0902\u0928\u0940 \u0935\u093f\u0928\u093e \u092a\u0930\u0935\u093e\u0928\u0917\u0940 \u0905\u0935\u0948\u0927\u0930\u0940\u0924\u094d\u092f\u093e \u0938\u094d\u091f\u094b\u0928 \u0915\u094d\u0930\u0936\u0930 \u092a\u094d\u0932\u093e\u0902\u091f \u091a\u093e\u0932\u0942 \u0915\u0947\u0932\u094d\u092f\u093e\u0928\u0947 \u0938\u0926\u0930 \u092a\u094d\u0932\u093e\u0902\u091f \u0924\u093e\u0924\u0921\u0940\u0928\u0947 \u092c\u0902\u0926 \u0915\u0930\u0942\u0928 \u0926\u0947\u0923\u094d\u092f\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508040005_doc.pdf",
+                "dvn": 5,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-04 07:10:32",
+                "remark": "",
+                "forwarding_department": "\u091c\u093f\u0932\u094d\u0939\u093e \u0916\u0928\u093f\u0915\u0930\u094d\u092e \u0905\u0927\u093f\u0915\u093e\u0930\u0940 \u0905\u0915\u094b\u0932\u093e"
+            },
+            {
+                "visit_id": "V202508210002",
+                "datetime": "2025-08-21 06:23:04",
+                "purpose": "\u0905\u0924\u093f\u0915\u094d\u0930\u092e\u0923 \u0928\u093f\u092f\u092e\u093e\u0915\u0941\u0932 \u0915\u0930\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508210002_doc.pdf",
+                "dvn": 2,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-21 06:44:39",
+                "remark": "",
+                "forwarding_department": "\u0917\u091f\u0935\u093f\u0915\u093e\u0938 \u0905\u0927\u093f\u0915\u093e\u0930\u0940 \u092c\u093e\u0930\u094d\u0936\u093f\u091f\u093e\u0915\u0933\u0940"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754291051/UID1754291051_img1.jpg"
+        ]
+    },
+    "UID1754291222": {
+        "name": "\u0938\u094d\u0935\u092a\u094d\u0928\u0940\u0932 \u092a\u094d\u0930\u0915\u093e\u0936 \u0928\u093f\u092e\u0915\u0902\u0921\u0947",
+        "phone": "7030087143",
+        "email": null,
+        "address": "\u0930\u093e. \u0917\u0941\u0930\u0941\u0935\u093e\u0930 \u092a\u0947\u0920 \u0924\u093e. \u092a\u093e\u0924\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092a\u093e\u0924\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-08-04 07:07:02",
+        "images": [
+            "facedata/UID1754291222/UID1754291222_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754291222_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508040006",
+                "datetime": "2025-08-04 07:07:03",
+                "purpose": "\u0938\u094d\u0925\u093e\u0928\u093f\u0915 \u0917\u0941\u0930\u0935\u093e\u0930\u092a\u0947\u0920 \u092f\u0947\u0925\u0940\u0932 \u0938\u094d\u092e\u093e\u0930\u0915 \u0926\u0941\u0938\u0930\u0940\u0915\u0921\u0947 \u0939\u0932\u0935\u093f\u0923\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508040006_doc.pdf",
+                "dvn": 6,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-04 07:16:30",
+                "remark": "",
+                "forwarding_department": "\u092e\u0941\u0916\u094d\u092f\u093e\u0927\u093f\u0915\u093e\u0930\u0940, \u0928\u0917\u0930\u092a\u0930\u093f\u0937\u0926, \u092a\u093e\u0924\u0941\u0930"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754291222/UID1754291222_img1.jpg"
+        ]
+    },
+    "UID1754291392": {
+        "name": "\u0936\u0947. \u092e\u094b\u092c\u0940\u0928 \u0936\u0947. \u0928\u093f\u091d\u093e\u092e\u0941\u0926\u094d\u0926\u0940\u0928",
+        "phone": "9890633513",
+        "email": null,
+        "address": "\u0930\u093e. \u092c\u094b\u0930\u0917\u093e\u0935 \u092e\u0902\u091c\u0942 \u0924\u093e. \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-04 07:09:52",
+        "images": [
+            "facedata/UID1754291392/UID1754291392_img1.jpg"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508040007",
+                "datetime": "2025-08-04 07:09:53",
+                "purpose": "\u0930\u093e\u091c\u0915\u0940\u092f \u0926\u092c\u093e\u0935\u093e\u0916\u093e\u0932\u0940 \u0938\u0942\u0921\u092c\u0941\u0926\u094d\u0927\u0940\u0928\u0947 \u0905\u0928\u094d\u092f\u093e\u092f \u0915\u0930\u0942\u0928 \u092e\u093e\u091d\u0947 \u0918\u0930 \u0924\u094b\u0921\u0932\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508040007_doc.pdf",
+                "dvn": 7,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-04 07:18:41",
+                "remark": "",
+                "forwarding_department": "\u0917\u091f\u0935\u093f\u0915\u093e\u0938 \u0905\u0927\u093f\u0915\u093e\u0930\u0940 \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754291392/UID1754291392_img1.jpg"
+        ]
+    },
+    "UID1754292406": {
+        "name": "\u0935\u093e\u0938\u0941\u0926\u0947\u0935 \u0939\u0930\u093f\u092d\u093e\u090a \u0918\u094b\u0902\u0917\u0947",
+        "phone": "9881022598",
+        "email": null,
+        "address": "\u0930\u093e. \u0915\u094b\u0933\u0938\u093e \u0924\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0933\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-08-04 07:26:46",
+        "images": [
+            "facedata/UID1754292406/UID1754292406_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754292406_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508040008",
+                "datetime": "2025-08-04 07:26:46",
+                "purpose": "\u0926\u093f\u0935\u094d\u092f\u093e\u0902\u0917 \u0935\u094d\u092f\u0915\u094d\u0924\u0940 \u0905\u0927\u0940\u0928\u093f\u092f\u093e\u092e\u093e\u0928\u0941\u0938\u093e\u0930 \u0968\u0966\u0966 \u091a\u094c. \u092e\u0940. \u091c\u093e\u0917\u093e \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "document_pdf": "pdf/V202508040008_doc.pdf",
+                "dvn": 8,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-04 07:35:25"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754292406/UID1754292406_img1.jpg"
+        ]
+    },
+    "UID1754461604": {
+        "name": "\u092e\u093e\u0923\u093f\u0915\u0930\u093e\u0935 \u0928\u093e\u092e\u0926\u0947\u0935\u0930\u093e\u0935 \u0915\u094d\u0937\u0940\u0930\u0938\u093e\u0917\u0930",
+        "phone": "9764131311",
+        "email": null,
+        "address": "\u0916\u0947\u0924\u093e\u0928 \u0928\u0917\u0930, \u0915\u094c\u0932\u094d\u0915\u0947\u0926, \u0905\u0915\u094b\u0932\u093e \u091c\u093f \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-06 06:26:44",
+        "images": [
+            "facedata/UID1754461604/UID1754461604_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754461604_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508060001",
+                "datetime": "2025-08-06 06:26:45",
+                "purpose": "\u0928\u0915\u093e\u0936\u093e \u0932\u0947\u0906\u0909\u091f \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508060001_doc.pdf",
+                "dvn": 3,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-06 06:46:55",
+                "remark": "",
+                "forwarding_department": "\u091c\u093f\u0932\u094d\u0939\u093e \u0905\u0927\u0940\u0915\u094d\u0937\u0915 \u092d\u0942\u092e\u0940 \u0905\u092d\u093f\u0932\u0947\u0916, \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754461604/UID1754461604_img1.jpg"
+        ]
+    },
+    "UID1754461828": {
+        "name": "\u0938\u0941\u0926\u093e\u092e \u0936\u094d\u0930\u0940\u0915\u0943\u0937\u094d\u0923 \u0936\u0947\u0902\u0921\u0947",
+        "phone": "9325545016",
+        "email": null,
+        "address": "\u0917\u094c\u0924\u092e \u0928\u0917\u0930 \u0930\u093e. \u0939\u093e\u0924\u0917\u093e\u0935 \u0924\u093e. \u092e\u0941\u0930\u094d\u0924\u0940\u091c\u093e\u092a\u0942\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092e\u0941\u0930\u094d\u0924\u093f\u091c\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-08-06 06:30:28",
+        "images": [
+            "facedata/UID1754461828/UID1754461828_img1.jpg"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508060002",
+                "datetime": "2025-08-06 06:30:28",
+                "purpose": "\u0905\u0924\u093f\u0915\u094d\u0930\u092e\u0923 \u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508060002_doc.pdf",
+                "dvn": 1,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-06 06:45:44",
+                "remark": "",
+                "forwarding_department": "Tahasildar Murtizapur"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754461828/UID1754461828_img1.jpg"
+        ]
+    },
+    "UID1754461985": {
+        "name": "\u0905\u092e\u094b\u0932 \u0926\u0940\u092a\u0915 \u0927\u0928\u092d\u093e\u0930",
+        "phone": "9022748264",
+        "email": null,
+        "address": "\u0930\u093e. \u0915\u093f\u0928\u0916\u0947\u0921 \u092a\u0942\u0930\u094d\u0923\u093e \u0924\u093e. \u0905\u0915\u094b\u091f \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u091f",
+        "district": "Akola",
+        "registration_datetime": "2025-08-06 06:33:05",
+        "images": [
+            "facedata/UID1754461985/UID1754461985_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754461985_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508060003",
+                "datetime": "2025-08-06 06:33:05",
+                "purpose": "\u0915\u094b\u0930\u094b\u0928\u093e\u092e\u0941\u0933\u0947 \u091d\u093e\u0932\u0947\u0932\u094d\u092f\u093e \u092e\u0943\u0924\u094d\u092f\u0942 \u091a\u0940 \u0906\u0930\u094d\u0925\u093f\u0915 \u092e\u0926\u0924 \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508060003_doc.pdf",
+                "dvn": 2,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-06 06:46:36",
+                "remark": "",
+                "forwarding_department": "Resident Deputy Collector"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754461985/UID1754461985_img1.jpg"
+        ]
+    },
+    "UID1754462753": {
+        "name": "\u0938\u092f\u094d\u092f\u0926 \u092e\u0928\u094d\u0928\u093e\u0928 \u0938\u092f\u094d\u092f\u0926 \u092e\u091c\u0940\u0926",
+        "phone": "8080539067",
+        "email": null,
+        "address": "\u0930\u093e. \u092c\u0930\u094d\u0936\u093f\u0924\u093e\u0915\u0932\u0940 \u0924\u093e. \u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940",
+        "district": "Akola",
+        "registration_datetime": "2025-08-06 06:45:53",
+        "images": [
+            "facedata/UID1754462753/UID1754462753_img1.jpg"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508060004",
+                "datetime": "2025-08-06 06:45:53",
+                "purpose": "\u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940 \u092f\u0947\u0925\u0940\u0932 \u0936\u093f\u091f \u0928, \u0967\u096a \u092e\u0927\u0940\u0932 \u092a\u094d\u0932\u0949\u091f \u0928. 1224,1225,1724 \u091a\u0940 \u0928\u0915\u094d\u0915\u0932 \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508060004_doc.pdf",
+                "dvn": 4,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-06 06:49:12",
+                "remark": "",
+                "forwarding_department": "\u091c\u093f\u0932\u094d\u0939\u093e \u0905\u0927\u0940\u0915\u094d\u0937\u0915 \u092d\u0942\u092e\u0940 \u0905\u092d\u093f\u0932\u0947\u0916, \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754462753/UID1754462753_img1.jpg"
+        ]
+    },
+    "UID1754462930": {
+        "name": "\u0936\u0947\u0916 \u0939\u0941\u0938\u0947\u0928",
+        "phone": "8766654289",
+        "email": null,
+        "address": "\u0930\u093e. \u092c\u094b\u0930\u0917\u093e\u0935 \u092e\u0902\u091c\u0942 \u0924\u093e. \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-06 06:48:50",
+        "images": [
+            "facedata/UID1754462930/UID1754462930_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754462930_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508060005",
+                "datetime": "2025-08-06 06:48:50",
+                "purpose": "\u0924\u0915\u094d\u0930\u093e\u0930 \u0915\u0930\u0923\u0947\u092c\u093e\u092c\u0924 \u0935 \u0928\u093f\u0935\u0947\u0926\u0928 \u0938\u093e\u0926\u0930 \u0915\u0930\u0923\u0947 \u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508060005_doc.pdf",
+                "dvn": 5,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-06 06:50:28",
+                "remark": "",
+                "forwarding_department": "Resident Deputy Collector"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754462930/UID1754462930_img1.jpg"
+        ]
+    },
+    "UID1754463181": {
+        "name": "\u0930\u0941\u0915\u0941\u092e\u0926\u093e\u0938 \u092a\u0930\u0935\u0947\u0936 \u0930\u093e\u0920\u094b\u0921",
+        "phone": "9359392061",
+        "email": null,
+        "address": "\u0930\u093e. \u091c\u0928\u0941\u0928 \u0924\u093e. \u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940",
+        "district": "Akola",
+        "registration_datetime": "2025-08-06 06:53:01",
+        "images": [
+            "facedata/UID1754463181/UID1754463181_img1.jpg"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508060006",
+                "datetime": "2025-08-06 06:53:01",
+                "purpose": "\u0917\u093e\u0935\u093e\u0924\u0940\u0932 \u0932\u094b\u0915\u093e\u0902\u0928\u093e \u0930\u094b\u091c\u0917\u093e\u0930 \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508060006_doc.pdf",
+                "dvn": 6,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-06 06:54:02",
+                "remark": "",
+                "forwarding_department": "Dy Collector EGS"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754463181/UID1754463181_img1.jpg"
+        ]
+    },
+    "UID1754894157": {
+        "name": "\u092d\u0940\u092e\u0930\u093e\u0935 \u0930\u0918\u0941\u0928\u093e\u0925 \u092a\u0939\u0941\u0930\u0915\u0930",
+        "phone": "7720922212",
+        "email": null,
+        "address": "\u0930\u093e. \u0926\u093e\u0928\u093e\u092a\u0942\u0930 \u0924\u093e. \u0924\u0947\u0932\u094d\u0939\u093e\u0930\u093e \u091c\u093f. \u0905\u0915\u094b\u0933\u093e",
+        "tahasil": "\u0924\u0947\u0932\u094d\u0939\u093e\u0930\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-11 06:35:57",
+        "images": [
+            "facedata/UID1754894157/UID1754894157_img1.jpg"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508110001",
+                "datetime": "2025-08-11 06:35:57",
+                "purpose": "\u091c\u092e\u0940\u0928 \u092e\u0939\u094d\u0938\u0942\u0932 \u0905\u0927\u093f\u0928\u093f\u092f\u092e \u0967\u096f\u096c\u096c \u091a\u0947 \u0915\u0932\u092e \u0967\u0968\u096f \u0928\u0941\u0938\u093e\u0930 \u092e\u0939\u0938\u0941\u0932\u0940 \u0938\u0928\u0926 \u092e\u093f\u0932\u094d\u092e\u093f\u0932\u094d\u0928\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508110001_doc.pdf",
+                "dvn": 3,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-11 07:01:07",
+                "remark": "",
+                "forwarding_department": "Dy. Collector Revenue"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754894157/UID1754894157_img1.jpg"
+        ]
+    },
+    "UID1754894473": {
+        "name": "\u092a\u094d\u0930\u0935\u0940\u0923 \u0930\u0941\u0932\u094d\u0939\u0947",
+        "phone": "9689918086",
+        "email": null,
+        "address": "\u0915\u094c\u0932\u0916\u0947\u0921 \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-11 06:41:13",
+        "images": [
+            "facedata/UID1754894473/UID1754894473_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754894473_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508110004",
+                "datetime": "2025-08-11 06:41:13",
+                "purpose": "RTE \u092c\u093e\u092c\u0924\u0924\u0915\u094d\u0930\u093e\u0930",
+                "status": "pending",
+                "dvn": 1,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-11 06:53:36",
+                "remark": "",
+                "forwarding_department": "\u0936\u093f\u0915\u094d\u0937\u0923\u093e\u0927\u093f\u0915\u093e\u0930\u0940 (\u092a\u094d\u0930\u093e\u0927) \u091c\u093f.\u092a. \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754894473/UID1754894473_img1.jpg"
+        ]
+    },
+    "UID1754894650": {
+        "name": "\u0928\u093f\u0924\u0947\u0936 \u0930\u093e\u091c\u0947\u0902\u0926\u094d\u0930 \u0917\u093e\u0902\u0927\u0940",
+        "phone": "9823605702",
+        "email": null,
+        "address": "\u0930\u093e. \u0905\u0915\u094b\u0932\u093e \u0924\u093e. \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-11 06:44:10",
+        "images": [
+            "facedata/UID1754894650/UID1754894650_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754894650_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508110006",
+                "datetime": "2025-08-11 06:44:10",
+                "purpose": "\u0930\u093e\u0938\u094d\u0924 \u092d\u093e\u0935 \u0926\u0941\u0915\u093e\u0928\u0926\u093e\u0930 \u091a\u0947 \u092a\u093e\u0938\u093f\u0902\u0917 \u0909\u092a\u0932\u092c\u094d\u0927 \u0915\u0930\u0942\u0928 \u0926\u0947\u0928\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508110006_doc.pdf",
+                "dvn": 7,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-11 07:09:13",
+                "remark": "",
+                "forwarding_department": "District Supply Officer"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754894650/UID1754894650_img1.jpg"
+        ]
+    },
+    "UID1754894842": {
+        "name": "\u0935\u0938\u0902\u0924\u0930\u093e\u0935 \u091c\u094d\u091e\u093e\u0928\u094d\u0926\u0947\u0935\u0930\u093e\u0935 \u0930\u093e\u0935\u0928\u0915\u0930",
+        "phone": "7972239062",
+        "email": null,
+        "address": "\u0924\u093e\u092a\u0921\u093f\u092f\u093e \u0928\u0917\u0930 \u0905\u0915\u094b\u0932\u093e \u0924\u093e. \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-11 06:47:22",
+        "images": [
+            "facedata/UID1754894842/UID1754894842_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754894842_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508110008",
+                "datetime": "2025-08-11 06:47:23",
+                "purpose": "\u0936\u0947\u0924\u0940\u092c\u093e\u092c\u0924 \u0924\u0915\u094d\u0930\u093e\u0930",
+                "status": "completed",
+                "document_pdf": "pdf/V202508110008_doc.pdf",
+                "dvn": 9,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-11 07:21:58"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754894842/UID1754894842_img1.jpg"
+        ]
+    },
+    "UID1754894992": {
+        "name": "\u0939\u0938\u092e\u0941\u0916 \u0935\u094b\u0930\u093e",
+        "phone": "9373432216",
+        "email": null,
+        "address": "\u0917\u0940\u0924\u093e \u0928\u0917\u0930 \u0924\u093e.\u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-11 06:49:52",
+        "images": [
+            "facedata/UID1754894992/UID1754894992_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754894992_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508110009",
+                "datetime": "2025-08-11 06:49:53",
+                "purpose": "\u092a\u094d\u0932\u0949\u091f \u0938\u0902\u092c\u0902\u0927\u0940 \u0928\u093f\u0935\u0947\u0926\u0928",
+                "status": "completed",
+                "document_pdf": "pdf/V202508110009_doc.pdf",
+                "dvn": 5,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-11 07:05:23"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754894992/UID1754894992_img1.jpg"
+        ]
+    },
+    "UID1754895147": {
+        "name": "\u0926\u093f\u0928\u0915\u0930 \u091c\u092f\u0930\u093e\u092e \u0924\u093e\u092f\u0921\u0947",
+        "phone": "8805440266",
+        "email": null,
+        "address": "\u0930\u093e. \u092a\u093e\u091a\u094b\u0902\u0921\u0940 \u092a\u094b\u0938\u094d\u091f. \u0917\u0941\u0921\u0927\u0940 \u0924\u093e.\u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-11 06:52:27",
+        "images": [
+            "facedata/UID1754895147/UID1754895147_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754895147_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508110010",
+                "datetime": "2025-08-11 06:52:27",
+                "purpose": "\u091c\u0928\u094d\u092e/\u092e\u0943\u0924\u094d\u092f\u0942 \u092a\u094d\u0930\u092e\u093e\u0923\u092a\u0924\u094d\u0930 \u0905\u0928\u0941\u0932\u092c\u094d\u0927\u0924\u093e \u092a\u094d\u0930\u092e\u093e\u0923\u092a\u0924\u094d\u0930 \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508110010_doc.pdf",
+                "dvn": 10,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-11 07:22:51",
+                "remark": "",
+                "forwarding_department": "\u0917\u091f\u0935\u093f\u0915\u093e\u0938 \u0905\u0927\u093f\u0915\u093e\u0930\u0940 \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754895147/UID1754895147_img1.jpg"
+        ]
+    },
+    "UID1754895308": {
+        "name": "\u0921\u0949. \u0936\u093f\u0935\u0936\u0902\u0915\u0930 \u0938\u0941\u0916\u0930\u093e\u091c \u092e\u094c\u0930\u094d\u092f",
+        "phone": "9850339921",
+        "email": null,
+        "address": "\u0930\u093e. \u092e\u094c\u0930\u094d\u092f \u0928\u0917\u0930 \u0936\u093f\u0935\u093e\u0928\u0940 \u0924\u093e. \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-11 06:55:08",
+        "images": [
+            "facedata/UID1754895308/UID1754895308_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754895308_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508110011",
+                "datetime": "2025-08-11 06:55:08",
+                "purpose": "\u0906\u092f\u0941\u0937 \u091a\u093f\u0915\u093f\u0924\u094d\u0938\u093e\u0932\u092f \u0909\u092d\u093e\u0930\u0923\u094d\u092f\u093e\u0915\u0930\u093f\u0924\u093e \u091c\u092e\u0940\u0928 \u0909\u092a\u0932\u092c\u094d\u0927 \u0915\u0930\u0942\u0928 \u0926\u0947\u0928\u0947\u092c\u093e\u092c\u093e\u0924",
+                "status": "completed",
+                "document_pdf": "pdf/V202508110011_doc.pdf",
+                "dvn": 11,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-11 07:23:37"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754895308/UID1754895308_img1.jpg"
+        ]
+    },
+    "UID1754896430": {
+        "name": "\u0926\u093f\u0928\u0915\u0930 \u091d\u093e\u092c\u0941\u091c\u0940 \u092d\u0917\u0924",
+        "phone": "7741841524",
+        "email": null,
+        "address": "\u0930\u093e. \u092d\u0902\u0921\u093e\u0930\u091c \u0916\u0941\u0930\u094d\u0926 \u0924\u093e. \u092a\u093e\u0924\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092a\u093e\u0924\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-08-11 07:13:50",
+        "images": [
+            "facedata/UID1754896430/UID1754896430_img1.jpg"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508110013",
+                "datetime": "2025-08-11 07:13:51",
+                "purpose": "\u0936\u0947\u0924\u0940 \u092c\u093e\u092c\u0924 \u0924\u0915\u094d\u0930\u093e\u0930",
+                "status": "pending",
+                "document_pdf": "pdf/V202508110013_doc.pdf",
+                "dvn": 13,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-11 07:25:58",
+                "remark": "",
+                "forwarding_department": "\u091c\u093f\u0932\u094d\u0939\u093e \u0905\u0927\u0940\u0915\u094d\u0937\u0915 \u092d\u0942\u092e\u0940 \u0905\u092d\u093f\u0932\u0947\u0916, \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754896430/UID1754896430_img1.jpg"
+        ]
+    },
+    "UID1754896621": {
+        "name": "\u0935\u093e\u092e\u0928 \u0932\u0915\u094d\u0937\u092e\u0923 \u0935\u093e\u0928\u0916\u0921\u0947",
+        "phone": "9022845681",
+        "email": null,
+        "address": "\u0930\u093e. \u0936\u0947\u0932\u0942 \u092a\u094b. \u0938\u094b\u0928\u0947\u0930\u0940 \u0924\u093e. \u092e\u0941\u0930\u094d\u0924\u0940\u091c\u093e\u092a\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092e\u0941\u0930\u094d\u0924\u093f\u091c\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-08-11 07:17:01",
+        "images": [
+            "facedata/UID1754896621/UID1754896621_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754896621_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508110014",
+                "datetime": "2025-08-11 07:17:01",
+                "purpose": "\u0917\u093e\u092f\u0930\u093e\u0928 \u091c\u092e\u0940\u0928 \u0935 \u0905\u0924\u093f\u0915\u094d\u0930\u092e\u0923 \u0915\u0947\u0932\u094d\u092f\u093e\u092c\u093e\u092c\u0924 \u0924\u0915\u094d\u0930\u093e\u0930",
+                "status": "pending",
+                "document_pdf": "pdf/V202508110014_doc.pdf",
+                "dvn": 14,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-11 07:27:30",
+                "remark": "",
+                "forwarding_department": "\u0905\u0924\u093f. \u092e\u0941\u0916\u094d\u092f \u0915\u093e\u0930\u094d\u092f\u0915\u093e\u0930\u0940 \u0905\u0927\u093f\u0915\u093e\u0930\u0940 \u091c\u093f.\u092a.\u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754896621/UID1754896621_img1.jpg"
+        ]
+    },
+    "UID1754896804": {
+        "name": "\u092d\u0917\u0935\u093e\u0928 \u0905\u0935\u0927\u0942\u0924 \u0935\u093e\u0928\u0916\u0921\u0947",
+        "phone": "8263820861",
+        "email": null,
+        "address": "\u092e\u0941.\u092a\u094b. \u092c\u094b\u0930\u094d\u091f\u093e \u0924\u093e. \u092e\u0941\u0930\u094d\u0924\u0940\u091c\u093e\u092a\u0942\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092e\u0941\u0930\u094d\u0924\u093f\u091c\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-08-11 07:20:04",
+        "images": [
+            "facedata/UID1754896804/UID1754896804_img1.jpg"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508110015",
+                "datetime": "2025-08-11 07:20:04",
+                "purpose": "\u092a\u0940. \u090f\u092e. \u0915\u093f\u0938\u093e\u0928 \u091a\u093e \u0932\u093e\u092d \u092e\u093f\u0933\u0924 \u0928\u0938\u0932\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508110015_doc.pdf",
+                "dvn": 15,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-11 07:28:09",
+                "remark": "",
+                "forwarding_department": "\u091c\u093f\u0932\u094d\u0939\u093e \u0905\u0927\u0940\u0915\u094d\u0937\u0915 \u0915\u0943\u0937\u093f \u0905\u0927\u093f\u0915\u093e\u0930\u0940, \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754896804/UID1754896804_img1.jpg"
+        ]
+    },
+    "UID1754980997": {
+        "name": "\u0936\u0940\u0932\u093e \u092a\u0941\u0902\u0921\u0932\u093f\u0915 \u0926\u0947\u0936\u092e\u0941\u0916",
+        "phone": "9881503668",
+        "email": null,
+        "address": "\u0930\u093e. \u0939\u0928\u0941\u092e\u093e\u0928 \u0928\u0917\u0930 \u0905\u0915\u094b\u091f \u0924\u093e. \u0905\u0915\u094b\u091f \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u091f",
+        "district": "Akola",
+        "registration_datetime": "2025-08-12 06:43:17",
+        "images": [
+            "facedata/UID1754980997/UID1754980997_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754980997_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508120001",
+                "datetime": "2025-08-12 06:43:17",
+                "purpose": "\u092e\u0939\u093e\u0924\u094d\u092e\u093e \u091c\u094d\u092f\u094b\u0924\u0940\u0930\u093e\u0935 \u092b\u0941\u0932\u0947 \u092f\u094b\u091c\u0928\u0947\u091a\u093e \u0932\u093e\u092d \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508120001_doc.pdf",
+                "dvn": 3,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-12 07:13:40",
+                "remark": "",
+                "forwarding_department": "\u091c\u093f\u0932\u094d\u0939\u093e \u0906\u0930\u094b\u0917\u094d\u092f \u0905\u0927\u093f\u0915\u093e\u0930\u0940, \u091c\u093f\u0932\u094d\u0939\u093e\u092a\u0930\u093f\u0937\u0926, \u0905\u0915\u094b\u0932\u093e"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754980997/UID1754980997_img1.jpg"
+        ]
+    },
+    "UID1754981403": {
+        "name": "\u092e\u094b\u0939\u092e\u094d\u092e\u0926 \u0905\u092c\u094d\u0930\u093e\u0930 \u0939\u0941\u0938\u0947\u0928 \u092e\u094b\u0939\u092e\u094d\u092e\u0926 \u0930\u094b\u0937\u0923",
+        "phone": "8275311346",
+        "email": null,
+        "address": "\u0930\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u0924\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0933\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-08-12 06:50:03",
+        "images": [
+            "facedata/UID1754981403/UID1754981403_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754981403_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508120003",
+                "datetime": "2025-08-12 06:50:03",
+                "purpose": "\u092d\u0947\u091f \u0926\u0947\u0928\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508120003_doc.pdf",
+                "dvn": 1,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-12 07:11:13",
+                "remark": "",
+                "forwarding_department": "SDO Balapur"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754981403/UID1754981403_img1.jpg"
+        ]
+    },
+    "UID1754981899": {
+        "name": "\u0905\u092e\u094b\u0932 \u0938\u0941\u092d\u093e\u0937 \u0921\u093e\u092c\u0947\u0930\u093e\u0935",
+        "phone": "9579180351",
+        "email": null,
+        "address": "\u0930\u093e. \u092c\u0947\u0932\u0942\u0930\u093e \u0924\u093e. \u092a\u093e\u0924\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092a\u093e\u0924\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-08-12 06:58:19",
+        "images": [
+            "facedata/UID1754981899/UID1754981899_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754981899_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508120004",
+                "datetime": "2025-08-12 06:58:20",
+                "purpose": "\u0926\u093f\u0935\u094d\u092f\u093e\u0902\u0917 \u0905\u0927\u093f\u0928\u093f\u092f\u092e\u093e\u0928\u0941\u0938\u093e\u0930 \u0918\u0930\u0915\u0941\u0932 \u0915\u0930\u093f\u0924\u093e \u0907-\u0915\u094d\u0932\u093e\u0938 \u091c\u092e\u0940\u0928 \u092e\u093f\u0933\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508120004_doc.pdf",
+                "dvn": 5,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-12 07:16:10",
+                "remark": "",
+                "forwarding_department": "Tahasildar Patur"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754981899/UID1754981899_img1.jpg"
+        ]
+    },
+    "UID1754982540": {
+        "name": "\u0936\u0947\u0916 \u0938\u0932\u093f\u092e",
+        "phone": "8805816410",
+        "email": null,
+        "address": "\u092e\u0941. \u092a\u094b. \u0930\u0947\u0932 \u0924\u093e. \u0905\u0915\u094b\u091f \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u091f",
+        "district": "Akola",
+        "registration_datetime": "2025-08-12 07:09:00",
+        "images": [
+            "facedata/UID1754982540/UID1754982540_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754982540_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508120005",
+                "datetime": "2025-08-12 07:09:00",
+                "purpose": "\u0915\u0941\u0930\u0947\u0936\u0940 \u0938\u092e\u093e\u091c\u093e\u091a\u094d\u092f\u093e \u092a\u093e\u0930\u0902\u092a\u093e\u0930\u093f\u0915 \u0935\u094d\u092f\u0935\u0938\u093e\u092f\u093e\u092c\u093e\u092c\u0924 \u0924\u094d\u0935\u0930\u093f\u0924 \u0928\u093f\u0930\u094d\u0923\u092f \u0918\u0947\u0923\u0947\u092c\u093e\u092c\u0924",
+                "status": "completed",
+                "document_pdf": "pdf/V202508120005_doc.pdf",
+                "dvn": 2,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-12 07:11:47"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754982540/UID1754982540_img1.jpg"
+        ]
+    },
+    "UID1754982711": {
+        "name": "\u0913\u092e \u091a\u0902\u0926\u094d\u0930\u0936\u0947\u0916\u0930 \u0938\u093e\u0935\u091c\u0940",
+        "phone": "9834965577",
+        "email": null,
+        "address": "\u0906\u0928\u0902\u0926 \u0917\u0943\u0939 \u0928\u093f\u0930\u094d\u092e\u093e\u0923 \u0938\u0902\u0938\u094d\u0925\u093e\u0928, \u0915\u094c\u0932\u0916\u0947\u0921 \u0924\u093e. \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-12 07:11:51",
+        "images": [
+            "facedata/UID1754982711/UID1754982711_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754982711_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508120006",
+                "datetime": "2025-08-12 07:11:51",
+                "purpose": "\u092c\u0901\u0915 \u0938\u094d\u092e\u093e\u0930\u094d\u091f \u092a\u094d\u0930\u0915\u0932\u094d\u092a \u0905\u0902\u0924\u0930\u094d\u0917\u0924 \u092e\u0902\u091c\u0942\u0930 \u092a\u094d\u0930\u0915\u0932\u094d\u092a\u093e\u0902\u0928\u093e \u0915\u0930\u094d\u091c \u0926\u0947\u0924 \u0928\u0938\u0932\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "completed",
+                "document_pdf": "pdf/V202508120006_doc.pdf",
+                "dvn": 6,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-12 07:17:21"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754982711/UID1754982711_img1.jpg"
+        ]
+    },
+    "UID1754982839": {
+        "name": "\u0936\u0948\u0932\u0947\u0936 \u0926\u093f\u0917\u0902\u092c\u0930 \u091c\u094b\u0936\u0940",
+        "phone": "9975860866",
+        "email": null,
+        "address": "\u0930\u093e. \u0905\u0902\u0926\u0941\u0930\u093e \u0924\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0933\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-08-12 07:13:59",
+        "images": [
+            "facedata/UID1754982839/UID1754982839_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754982839_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508120007",
+                "datetime": "2025-08-12 07:13:59",
+                "purpose": "\u0905\u0924\u093f\u0915\u094d\u0930\u092e\u0923 \u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508120007_doc.pdf",
+                "dvn": 7,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-12 07:19:31",
+                "remark": "",
+                "forwarding_department": "\u0917\u091f\u0935\u093f\u0915\u093e\u0938 \u0905\u0927\u093f\u0915\u093e\u0930\u0940 \u092c\u093e\u0933\u093e\u092a\u0941\u0930"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754982839/UID1754982839_img1.jpg"
+        ]
+    },
+    "UID1754983556": {
+        "name": "\u0930\u094b\u0939\u0928 \u0926\u093f\u0935\u093e\u0915\u0930 \u0905\u0902\u092d\u094b\u0930\u0947",
+        "phone": "9653303853",
+        "email": null,
+        "address": "\u092e\u0902\u0917\u0930\u0942\u0933 \u0924\u093e\u0902\u092c\u0947 \u0924\u093e. \u092e\u0941\u0930\u094d\u0924\u0940\u091c\u093e\u092a\u0942\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092e\u0941\u0930\u094d\u0924\u093f\u091c\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-08-12 07:25:56",
+        "images": [
+            "facedata/UID1754983556/UID1754983556_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754983556_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508120008",
+                "datetime": "2025-08-12 07:25:56",
+                "purpose": "\u0917\u093e\u0935\u093e\u0924\u0940\u0932 \u0930\u0938\u094d\u0924\u094d\u092f\u093e\u091a\u094d\u092f\u093e \u0926\u0941\u0930\u0941\u0938\u094d\u0924\u0940\u092c\u093e\u092c\u0924",
+                "status": "completed",
+                "dvn": 8,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-12 07:26:19"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754983556/UID1754983556_img1.jpg"
+        ]
+    },
+    "UID1754983693": {
+        "name": "\u0926\u093f\u0932\u0940\u092a \u091c\u0917\u0926\u0947\u0935\u0930\u093e\u0935 \u091a\u093e\u0902\u0926\u0923\u0947",
+        "phone": "8806995002",
+        "email": null,
+        "address": "\u0930\u093e. \u0930\u093e\u091c\u0928\u0916\u0947\u0921 \u0924\u093e. \u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940",
+        "district": "Akola",
+        "registration_datetime": "2025-08-12 07:28:13",
+        "images": [
+            "facedata/UID1754983693/UID1754983693_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1754983693_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508120009",
+                "datetime": "2025-08-12 07:28:13",
+                "purpose": "\u0936\u0947\u0924\u0940\u092c\u093e\u092c\u0924",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "dvn": 9,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-12 07:51:35"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1754983693/UID1754983693_img1.jpg"
+        ]
+    },
+    "UID1755153399": {
+        "name": "\u092c\u092c\u0928 \u0939\u0930\u093f\u0926\u093e\u0938 \u0905\u0915\u094b\u091f\u0915\u0930",
+        "phone": "9325915600",
+        "email": null,
+        "address": "\u0930\u093e. \u092a\u0923\u091c \u0924\u093e. \u0905\u0915\u094b\u091f \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u091f",
+        "district": "Akola",
+        "registration_datetime": "2025-08-14 06:36:39",
+        "images": [
+            "facedata/UID1755153399/UID1755153399_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1755153399_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508140001",
+                "datetime": "2025-08-14 06:36:40",
+                "purpose": "\u0917\u094d\u0930\u093e\u092e\u092a\u0902\u091a\u093e\u092f\u0924 \u092c\u093e\u092c\u0924",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "document_pdf": "pdf/V202508140001_doc.pdf",
+                "dvn": 1,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-14 07:19:26"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1755153399/UID1755153399_img1.jpg"
+        ]
+    },
+    "UID1755153625": {
+        "name": "\u0938\u093f\u0926\u094d\u0927\u093e\u0930\u094d\u0925 \u0938\u093f\u0930\u0938\u093e\u091f",
+        "phone": "8149350501",
+        "email": null,
+        "address": "\u0930\u093e. \u0939\u0930\u0940\u0939\u0930\u092a\u0947\u0920 \u091c\u0941\u0928\u0947 \u0936\u0939\u0930 \u0924\u093e. \u0905\u0915\u094b\u0932\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-14 06:40:25",
+        "images": [
+            "facedata/UID1755153625/UID1755153625_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1755153625_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508140003",
+                "datetime": "2025-08-14 06:40:25",
+                "purpose": "\u0936\u093e\u0933\u093e \u092a\u094d\u0930\u0935\u0947\u0936\u093e\u092c\u093e\u092c\u0924",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "document_pdf": "pdf/V202508140003_doc.pdf",
+                "dvn": 2,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-14 07:19:37"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1755153625/UID1755153625_img1.jpg"
+        ]
+    },
+    "UID1755153781": {
+        "name": "\u0905\u092d\u093f\u0937\u0947\u0915 \u0926\u0924\u094d\u0924\u093e\u0924\u094d\u0930\u092f \u0915\u093e\u0928\u094d\u091d\u0930\u0915\u0930",
+        "phone": "7385582708",
+        "email": null,
+        "address": "\u0930\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u0924\u093e. \u092c\u093e\u0933\u093e\u092a\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0933\u093e\u092a\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-08-14 06:43:01",
+        "images": [
+            "facedata/UID1755153781/UID1755153781_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1755153781_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508140004",
+                "datetime": "2025-08-14 06:43:02",
+                "purpose": "\u0905\u0928\u0941\u0915\u0902\u092a\u093e \u0928\u093f\u092f\u0941\u0915\u094d\u0924\u0940\u092c\u093e\u092c\u0924",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "document_pdf": "pdf/V202508140004_doc.pdf",
+                "dvn": 4,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-14 07:21:46"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1755153781/UID1755153781_img1.jpg"
+        ]
+    },
+    "UID1755155196": {
+        "name": "\u0926\u092f\u093e\u0930\u093e\u092e \u0935\u093f\u0920\u094d\u0920\u0932 \u0915\u094b\u0930\u0921\u0947",
+        "phone": "7218605965",
+        "email": null,
+        "address": "\u092e\u0941.\u092a\u094b. \u092f\u0947\u0933\u0935\u0928 \u0924\u093e.  \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-14 07:06:36",
+        "images": [
+            "facedata/UID1755155196/UID1755155196_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1755155196_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508140005",
+                "datetime": "2025-08-14 07:06:36",
+                "purpose": "\u091c\u0947\u0937\u094d\u0920 \u0928\u093e\u0917\u0930\u093f\u0915 \u0928\u093f\u0930\u094d\u0935\u093e\u0939 \u092d\u0924\u094d\u0924\u093e \u092c\u093e\u092c\u0924 \u0924\u0915\u094d\u0930\u093e\u0930",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "dvn": 5,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-14 07:30:37"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1755155196/UID1755155196_img1.jpg"
+        ]
+    },
+    "UID1755156203": {
+        "name": "\u0938\u0941\u0930\u094d\u0924\u093e\u092c\u093e\u0908 \u0930\u092e\u0947\u0936 \u0915\u093f\u0930\u093e\u0924\u0915\u093e\u0930",
+        "phone": "8261823855",
+        "email": null,
+        "address": "\u0930\u093e\u0902. \u0935\u0930\u0923\u0917\u093e\u0935 \u0924\u093e. \u092a\u093e\u0924\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092a\u093e\u0924\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-08-14 07:23:23",
+        "images": [
+            "facedata/UID1755156203/UID1755156203_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1755156203_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508140006",
+                "datetime": "2025-08-14 07:23:23",
+                "purpose": "\u0936\u0947\u0924\u0930\u0938\u094d\u0924\u093e' \u0905\u0921\u0935\u093f\u0932\u094d\u092f\u093e\u092c\u093e\u092c\u0924",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "document_pdf": "pdf/V202508140006_doc.pdf",
+                "dvn": 6,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-14 07:32:13"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1755156203/UID1755156203_img1.jpg"
+        ]
+    },
+    "UID1755156377": {
+        "name": "\u0905\u0930\u0941\u0923 \u0926\u093f\u0917\u0902\u092c\u0930 \u092a\u093f\u0902\u092a\u0933\u0947",
+        "phone": "8007957917",
+        "email": null,
+        "address": "\u0930\u093e. \u091c\u093e\u092e\u0935\u0924 \u0924\u093e. \u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940",
+        "district": "Akola",
+        "registration_datetime": "2025-08-14 07:26:17",
+        "images": [
+            "facedata/UID1755156377/UID1755156377_img1.jpg"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508140007",
+                "datetime": "2025-08-14 07:26:17",
+                "purpose": "\u0936\u0947\u0924\u0940\u092c\u093e\u092c\u0924",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "document_pdf": "pdf/V202508140007_doc.pdf",
+                "dvn": 7,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-14 07:34:54"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1755156377/UID1755156377_img1.jpg"
+        ]
+    },
+    "UID1755156540": {
+        "name": "\u0938\u0902\u091c\u092f\u0915\u0941\u092e\u093e\u0930 \u092a\u094d\u0930\u0915\u093e\u0936\u091a\u0902\u0926 \u0936\u0930\u094d\u092e\u093e",
+        "phone": "9850812920",
+        "email": null,
+        "address": "\u0930\u093e. \u091a\u093e\u0928\u094d\u0928\u0940 \u0924\u093e. \u092a\u093e\u0924\u0941\u0930 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092a\u093e\u0924\u0942\u0930",
+        "district": "Akola",
+        "registration_datetime": "2025-08-14 07:29:00",
+        "images": [
+            "facedata/UID1755156540/UID1755156540_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1755156540_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508140008",
+                "datetime": "2025-08-14 07:29:00",
+                "purpose": "\u0909\u092a\u094b\u0937\u0923 \u092c\u093e\u092c\u0924 \u0928\u093f\u0935\u0947\u0926\u0928",
+                "status": "\u0928\u0935\u0940\u0928 \u0905\u092d\u094d\u092f\u093e\u0917\u0924",
+                "document_pdf": "pdf/V202508140008_doc.pdf",
+                "dvn": 8,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-14 07:35:15"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1755156540/UID1755156540_img1.jpg"
+        ]
+    },
+    "UID1755757189": {
+        "name": "\u092d\u093f\u092e\u0930\u093e\u0935 \u0930\u0918\u0941\u0928\u093e\u0925 \u092a\u094b\u0939\u094b\u0930\u0915\u0930",
+        "phone": "7720922212",
+        "email": null,
+        "address": "\u0930\u093e. \u0926\u093e\u0928\u093e\u092a\u0942\u0930 \u092a\u094b. \u0926\u093e\u0928\u093e\u092a\u0942\u0930 \u0924\u093e. \u0924\u0947\u0932\u094d\u0939\u093e\u0930\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0924\u0947\u0932\u094d\u0939\u093e\u0930\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-21 06:19:49",
+        "images": [
+            "facedata/UID1755757189/UID1755757189_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1755757189_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508210001",
+                "datetime": "2025-08-21 06:19:49",
+                "purpose": "\u0905\u0924\u093f\u0915\u094d\u0930\u092e\u0923 \u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508210001_doc.pdf",
+                "dvn": 1,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-21 06:44:21",
+                "remark": "",
+                "forwarding_department": "Tahasildar Telhar"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1755757189/UID1755757189_img1.jpg"
+        ]
+    },
+    "UID1755757619": {
+        "name": "\u092c\u093e\u092c\u0942\u0932\u093e\u0932 \u092c\u093e\u092c\u093e\u0930\u093e\u0935 \u0936\u093f\u0902\u0926\u0947",
+        "phone": "9075445315",
+        "email": null,
+        "address": "\u0930\u093e. \u0905\u091c\u0928\u0940 \u092c\u0941. \u0924. \u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940 \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u092c\u093e\u0930\u094d\u0936\u0940\u091f\u093e\u0915\u0933\u0940",
+        "district": "Akola",
+        "registration_datetime": "2025-08-21 06:26:59",
+        "images": [
+            "facedata/UID1755757619/UID1755757619_img1.jpg"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508210003",
+                "datetime": "2025-08-21 06:27:00",
+                "purpose": "\u0936\u0947\u0924\u0940 \u0905\u0924\u093f\u0915\u094d\u0930\u092e\u0923 \u092c\u093e\u092c\u0924",
+                "status": "pending",
+                "document_pdf": "pdf/V202508210003_doc.pdf",
+                "dvn": 3,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-21 06:48:08",
+                "remark": "",
+                "forwarding_department": "Tahasildar Akola"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1755757619/UID1755757619_img1.jpg"
+        ]
+    },
+    "UID1755758448": {
+        "name": "\u0938\u0902\u0924\u094b\u0937 \u092a\u0941\u0902\u091c\u093e\u091c\u0940 \u0917\u094b\u0902\u0921\u091a\u0935\u0930",
+        "phone": "8975678342",
+        "email": null,
+        "address": "\u0930\u093e. \u0916\u0930\u092a \u0916\u0941\u0930\u094d\u0926 \u0924\u093e. .\u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0905\u0915\u094b\u0932\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-21 06:40:48",
+        "images": [
+            "facedata/UID1755758448/UID1755758448_img1.jpg"
+        ],
+        "face_encodings": [
+            "data/encodings/UID1755758448_encoding1.npy"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508210004",
+                "datetime": "2025-08-21 06:40:48",
+                "purpose": "\u0936\u093e\u0938\u0915\u0940\u092f \u0906\u0926\u0947\u0936\u093e\u091a\u0947 \u0909\u0932\u094d\u0932\u0902\u0918\u0928 \u0915\u0947\u0932\u094d\u092f\u093e\u092c\u093e\u092c\u0924 \u0924\u0915\u094d\u0930\u093e\u0930",
+                "status": "pending",
+                "document_pdf": "pdf/V202508210004_doc.pdf",
+                "dvn": 4,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-21 06:50:32",
+                "remark": "",
+                "forwarding_department": "Tahasildar Akola"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1755758448/UID1755758448_img1.jpg"
+        ]
+    },
+    "UID1755758710": {
+        "name": "\u0917\u094b\u092a\u093e\u0932 \u0905\u092e\u0943\u0924\u093e \u092a\u093e\u091f\u094b\u0933\u0947",
+        "phone": "9309457669",
+        "email": null,
+        "address": "\u0930\u093e. \u0916\u0902\u0921\u093e\u0933\u093e \u0924. \u0924\u0947\u0932\u094d\u0939\u093e\u0930\u093e \u091c\u093f. \u0905\u0915\u094b\u0932\u093e",
+        "tahasil": "\u0924\u0947\u0932\u094d\u0939\u093e\u0930\u093e",
+        "district": "Akola",
+        "registration_datetime": "2025-08-21 06:45:10",
+        "images": [
+            "facedata/UID1755758710/UID1755758710_img1.jpg"
+        ],
+        "visitor": [
+            {
+                "visit_id": "V202508210005",
+                "datetime": "2025-08-21 06:45:10",
+                "purpose": "\u092e\u0941\u0932\u0917\u093e \u092c\u0947\u092a\u0924\u094d\u0924\u093e \u0905\u0938\u0932\u094d\u092f\u093e\u092c\u093e\u092c\u0924 \u0924\u0915\u094d\u0930\u093e\u0930",
+                "status": "completed",
+                "document_pdf": "pdf/V202508210005_doc.pdf",
+                "dvn": 5,
+                "entry_confirmed": true,
+                "confirmation_time": "2025-08-21 06:53:17"
+            }
+        ],
+        "profile_img": [
+            "profiles/UID1755758710/UID1755758710_img1.jpg"
         ]
     }
 }

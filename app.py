@@ -23,21 +23,17 @@ DATA_FILE = 'data/facedata/facedata.json'
 DEPARTMENTS_FILE = 'JSON/departments.json'
 ALLOWED_EXTENSIONS = {'pdf'}
 
-
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(PDF_FOLDER, exist_ok=True)
-
 
 def is_admin_authenticated():
     if "user" in session and session.get("user", {}).get("role") == "admin":
         return True
     print("WARNING: is_admin_authenticated called WITHOUT proper authentication check!")
     return False
-
 
 def load_face_data():
     try:
@@ -46,18 +42,15 @@ def load_face_data():
     except (FileNotFoundError, json.JSONDecodeError):
         return {}
 
-
 def save_face_data(data):
     os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
     with open(DATA_FILE, 'w') as file:
         json.dump(data, file, indent=4)
     return True
 
-
 def signal_handler(sig, frame):
     print('Shutting down gracefully...')
     sys.exit(0)
-
 
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
@@ -124,12 +117,10 @@ def generate_visitor_id():
     visitor_id = f"V{date_component}{str(visit_count).zfill(4)}"
     return visitor_id
 
-
 def is_marathi(text):
     if not text:
         return False
     return any('\u0900' <= c <= '\u097F' for c in text)
-
 
 def save_face_images(frame, uid):
     user_dir = f'data/facedata/{uid}'
