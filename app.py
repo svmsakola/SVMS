@@ -12,6 +12,7 @@ from openpyxl.styles import Font, Alignment, Border, Side
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from ultralytics import YOLO
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 CORS(app)
@@ -19,21 +20,27 @@ app.secret_key = os.urandom(24)
 
 UPLOAD_FOLDER = 'uploads/docimg'
 PDF_FOLDER = 'pdf'
+REMARK_PDF_FOLDER = 'data/remarkpdf'  # Folder for remark PDFs
 DATA_FILE = 'JSON/facedata.json'
 DEPARTMENTS_FILE = 'JSON/departments.json'
 ALLOWED_EXTENSIONS = {'pdf'}
 
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(PDF_FOLDER, exist_ok=True)
+os.makedirs(REMARK_PDF_FOLDER, exist_ok=True)  # Ensure the remark PDF directory exists
+
 
 def is_admin_authenticated():
     if "user" in session and session.get("user", {}).get("role") == "admin":
         return True
     print("WARNING: is_admin_authenticated called WITHOUT proper authentication check!")
     return False
+
 
 def load_face_data():
     try:
@@ -42,15 +49,18 @@ def load_face_data():
     except (FileNotFoundError, json.JSONDecodeError):
         return {}
 
+
 def save_face_data(data):
     os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
     with open(DATA_FILE, 'w') as file:
         json.dump(data, file, indent=4)
     return True
 
+
 def signal_handler(sig, frame):
     print('Shutting down gracefully...')
     sys.exit(0)
+
 
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
@@ -117,10 +127,12 @@ def generate_visitor_id():
     visitor_id = f"V{date_component}{str(visit_count).zfill(4)}"
     return visitor_id
 
+
 def is_marathi(text):
     if not text:
         return False
     return any('\u0900' <= c <= '\u097F' for c in text)
+
 
 def save_face_images(frame, uid):
     user_dir = f'data/facedata/{uid}'
@@ -418,6 +430,7 @@ def register_visitor():
         'uid': uid,
         'visit_id': visitor_id
     })
+
 
 @app.route('/search_visitors', methods=['GET'])
 def search_visitors():
@@ -903,7 +916,6 @@ def upload_visitor_document(visit_id):
             abs_existing_path = os.path.abspath(existing_pdf_path)
             abs_pdf_folder = os.path.abspath(PDF_FOLDER)
             if abs_existing_path.startswith(abs_pdf_folder): os.remove(existing_pdf_path)
-        from werkzeug.utils import secure_filename
         filename = f"{secure_filename(visit_id)}_doc.pdf"
         filepath = os.path.join(PDF_FOLDER, filename)
         file.save(filepath)
@@ -1024,7 +1036,6 @@ def generate_pdf():
         visit_id = request.json['visit_id']
         if not visit_id: return jsonify({'success': False, 'error': 'Visit ID is missing'}), 400
         if not image_ids: return jsonify({'success': False, 'error': 'No image IDs provided for PDF generation'}), 400
-        from werkzeug.utils import secure_filename
         pdf_filename = f"{secure_filename(visit_id)}_doc.pdf"
         pdf_path = os.path.join(PDF_FOLDER, pdf_filename)
         if os.path.exists(pdf_path):
@@ -1126,17 +1137,14 @@ def load_departments():
         return []
 
 
-# Helper to load the entire departments JSON structure for admin edits
 def load_departments_data():
     try:
         with open(DEPARTMENTS_FILE, 'r', encoding='utf-8') as f:
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
-        # If file is missing or corrupt, create a default structure
         return {"departments": []}
 
 
-# Helper to save the entire departments JSON structure after admin edits
 def save_departments_data(data):
     try:
         with open(DEPARTMENTS_FILE, 'w', encoding='utf-8') as f:
@@ -1390,8 +1398,13 @@ def get_department_applications():
                     'profile_img': user_data.get('profile_img', [''])[0] if user_data.get('profile_img') else ''
                 }
                 applications.append(application)
-
     return jsonify(applications)
+
+
+@app.route('/data/remarkpdf/<path:filename>')
+@department_login_required
+def serve_remark_pdf(filename):
+    return send_from_directory(REMARK_PDF_FOLDER, filename)
 
 
 @app.route('/api/department/application/<visit_id>', methods=['GET'])
@@ -1422,6 +1435,7 @@ def get_application_details(visit_id):
                         'purpose': visit.get('purpose'),
                         'status': visit.get('status'),
                         'remark': visit.get('remark', ''),
+                        'remark_pdf': visit.get('remark_pdf', ''),
                         'document_pdf': visit.get('document_pdf', ''),
                         'entry_confirmed': visit.get('entry_confirmed', False),
                         'confirmation_time': visit.get('confirmation_time', ''),
@@ -1441,13 +1455,16 @@ def update_application(visit_id):
     department_name = department.get('name')
     status = request.form.get('status')
     remark = request.form.get('remark', '')
+
     if not status or status not in ['pending', 'completed']:
         return jsonify({"error": "Invalid status value"}), 400
+
     try:
         with open(DATA_FILE, 'r') as file:
             facedata = json.load(file)
     except Exception as e:
         return jsonify({'error': f'Failed to load data: {str(e)}'}), 500
+
     updated = False
     for uid, user_data in facedata.items():
         for i, visit in enumerate(user_data.get('visitor', [])):
@@ -1455,10 +1472,29 @@ def update_application(visit_id):
                 if visit.get('forwarding_department') == department_name:
                     user_data['visitor'][i]['status'] = status
                     user_data['visitor'][i]['remark'] = remark
+
+                    if 'remark_pdf' in request.files:
+                        file = request.files['remark_pdf']
+                        if file and file.filename != '' and allowed_file(file.filename):
+                            old_pdf_path = user_data['visitor'][i].get('remark_pdf')
+                            if old_pdf_path and os.path.exists(old_pdf_path):
+                                try:
+                                    os.remove(old_pdf_path)
+                                except OSError as e:
+                                    print(f"Error removing old remark PDF: {e}")
+
+                            filename = f"{secure_filename(visit_id)}_remark_{int(datetime.now().timestamp())}.pdf"
+                            filepath = os.path.join(REMARK_PDF_FOLDER, filename)
+                            file.save(filepath)
+                            user_data['visitor'][i]['remark_pdf'] = filepath
+                        elif file.filename != '':
+                            return jsonify({"error": "Invalid file type. Only PDF is allowed."}), 400
+
                     updated = True
                     break
         if updated:
             break
+
     if updated:
         try:
             with open(DATA_FILE, 'w') as file:
@@ -1673,32 +1709,24 @@ def admin_update_department(dept_id):
     req_data = request.get_json()
     if not req_data:
         return jsonify({"success": False, "message": "Request body is empty."}), 400
-
     new_name = req_data.get('name', '').strip()
     new_email = req_data.get('email', '').strip()
-
     if not new_name and not new_email:
         return jsonify(
             {"success": False, "message": "At least one field (name or email) must be provided for update."}), 400
-
     data = load_departments_data()
     departments = data.get('departments', [])
-
     target_dept = next((d for d in departments if d.get('id') == dept_id), None)
-
     if not target_dept:
         return jsonify({"success": False, "message": "Department not found."}), 404
-
     if new_name and any(d['name'].lower() == new_name.lower() and d['id'] != dept_id for d in departments):
         return jsonify({"success": False, "message": "Another department with this name already exists."}), 409
     if new_email and any(d['email'].lower() == new_email.lower() and d['id'] != dept_id for d in departments):
         return jsonify({"success": False, "message": "Another department with this email already exists."}), 409
-
     if new_name:
         target_dept['name'] = new_name
     if new_email:
         target_dept['email'] = new_email
-
     data['departments'] = departments
     if save_departments_data(data):
         return jsonify({"success": True, "message": "Department updated successfully.", "department": target_dept})
@@ -1711,13 +1739,10 @@ def admin_update_department(dept_id):
 def admin_delete_department(dept_id):
     data = load_departments_data()
     departments = data.get('departments', [])
-
     initial_len = len(departments)
     departments = [d for d in departments if d.get('id') != dept_id]
-
     if len(departments) == initial_len:
         return jsonify({"success": False, "message": "Department not found."}), 404
-
     data['departments'] = departments
     if save_departments_data(data):
         return jsonify({"success": True, "message": "Department deleted successfully."})
@@ -1726,7 +1751,6 @@ def admin_delete_department(dept_id):
 
 
 # --- End Admin Department CRUD ---
-
 @app.route('/api/admin/visitors')
 @admin_login_required
 def get_admin_visitors():
@@ -1772,7 +1796,6 @@ def get_admin_visitors():
                     print(f"Warning: Skipping invalid visit entry for UID {uid}: {visit}")
         else:
             print(f"Warning: Skipping invalid user data structure for UID {uid}")
-
     try:
         valid_visitors = [v for v in daily_visitors if
                           'datetime' in v and isinstance(v['datetime'], str) and v['datetime']]
@@ -1783,7 +1806,6 @@ def get_admin_visitors():
     except Exception as e:
         print(f"Warning: Could not sort visitors due to invalid data or structure: {e}")
         sorted_daily_visitors = daily_visitors
-
     response = make_response(jsonify({"visitors": sorted_daily_visitors}))
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response.headers['Pragma'] = 'no-cache'
@@ -1798,7 +1820,6 @@ def delete_visitor_entry():
     uid, visit_id = data.get('uid'), data.get('visit_id') if data else (None, None)
     if not uid or not visit_id:
         return jsonify({"success": False, "message": "Missing or empty uid/visit_id"}), 400
-
     try:
         face_data = load_face_data()
         user_visits = face_data.get(uid, {}).get('visitor')
@@ -1841,10 +1862,8 @@ def generate_visitor_report():
             end_date = start_date
         else:
             end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
-
         if start_date > end_date:
             return jsonify({"error": "Start date cannot be after end date"}), 400
-
     except ValueError:
         return jsonify({"error": "Invalid date format. Use YYYY-MM-DD"}), 400
     try:
@@ -2000,8 +2019,6 @@ def delete_user():
         traceback.print_exc()
         return jsonify({"success": False, "message": f"An server error occurred during user deletion: {str(e)}"}), 500
 
-
-# --- OTHER API & UTILITY ROUTES ---
 @app.route('/data/facedata/<uid>/<filename>')
 def get_registration_image(uid, filename):
     facedata_image_dir = os.path.join('data', 'facedata')
