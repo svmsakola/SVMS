@@ -68,7 +68,7 @@
         {
             "id": 14,
             "name": "Tahasildar Patur",
-            "email": "tah.barshitakli@rediffmail.com"
+            "email": "tah.patur@rediffmail.com"
         },
         {
             "id": 15,
@@ -631,11 +631,6 @@
             "email": "tah.akola@rediffmail.com"
         },
         {
-            "id": 128,
-            "name": "तहसिलदार बार्शिटाकळी",
-            "email": "tah.barshitakli@rediffmail.com"
-        },
-        {
             "id": 129,
             "name": "तहसिलदार अकोट",
             "email": "tah.akot@rediffmail.com"
@@ -649,11 +644,6 @@
             "id": 131,
             "name": "तहसिलदार बाळापुर",
             "email": "tah.balapur@rediffmail.com"
-        },
-        {
-            "id": 132,
-            "name": "तहसिलदार पातुर",
-            "email": "tah.patur@rediffmail.com"
         },
         {
             "id": 133,
@@ -694,11 +684,6 @@
             "id": 140,
             "name": "जिल्हा कोषागार अधिकारी, अकोला",
             "email": "to.akola@zillamahakosh.in"
-        },
-        {
-            "id": 141,
-            "name": "जिल्हा पुरवठा अधिकारी, अकोला",
-            "email": "dsoakola@gmail.com"
         },
         {
             "id": 142,

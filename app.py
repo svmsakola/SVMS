@@ -1750,9 +1750,22 @@ def admin_delete_department(dept_id):
         return jsonify({"success": False, "message": "Failed to save updated department data."}), 500
 
 
+def admin_or_inoffice_login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "user" not in session:
+            return jsonify({"success": False, "message": "Authentication required."}), 401
+
+        user_role = session.get("user", {}).get("role")
+        if user_role not in ["admin", "inoffice"]:
+            return jsonify({"success": False, "message": "Admin or In-Office access required."}), 403
+
+        return f(*args, **kwargs)
+
+    return decorated_function
 # --- End Admin Department CRUD ---
 @app.route('/api/admin/visitors')
-@admin_login_required
+@admin_or_inoffice_login_required  # <-- Use the new decorator here
 def get_admin_visitors():
     selected_date_str = request.args.get('date')
     if not selected_date_str:
@@ -1761,6 +1774,7 @@ def get_admin_visitors():
         datetime.strptime(selected_date_str, '%Y-%m-%d')
     except ValueError:
         return jsonify({"error": "Invalid date format. Use YYYY-MM-DD"}), 400
+
     face_data = load_face_data()
     daily_visitors = []
     for uid, user_data in face_data.items():
@@ -1796,6 +1810,7 @@ def get_admin_visitors():
                     print(f"Warning: Skipping invalid visit entry for UID {uid}: {visit}")
         else:
             print(f"Warning: Skipping invalid user data structure for UID {uid}")
+
     try:
         valid_visitors = [v for v in daily_visitors if
                           'datetime' in v and isinstance(v['datetime'], str) and v['datetime']]
@@ -1806,6 +1821,7 @@ def get_admin_visitors():
     except Exception as e:
         print(f"Warning: Could not sort visitors due to invalid data or structure: {e}")
         sorted_daily_visitors = daily_visitors
+
     response = make_response(jsonify({"visitors": sorted_daily_visitors}))
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response.headers['Pragma'] = 'no-cache'

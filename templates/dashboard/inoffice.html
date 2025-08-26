@@ -86,6 +86,40 @@
             display: flex;
             flex-direction: column;
         }
+        /* New Date Selector Styles */
+        .date-selector-container {
+            background-color: var(--white);
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 5px; /* Spacing below the date picker */
+        }
+        .date-selector-container label {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+        #date-picker {
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 15px;
+            font-family: inherit;
+            color: var(--text-dark);
+            background-color: #f8fafc;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        #date-picker:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+        }
+
         .content-section {
             background-color: rgba(255, 255, 255, 0.6);
             border-radius: var(--border-radius);
@@ -490,7 +524,6 @@
         .popup-btn-cancel { background-color: #e2e8f0; color: var(--text-dark); border: none; }
         .popup-btn:hover { transform: translateY(-2px); }
         .popup-btn-confirm:hover { box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4); }
-        .popup-btn-cancel:hover { background-color: #cbd5e1; }
         .popup-btn-confirm.complete-confirm { background: linear-gradient(100deg, var(--complete-red-start), var(--complete-red-end)); box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3); }
         .popup-btn-confirm.complete-confirm:hover { box-shadow: 0 6px 15px rgba(231, 76, 60, 0.4); }
         .popup-btn-confirm.action-confirm { background: linear-gradient(100deg, var(--action-confirm-start), var(--action-confirm-end)); box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
@@ -599,6 +632,7 @@
             .header img {height: 60px; width: auto; max-height: 100%; object-fit: contain;}
             .logout-btn { padding: 7px 18px; font-size: 13px; }
             .main-content { padding: 20px; gap: 20px; }
+            .date-selector-container { flex-direction: column; gap: 8px; padding: 12px; }
             .content-section { padding: 10px; }
             .section-title { font-size: 20px; margin-bottom: 10px; }
             .visitor-header { padding: 20px; gap: 20px; }
@@ -728,6 +762,12 @@
         </div>
 
         <div class="main-content">
+            <!-- New Date Selector Element -->
+            <div class="date-selector-container">
+                <label for="date-picker">अहवाल पाहण्यासाठी तारीख निवडा:</label>
+                <input type="date" id="date-picker">
+            </div>
+
             <div class="content-section">
                 <h2 class="section-title">आगामी अभ्यागत</h2>
                 <div id="upcoming-visitors-container" class="horizontal-scroll-container">
@@ -772,7 +812,6 @@
             let globalVisitorsList = [];
             let actionVisitorsList = [];
             let completedVisitorsList = [];
-            let otherUpcomingVisitors = [];
             let departmentList = [];
             let currentVisitorIndex = -1;
             let currentSelectedVisitId = null;
@@ -784,7 +823,7 @@
             let pollingIntervalId = null;
             let isFetching = false;
 
-            const today = new Date().toISOString().split('T')[0];
+            const datePicker = document.getElementById('date-picker');
             const completedMeetingBtn = document.getElementById('completed-meeting-btn');
             let saveDetailsBtn = null; // Will be assigned after render
             const logoutBtn = document.getElementById('logout-btn');
@@ -796,14 +835,12 @@
             const completeVisitConfirm = document.getElementById('complete-visit-confirm');
             const actionConfirmPopup = document.getElementById('action-confirm-popup');
             const actionConfirmSummary = document.getElementById('action-confirm-summary');
-            const actionConfirmBtn = document.getElementById('action-confirm-btn'); // Refers to the button inside the action popup
+            const actionConfirmBtn = document.getElementById('action-confirm-btn');
             const actionCancelBtn = document.getElementById('action-cancel-btn');
             const upcomingVisitorsContainer = document.getElementById('upcoming-visitors-container');
             const currentVisitorDetailsContainer = document.getElementById('current-visitor-details-container');
             const actionVisitorsContainer = document.getElementById('action-visitors-container');
             const completedVisitorsContainer = document.getElementById('completed-visitors-container');
-
-            // PDF Popup Elements
             const pdfPopupOverlay = document.getElementById('pdf-popup-overlay');
             const pdfCloseBtn = document.getElementById('pdf-close-btn');
             const pdfIframe = document.getElementById('pdf-iframe');
@@ -811,7 +848,6 @@
             let lastTapTime = 0;
             let lastTapTarget = null;
             const doubleTapDelay = 300;
-
             let currentActionData = null;
 
             // Event Listeners for fixed elements
@@ -821,14 +857,14 @@
             completedMeetingBtn.addEventListener('click', showCompleteVisitPopup);
             completeVisitCancel.addEventListener('click', () => completeVisitPopup.classList.remove('active'));
             completeVisitConfirm.addEventListener('click', executeVisitCompletion);
+            datePicker.addEventListener('change', handleDateChange);
 
             actionCancelBtn.addEventListener('click', () => {
                 actionConfirmPopup.classList.remove('active');
-                if (saveDetailsBtn) { // Check if saveDetailsBtn exists
+                if (saveDetailsBtn) {
                     saveDetailsBtn.disabled = false;
                     saveDetailsBtn.textContent = 'संबंधित विभागाला कृतीसाठी पाठवा';
                 }
-                 // Re-fetch the confirm button inside the popup as it might be replaced
                 const currentActionConfirmBtn = document.getElementById('action-confirm-btn');
                 if(currentActionConfirmBtn){
                     currentActionConfirmBtn.disabled = false;
@@ -837,170 +873,116 @@
                 currentActionData = null;
                 updateButtonStates();
             });
-             // PDF Popup Close Listeners (added in initializeApp as well for safety)
-             if (pdfCloseBtn) {
-                 pdfCloseBtn.addEventListener('click', hidePdfPopup);
-             }
-             if (pdfPopupOverlay) {
-                 pdfPopupOverlay.addEventListener('click', function(event) {
-                     if (event.target === pdfPopupOverlay) { hidePdfPopup(); }
-                 });
-             }
+
+             if (pdfCloseBtn) pdfCloseBtn.addEventListener('click', hidePdfPopup);
+             if (pdfPopupOverlay) pdfPopupOverlay.addEventListener('click', (e) => { if (e.target === pdfPopupOverlay) hidePdfPopup(); });
 
             function logout() {
-                if (pollingIntervalId) {
-                    clearInterval(pollingIntervalId);
-                }
-                fetch("/logout")
-                    .then(() => { localStorage.removeItem("user"); window.location.href = "/login"; })
-                    .catch(error => { console.error("Logout failed:", error); localStorage.removeItem("user"); window.location.href = "/"; });
+                if (pollingIntervalId) clearInterval(pollingIntervalId);
+                window.location.href = "/logout";
             }
 
-             async function fetchDepartments() {
+            function handleDateChange() {
+                console.log(`Date changed to: ${datePicker.value}. Triggering full refresh.`);
+                // Reset state completely before fetching new date's data
+                currentSelectedVisitId = null;
+                currentVisitorIndex = -1;
+                visitorDetailsCache = {}; // Clear cache for the new day
+                fetchAndProcessVisitors(true); // Treat as initial load for the new date
+            }
+
+            async function fetchDepartments() {
                  try {
                      const response = await fetch('/departments');
                      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                      const data = await response.json();
                      departmentList = data.departments || [];
-                     console.log("Departments loaded:", departmentList);
                  } catch (error) {
                      console.error('Error fetching departments:', error);
                      departmentList = [];
                  }
-             }
-             function isValidDvn(dvn) {
+            }
+
+            function isValidDvn(dvn) {
                  const dvnString = String(dvn).trim();
                  return dvn != null && dvnString !== '' && !isNaN(parseInt(dvnString, 10));
-             }
+            }
+
             async function fetchAndProcessVisitors(isInitialLoad = false) {
-                if (isFetching) {
-                    console.log("Fetch already in progress. Skipping.");
-                    return;
-                }
+                if (isFetching) return;
                 isFetching = true;
                 console.log("Fetching visitor data...");
+                const selectedDate = datePicker.value;
+                if (!selectedDate) {
+                    console.error("No date selected.");
+                    isFetching = false;
+                    return;
+                }
 
                 try {
-                    const response = await fetch('/get_today_visitors');
+                    // Use the admin endpoint that accepts a date parameter
+                    const response = await fetch(`/api/admin/visitors?date=${selectedDate}`);
                     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                     const data = await response.json();
 
-                    const allTodayVisits = Object.entries(data.visitors || {})
-                        .flatMap(([uid, userData]) =>
-                            (userData.visitor || [])
-                                .filter(visit => visit.datetime?.startsWith(today))
-                                // Make sure document_pdf is included
-                                .map(visit => ({ ...visit, uid: uid, name: userData.name, document_pdf: visit.document_pdf }))
-                        );
+                    const allVisitsForDay = data.visitors || [];
 
                     let newUpcomingVisitorsWithDvn = [];
                     let newActionVisitors = [];
                     let newCompletedVisitors = [];
-                    let newOtherUpcomingVisitors = [];
 
-                    allTodayVisits.forEach(visit => {
+                    allVisitsForDay.forEach(visit => {
                         if (visit.status === 'completed') {
                             newCompletedVisitors.push(visit);
                         } else if (visit.status === 'pending') {
                             newActionVisitors.push(visit);
-                        } else {
-                            // Keep all non-completed/non-pending in upcoming lists
-                            if (isValidDvn(visit.dvn)) {
-                                newUpcomingVisitorsWithDvn.push(visit);
-                            } else {
-                                newOtherUpcomingVisitors.push(visit); // Track those without DVN too if needed later
-                            }
+                        } else if (isValidDvn(visit.dvn)) {
+                            // Only visitors with a valid DVN go into the upcoming list
+                            newUpcomingVisitorsWithDvn.push(visit);
                         }
                     });
 
                     // Sorting
-                    newUpcomingVisitorsWithDvn.sort((a, b) => {
-                        const numA = parseInt(String(a.dvn).trim(), 10);
-                        const numB = parseInt(String(b.dvn).trim(), 10);
-                        return numA - numB;
-                    });
+                    newUpcomingVisitorsWithDvn.sort((a, b) => (parseInt(String(a.dvn).trim(), 10) || 0) - (parseInt(String(b.dvn).trim(), 10) || 0));
                     newActionVisitors.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
                     newCompletedVisitors.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
 
-                    // Check for changes
                     const upcomingChanged = !areArraysEqual(globalVisitorsList, newUpcomingVisitorsWithDvn, 'visit_id');
                     const actionChanged = !areArraysEqual(actionVisitorsList, newActionVisitors, 'visit_id');
                     const completedChanged = !areArraysEqual(completedVisitorsList, newCompletedVisitors, 'visit_id');
-                    // const otherUpcomingChanged = !areArraysEqual(otherUpcomingVisitors, newOtherUpcomingVisitors, 'visit_id');
 
-                    // Update lists
                     globalVisitorsList = newUpcomingVisitorsWithDvn;
                     actionVisitorsList = newActionVisitors;
                     completedVisitorsList = newCompletedVisitors;
-                    otherUpcomingVisitors = newOtherUpcomingVisitors;
 
                     let needsCurrentVisitorRender = false;
-                    let previousIndex = currentVisitorIndex;
-                    let previousSelectedVisitId = currentSelectedVisitId;
 
-                    // Determine if current visitor needs update
                     if (currentSelectedVisitId) {
-                        // Find the currently selected visitor *only* in the DVN list
                         currentVisitorIndex = globalVisitorsList.findIndex(v => v.visit_id === currentSelectedVisitId);
-
-                        if (currentVisitorIndex === -1) {
-                             // Selected visitor is no longer in the DVN list (maybe completed, actioned, or DVN removed)
-                             console.log(`Visitor ${previousSelectedVisitId} no longer in DVN-based upcoming list.`);
-                             currentSelectedVisitId = null;
-                             // Auto-select the first DVN visitor if available
-                             if (globalVisitorsList.length > 0) {
-                                 currentVisitorIndex = 0;
-                                 currentSelectedVisitId = globalVisitorsList[0].visit_id;
-                                 console.log(`Auto-selecting first DVN upcoming visitor: ${currentSelectedVisitId}`);
-                             } else {
-                                 currentVisitorIndex = -1; // No DVN visitors left
-                             }
-                             needsCurrentVisitorRender = true; // Force render (either new selection or empty message)
-                        } else {
-                             // Selected visitor is still in the DVN list
-                             // Re-render if the index changed (unlikely here) or if the list content changed
-                             if (currentVisitorIndex !== previousIndex || upcomingChanged) {
-                                 needsCurrentVisitorRender = true;
-                             }
-                        }
-                    } else {
-                        // No visitor was selected previously
-                        if (globalVisitorsList.length > 0) {
-                            // Auto-select the first DVN visitor
-                            currentVisitorIndex = 0;
-                            currentSelectedVisitId = globalVisitorsList[0].visit_id;
-                            console.log(`Auto-selecting first DVN upcoming visitor: ${currentSelectedVisitId}`);
+                        if (currentVisitorIndex === -1) { // Selected visitor is no longer in the list
+                            currentSelectedVisitId = null;
                             needsCurrentVisitorRender = true;
-                        } else {
-                            // No DVN visitors available, ensure index is -1
-                            currentVisitorIndex = -1;
-                            if (previousSelectedVisitId !== null) { // Only re-render if there *was* a selection before
-                               needsCurrentVisitorRender = true;
-                            }
                         }
                     }
 
-                    // Render sections based on changes
-                    if (isInitialLoad || upcomingChanged) {
-                        console.log("Rendering Upcoming Visitors (DVN only)");
-                        await renderHorizontalVisitors(upcomingVisitorsContainer, globalVisitorsList.slice(0, MAX_UPCOMING_VISITORS), 'DVN नियुक्त असलेले आगामी अभ्यागत नाहीत', true);
-                    }
-                    if (isInitialLoad || actionChanged) {
-                        console.log("Rendering Action Visitors");
-                        await renderHorizontalVisitors(actionVisitorsContainer, actionVisitorsList.slice(0, MAX_ACTION_VISITORS_DISPLAY), 'कृती प्रलंबित असलेले अभ्यागत नाहीत', false, 'pending');
-                    }
-                    if (isInitialLoad || completedChanged) {
-                        console.log("Rendering Completed Visitors");
-                        await renderHorizontalVisitors(completedVisitorsContainer, completedVisitorsList.slice(0, MAX_COMPLETED_VISITORS_DISPLAY), 'पूर्ण झालेले अभ्यागत नाहीत', false, 'completed');
+                    if (!currentSelectedVisitId && globalVisitorsList.length > 0) {
+                        currentVisitorIndex = 0;
+                        currentSelectedVisitId = globalVisitorsList[0].visit_id;
+                        needsCurrentVisitorRender = true;
+                    } else if (globalVisitorsList.length === 0) {
+                        currentVisitorIndex = -1;
+                        currentSelectedVisitId = null;
+                        needsCurrentVisitorRender = true;
                     }
 
-                    // Render current visitor section if needed
-                    if (isInitialLoad || needsCurrentVisitorRender) {
-                         console.log("Rendering Current Visitor");
-                         await renderCurrentVisitor(); // This now handles the empty state too
+                    if (isInitialLoad || upcomingChanged) await renderHorizontalVisitors(upcomingVisitorsContainer, globalVisitorsList.slice(0, MAX_UPCOMING_VISITORS), 'DVN नियुक्त असलेले आगामी अभ्यागत नाहीत', true);
+                    if (isInitialLoad || actionChanged) await renderHorizontalVisitors(actionVisitorsContainer, actionVisitorsList.slice(0, MAX_ACTION_VISITORS_DISPLAY), 'कृती प्रलंबित असलेले अभ्यागत नाहीत', false, 'pending');
+                    if (isInitialLoad || completedChanged) await renderHorizontalVisitors(completedVisitorsContainer, completedVisitorsList.slice(0, MAX_COMPLETED_VISITORS_DISPLAY), 'पूर्ण झालेले अभ्यागत नाहीत', false, 'completed');
+
+                    if (isInitialLoad || needsCurrentVisitorRender || upcomingChanged) {
+                        await renderCurrentVisitor();
                     } else {
-                        // If no render needed, still update button states in case data changed slightly
-                         updateButtonStates();
+                        updateButtonStates();
                     }
 
                 } catch (error) {
@@ -1011,298 +993,146 @@
                          currentVisitorDetailsContainer.innerHTML = `<div class="no-visitor-message"><p>डेटा लोड करताना त्रुटी.</p></div>`;
                          completedVisitorsContainer.innerHTML = `<div class="no-items-message"><p>पूर्ण झालेले अभ्यागत लोड करताना त्रुटी.</p></div>`;
                      }
-                     updateButtonStates(); // Ensure buttons are disabled on error
+                     updateButtonStates();
                 } finally {
                      isFetching = false;
-                     console.log("Fetch cycle complete.");
                 }
             }
+
             function areArraysEqual(arr1, arr2, key) {
-                if (!arr1 || !arr2) return false;
-                if (arr1.length !== arr2.length) return false;
+                if (!arr1 || !arr2 || arr1.length !== arr2.length) return false;
                 const ids1 = new Set(arr1.map(item => item[key]));
-                for (let i = 0; i < arr2.length; i++) {
-                    if (!ids1.has(arr2[i][key])) return false;
-                }
-                return true;
+                return arr2.every(item => ids1.has(item[key]));
             }
 
             async function getVisitorDetails(uid) {
-                // Attempt to retrieve from cache first
-                 // Cache invalidation might be needed if details can change significantly post-registration
-                 // For now, assume basic details (name, phone, address, initial images) don't change often
-                if (visitorDetailsCache[uid]) {
-                     // Check if the visitor array within the cached data needs update (e.g., new visits added)
-                     // This part is tricky without knowing exactly what changes. A simple approach: always fetch if not initial load.
-                     // Or, implement a timestamp/version check if possible.
-                     // Let's stick to simple caching for now.
-                    // console.log(`Using cached details for UID: ${uid}`);
-                    return visitorDetailsCache[uid];
-                }
-                console.log(`Fetching details for UID: ${uid}`);
+                if (visitorDetailsCache[uid]) return visitorDetailsCache[uid];
                 try {
                     const response = await fetch(`/get_visitor_details?uid=${uid}`);
                     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                     const data = await response.json();
                     if (data.success && data.visitor_data) {
-                        visitorDetailsCache[uid] = data.visitor_data; // Store in cache
+                        visitorDetailsCache[uid] = data.visitor_data;
                         return data.visitor_data;
                     }
-                    console.error(`Failed to fetch details for UID: ${uid}`, data.message || 'No visitor_data found');
-                    return null; // Indicate failure
+                    return null;
                 } catch (error) {
                     console.error(`Error fetching details for UID: ${uid}`, error);
-                    return null; // Indicate failure
+                    return null;
                 }
             }
             function getProfileImageHtml(visitorData, visitInfo, cssClassPrefix = 'profile') {
-                // Prioritize profile_img, then images array
-                let imageUrl = visitorData?.profile_img?.[0] || visitorData?.images?.[0] || null;
-                const timestamp = Date.now(); // Cache buster for images
-                const finalImageUrl = imageUrl ? `${imageUrl}?t=${timestamp}` : null; // Append timestamp only if URL exists
-                const initials = generateInitials(visitorData);
-                const altText = visitorData?.name || 'अभ्यागत';
-                const placeholderHtml = `<div class="${cssClassPrefix}-placeholder">${initials}</div>`;
-
-                // Image tag with onerror fallback to placeholder
-                const imageHtml = finalImageUrl
-                    ? `<img src="${finalImageUrl}" alt="${altText}" class="${cssClassPrefix}-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">`
-                    : '';
-
-                 // Determine if DVN badge should be shown (only for main profile and if DVN is valid)
-                 const displayDvn = cssClassPrefix === 'main-profile' && visitInfo && isValidDvn(visitInfo.dvn);
-                 const dvnBadgeHtml = displayDvn
-                     ? `<div class="profile-dvn-badge">${visitInfo.dvn}</div>`
-                     : '';
-
-                 // Return the container with image, placeholder (hidden if image loads), and optional DVN badge
-                 return `<div class="${cssClassPrefix}-image-container">
+                const imageUrl = (visitorData.profile_img && visitorData.profile_img.length > 0) ? visitorData.profile_img[0] : ((visitorData.images && visitorData.images.length > 0) ? visitorData.images[0] : null);
+                const finalImageUrl = imageUrl ? `${imageUrl}?t=${Date.now()}` : null;
+                const initials = visitorData.name?.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || '?';
+                const altText = visitorData.name || 'अभ्यागत';
+                const imageHtml = finalImageUrl ? `<img src="${finalImageUrl}" alt="${altText}" class="${cssClassPrefix}-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` : '';
+                const dvnBadgeHtml = cssClassPrefix === 'main-profile' && visitInfo && isValidDvn(visitInfo.dvn) ? `<div class="profile-dvn-badge">${visitInfo.dvn}</div>` : '';
+                return `<div class="${cssClassPrefix}-image-container">
                             ${imageHtml}
-                            <div class="${cssClassPrefix}-placeholder" ${imageHtml ? 'style="display: none;"' : 'style="display: flex;"'}>${initials}</div>
+                            <div class="${cssClassPrefix}-placeholder" style="${imageHtml ? 'display: none;' : 'display: flex;'}">${initials}</div>
                             ${dvnBadgeHtml}
                          </div>`;
             }
 
-            function generateInitials(visitorData) {
-                 return visitorData?.name?.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || '?';
-            }
             function isReturningVisitorCheck(visitorData) {
-                 // Check if the visitor array exists and has more than one entry
                  return visitorData && Array.isArray(visitorData.visitor) && visitorData.visitor.length > 1;
             }
+
             function updateButtonStates() {
-                // Enable/disable 'Complete Meeting' button based on valid selection in DVN list
                 const isValidSelection = currentVisitorIndex >= 0 && currentVisitorIndex < globalVisitorsList.length;
                 completedMeetingBtn.disabled = !isValidSelection;
-
-                // Find the 'Send for Action' button *if it currently exists in the DOM*
                 saveDetailsBtn = document.getElementById('save-details-btn');
-
                 if (saveDetailsBtn) {
-                     // Disable if no valid selection OR if it's already submitting
                     saveDetailsBtn.disabled = !isValidSelection || saveDetailsBtn.textContent === 'पाठवत आहे...';
-                     // Reset text if it was submitting but selection became invalid
-                    if (!isValidSelection && saveDetailsBtn.textContent === 'पाठवत आहे...') {
-                         saveDetailsBtn.textContent = 'संबंधित विभागाला कृतीसाठी पाठवा';
-                    }
                 }
-
-                // Reset 'Complete Meeting' button text if it was submitting but selection became invalid
-                if (completedMeetingBtn.textContent === 'पूर्ण होत आहे...') {
-                     if (!isValidSelection) {
-                        completedMeetingBtn.textContent = 'अभ्यागताची भेट पूर्ण करा';
-                     }
-                }
-
-                 // Ensure the confirmation button inside the action popup is enabled unless popup is active and submitting
-                 const currentActionConfirmBtn = document.getElementById('action-confirm-btn');
-                 if (currentActionConfirmBtn && !actionConfirmPopup.classList.contains('active')) {
-                     currentActionConfirmBtn.disabled = false;
-                     currentActionConfirmBtn.textContent = 'पुष्टी करा आणि पाठवा';
-                 }
             }
 
-
             async function renderHorizontalVisitors(container, visitorsToShow, emptyMessage, isSelectable = false, status = null) {
-                if (!container) {
-                    console.error("Container not found for rendering horizontal visitors.");
-                    return;
-                }
-                if (!Array.isArray(visitorsToShow)) {
-                    console.error("Invalid data provided for visitorsToShow (expected array):", visitorsToShow);
-                     container.innerHTML = `<div class="no-items-message"><p>त्रुटी: अवैध अभ्यागत डेटा.</p></div>`;
-                    return;
-                }
-                if (visitorsToShow.length === 0) {
+                if (!container) return;
+                if (!visitorsToShow || visitorsToShow.length === 0) {
                     container.innerHTML = `<div class="no-items-message"><p>${emptyMessage}</p></div>`;
                     return;
                 }
-                // Fetch details for all visitors in parallel
-                const detailPromises = visitorsToShow.map(visitInfo => {
-                    if (visitInfo && visitInfo.uid) {
-                        return getVisitorDetails(visitInfo.uid);
-                    }
-                    return Promise.resolve(null); // Handle cases with missing uid
-                });
-
-                const visitorDetailsArray = await Promise.all(detailPromises);
-
-                // Now create cards using the fetched details
-                const cardsHtml = visitorsToShow.map((visitInfo, index) => {
-                     if (!visitInfo || !visitInfo.uid) {
-                         console.warn("Skipping card render due to missing visitInfo or uid:", visitInfo);
-                         return createHorizontalVisitorCard(null, null, false, 'error');
-                     }
-                     const visitorData = visitorDetailsArray[index]; // Get corresponding fetched detail
-                     return createHorizontalVisitorCard(visitInfo, visitorData, isSelectable, visitInfo.status);
-                 }).join('');
-
-
-                 try {
-                     // Check if container still exists before updating
-                     if (document.body.contains(container)) {
-                         container.innerHTML = cardsHtml;
-                     } else {
-                         console.warn("Container removed before rendering horizontal visitors completed.");
-                     }
-                 } catch (error) {
-                     console.error("Error rendering horizontal visitors:", error);
-                     if (document.body.contains(container)) {
-                         container.innerHTML = `<div class="no-items-message"><p>अभ्यागत दाखवण्यात त्रुटी.</p></div>`;
-                     }
-                 }
+                // The data from /api/admin/visitors is already enriched, so we don't need to fetch details again.
+                const cardsHtml = visitorsToShow.map(visitInfo => createHorizontalVisitorCard(visitInfo, visitInfo, isSelectable)).join('');
+                container.innerHTML = cardsHtml;
             }
 
-            function createHorizontalVisitorCard(visitInfo, visitorData, selectable = false, status = null) {
-                // Handle error case or missing data
-                 if (status === 'error' || !visitorData || !visitInfo) {
-                    const errorUid = visitInfo ? ` (UID: ${visitInfo.uid})` : '';
-                     return `<div class="visitor-card-horizontal">
-                                <div class="profile-image-container"><div class="profile-placeholder">!</div></div>
-                                <strong>लोड करताना त्रुटी</strong>
-                                <span style="font-size: 0.8em; color: var(--text-gray);">तपशील उपलब्ध नाहीत${errorUid}</span>
-                            </div>`;
-                }
 
-                const isReturning = isReturningVisitorCheck(visitorData);
-                const typeBadgeClass = isReturning ? 'returning-visitor' : 'new-visitor';
-                const typeBadgeText = isReturning ? 'परत आलेले' : 'नवीन';
-                const profileImageHtml = getProfileImageHtml(visitorData, null, 'profile'); // No DVN badge on small cards
-                const displayName = visitorData?.name || visitInfo.name || 'अज्ञात अभ्यागत';
-                const selectableClass = selectable ? ' selectable-visitor' : '';
-                const dataAttributes = selectable ? `data-uid="${visitInfo.uid}" data-visit-id="${visitInfo.visit_id}"` : '';
+            function createHorizontalVisitorCard(visitInfo, visitorData, selectable = false) {
+                 const isReturning = visitInfo.status === 'पुनरावृत्ती अभ्यागत' || (visitorData.visitor && visitorData.visitor.length > 1);
+                 const typeBadgeClass = isReturning ? 'returning-visitor' : 'new-visitor';
+                 const typeBadgeText = isReturning ? 'परत आलेले' : 'नवीन';
+                 const profileImageHtml = getProfileImageHtml(visitorData, null, 'profile');
+                 const displayName = visitorData.name || 'अज्ञात अभ्यागत';
+                 const selectableClass = selectable ? ' selectable-visitor' : '';
+                 const dataAttributes = selectable ? `data-uid="${visitInfo.uid}" data-visit-id="${visitInfo.visit_id}"` : '';
 
-                 // Status badge for pending/completed lists
                  const statusMap = { 'pending': 'प्रलंबित', 'completed': 'पूर्ण' };
-                 const displayStatus = statusMap[status] || status;
-
                  let statusBadgeHtml = '';
-                 // Only show status badge if status is explicitly pending or completed
-                if (status === 'pending' || status === 'completed') {
-                    statusBadgeHtml = `<span class="visitor-status-badge ${status}">${displayStatus}</span>`;
-                }
+                 if (visitInfo.status === 'pending' || visitInfo.status === 'completed') {
+                     statusBadgeHtml = `<span class="visitor-status-badge ${visitInfo.status}">${statusMap[visitInfo.status]}</span>`;
+                 }
 
-                return `
-                    <div class="visitor-card-horizontal${selectableClass}" ${dataAttributes}>
-                        ${statusBadgeHtml}
-                        ${profileImageHtml}
-                        <strong>${displayName}</strong>
-                        <span class="visitor-badge-small ${typeBadgeClass}">${typeBadgeText}</span>
-                    </div>`;
+                return `<div class="visitor-card-horizontal${selectableClass}" ${dataAttributes}>
+                            ${statusBadgeHtml}
+                            ${profileImageHtml}
+                            <strong>${displayName}</strong>
+                            <span class="visitor-badge-small ${typeBadgeClass}">${typeBadgeText}</span>
+                        </div>`;
             }
+
 
             async function renderCurrentVisitor() {
-                 // Remove event listener from the old button if it exists
                  const oldSaveBtn = document.getElementById('save-details-btn');
-                 if (oldSaveBtn) {
-                     oldSaveBtn.removeEventListener('click', showActionConfirmPopup);
-                 }
-                 saveDetailsBtn = null; // Reset reference
+                 if (oldSaveBtn) oldSaveBtn.removeEventListener('click', showActionConfirmPopup);
+                 saveDetailsBtn = null;
 
-                 // Check if a valid visitor is selected from the DVN list
                  if (currentVisitorIndex < 0 || currentVisitorIndex >= globalVisitorsList.length) {
                     currentVisitorDetailsContainer.innerHTML = `<div class="no-visitor-message"><p>सध्या कोणताही अभ्यागत निवडलेला नाही</p></div>`;
-                    updateButtonStates(); // Ensure buttons are disabled
+                    updateButtonStates();
                     return;
                  }
 
                 const currentVisitInfo = globalVisitorsList[currentVisitorIndex];
-                 currentSelectedVisitId = currentVisitInfo.visit_id; // Update the selected ID
+                currentSelectedVisitId = currentVisitInfo.visit_id;
 
-                 // Fetch the full details for the selected visitor
                 const currentVisitorData = await getVisitorDetails(currentVisitInfo.uid);
-
-                 // Handle case where details couldn't be fetched
                 if (!currentVisitorData) {
-                    currentVisitorDetailsContainer.innerHTML = `
-                        <div class="no-visitor-message">
-                            <p>${currentVisitInfo.name || ' निवडलेल्या अभ्यागतासाठी'} तपशील लोड करताना त्रुटी.</p>
-                            <p><small>(UID: ${currentVisitInfo.uid}, भेट आयडी: ${currentVisitInfo.visit_id})</small></p>
-                        </div>`;
+                    currentVisitorDetailsContainer.innerHTML = `<div class="no-visitor-message"><p>अभ्यागताचे तपशील लोड करताना त्रुटी.</p></div>`;
                     updateButtonStates();
                     return;
                 }
 
                 const isReturning = isReturningVisitorCheck(currentVisitorData);
-                 // Sort all visits for this user by date, descending
-                 const allVisits = [...(currentVisitorData.visitor || [])]
-                     .sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
-
-                 // Generate profile image HTML (includes DVN badge logic)
+                const allVisits = [...(currentVisitorData.visitor || [])].sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
                 const profileImageHtml = getProfileImageHtml(currentVisitorData, currentVisitInfo, 'main-profile');
+                const pdfPath = currentVisitInfo.document_pdf;
+                let pdfButtonHtml = '';
+                if (pdfPath) {
+                    const pdfUrl = `/api/get-visitor-document/${currentVisitInfo.visit_id}`;
+                    pdfButtonHtml = `<button id="view-pdf-btn" class="view-pdf-button" data-pdf-url="${pdfUrl}"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512" fill="currentColor"><path d="M0 64C0 28.7 28.7 0 64 0H224V128c0 17.7 14.3 32 32 32H384V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0L384 64z"/></svg> दस्तऐवज पहा</button>`;
+                }
 
-                 // --- PDF Button Logic ---
-                 const pdfPath = currentVisitInfo.document_pdf;
-                 let pdfButtonHtml = '';
-                 if (pdfPath && pdfPath.trim() !== '') {
-                     const pdfUrl = `/api/get-visitor-document/${currentVisitInfo.visit_id}`;
-                     pdfButtonHtml = `
-                         <button id="view-pdf-btn" class="view-pdf-button" data-pdf-url="${pdfUrl}">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512" fill="currentColor"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. --><path d="M0 64C0 28.7 28.7 0 64 0H224V128c0 17.7 14.3 32 32 32H384V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0L384 64z"/></svg>
-                             दस्तऐवज पहा
-                         </button>
-                     `;
-                 }
-                 // --- End PDF Button Logic ---
-
-
-                 // Find the most relevant previous visit (completed or pending)
                 const previousVisits = allVisits.filter(v => v.visit_id !== currentVisitInfo.visit_id);
-                 const actualPreviousVisit = previousVisits.find(v => v.status === 'completed' || v.status === 'pending') || (previousVisits.length > 0 ? previousVisits[0] : null);
-                  const statusMap = { 'new': 'नवीन', 'pending': 'प्रलंबित', 'completed': 'पूर्ण', 'unknown': 'अज्ञात' }; // Added 'new' mapping
-                  const previousStatusDisplay = statusMap[actualPreviousVisit?.status] || actualPreviousVisit?.status || 'अज्ञात';
-                  const currentStatusDisplay = statusMap[currentVisitInfo?.status] || currentVisitInfo?.status || 'अज्ञात'; // Map current status too
+                const actualPreviousVisit = previousVisits[0] || null;
+                const statusMap = { 'pending': 'प्रलंबित', 'completed': 'पूर्ण' };
+                const previousStatusDisplay = statusMap[actualPreviousVisit?.status] || actualPreviousVisit?.status || 'N/A';
+                const currentStatusDisplay = statusMap[currentVisitInfo?.status] || currentVisitInfo?.status || 'N/A';
 
                 let previousVisitHtml = '';
                 if (actualPreviousVisit) {
-                    previousVisitHtml = `
-                        <div class="previous-visit-details">
-                            <h4>मागील भेटीची माहिती</h4>
-                            <p><strong>मागील भेटीची तारीख</strong><span class="detail-value">${new Date(actualPreviousVisit.datetime).toLocaleString('mr-IN') || 'N/A'}</span></p>
-                            <p><strong>मागील उद्देश</strong><span class="detail-value">${actualPreviousVisit.purpose || 'N/A'}</span></p>
-                             <p><strong>मागील स्थिती</strong><span class="detail-value">${previousStatusDisplay}</span></p>
-                             ${actualPreviousVisit.forwarding_department ? `<p><strong>मागील फॉरवर्ड विभाग</strong><span class="detail-value">${actualPreviousVisit.forwarding_department}</span></p>` : ''}
-                             ${actualPreviousVisit.remark ? `<p><strong>मागील शेरा</strong><span class="detail-value">${actualPreviousVisit.remark}</span></p>` : ''}
-                        </div>`;
-                } else if (isReturning) { // Is returning but no specific previous visit found in the list (maybe older data)
-                     previousVisitHtml = `
-                        <div class="previous-visit-details">
-                             <h4>मागील भेटीची माहिती</h4>
-                             <p>हे परत आलेले अभ्यागत आहेत, परंतु मागील भेटीचे तपशील या लोड केलेल्या डेटामध्ये उपलब्ध नाहीत.</p>
-                        </div>`;
+                    previousVisitHtml = `<div class="previous-visit-details">
+                                            <h4>मागील भेटीची माहिती</h4>
+                                            <p><strong>मागील भेटीची तारीख</strong><span class="detail-value">${new Date(actualPreviousVisit.datetime).toLocaleString('mr-IN')}</span></p>
+                                            <p><strong>मागील उद्देश</strong><span class="detail-value">${actualPreviousVisit.purpose || 'N/A'}</span></p>
+                                            <p><strong>मागील स्थिती</strong><span class="detail-value">${previousStatusDisplay}</span></p>
+                                        </div>`;
                 }
 
-                 // Prepare department dropdown options
-                 let departmentOptionsHtml = '<option value="">-- विभाग निवडा --</option>';
-                 if (departmentList && departmentList.length > 0) {
-                     departmentOptionsHtml += departmentList.map(dept =>
-                         `<option value="${dept.name}">${dept.name}</option>`
-                     ).join('');
-                 } else {
-                     departmentOptionsHtml += '<option value="" disabled>विभाग लोड होत आहेत...</option>'; // Show loading state
-                 }
+                let departmentOptionsHtml = '<option value="">-- विभाग निवडा --</option>' + departmentList.map(d => `<option value="${d.name}">${d.name}</option>`).join('');
 
-                 // Construct the main visitor profile HTML
                 currentVisitorDetailsContainer.innerHTML = `
                     <div class="visitor-profile">
                         <div class="visitor-header">
@@ -1312,366 +1142,182 @@
                                      <div class="visitor-id-header">भेट आयडी: ${currentVisitInfo.visit_id || 'N/A'}</div>
                                      ${pdfButtonHtml}
                                  </div>
-                                <h2>${currentVisitorData.name || 'अज्ञात अभ्यागत'}</h2>
+                                <h2>${currentVisitorData.name || 'N/A'}</h2>
                                 <div class="visitor-phone-header"><strong>फोन:</strong> ${currentVisitorData.phone || 'N/A'}</div>
                                 <div class="visitor-address-header"><strong>पत्ता:</strong> ${currentVisitorData.address || 'N/A'}</div>
                                 <div class="visitor-tahasil-header"><strong>तहसील:</strong> ${currentVisitorData.tahasil || 'N/A'}</div>
-                                <span class="visitor-type ${isReturning ? 'returning-visitor' : 'new-visitor'}">
-                                    ${isReturning ? 'परत आलेले अभ्यागत' : 'नवीन अभ्यागत'}
-                                </span>
+                                <span class="visitor-type ${isReturning ? 'returning-visitor' : 'new-visitor'}">${isReturning ? 'परत आलेले अभ्यागत' : 'नवीन अभ्यागत'}</span>
                             </div>
                         </div>
                         <div class="visit-summary">
                             <div class="current-visit-details">
                                 <h4>सध्याच्या भेटीचा तपशील</h4>
-                                <p><strong>भेटीची वेळ</strong><span class="detail-value">${new Date(currentVisitInfo.datetime).toLocaleString('mr-IN') || 'N/A'}</span></p>
+                                <p><strong>भेटीची वेळ</strong><span class="detail-value">${new Date(currentVisitInfo.datetime).toLocaleString('mr-IN')}</span></p>
                                 <p><strong>भेटीचा उद्देश</strong><span class="detail-value">${currentVisitInfo.purpose || 'N/A'}</span></p>
                                 <p><strong>सध्याची स्थिती</strong><span class="detail-value">${currentStatusDisplay}</span></p>
                             </div>
                             ${previousVisitHtml}
                         </div>
                          <div class="additional-actions">
-                            <div class="form-group">
-                                <label for="remark-input">शेरा (ऐच्छिक)</label>
-                                <textarea id="remark-input" name="remark" rows="3" placeholder="काही शेरा लिहा..."></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="forward-dept-select">यांना फॉरवर्ड करा</label>
-                                <select id="forward-dept-select" name="forward_department">
-                                     ${departmentOptionsHtml}
-                                </select>
-                            </div>
-                             <button id="save-details-btn" class="nav-btn action-btn">संबंधित विभागाला कृतीसाठी पाठवा</button>
+                            <div class="form-group"><label for="remark-input">शेरा (ऐच्छिक)</label><textarea id="remark-input" rows="3" placeholder="काही शेरा लिहा..."></textarea></div>
+                            <div class="form-group"><label for="forward-dept-select">यांना फॉरवर्ड करा</label><select id="forward-dept-select">${departmentOptionsHtml}</select></div>
+                            <button id="save-details-btn" class="nav-btn action-btn">संबंधित विभागाला कृतीसाठी पाठवा</button>
                         </div>
                     </div>`;
 
-                 // Add event listener for the PDF button *after* it's added to the DOM
                  const viewPdfBtn = document.getElementById('view-pdf-btn');
-                 if (viewPdfBtn) {
-                     viewPdfBtn.addEventListener('click', showPdfPopup);
-                 }
-
-                 // Re-assign saveDetailsBtn and add its listener
+                 if (viewPdfBtn) viewPdfBtn.addEventListener('click', showPdfPopup);
                  saveDetailsBtn = document.getElementById('save-details-btn');
-                 if (saveDetailsBtn) {
-                     saveDetailsBtn.addEventListener('click', showActionConfirmPopup);
-                 } else {
-                     console.error("Failed to find #save-details-btn after render.");
-                 }
-                 updateButtonStates(); // Update button states based on the new render
+                 if (saveDetailsBtn) saveDetailsBtn.addEventListener('click', showActionConfirmPopup);
+                 updateButtonStates();
             }
 
-             function showCompleteVisitPopup() {
-                 if (currentVisitorIndex < 0 || currentVisitorIndex >= globalVisitorsList.length) {
-                    console.warn("Attempted to show complete popup with no valid visitor selected.");
-                    return;
-                 }
+            function showCompleteVisitPopup() {
+                 if (currentVisitorIndex < 0 || currentVisitorIndex >= globalVisitorsList.length) return;
                  completeVisitPopup.classList.add('active');
-             }
-
+            }
 
             async function executeVisitCompletion() {
-                 if (currentVisitorIndex < 0 || currentVisitorIndex >= globalVisitorsList.length) {
-                    console.warn("Complete button clicked with no valid current visitor selected.");
-                    updateButtonStates();
-                    completeVisitPopup.classList.remove('active');
-                    return;
-                }
-
+                if (currentVisitorIndex < 0 || currentVisitorIndex >= globalVisitorsList.length) return;
                 const currentVisitInfo = globalVisitorsList[currentVisitorIndex];
-                // Disable buttons immediately
                 completedMeetingBtn.disabled = true;
                 completedMeetingBtn.textContent = 'पूर्ण होत आहे...';
-                 if (saveDetailsBtn) saveDetailsBtn.disabled = true; // Disable action button too
-                completeVisitPopup.classList.remove('active'); // Hide popup
-
+                completeVisitPopup.classList.remove('active');
                 try {
                     const response = await fetch(`/complete_meeting?visit_id=${currentVisitInfo.visit_id}&uid=${currentVisitInfo.uid}`, { method: 'POST' });
-                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                     const data = await response.json();
-                    if (!data.success) throw new Error(data.message || 'Failed to mark meeting as completed');
-
-                     console.log(`Visit ${currentVisitInfo.visit_id} marked as completed.`);
-                     delete visitorDetailsCache[currentVisitInfo.uid]; // Invalidate cache for this user
-                     currentSelectedVisitId = null; // Reset selection
-                     currentVisitorIndex = -1;
-                     await fetchAndProcessVisitors(); // Refresh all lists
-
+                    if (!response.ok || !data.success) throw new Error(data.message || 'Failed to complete visit');
+                    delete visitorDetailsCache[currentVisitInfo.uid];
+                    currentSelectedVisitId = null;
+                    await fetchAndProcessVisitors();
                 } catch (error) {
                     console.error('Error completing visit:', error);
                     alert('भेट पूर्ण करताना त्रुटी: ' + error.message);
-                     // Re-enable buttons on error, but only if the selection is still valid
-                     updateButtonStates();
                 } finally {
-                    // Ensure button text is reset if it's still in the submitting state
-                    if (completedMeetingBtn.textContent === 'पूर्ण होत आहे...') {
-                         completedMeetingBtn.textContent = 'अभ्यागताची भेट पूर्ण करा';
-                         updateButtonStates(); // Final state update
-                    }
-                }
-            }
-             async function showActionConfirmPopup() {
-                 if (currentVisitorIndex < 0 || currentVisitorIndex >= globalVisitorsList.length) {
-                    console.warn("Action button clicked with no valid current visitor selected.");
+                    completedMeetingBtn.textContent = 'अभ्यागताची भेट पूर्ण करा';
                     updateButtonStates();
-                    return;
                 }
-                if (!saveDetailsBtn) { // Check if the button exists
-                    console.error("Save button reference is missing.");
-                    return;
-                }
-                 const currentVisitInfo = globalVisitorsList[currentVisitorIndex];
-                 const currentVisitorData = await getVisitorDetails(currentVisitInfo.uid); // Fetch details if needed
-                 const remarkInput = document.getElementById('remark-input');
-                 const forwardDeptSelect = document.getElementById('forward-dept-select');
-
-                 // Ensure elements exist before accessing value
-                 const remark = remarkInput ? remarkInput.value.trim() : '';
-                 const forwardingDepartment = forwardDeptSelect ? forwardDeptSelect.value : '';
-                 const visitorName = currentVisitorData?.name || 'अज्ञात अभ्यागत';
-
-                 if (!forwardingDepartment) {
-                     alert('कृपया फॉरवर्ड करण्यासाठी विभाग निवडा.');
-                     return;
-                 }
-
-                 // Store data needed for submission
-                 currentActionData = {
-                     visitInfo: currentVisitInfo,
-                     remark: remark,
-                     forwardingDepartment: forwardingDepartment
-                 };
-
-                 // Populate the confirmation popup summary
-                 actionConfirmSummary.innerHTML = `
-                    <p><strong>अभ्यागत:</strong> <span>${visitorName} (भेट आयडी: ${currentVisitInfo.visit_id})</span></p>
-                    <p><strong>यांना फॉरवर्ड करा:</strong> <span>${forwardingDepartment}</span></p>
-                    <p><strong>शेरा:</strong> <span>${remark || 'काही नाही'}</span></p>
-                 `;
-
-                 // Disable main action buttons
-                 saveDetailsBtn.disabled = true;
-                 saveDetailsBtn.textContent = 'पाठवत आहे...';
-                 completedMeetingBtn.disabled = true;
-
-                 // Ensure popup confirm button is ready
-                 const popupConfirmBtn = document.getElementById('action-confirm-btn');
-                 if (popupConfirmBtn) {
-                     popupConfirmBtn.disabled = false;
-                     popupConfirmBtn.textContent = 'पुष्टी करा आणि पाठवा';
-                     // Re-attach listener to handle potential DOM replacements
-                     const newConfirmBtn = popupConfirmBtn.cloneNode(true);
-                     popupConfirmBtn.parentNode.replaceChild(newConfirmBtn, popupConfirmBtn);
-                     newConfirmBtn.addEventListener('click', executeActionSubmission);
-                 }
-
-                 actionConfirmPopup.classList.add('active'); // Show the popup
             }
-             async function executeActionSubmission() {
-                 if (!currentActionData) {
-                     console.error("No action data available for submission.");
-                     actionConfirmPopup.classList.remove('active');
-                     updateButtonStates();
-                     return;
-                 }
-                 const { visitInfo, remark, forwardingDepartment } = currentActionData;
 
-                 // Disable popup buttons during submission
-                 const localActionConfirmBtn = document.getElementById('action-confirm-btn');
-                 const localActionCancelBtn = document.getElementById('action-cancel-btn');
-                 if(localActionConfirmBtn) localActionConfirmBtn.disabled = true;
-                 if(localActionConfirmBtn) localActionConfirmBtn.textContent = 'पाठवत आहे...';
-                 if(localActionCancelBtn) localActionCancelBtn.disabled = true;
+            async function showActionConfirmPopup() {
+                if (currentVisitorIndex < 0 || currentVisitorIndex >= globalVisitorsList.length) return;
+                const forwardDeptSelect = document.getElementById('forward-dept-select');
+                if (!forwardDeptSelect.value) {
+                    alert('कृपया फॉरवर्ड करण्यासाठी विभाग निवडा.');
+                    return;
+                }
+                const currentVisitInfo = globalVisitorsList[currentVisitorIndex];
+                const visitorName = (await getVisitorDetails(currentVisitInfo.uid))?.name || 'N/A';
+                const remark = document.getElementById('remark-input').value.trim();
+                currentActionData = { visitInfo: currentVisitInfo, remark, forwardingDepartment: forwardDeptSelect.value };
+                actionConfirmSummary.innerHTML = `<p><strong>अभ्यागत:</strong> <span>${visitorName}</span></p><p><strong>यांना फॉरवर्ड करा:</strong> <span>${forwardDeptSelect.value}</span></p><p><strong>शेरा:</strong> <span>${remark || 'काही नाही'}</span></p>`;
+                saveDetailsBtn.disabled = true;
+                saveDetailsBtn.textContent = 'पाठवत आहे...';
+                actionConfirmPopup.classList.add('active');
+                const newConfirmBtn = actionConfirmBtn.cloneNode(true);
+                actionConfirmBtn.parentNode.replaceChild(newConfirmBtn, actionConfirmBtn);
+                newConfirmBtn.addEventListener('click', executeActionSubmission);
+            }
 
-                 try {
-                     const response = await fetch(`/visitor_action`, {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                              visit_id: visitInfo.visit_id,
-                              uid: visitInfo.uid,
-                              remark: remark,
-                              forwarding_department: forwardingDepartment
-                          })
-                      });
+            async function executeActionSubmission() {
+                if (!currentActionData) return;
+                const { visitInfo, remark, forwardingDepartment } = currentActionData;
+                const btn = document.getElementById('action-confirm-btn');
+                btn.disabled = true;
+                btn.textContent = 'पाठवत आहे...';
+                try {
+                    const response = await fetch(`/visitor_action`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ visit_id: visitInfo.visit_id, uid: visitInfo.uid, remark, forwarding_department: forwardingDepartment })
+                    });
+                    const data = await response.json();
+                    if (!response.ok || !data.success) throw new Error(data.message || 'Failed to send action');
+                    delete visitorDetailsCache[visitInfo.uid];
+                    currentSelectedVisitId = null;
+                    actionConfirmPopup.classList.remove('active');
+                    await fetchAndProcessVisitors();
+                } catch (error) {
+                    console.error('Error sending visitor action:', error);
+                    alert('कृती पाठवताना त्रुटी: ' + error.message);
+                    actionConfirmPopup.classList.remove('active');
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = 'पुष्टी करा आणि पाठवा';
+                    updateButtonStates();
+                    currentActionData = null;
+                }
+            }
 
-                     // Check for network errors or non-JSON responses first
-                      if (!response.ok) {
-                          const errorText = await response.text(); // Get error text
-                          let errorMessage = `HTTP error! Status: ${response.status}`;
-                          try { // Try parsing as JSON for specific error messages
-                              const errorData = JSON.parse(errorText);
-                              errorMessage = errorData.message || errorData.error || errorMessage;
-                          } catch (e) {
-                              // If not JSON, use the text content or default HTTP error
-                              errorMessage = errorText || errorMessage;
-                          }
-                          throw new Error(errorMessage);
-                      }
-
-                     const data = await response.json(); // Now parse the successful JSON response
-
-                     if (data.success) {
-                         console.log(`Action sent for visit ${visitInfo.visit_id}, status should be pending.`);
-                         delete visitorDetailsCache[visitInfo.uid]; // Invalidate cache
-                         currentSelectedVisitId = null; // Reset selection
-                         currentVisitorIndex = -1;
-                         actionConfirmPopup.classList.remove('active'); // Close popup
-                         await fetchAndProcessVisitors(); // Refresh lists
-                     } else {
-                         // Handle cases where API returns success: false
-                         throw new Error(data.message || 'Failed to send action (API reported failure)');
-                     }
-                 } catch (error) {
-                     console.error('Error sending visitor action:', error);
-                     alert('कृती पाठवताना त्रुटी: ' + error.message);
-                     actionConfirmPopup.classList.remove('active'); // Close popup on error too
-                      // Re-enable popup buttons ONLY if the popup wasn't closed automatically
-                     if (actionConfirmPopup.classList.contains('active')) {
-                        if(localActionConfirmBtn) localActionConfirmBtn.disabled = false;
-                        if(localActionConfirmBtn) localActionConfirmBtn.textContent = 'पुष्टी करा आणि पाठवा';
-                        if(localActionCancelBtn) localActionCancelBtn.disabled = false;
-                     }
-                     updateButtonStates(); // Re-enable main buttons based on current state
-                 } finally {
-                     // Reset main button state if it was left submitting
-                     if (saveDetailsBtn && saveDetailsBtn.textContent === 'पाठवत आहे...') {
-                         saveDetailsBtn.textContent = 'संबंधित विभागाला कृतीसाठी पाठवा';
-                         updateButtonStates();
-                     }
-                     currentActionData = null; // Clear action data
-                 }
-             }
-
-             // Function to handle selecting a visitor from the top scroll list
             function selectVisitor(card) {
-                if (!card || !card.classList.contains('selectable-visitor')) return; // Ensure it's a selectable card
-                const uid = card.dataset.uid;
+                if (!card) return;
                 const visitId = card.dataset.visitId;
-                if (!uid || !visitId) {
-                    console.error("Missing UID or Visit ID on selected card element:", card);
-                    return;
-                }
-                // Find the index *only* within the DVN list (globalVisitorsList)
-                const newIndex = globalVisitorsList.findIndex(visitor => visitor.uid === uid && visitor.visit_id === visitId);
-
+                if (visitId === currentSelectedVisitId) return;
+                const newIndex = globalVisitorsList.findIndex(v => v.visit_id === visitId);
                 if (newIndex !== -1) {
-                     // Check if it's actually a different visitor being selected
-                     if(visitId !== currentSelectedVisitId) {
-                         console.log(`Selected visitor index: ${newIndex}, visit_id: ${visitId}`);
-                         currentVisitorIndex = newIndex;
-                         currentSelectedVisitId = visitId;
-                         renderCurrentVisitor(); // Render the newly selected visitor
-                     } else {
-                         console.log(`Visitor ${visitId} already selected.`); // No change needed
-                     }
-                } else {
-                     // This should ideally not happen if only cards from globalVisitorsList are marked selectable
-                     console.warn(`Clicked card (UID: ${uid}, VisitID: ${visitId}) is not in the currently selectable upcoming (DVN) list.`);
-                     // You might want to check other lists for debugging, but don't select from them
-                     const actionIndex = actionVisitorsList.findIndex(visitor => visitor.uid === uid && visitor.visit_id === visitId);
-                     const completedIndex = completedVisitorsList.findIndex(visitor => visitor.uid === uid && visitor.visit_id === visitId);
-                     if(actionIndex !== -1) console.log("-> Debug: Found in Action Pending list.");
-                     if(completedIndex !== -1) console.log("-> Debug: Found in Completed list.");
+                    currentVisitorIndex = newIndex;
+                    currentSelectedVisitId = visitId;
+                    renderCurrentVisitor();
                 }
             }
 
-            // Double-click handler for desktop
             function handleDoubleClickSelection(event) {
-                 const card = event.target.closest('.selectable-visitor'); // Find the closest selectable card
-                 if (card) {
-                    selectVisitor(card); // Pass the card element to the selection function
-                 }
+                const card = event.target.closest('.selectable-visitor');
+                if (card) selectVisitor(card);
             }
-            // Double-tap handler for touch devices
             function handleDoubleTapSelection(event) {
                 const card = event.target.closest('.selectable-visitor');
                 if (!card) return;
                 const currentTime = new Date().getTime();
-                // Check if the tap is on the same target and within the delay
                 if (currentTime - lastTapTime < doubleTapDelay && card === lastTapTarget) {
-                    event.preventDefault(); // Prevent zoom or other default actions
+                    event.preventDefault();
                     selectVisitor(card);
-                    lastTapTime = 0; // Reset tap time
-                    lastTapTarget = null; // Reset target
+                    lastTapTime = 0;
                 } else {
-                    // First tap (or tap on a different target)
                     lastTapTime = currentTime;
                     lastTapTarget = card;
                 }
             }
 
-            // --- PDF Popup Functions ---
             function showPdfPopup(event) {
-                const button = event.currentTarget;
-                const pdfUrl = button.dataset.pdfUrl;
+                const pdfUrl = event.currentTarget.dataset.pdfUrl;
                 if (pdfUrl && pdfPopupOverlay && pdfIframe) {
-                    pdfIframe.src = pdfUrl; // Set iframe source
-                    pdfPopupOverlay.classList.add('active'); // Show overlay
-                } else {
-                    console.error("Could not find PDF URL or popup elements for PDF viewer.");
-                    alert("दस्तऐवज लोड करताना त्रुटी.");
+                    pdfIframe.src = pdfUrl;
+                    pdfPopupOverlay.classList.add('active');
                 }
             }
             function hidePdfPopup() {
                 if (pdfPopupOverlay && pdfIframe) {
-                    pdfPopupOverlay.classList.remove('active'); // Hide overlay
-                    pdfIframe.src = ''; // Clear src to stop loading/display and free resources
+                    pdfPopupOverlay.classList.remove('active');
+                    pdfIframe.src = '';
                 }
             }
-            // --- End PDF Popup Functions ---
 
             function startPolling() {
-                if (pollingIntervalId) {
-                    clearInterval(pollingIntervalId); // Clear existing interval if any
-                }
-                 console.log(`Starting polling with interval: ${POLLING_INTERVAL}ms`);
-                 pollingIntervalId = setInterval(() => {
-                    // Only poll if not currently fetching and no popups are active
-                    if (!isFetching &&
-                        !actionConfirmPopup.classList.contains('active') &&
-                        !completeVisitPopup.classList.contains('active') &&
-                        !logoutPopup.classList.contains('active') &&
-                        !pdfPopupOverlay.classList.contains('active')) { // Also check PDF popup
-                       fetchAndProcessVisitors(false); // Fetch updates, not initial load
-                    } else {
-                       console.log("Skipping poll cycle due to active fetch or popup.");
+                if (pollingIntervalId) clearInterval(pollingIntervalId);
+                pollingIntervalId = setInterval(() => {
+                    if (!isFetching && !document.querySelector('.popup-overlay.active')) {
+                       fetchAndProcessVisitors(false);
                     }
-                 }, POLLING_INTERVAL);
+                }, POLLING_INTERVAL);
             }
 
             async function initializeApp() {
-                 console.log("Initializing App...");
-                 // Initial loading messages
+                 datePicker.value = new Date().toISOString().split('T')[0];
                  upcomingVisitorsContainer.innerHTML = `<div class="no-items-message"><p>लोड होत आहे...</p></div>`;
                  actionVisitorsContainer.innerHTML = `<div class="no-items-message"><p>लोड होत आहे...</p></div>`;
                  currentVisitorDetailsContainer.innerHTML = `<div class="no-visitor-message"><p>लोड होत आहे...</p></div>`;
                  completedVisitorsContainer.innerHTML = `<div class="no-items-message"><p>लोड होत आहे...</p></div>`;
 
-                 // Add essential event listeners for fixed elements (like popup close buttons)
-                 if (pdfCloseBtn) {
-                     pdfCloseBtn.addEventListener('click', hidePdfPopup);
-                 }
-                 if (pdfPopupOverlay) {
-                    pdfPopupOverlay.addEventListener('click', function(event) {
-                        if (event.target === pdfPopupOverlay) { hidePdfPopup(); } // Close on background click
-                    });
-                 }
-
-                 // Fetch initial data
                  await fetchDepartments();
-                 await fetchAndProcessVisitors(true); // Initial fetch and render
+                 await fetchAndProcessVisitors(true);
 
-                 // Add event listeners for dynamic content containers (visitor selection)
                  upcomingVisitorsContainer.addEventListener('dblclick', handleDoubleClickSelection);
-                 upcomingVisitorsContainer.addEventListener('touchend', handleDoubleTapSelection, {passive: false}); // Use passive: false to allow preventDefault
+                 upcomingVisitorsContainer.addEventListener('touchend', handleDoubleTapSelection, {passive: false});
 
-                 // Start polling for updates
                  startPolling();
-                 console.log("Initialization complete.");
             }
 
-            // Start the application
             initializeApp();
         });
     </script>

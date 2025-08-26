@@ -6,15 +6,23 @@
     <link rel="icon" href="static/assets/logo/favicon.png" type="image/png">
     <title>Smart Visitor Management System - Login</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
         :root {
             --primary-blue: #2c3e90;
             --secondary-blue: #3498db;
             --light-blue: #e6f2ff;
             --white: #ffffff;
             --text-dark: #2c3e50;
-            --border-radius: 12px;
-            --box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            --transition: all 0.3s ease;
+            --text-light: #7f8c8d;
+            --error-red: #e74c3c;
+            --success-green: #27ae60;
+            --border-radius: 16px;
+            --border-radius-small: 8px;
+            --box-shadow: 0 20px 60px rgba(44, 62, 144, 0.15);
+            --box-shadow-hover: 0 25px 80px rgba(44, 62, 144, 0.25);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: all 0.2s ease;
         }
 
         * {
@@ -24,47 +32,143 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--light-blue) 0%, var(--white) 100%);
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--light-blue) 0%, #f8fbff 50%, var(--white) 100%);
             color: var(--text-dark);
             line-height: 1.6;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background elements */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(52, 152, 219, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(44, 62, 144, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(52, 152, 219, 0.05) 0%, transparent 50%);
+            animation: backgroundFloat 20s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(1deg); }
         }
 
         .login-container {
-            width: 450px;
+            width: 100%;
+            max-width: 480px;
             background-color: var(--white);
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
             overflow: hidden;
             transition: var(--transition);
+            position: relative;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .login-container:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: var(--box-shadow-hover);
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue), var(--primary-blue));
+            background-size: 200% 100%;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
         }
 
         .login-header {
-            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
             color: var(--white);
-            padding: 25px 20px;
+            padding: 40px 30px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(255, 255, 255, 0.05) 1deg, transparent 2deg);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .login-header img {
-            max-width: 300px;
+            max-width: 320px;
+            width: 100%;
             height: auto;
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+            transition: var(--transition);
+        }
+
+        .login-header:hover img {
+            transform: scale(1.02);
         }
 
         .login-form {
-            padding: 30px;
+            padding: 40px 30px;
+            position: relative;
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-dark);
+            position: relative;
+        }
+
+        .form-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue));
+            border-radius: 2px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            position: relative;
         }
 
         .form-group label {
@@ -72,55 +176,150 @@
             margin-bottom: 8px;
             font-weight: 500;
             color: var(--text-dark);
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            transition: var(--transition-fast);
+        }
+
+        .input-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--border-radius-small);
         }
 
         .form-control {
             width: 100%;
-            padding: 12px 15px;
+            padding: 15px 20px;
             background-color: var(--light-blue);
-            border: 1px solid rgba(0,0,0,0.05);
-            border-radius: 8px;
+            border: 2px solid rgba(52, 152, 219, 0.1);
+            border-radius: var(--border-radius-small);
             font-size: 16px;
             color: var(--text-dark);
             transition: var(--transition);
+            font-family: inherit;
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-control::placeholder {
+            color: var(--text-light);
+            transition: var(--transition-fast);
         }
 
         .form-control:focus {
             outline: none;
             border-color: var(--secondary-blue);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+            background-color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .form-control:focus::placeholder {
+            opacity: 0.7;
+            transform: translateY(-2px);
+        }
+
+        .input-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(52, 152, 219, 0.1), transparent);
+            transition: var(--transition);
+            z-index: 1;
+        }
+
+        .form-control:focus + .input-wrapper::before,
+        .input-wrapper:hover::before {
+            left: 100%;
         }
 
         .login-btn {
             width: 100%;
-            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
             color: var(--white);
             border: none;
-            padding: 14px;
-            border-radius: 8px;
+            padding: 18px;
+            border-radius: var(--border-radius-small);
             cursor: pointer;
             font-weight: 600;
+            font-size: 16px;
             letter-spacing: 1px;
             transition: var(--transition);
-            margin-top: 10px;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            font-family: inherit;
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: var(--transition);
         }
 
         .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(44, 62, 144, 0.3);
+        }
+
+        .login-btn:hover::before {
+            left: 100%;
+        }
+
+        .login-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .error-message {
-            color: #e74c3c;
+            color: var(--error-red);
             text-align: center;
-            margin-top: 15px;
+            margin-top: 20px;
             font-size: 14px;
+            padding: 12px;
+            background-color: rgba(231, 76, 60, 0.1);
+            border-radius: var(--border-radius-small);
+            border-left: 4px solid var(--error-red);
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: var(--transition);
+        }
+
+        .error-message.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .register-link {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 30px;
             font-size: 14px;
+            position: relative;
+        }
+
+        .register-link::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--text-light), transparent);
         }
 
         .register-link a {
@@ -128,59 +327,318 @@
             text-decoration: none;
             font-weight: 600;
             transition: var(--transition);
+            position: relative;
+        }
+
+        .register-link a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue));
+            transition: var(--transition);
         }
 
         .register-link a:hover {
             color: var(--primary-blue);
-            text-decoration: underline;
+        }
+
+        .register-link a:hover::after {
+            width: 100%;
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--white);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .login-container {
+                max-width: 100%;
+                margin: 0;
+            }
+
+            .login-header {
+                padding: 30px 20px;
+            }
+
+            .login-header img {
+                max-width: 280px;
+            }
+
+            .login-form {
+                padding: 30px 20px;
+            }
+
+            .form-title {
+                font-size: 22px;
+                margin-bottom: 25px;
+            }
+
+            .form-control {
+                padding: 14px 16px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            .login-btn {
+                padding: 16px;
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-header {
+                padding: 25px 15px;
+            }
+
+            .login-header img {
+                max-width: 250px;
+            }
+
+            .login-form {
+                padding: 25px 15px;
+            }
+
+            .form-title {
+                font-size: 20px;
+            }
+
+            .form-control {
+                padding: 12px 14px;
+            }
+
+            .login-btn {
+                padding: 14px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .login-header img {
+                max-width: 220px;
+            }
+
+            .form-title {
+                font-size: 18px;
+            }
+        }
+
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .login-header img {
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
+            }
+        }
+
+        /* Force white theme - override any dark mode preferences */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --light-blue: #e6f2ff;
+                --white: #ffffff;
+                --text-dark: #2c3e50;
+                --text-light: #7f8c8d;
+            }
+
+            body {
+                background: linear-gradient(135deg, var(--light-blue) 0%, #f8fbff 50%, var(--white) 100%);
+            }
+
+            .login-container {
+                background-color: var(--white);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Focus indicators for keyboard navigation */
+        .login-btn:focus-visible {
+            outline: 3px solid rgba(52, 152, 219, 0.5);
+            outline-offset: 2px;
+        }
+
+        .register-link a:focus-visible {
+            outline: 2px solid var(--secondary-blue);
+            outline-offset: 2px;
+            border-radius: 2px;
         }
     </style>
 </head>
 <body>
     <div class="login-container">
         <div class="login-header">
-            <img src="static/assets/logo/svmslogo.png" alt="Smart Visitor Management System Logo">
+            <img src="static/assets/logo/svmslogo.png" alt="Smart Visitor Management System Logo" loading="lazy">
         </div>
         <div class="login-form">
             <form id="login-form">
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" class="form-control" placeholder="Enter your username" required>
+                    <div class="input-wrapper">
+                        <input type="text" id="username" class="form-control" placeholder="Enter your username" required autocomplete="username" spellcheck="false">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" class="form-control" placeholder="Enter your password" required autocomplete="current-password">
+                    </div>
                 </div>
-                <button type="submit" class="login-btn">Login</button>
-                <p id="error-message" class="error-message"></p>
+                <button type="submit" class="login-btn" id="login-button">
+                    <span id="login-text">Sign In</span>
+                    <div class="loading-spinner" id="loading-spinner"></div>
+                </button>
+                <div id="error-message" class="error-message" role="alert" aria-live="polite"></div>
             </form>
-            <p class="register-link">Don't have an account? <a href="/register">Register Here</a></p>
+            <p class="register-link">Don't have an account? <a href="/register">Create Account</a></p>
         </div>
     </div>
 
     <script>
-        document.getElementById("login-form").addEventListener("submit", function(event) {
-            event.preventDefault();
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById("login-form");
+            const loginButton = document.getElementById("login-button");
+            const loginText = document.getElementById("login-text");
+            const loadingSpinner = document.getElementById("loading-spinner");
+            const errorMessage = document.getElementById("error-message");
 
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
+            // Add input animation effects
+            const inputs = document.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'translateY(-2px)';
+                });
 
-            fetch("/", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, password })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.href = data.redirect_url;
-                } else {
-                    document.getElementById("error-message").textContent = "Invalid credentials. Please try again.";
-                }
-            })
-            .catch(error => {
-                document.getElementById("error-message").textContent = "An error occurred. Please try again later.";
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'translateY(0)';
+                });
             });
+
+            // Form submission
+            loginForm.addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                const username = document.getElementById("username").value.trim();
+                const password = document.getElementById("password").value;
+
+                // Clear previous error
+                errorMessage.classList.remove('show');
+                errorMessage.textContent = '';
+
+                // Validation
+                if (!username || !password) {
+                    showError("Please fill in all fields.");
+                    return;
+                }
+
+                // Show loading state
+                setLoadingState(true);
+
+                fetch("/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
+                    body: JSON.stringify({ username, password })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Success animation
+                        loginButton.style.background = 'linear-gradient(135deg, #27ae60 0%, #2ecc71 100%)';
+                        loginText.textContent = 'Success!';
+
+                        setTimeout(() => {
+                            window.location.href = data.redirect_url;
+                        }, 500);
+                    } else {
+                        setLoadingState(false);
+                        showError(data.message || "Invalid credentials. Please try again.");
+
+                        // Shake animation for error
+                        loginForm.style.animation = 'shake 0.5s ease-in-out';
+                        setTimeout(() => {
+                            loginForm.style.animation = '';
+                        }, 500);
+                    }
+                })
+                .catch(error => {
+                    console.error('Login error:', error);
+                    setLoadingState(false);
+                    showError("Connection error. Please check your internet and try again.");
+                });
+            });
+
+            function setLoadingState(isLoading) {
+                if (isLoading) {
+                    loginButton.disabled = true;
+                    loginText.textContent = 'Signing In...';
+                    loadingSpinner.style.display = 'inline-block';
+                } else {
+                    loginButton.disabled = false;
+                    loginText.textContent = 'Sign In';
+                    loadingSpinner.style.display = 'none';
+                }
+            }
+
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.classList.add('show');
+            }
+
+            // Add shake animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes shake {
+                    0%, 100% { transform: translateX(0); }
+                    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                    20%, 40%, 60%, 80% { transform: translateX(5px); }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+
+        // Keyboard navigation enhancement
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.tagName !== 'BUTTON') {
+                const form = e.target.closest('form');
+                if (form) {
+                    const submitButton = form.querySelector('button[type="submit"]');
+                    if (submitButton && !submitButton.disabled) {
+                        submitButton.click();
+                    }
+                }
+            }
         });
     </script>
 </body>

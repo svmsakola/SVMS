@@ -6,15 +6,23 @@
     <link rel="icon" href="static/assets/logo/favicon.png" type="image/png">
     <title>Smart Visitor Management System - Register</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
         :root {
             --primary-blue: #2c3e90;
             --secondary-blue: #3498db;
             --light-blue: #e6f2ff;
             --white: #ffffff;
             --text-dark: #2c3e50;
-            --border-radius: 12px;
-            --box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            --transition: all 0.3s ease;
+            --text-light: #7f8c8d;
+            --error-red: #e74c3c;
+            --success-green: #27ae60;
+            --border-radius: 16px;
+            --border-radius-small: 8px;
+            --box-shadow: 0 20px 60px rgba(44, 62, 144, 0.15);
+            --box-shadow-hover: 0 25px 80px rgba(44, 62, 144, 0.25);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: all 0.2s ease;
         }
 
         * {
@@ -24,47 +32,154 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--light-blue) 0%, var(--white) 100%);
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--light-blue) 0%, #f8fbff 50%, var(--white) 100%);
             color: var(--text-dark);
             line-height: 1.6;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background elements */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(52, 152, 219, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(44, 62, 144, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(52, 152, 219, 0.05) 0%, transparent 50%);
+            animation: backgroundFloat 20s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(1deg); }
         }
 
         .register-container {
-            width: 450px;
+            width: 100%;
+            max-width: 500px;
             background-color: var(--white);
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
             overflow: hidden;
             transition: var(--transition);
+            position: relative;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .register-container:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: var(--box-shadow-hover);
+        }
+
+        .register-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue), var(--primary-blue));
+            background-size: 200% 100%;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
         }
 
         .register-header {
-            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
             color: var(--white);
-            padding: 25px 20px;
+            padding: 35px 30px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(255, 255, 255, 0.05) 1deg, transparent 2deg);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .register-header img {
             max-width: 300px;
+            width: 100%;
             height: auto;
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+            transition: var(--transition);
+        }
+
+        .register-header:hover img {
+            transform: scale(1.02);
         }
 
         .register-form {
-            padding: 30px;
+            padding: 35px 30px;
+            position: relative;
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-dark);
+            position: relative;
+        }
+
+        .form-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue));
+            border-radius: 2px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
         }
 
         .form-group label {
@@ -72,65 +187,194 @@
             margin-bottom: 8px;
             font-weight: 500;
             color: var(--text-dark);
-            text-align: left;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            transition: var(--transition-fast);
+        }
+
+        .input-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--border-radius-small);
         }
 
         .form-control {
             width: 100%;
-            padding: 12px 15px;
+            padding: 16px 20px;
             background-color: var(--light-blue);
-            border: 1px solid rgba(0,0,0,0.05);
-            border-radius: 8px;
+            border: 2px solid rgba(52, 152, 219, 0.1);
+            border-radius: var(--border-radius-small);
             font-size: 16px;
             color: var(--text-dark);
             transition: var(--transition);
+            font-family: inherit;
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-control::placeholder {
+            color: var(--text-light);
+            transition: var(--transition-fast);
         }
 
         .form-control:focus {
             outline: none;
             border-color: var(--secondary-blue);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+            background-color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .form-control:focus::placeholder {
+            opacity: 0.7;
+            transform: translateY(-2px);
+        }
+
+        .form-control:valid {
+            border-color: var(--success-green);
+        }
+
+        .input-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(52, 152, 219, 0.1), transparent);
+            transition: var(--transition);
+            z-index: 1;
+        }
+
+        .form-control:focus + .input-wrapper::before,
+        .input-wrapper:hover::before {
+            left: 100%;
         }
 
         select.form-control {
             appearance: none;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232c3e50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
-            background-position: right 15px center;
-            background-size: 15px;
-            padding-right: 45px;
+            background-position: right 20px center;
+            background-size: 16px;
+            padding-right: 50px;
+            cursor: pointer;
         }
+
+        select.form-control:focus {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233498db' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        }
+
+        /* PIN input styling */
+        #pin {
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .password-strength {
+            margin-top: 5px;
+            font-size: 12px;
+            height: 20px;
+        }
+
+        .strength-weak { color: #e74c3c; }
+        .strength-medium { color: #f39c12; }
+        .strength-strong { color: #27ae60; }
 
         .register-btn {
             width: 100%;
-            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
             color: var(--white);
             border: none;
-            padding: 14px;
-            border-radius: 8px;
+            padding: 18px;
+            border-radius: var(--border-radius-small);
             cursor: pointer;
             font-weight: 600;
+            font-size: 16px;
             letter-spacing: 1px;
             transition: var(--transition);
-            margin-top: 10px;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            font-family: inherit;
+        }
+
+        .register-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: var(--transition);
         }
 
         .register-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(44, 62, 144, 0.3);
         }
 
-        .error-message {
-            color: #e74c3c;
+        .register-btn:hover::before {
+            left: 100%;
+        }
+
+        .register-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .register-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
             text-align: center;
-            margin-top: 15px;
+            margin-top: 20px;
             font-size: 14px;
+            padding: 12px;
+            border-radius: var(--border-radius-small);
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: var(--transition);
+        }
+
+        .message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .message.error {
+            color: var(--error-red);
+            background-color: rgba(231, 76, 60, 0.1);
+            border-left: 4px solid var(--error-red);
+        }
+
+        .message.success {
+            color: var(--success-green);
+            background-color: rgba(39, 174, 96, 0.1);
+            border-left: 4px solid var(--success-green);
         }
 
         .login-link {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 30px;
             font-size: 14px;
+            position: relative;
+        }
+
+        .login-link::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--text-light), transparent);
         }
 
         .login-link a {
@@ -138,80 +382,442 @@
             text-decoration: none;
             font-weight: 600;
             transition: var(--transition);
+            position: relative;
+        }
+
+        .login-link a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue));
+            transition: var(--transition);
         }
 
         .login-link a:hover {
             color: var(--primary-blue);
-            text-decoration: underline;
+        }
+
+        .login-link a:hover::after {
+            width: 100%;
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--white);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Role badges */
+        .role-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: var(--transition);
+        }
+
+        .role-badge.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .badge-admin { background: rgba(231, 76, 60, 0.1); color: #c0392b; }
+        .badge-registrar { background: rgba(52, 152, 219, 0.1); color: #2980b9; }
+        .badge-inoffice { background: rgba(39, 174, 96, 0.1); color: #27ae60; }
+        .badge-cctv { background: rgba(155, 89, 182, 0.1); color: #8e44ad; }
+        .badge-scanner { background: rgba(243, 156, 18, 0.1); color: #e67e22; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .register-container {
+                max-width: 100%;
+                margin: 0;
+            }
+
+            .register-header {
+                padding: 30px 20px;
+            }
+
+            .register-header img {
+                max-width: 280px;
+            }
+
+            .register-form {
+                padding: 30px 20px;
+            }
+
+            .form-title {
+                font-size: 22px;
+                margin-bottom: 25px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .form-control {
+                padding: 14px 16px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            .register-btn {
+                padding: 16px;
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .register-header {
+                padding: 25px 15px;
+            }
+
+            .register-header img {
+                max-width: 250px;
+            }
+
+            .register-form {
+                padding: 25px 15px;
+            }
+
+            .form-title {
+                font-size: 20px;
+            }
+
+            .form-control {
+                padding: 12px 14px;
+            }
+
+            .register-btn {
+                padding: 14px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .register-header img {
+                max-width: 220px;
+            }
+
+            .form-title {
+                font-size: 18px;
+            }
+        }
+
+        /* Force white theme - override any dark mode preferences */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --light-blue: #e6f2ff;
+                --white: #ffffff;
+                --text-dark: #2c3e50;
+                --text-light: #7f8c8d;
+            }
+
+            body {
+                background: linear-gradient(135deg, var(--light-blue) 0%, #f8fbff 50%, var(--white) 100%);
+            }
+
+            .register-container {
+                background-color: var(--white);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Focus indicators for keyboard navigation */
+        .register-btn:focus-visible {
+            outline: 3px solid rgba(52, 152, 219, 0.5);
+            outline-offset: 2px;
+        }
+
+        .login-link a:focus-visible {
+            outline: 2px solid var(--secondary-blue);
+            outline-offset: 2px;
+            border-radius: 2px;
         }
     </style>
 </head>
 <body>
     <div class="register-container">
         <div class="register-header">
-            <img src="static/assets/logo/svmslogo.png" alt="Smart Visitor Management System Logo">
+            <img src="static/assets/logo/svmslogo.png" alt="Smart Visitor Management System Logo" loading="lazy">
         </div>
         <div class="register-form">
+            <h2 class="form-title">Create Account</h2>
             <form id="register-form">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" class="form-control" placeholder="Create a username" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="username" class="form-control" placeholder="Create username" required autocomplete="username" spellcheck="false" minlength="3">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pin">Security PIN</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="pin" class="form-control" placeholder="6-digit PIN" pattern="[0-9]{6}" maxlength="6" required autocomplete="new-password">
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
+
+                <div class="form-group full-width">
                     <label for="password">Password</label>
-                    <input type="password" id="password" class="form-control" placeholder="Create a password" required>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" class="form-control" placeholder="Create strong password" required autocomplete="new-password" minlength="6">
+                    </div>
+                    <div id="password-strength" class="password-strength"></div>
                 </div>
-                <div class="form-group">
-                    <label for="pin">Security PIN (6 digits)</label>
-                    <input type="password" id="pin" class="form-control" placeholder="Enter 6-digit PIN" pattern="[0-9]{6}" maxlength="6" required>
+
+                <div class="form-group full-width">
+                    <label for="role">Role <span class="role-badge" id="role-badge"></span></label>
+                    <div class="input-wrapper">
+                        <select id="role" class="form-control" required>
+                            <option value="">Select your role</option>
+                            <option value="admin">Admin - Full system access</option>
+                            <option value="registrar">Registrar - Visitor registration</option>
+                            <option value="inoffice">In-Office - Office management</option>
+                            <option value="cctv">Viewer - Monitor activities</option>
+                            <option value="scanner">Scanner - Entry scanning</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="role">Role</label>
-                    <select id="role" class="form-control" required>
-                        <option value="admin">Admin</option>
-                        <option value="registrar">Registrar</option>
-                        <option value="inoffice">In-Office</option>
-                        <option value="cctv">Viewer</option>
-                        <option value="scanner">Scanner</option>
-                    </select>
-                </div>
-                <button type="button" class="register-btn" onclick="register()">Register</button>
-                <p id="message" class="error-message"></p>
+
+                <button type="button" class="register-btn" id="register-button">
+                    <span id="register-text">Create Account</span>
+                    <div class="loading-spinner" id="loading-spinner"></div>
+                </button>
+
+                <div id="message" class="message" role="alert" aria-live="polite"></div>
             </form>
-            <p class="login-link">Already have an account? <a href="/">Login</a></p>
+            <p class="login-link">Already have an account? <a href="/">Sign In</a></p>
         </div>
     </div>
 
     <script>
-        function register() {
-            let username = document.getElementById("username").value;
-            let password = document.getElementById("password").value;
-            let role = document.getElementById("role").value;
-            let pin = document.getElementById("pin").value;
+        document.addEventListener('DOMContentLoaded', function() {
+            const registerForm = document.getElementById("register-form");
+            const registerButton = document.getElementById("register-button");
+            const registerText = document.getElementById("register-text");
+            const loadingSpinner = document.getElementById("loading-spinner");
+            const messageDiv = document.getElementById("message");
+            const passwordInput = document.getElementById("password");
+            const passwordStrength = document.getElementById("password-strength");
+            const roleSelect = document.getElementById("role");
+            const roleBadge = document.getElementById("role-badge");
 
-            if (!username || !password || !pin || !role) {
-                document.getElementById("message").innerText = "Please fill in all fields";
-                return;
+            // Add input animation effects
+            const inputs = document.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.closest('.input-wrapper').style.transform = 'translateY(-2px)';
+                });
+
+                input.addEventListener('blur', function() {
+                    this.closest('.input-wrapper').style.transform = 'translateY(0)';
+                });
+            });
+
+            // Password strength indicator
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                const strength = calculatePasswordStrength(password);
+
+                if (password.length === 0) {
+                    passwordStrength.textContent = '';
+                    return;
+                }
+
+                if (strength < 3) {
+                    passwordStrength.textContent = 'Weak password';
+                    passwordStrength.className = 'password-strength strength-weak';
+                } else if (strength < 5) {
+                    passwordStrength.textContent = 'Medium strength';
+                    passwordStrength.className = 'password-strength strength-medium';
+                } else {
+                    passwordStrength.textContent = 'Strong password';
+                    passwordStrength.className = 'password-strength strength-strong';
+                }
+            });
+
+            // Role selection badge
+            roleSelect.addEventListener('change', function() {
+                const role = this.value;
+                if (role) {
+                    roleBadge.textContent = role.toUpperCase();
+                    roleBadge.className = `role-badge badge-${role} show`;
+                } else {
+                    roleBadge.classList.remove('show');
+                }
+            });
+
+            // PIN input formatting
+            const pinInput = document.getElementById('pin');
+            pinInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+
+            // Form submission
+            registerButton.addEventListener('click', function() {
+                register();
+            });
+
+            // Enter key submission
+            registerForm.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    register();
+                }
+            });
+
+            function calculatePasswordStrength(password) {
+                let strength = 0;
+                if (password.length >= 6) strength++;
+                if (password.length >= 8) strength++;
+                if (/[a-z]/.test(password)) strength++;
+                if (/[A-Z]/.test(password)) strength++;
+                if (/[0-9]/.test(password)) strength++;
+                if (/[^A-Za-z0-9]/.test(password)) strength++;
+                return strength;
             }
 
-            fetch("/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, password, role, pin })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert("Registration successful! Redirecting to login.");
-                    window.location.href = "/";
+            function setLoadingState(isLoading) {
+                if (isLoading) {
+                    registerButton.disabled = true;
+                    registerText.textContent = 'Creating Account...';
+                    loadingSpinner.style.display = 'inline-block';
                 } else {
-                    document.getElementById("message").innerText = data.message || "Registration failed";
+                    registerButton.disabled = false;
+                    registerText.textContent = 'Create Account';
+                    loadingSpinner.style.display = 'none';
                 }
-            })
-            .catch(error => {
-                document.getElementById("message").innerText = "An error occurred. Please try again.";
-            });
-        }
+            }
+
+            function showMessage(text, type = 'error') {
+                messageDiv.textContent = text;
+                messageDiv.className = `message ${type} show`;
+            }
+
+            function hideMessage() {
+                messageDiv.classList.remove('show');
+            }
+
+            function register() {
+                const username = document.getElementById("username").value.trim();
+                const password = document.getElementById("password").value;
+                const role = document.getElementById("role").value;
+                const pin = document.getElementById("pin").value;
+
+                // Clear previous messages
+                hideMessage();
+
+                // Validation
+                if (!username || !password || !pin || !role) {
+                    showMessage("Please fill in all fields");
+                    registerForm.style.animation = 'shake 0.5s ease-in-out';
+                    setTimeout(() => registerForm.style.animation = '', 500);
+                    return;
+                }
+
+                if (username.length < 3) {
+                    showMessage("Username must be at least 3 characters long");
+                    return;
+                }
+
+                if (password.length < 6) {
+                    showMessage("Password must be at least 6 characters long");
+                    return;
+                }
+
+                if (pin.length !== 6 || !/^\d{6}$/.test(pin)) {
+                    showMessage("PIN must be exactly 6 digits");
+                    return;
+                }
+
+                // Show loading state
+                setLoadingState(true);
+
+                fetch("/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
+                    body: JSON.stringify({ username, password, role, pin })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Success animation
+                        registerButton.style.background = 'linear-gradient(135deg, #27ae60 0%, #2ecc71 100%)';
+                        registerText.textContent = 'Success!';
+                        showMessage("Registration successful! Redirecting to login...", 'success');
+
+                        setTimeout(() => {
+                            window.location.href = "/";
+                        }, 1500);
+                    } else {
+                        setLoadingState(false);
+                        showMessage(data.message || "Registration failed. Please try again.");
+
+                        // Shake animation for error
+                        registerForm.style.animation = 'shake 0.5s ease-in-out';
+                        setTimeout(() => registerForm.style.animation = '', 500);
+                    }
+                })
+                .catch(error => {
+                    console.error('Registration error:', error);
+                    setLoadingState(false);
+                    showMessage("Connection error. Please check your internet and try again.");
+                });
+            }
+
+            // Make register function globally accessible
+            window.register = register;
+
+            // Add shake animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes shake {
+                    0%, 100% { transform: translateX(0); }
+                    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                    20%, 40%, 60%, 80% { transform: translateX(5px); }
+                }
+            `;
+            document.head.appendChild(style);
+        });
     </script>
 </body>
 </html>
