@@ -1164,32 +1164,73 @@
                      });
                  } catch (e) { console.error("Error formatting date:", e); return dateTimeString; }
              }
-            function getProfileImageHtml(visitorData) {
-                 let imageUrl = visitorData?.profile_img?.[0] || visitorData?.images?.[0] || null;
-                 const initials = (visitorData?.name?.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || '?');
-                 const altText = visitorData?.name || 'Visitor';
-                 const timestamp = Date.now();
-                 let basePath = '/';
-                 let finalImageName = null;
 
-                 if (imageUrl && typeof imageUrl === 'string') {
-                     if (imageUrl.startsWith('profiles/')) {
-                         finalImageName = imageUrl;
-                         basePath = '/dashboard/';
-                     } else if (imageUrl.startsWith('facedata/')) {
-                         finalImageName = imageUrl;
-                         basePath = '/';
+            // ------------------ FIXED PROFILE IMAGE LOGIC ------------------
+            // This function correctly handles keys like:
+            // - "profiles/<uid>/<filename>"
+            // - "facedata/<uid>/<filename>"
+            // - absolute paths or full URLs stored in DB
+            function getProfileImageHtml(visitorData) {
+                 // pick possible image keys from your visitor record
+                 let imageKey = visitorData?.profile_img?.[0] || visitorData?.images?.[0] || null;
+                 const initials = (visitorData?.name?.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || '?');
+                 const altTextRaw = visitorData?.name || 'Visitor';
+                 const altText = ("" + altTextRaw).replace(/"/g, '&quot;');
+                 const timestamp = Date.now();
+                 const uid = visitorData?.uid || '';
+
+                 let finalImageUrl = null;
+
+                 if (imageKey && typeof imageKey === 'string') {
+                     // If stored as full URL or absolute path (starts with http(s) or '/'), use directly (append cache buster)
+                     if (/^https?:\/\//i.test(imageKey) || imageKey.startsWith('/')) {
+                         finalImageUrl = `${imageKey}${imageKey.includes('?') ? '&' : '?'}t=${timestamp}`;
+                     } else {
+                         // handle keys saved like: "profiles/<uid>/<filename>" or "facedata/<uid>/<filename>"
+                         const parts = imageKey.split('/');
+                         const prefix = parts[0] || '';
+                         const filename = parts.slice(-1)[0] || imageKey;
+
+                         if (prefix === 'profiles') {
+                             // prefer endpoint that streams profile images from your server:
+                             // /data/profiles/<uid>/<filename>
+                             // derive uid from record if not present in visitorData, try parts[1]
+                             const uidFromKey = uid || parts[1] || '';
+                             if (uidFromKey) {
+                                 finalImageUrl = `/data/profiles/${encodeURIComponent(uidFromKey)}/${encodeURIComponent(filename)}?t=${timestamp}`;
+                             } else {
+                                 // fallback: request raw key under /data/profiles (less likely)
+                                 finalImageUrl = `/data/profiles/${encodeURIComponent(filename)}?t=${timestamp}`;
+                             }
+                         } else if (prefix === 'facedata') {
+                             const uidFromKey = uid || parts[1] || '';
+                             if (uidFromKey) {
+                                 finalImageUrl = `/data/facedata/${encodeURIComponent(uidFromKey)}/${encodeURIComponent(filename)}?t=${timestamp}`;
+                             } else {
+                                 finalImageUrl = `/data/facedata/${encodeURIComponent(filename)}?t=${timestamp}`;
+                             }
+                         } else {
+                             // unknown relative key — try to serve from profiles using uid if present
+                             if (uid) {
+                                 finalImageUrl = `/data/profiles/${encodeURIComponent(uid)}/${encodeURIComponent(imageKey)}?t=${timestamp}`;
+                             } else {
+                                 // as last resort use the raw key and append timestamp
+                                 finalImageUrl = `${imageKey}${imageKey.includes('?') ? '&' : '?'}t=${timestamp}`;
+                             }
+                         }
                      }
                  }
-                 const finalImageUrl = finalImageName ? `${basePath}${finalImageName}?t=${timestamp}`.replace(/\\/g, '/') : null;
 
+                 // If finalImageUrl exists, return an <img> with onerror fallback to initials; else return initials
                  return `<div class="profile-img-container">
                              ${finalImageUrl
-                                 ? `<img src="${finalImageUrl}" alt="${altText}" onerror="this.style.display='none'; this.parentElement.innerHTML='${initials}';">`
+                                 ? `<img src="${finalImageUrl}" alt="${altText}" onerror="this.onerror=null; this.style.display='none'; this.parentElement.innerHTML='${initials}';">`
                                  : initials
                              }
                           </div>`;
              }
+             // ------------------ end image logic ------------------
+
              function getStatusBadge(status) {
                  let badgeClass = 'status-default';
                  let statusText = status || 'unknown';

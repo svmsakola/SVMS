@@ -1,11 +1,17 @@
-Flask
+Flask~=3.1.2
 flask-cors
-bcrypt
+bcrypt~=5.0.0
 opencv-python-headless
-numpy
+numpy~=2.3.4
 face_recognition
-Pillow
-openpyxl
-reportlab
-ultralytics
+Pillow~=12.0.0
+openpyxl~=3.1.5
+reportlab~=4.4.4
+ultralytics~=8.3.221
 
+
+opencv-python~=4.11.0.86
+boto3~=1.40.61
+torch~=2.9.0
+Werkzeug~=3.1.3
+botocore~=1.40.61
