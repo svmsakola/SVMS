@@ -38,7 +38,6 @@ from werkzeug.utils import secure_filename
 import boto3
 from botocore.exceptions import ClientError
 
-# Try torch globally so we can use torch.no_grad() in detect_face
 try:
     import torch
 except Exception:
@@ -48,15 +47,13 @@ app = Flask(__name__)
 CORS(app)
 app.secret_key = os.urandom(24)
 
-# Base prefixes (kept short) — keys will be constructed via s3_key(...)
 UPLOAD_PREFIX = "uploads/docimg"
 PDF_PREFIX = "pdf"
 REMARK_PDF_PREFIX = "remarkpdf"
 ENCODINGS_PREFIX = "encodings"
 FACEDATA_PREFIX = "facedata"
 PROFILES_PREFIX = "profiles"
-# Optional top-level prefix if you want all keys under a single folder in the bucket:
-S3_BASE_PREFIX = os.environ.get("S3_BASE_PREFIX", "").strip("/")  # e.g. "svms" or "" for none
+S3_BASE_PREFIX = os.environ.get("S3_BASE_PREFIX", "").strip("/")
 
 FACE_TABLE = os.environ.get("FACE_TABLE", "SVMSFaceData")
 DEPT_TABLE = os.environ.get("DEPT_TABLE", "SVMSDepartments")
@@ -70,10 +67,6 @@ s3 = boto3.client("s3", region_name=AWS_REGION)
 
 
 def s3_key(*parts):
-    """
-    Build a clean S3 key by joining provided parts with '/' and stripping extra slashes.
-    If S3_BASE_PREFIX is set, it will be prefixed automatically.
-    """
     parts_clean = [str(p).strip("/") for p in parts if p is not None and str(p).strip() != ""]
     if S3_BASE_PREFIX:
         return "/".join([S3_BASE_PREFIX] + parts_clean)
@@ -114,6 +107,28 @@ def s3_delete(key):
         return False
 
 
+def s3_list_objects(prefix):
+    try:
+        objects = []
+        paginator = s3.get_paginator('list_objects_v2')
+        for page in paginator.paginate(Bucket=BUCKET, Prefix=prefix):
+            objects.extend(page.get('Contents', []))
+        return objects
+    except Exception:
+        return []
+
+
+def s3_delete_prefix(prefix):
+    try:
+        objects = s3_list_objects(prefix)
+        if objects:
+            delete_keys = [{'Key': obj['Key']} for obj in objects]
+            s3.delete_objects(Bucket=BUCKET, Delete={'Objects': delete_keys})
+        return True
+    except Exception:
+        return False
+
+
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -138,7 +153,6 @@ elif sys.platform.startswith("linux"):
     except Exception:
         pass
 
-# Decide which face_recognition model to use
 face_recognition_model = "hog"
 if sys.platform.startswith("linux"):
     try:
@@ -147,7 +161,6 @@ if sys.platform.startswith("linux"):
     except Exception:
         pass
 
-# Load YOLO models
 try:
     person_model = YOLO("models/yolo11n-seg.pt")
     face_model = YOLO("models/yolov11n-face.pt")
@@ -155,60 +168,39 @@ except Exception as e:
     print(f"Error loading YOLO models: {e}")
     sys.exit(1)
 
-# ------------------------------------------------------------------
-# FAST FACE RECOGNITION CACHE (GLOBAL SHARED STATE PER WORKER)
-# ------------------------------------------------------------------
-
-FACE_CACHE_TTL = 60  # seconds to keep cache "fresh"
+FACE_CACHE_TTL = 60
 
 _face_cache_lock = threading.RLock()
 _face_cache = {
-    "encodings": None,   # np.ndarray of shape (N,128) float32
-    "uids":     [],      # [uid, uid, ...] parallel to encodings rows
-    "last_load": 0.0     # unix timestamp
+    "encodings": None,
+    "uids": [],
+    "last_load": 0.0
 }
 
 
 def _load_face_cache(force: bool = False):
-    """
-    Refresh the global in-memory known-face cache from DynamoDB+S3.
-
-    We only rebuild if:
-      - cache empty,
-      - cache is older than FACE_CACHE_TTL,
-      - or force=True.
-
-    This dramatically reduces repeated S3/DB lookups per request.
-    NOTE: We do NOT regenerate encodings from raw images here
-    (that "healing" logic in your old /detect_face was expensive and
-    caused per-request slowness). That should be handled offline.
-    """
     global _face_cache
 
     with _face_cache_lock:
         now = time.time()
 
-        # Use cached version if still fresh
         if (
-            not force
-            and _face_cache["encodings"] is not None
-            and (now - _face_cache["last_load"] < FACE_CACHE_TTL)
+                not force
+                and _face_cache["encodings"] is not None
+                and (now - _face_cache["last_load"] < FACE_CACHE_TTL)
         ):
             return
 
-        # Pull all visitors from DB
         known_data = scan_face_data()
 
         enc_list = []
         uid_list = []
 
         for uid, user in known_data.items():
-            # Use precomputed encodings if available
             for encoding_path in user.get("face_encodings", []):
                 try:
-                    raw = s3_get_bytes(encoding_path)  # load .npy bytes
+                    raw = s3_get_bytes(encoding_path)
                     arr = np.load(io.BytesIO(raw))
-                    # Expect shape (128,), skip bad arrays
                     if arr is not None and hasattr(arr, "shape") and arr.shape == (128,):
                         enc_list.append(arr.astype("float32"))
                         uid_list.append(uid)
@@ -217,7 +209,7 @@ def _load_face_cache(force: bool = False):
                     continue
 
         if enc_list:
-            enc_array = np.stack(enc_list, axis=0).astype("float32")  # (N,128)
+            enc_array = np.stack(enc_list, axis=0).astype("float32")
         else:
             enc_array = np.zeros((0, 128), dtype="float32")
 
@@ -227,14 +219,6 @@ def _load_face_cache(force: bool = False):
 
 
 def _match_face(embedding: np.ndarray, tolerance: float = 0.4):
-    """
-    Fast approximate nearest-neighbor match.
-
-    We compute L2 distance between the captured embedding (128-d)
-    and each cached encoding, then pick the closest.
-
-    If best distance <= tolerance, we return the UID, else None.
-    """
     with _face_cache_lock:
         encs = _face_cache["encodings"]
         uids = _face_cache["uids"]
@@ -242,14 +226,12 @@ def _match_face(embedding: np.ndarray, tolerance: float = 0.4):
         if encs is None or encs.shape[0] == 0:
             return None
 
-        # Vectorized distance: (N,128) vs (1,128)
         diff = encs - embedding.astype("float32")
-        dists = np.linalg.norm(diff, axis=1)  # shape (N,)
+        dists = np.linalg.norm(diff, axis=1)
 
         best_idx = int(np.argmin(dists))
         best_dist = float(dists[best_idx])
 
-        # Your old tolerance via compare_faces was 0.4
         if best_dist <= tolerance:
             return uids[best_idx]
         else:
@@ -465,8 +447,8 @@ def login():
                 return jsonify(success=False, message="Username and password are required")
             users = load_users()
             if (
-                username in users
-                and bcrypt.checkpw(password.encode("utf-8"), users[username]["password"].encode("utf-8"))
+                    username in users
+                    and bcrypt.checkpw(password.encode("utf-8"), users[username]["password"].encode("utf-8"))
             ):
                 role = users[username]["role"]
                 session["user"] = {"username": username, "role": role}
@@ -480,8 +462,8 @@ def login():
                 return render_template("login.html")
             users = load_users()
             if (
-                username in users
-                and bcrypt.checkpw(password.encode("utf-8"), users[username]["password"].encode("utf-8"))
+                    username in users
+                    and bcrypt.checkpw(password.encode("utf-8"), users[username]["password"].encode("utf-8"))
             ):
                 role = users[username]["role"]
                 session["user"] = {"username": username, "role": role}
@@ -578,8 +560,8 @@ def register_visitor():
     for uid_key, user_data_val in facedata.items():
         if isinstance(user_data_val, dict):
             if (
-                user_data_val.get("name") == data.get("name")
-                and user_data_val.get("phone") == data.get("phone")
+                    user_data_val.get("name") == data.get("name")
+                    and user_data_val.get("phone") == data.get("phone")
             ):
                 existing_uid = uid_key
                 break
@@ -660,6 +642,8 @@ def register_visitor():
         visitor_data["visitor"] = [visit_entry]
         put_face_item(uid, visitor_data)
 
+    _load_face_cache(force=True)
+
     return jsonify({"success": True, "message": "Visitor registered successfully", "uid": uid, "visit_id": visitor_id})
 
 
@@ -672,10 +656,10 @@ def search_visitors():
     matching_visitors = []
     for uid, visitor_data in facedata.items():
         if (
-            query in visitor_data.get("name", "").lower()
-            or query in uid.lower()
-            or query in visitor_data.get("phone", "").lower()
-            or any(query in visit.get("visit_id", "").lower() for visit in visitor_data.get("visitor", []))
+                query in visitor_data.get("name", "").lower()
+                or query in uid.lower()
+                or query in visitor_data.get("phone", "").lower()
+                or any(query in visit.get("visit_id", "").lower() for visit in visitor_data.get("visitor", []))
         ):
             last_visit = visitor_data.get("visitor", [])[-1] if visitor_data.get("visitor") else None
             matching_visitors.append(
@@ -708,17 +692,12 @@ def get_visitor_details():
     return jsonify({"success": False, "message": "Visitor not found"})
 
 
-# ------------------------------------------------------------------
-# FAST /detect_face ENDPOINT
-# ------------------------------------------------------------------
 @app.route("/detect_face", methods=["POST"])
 def detect_face():
-    # Require an uploaded frame (multipart)
     if "frame" not in request.files:
         return jsonify({"recognized": False, "message": "No frame uploaded"})
 
     try:
-        # Read image from request
         frame_bytes = request.files["frame"].read()
         frame_arr = np.frombuffer(frame_bytes, dtype=np.uint8)
         frame = cv2.imdecode(frame_arr, cv2.IMREAD_COLOR)
@@ -726,35 +705,29 @@ def detect_face():
         if frame is None:
             return jsonify({"recognized": False, "message": "Invalid image format"})
 
-        # Make sure models exist
         if person_model is None or not hasattr(person_model, "predict"):
             return jsonify({"recognized": False, "message": "Model not properly initialized"})
         if face_model is None or not hasattr(face_model, "predict"):
             return jsonify({"recognized": False, "message": "Face model not initialized"})
 
-        # Pre-resize to speed up YOLO face detection
         orig_h, orig_w = frame.shape[:2]
-        target_size = 640  # YOLO-ish working size
+        target_size = 640
         scale_x = orig_w / target_size
         scale_y = orig_h / target_size
         resized = cv2.resize(frame, (target_size, target_size), interpolation=cv2.INTER_LINEAR)
 
-        # Run face detector (single forward, no grad)
         if torch:
             with torch.no_grad():
                 face_results = face_model.predict(source=resized, stream=False)
         else:
-            # Fallback if torch isn't available
             face_results = face_model.predict(source=resized, stream=False)
 
-        # Pick best (highest conf) face box
         face_bbox_resized = None
         for fr in face_results:
             if fr.boxes is None or len(fr.boxes.data) == 0:
                 continue
 
             boxes_np = fr.boxes.data.cpu().numpy()
-            # YOLO boxes: [x1, y1, x2, y2, conf, ...]
             best_i = int(np.argmax(boxes_np[:, 4]))
             x1_r, y1_r, x2_r, y2_r, conf, *_ = boxes_np[best_i]
 
@@ -767,13 +740,11 @@ def detect_face():
         if face_bbox_resized is None:
             return jsonify({"recognized": False, "message": "No face detected"})
 
-        # Map face box back to original frame coords
         x1 = int(face_bbox_resized[0] * scale_x)
         y1 = int(face_bbox_resized[1] * scale_y)
         x2 = int(face_bbox_resized[2] * scale_x)
         y2 = int(face_bbox_resized[3] * scale_y)
 
-        # Clamp box just in case
         x1 = max(0, min(x1, orig_w - 1))
         x2 = max(0, min(x2, orig_w - 1))
         y1 = max(0, min(y1, orig_h - 1))
@@ -782,15 +753,12 @@ def detect_face():
         if x2 <= x1 or y2 <= y1:
             return jsonify({"recognized": False, "message": "Invalid face crop"})
 
-        # Crop the face region
         face_crop = frame[y1:y2, x1:x2]
         if face_crop.size == 0:
             return jsonify({"recognized": False, "message": "Invalid face crop"})
 
-        # Convert to RGB for face_recognition
         rgb_face = cv2.cvtColor(face_crop, cv2.COLOR_BGR2RGB)
 
-        # Get face embedding
         face_enc_list = face_recognition.face_encodings(
             rgb_face,
             model=face_recognition_model
@@ -799,19 +767,15 @@ def detect_face():
         if not face_enc_list:
             return jsonify({"recognized": False, "message": "Unable to encode face"})
 
-        face_embedding = face_enc_list[0]  # (128,)
+        face_embedding = face_enc_list[0]
 
-        # Refresh / load cached encodings (does nothing if cache is still warm)
         _load_face_cache(force=False)
 
-        # Vectorized nearest neighbor vs all known encodings
         matched_uid = _match_face(face_embedding, tolerance=0.4)
 
         if matched_uid is None:
-            # Face seen, but nobody matches under tolerance
             return jsonify({"recognized": False, "message": "Face not recognized"})
 
-        # Get the full visitor record
         matched_user = get_face_item(matched_uid)
 
         return jsonify({
@@ -1164,7 +1128,8 @@ def delete_visitor_document(visit_id):
                     break
             put_face_item(found_uid, record)
             return jsonify(
-                {"success": True, "message": "Document reference removed and file deleted successfully (if it existed)."}
+                {"success": True,
+                 "message": "Document reference removed and file deleted successfully (if it existed)."}
             )
         else:
             return jsonify({"success": False, "message": "File deletion was prevented or failed."}), 500
@@ -1264,7 +1229,8 @@ def generate_pdf():
                     break
             if updated:
                 break
-        return jsonify({"success": True, "message": "PDF generated successfully from scanned images.", "pdf_url": f"/api/get-visitor-document/{visit_id}"})
+        return jsonify({"success": True, "message": "PDF generated successfully from scanned images.",
+                        "pdf_url": f"/api/get-visitor-document/{visit_id}"})
     except Exception as e:
         traceback.print_exc()
         return jsonify({"success": False, "error": f"Failed to generate PDF: {str(e)}"}), 500
@@ -1273,9 +1239,8 @@ def generate_pdf():
 @app.route("/api/cleanup", methods=["POST"])
 def cleanup_images():
     try:
-        resp = s3.list_objects_v2(Bucket=BUCKET, Prefix=s3_key(UPLOAD_PREFIX))
-        for obj in resp.get("Contents", []):
-            s3_delete(obj["Key"])
+        prefix = s3_key(UPLOAD_PREFIX)
+        s3_delete_prefix(prefix)
         return jsonify({"success": True, "message": "All temporary images have been deleted"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -1286,6 +1251,9 @@ def load_departments():
     try:
         resp = table.scan()
         items = resp.get("Items", [])
+        while "LastEvaluatedKey" in resp:
+            resp = table.scan(ExclusiveStartKey=resp["LastEvaluatedKey"])
+            items.extend(resp.get("Items", []))
         valid_departments = [d for d in items if d.get("name") and d.get("email")]
         return valid_departments
     except Exception:
@@ -1297,6 +1265,9 @@ def load_departments_data():
     try:
         resp = table.scan()
         items = resp.get("Items", [])
+        while "LastEvaluatedKey" in resp:
+            resp = table.scan(ExclusiveStartKey=resp["LastEvaluatedKey"])
+            items.extend(resp.get("Items", []))
         return {"departments": items}
     except Exception:
         return {"departments": []}
@@ -1699,13 +1670,13 @@ def search_applications():
         for visit in user_data.get("visitor", []):
             if visit.get("forwarding_department") == department_name:
                 if (
-                    query in user_data.get("name", "").lower()
-                    or query in user_data.get("phone", "").lower()
-                    or query in user_data.get("email", "").lower()
-                    or query in visit.get("visit_id", "").lower()
-                    or query in visit.get("purpose", "").lower()
-                    or query in user_data.get("address", "").lower()
-                    or query in user_data.get("district", "").lower()
+                        query in user_data.get("name", "").lower()
+                        or query in user_data.get("phone", "").lower()
+                        or query in user_data.get("email", "").lower()
+                        or query in visit.get("visit_id", "").lower()
+                        or query in visit.get("purpose", "").lower()
+                        or query in user_data.get("address", "").lower()
+                        or query in user_data.get("district", "").lower()
                 ):
                     result = {
                         "uid": uid,
@@ -1786,7 +1757,8 @@ def admin_update_department(dept_id):
     new_name = req_data.get("name", "").strip()
     new_email = req_data.get("email", "").strip()
     if not new_name and not new_email:
-        return jsonify({"success": False, "message": "At least one field (name or email) must be provided for update."}), 400
+        return jsonify(
+            {"success": False, "message": "At least one field (name or email) must be provided for update."}), 400
     data = load_departments_data()
     departments = data.get("departments", [])
     target_dept = next((d for d in departments if d.get("id") == dept_id), None)
@@ -1878,8 +1850,10 @@ def get_admin_visitors():
         else:
             print(f"Warning: Skipping invalid user data structure for UID {uid}")
     try:
-        valid_visitors = [v for v in daily_visitors if "datetime" in v and isinstance(v["datetime"], str) and v["datetime"]]
-        invalid_visitors = [v for v in daily_visitors if not ("datetime" in v and isinstance(v["datetime"], str) and v["datetime"])]
+        valid_visitors = [v for v in daily_visitors if
+                          "datetime" in v and isinstance(v["datetime"], str) and v["datetime"]]
+        invalid_visitors = [v for v in daily_visitors if
+                            not ("datetime" in v and isinstance(v["datetime"], str) and v["datetime"])]
         valid_visitors.sort(key=lambda x: datetime.strptime(x["datetime"], "%Y-%m-%d %H:%M:%S"))
         sorted_daily_visitors = valid_visitors + invalid_visitors
     except Exception:
@@ -1902,7 +1876,8 @@ def delete_visitor_entry():
     record = get_face_item(uid)
     if not record:
         return jsonify({"success": False, "message": "Invalid or missing visitor data"}), 404
-    visit_to_remove = next((v for v in record.get("visitor", []) if isinstance(v, dict) and v.get("visit_id") == visit_id), None)
+    visit_to_remove = next(
+        (v for v in record.get("visitor", []) if isinstance(v, dict) and v.get("visit_id") == visit_id), None)
     if not visit_to_remove:
         return jsonify({"success": False, "message": f"Visit ID '{visit_id}' not found for UID '{uid}'"}), 404
     record["visitor"] = [v for v in record.get("visitor", []) if v.get("visit_id") != visit_id]
@@ -1959,9 +1934,11 @@ def generate_visitor_report():
                                 }
                                 report_data.append(report_entry)
                         except ValueError:
-                            print(f"Skipping visit due to invalid datetime format: UID {uid}, Visit {visit.get('visit_id', 'N/A')}")
+                            print(
+                                f"Skipping visit due to invalid datetime format: UID {uid}, Visit {visit.get('visit_id', 'N/A')}")
                         except Exception as e:
-                            print(f"Error processing visit row for report: UID {uid}, Visit {visit.get('visit_id', 'N/A')} - {e}")
+                            print(
+                                f"Error processing visit row for report: UID {uid}, Visit {visit.get('visit_id', 'N/A')} - {e}")
         report_data.sort(key=lambda x: datetime.strptime(x["Date & Time"], "%d/%m/%Y %I:%M:%S %p"))
         wb = openpyxl.Workbook()
         ws = wb.active
@@ -1991,7 +1968,8 @@ def generate_visitor_report():
         for entry in report_data:
             row_data = [entry.get(header, "N/A") for header in headers]
             ws.append(row_data)
-        for col_idx, column_letter in enumerate(openpyxl.utils.get_column_letter(i) for i in range(1, len(headers) + 1)):
+        for col_idx, column_letter in enumerate(
+                openpyxl.utils.get_column_letter(i) for i in range(1, len(headers) + 1)):
             max_length = 0
             column = ws[column_letter]
             for cell in column:
@@ -2032,14 +2010,10 @@ def delete_user():
             for encoding_path in record.get("face_encodings", []):
                 if encoding_path and isinstance(encoding_path, str) and s3_exists(encoding_path):
                     s3_delete(encoding_path)
-        profile_prefix = s3_key(PROFILES_PREFIX, uid_to_delete) + "/"
-        resp = s3.list_objects_v2(Bucket=BUCKET, Prefix=profile_prefix)
-        for obj in resp.get("Contents", []):
-            s3_delete(obj["Key"])
-        face_data_prefix = s3_key(FACEDATA_PREFIX, uid_to_delete) + "/"
-        resp = s3.list_objects_v2(Bucket=BUCKET, Prefix=face_data_prefix)
-        for obj in resp.get("Contents", []):
-            s3_delete(obj["Key"])
+        profile_prefix = s3_key(PROFILES_PREFIX, uid_to_delete)
+        s3_delete_prefix(profile_prefix)
+        face_data_prefix = s3_key(FACEDATA_PREFIX, uid_to_delete)
+        s3_delete_prefix(face_data_prefix)
         if isinstance(record, dict) and "visitor" in record:
             for visit in record.get("visitor", []):
                 if isinstance(visit, dict) and "document_pdf" in visit:
@@ -2047,7 +2021,11 @@ def delete_user():
                     if pdf_path and isinstance(pdf_path, str) and s3_exists(pdf_path):
                         s3_delete(pdf_path)
         delete_face_item(uid_to_delete)
-        return jsonify({"success": True, "message": f"User '{uid_to_delete}' and associated files deleted successfully"})
+
+        _load_face_cache(force=True)
+
+        return jsonify(
+            {"success": True, "message": f"User '{uid_to_delete}' and associated files deleted successfully"})
     except Exception as e:
         print(f"Error deleting user {uid_to_delete}: {e}")
         traceback.print_exc()
@@ -2093,11 +2071,13 @@ def get_visitor_status(visit_id):
         profile_image_url = None
         profile_imgs = found_visitor_data.get("profile_img", [])
         if profile_imgs and isinstance(profile_imgs, list) and profile_imgs[0]:
-            profile_image_url = url_for("get_registration_image", uid=visitor_uid, filename=os.path.basename(profile_imgs[0]), _external=False)
+            profile_image_url = url_for("get_registration_image", uid=visitor_uid,
+                                        filename=os.path.basename(profile_imgs[0]), _external=False)
         else:
             reg_images = found_visitor_data.get("images", [])
             if reg_images and isinstance(reg_images, list) and reg_images[0]:
-                profile_image_url = url_for("get_registration_image", uid=visitor_uid, filename=os.path.basename(reg_images[0]), _external=False)
+                profile_image_url = url_for("get_registration_image", uid=visitor_uid,
+                                            filename=os.path.basename(reg_images[0]), _external=False)
         response_data = {
             "success": True,
             "uid": visitor_uid,
@@ -2153,7 +2133,8 @@ def validate_visitor_face():
         if not known_encodings:
             image_paths = user_data.get("images", [])
             if not image_paths:
-                return jsonify({"success": False, "message": "No face data (encodings or images) found for this user to compare."}), 404
+                return jsonify({"success": False,
+                                "message": "No face data (encodings or images) found for this user to compare."}), 404
             for img_path_rel in image_paths:
                 try:
                     b = s3_get_bytes(img_path_rel)
@@ -2164,11 +2145,13 @@ def validate_visitor_face():
                 except Exception as e:
                     print(f"Warning: Could not process image {img_path_rel} for encoding: {e}")
         if not known_encodings:
-            return jsonify({"success": False, "message": "Could not load or generate any known face encodings for comparison."}), 404
+            return jsonify({"success": False,
+                            "message": "Could not load or generate any known face encodings for comparison."}), 404
         face_locations = face_recognition.face_locations(rgb_captured_frame, model=face_recognition_model)
         if not face_locations:
             return jsonify({"success": False, "message": "No face detected in the provided image."})
-        captured_encodings = face_recognition.face_encodings(rgb_captured_frame, face_locations, model=face_recognition_model)
+        captured_encodings = face_recognition.face_encodings(rgb_captured_frame, face_locations,
+                                                             model=face_recognition_model)
         if not captured_encodings:
             return jsonify({"success": False, "message": "Could not generate encoding from the detected face."})
         match_found = False
@@ -2184,7 +2167,8 @@ def validate_visitor_face():
     except Exception as e:
         print(f"Error during face validation for UID {uid}: {e}")
         traceback.print_exc()
-        return jsonify({"success": False, "message": f"An internal server error occurred during face validation: {str(e)}"}), 500
+        return jsonify(
+            {"success": False, "message": f"An internal server error occurred during face validation: {str(e)}"}), 500
     finally:
         cleanup_memory()
 
@@ -2194,7 +2178,6 @@ def get_profile_image(uid, filename):
     key = s3_key(PROFILES_PREFIX, uid, filename)
     try:
         b = s3_get_bytes(key)
-        # Serve as image/jpeg — if you have other types adapt as required
         return send_file(io.BytesIO(b), download_name=filename, mimetype="image/jpeg")
     except FileNotFoundError:
         return jsonify({"success": False, "message": "Profile image not found"}), 404
@@ -2204,5 +2187,5 @@ def get_profile_image(uid, filename):
 
 
 if __name__ == "__main__":
-    # threaded=True lets multiple requests be served in parallel
+    _load_face_cache(force=True)
     app.run(host="0.0.0.0", port=5000, threaded=True)

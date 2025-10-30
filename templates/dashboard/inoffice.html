@@ -7,1319 +7,2225 @@
     <title>इनऑफिस एसव्हीएमएस</title>
     <style>
         :root {
-            --primary-blue: #2c3e90;
-            --secondary-blue: #3498db;
-            --light-blue: #e6f2ff;
-            --white: #ffffff;
-            --text-dark: #2c3e50;
+            --primary-blue: #1e3a8a;
+            --secondary-blue: #3b82f6;
+            --accent-blue-soft: rgba(30,58,138,0.07);
+
+            --light-surface: #f8fafc;
+            --surface-card: #ffffff;
+            --surface-muted: #eef2ff;
+            --surface-scroll-bg: #f1f5f9;
+
+            --text-dark: #1e293b;
             --text-gray: #94a3b8;
+            --text-dim: #64748b;
+
             --new-visitor-green: #10b981;
             --returning-visitor-blue: #3b82f6;
-            --complete-red-start: #e74c3c;
-            --complete-red-end: #c0392b;
-            --action-confirm-start: var(--new-visitor-green);
+
+            --pending-action-orange-start: #f59e0b;
+            --pending-action-orange-end: #ea580c;
+
+            --complete-red-start: #dc2626;
+            --complete-red-end: #b91c1c;
+
+            --action-confirm-start: #10b981;
             --action-confirm-end: #34d399;
-            --pending-action-orange-start: #f39c12; /* Added for pending */
-            --pending-action-orange-end: #e67e22; /* Added for pending */
-            --border-radius: 12px;
-            --box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-            --box-shadow-hover: 0 12px 30px rgba(0,0,0,0.12);
-            --transition: all 0.3s ease;
-            --card-hover-transform: translateY(-4px);
-            --placeholder-bg: #e2e8f0;
-            --placeholder-text: #64748b;
+
+            --border-card: #e2e8f0;
+            --border-card-strong: #cbd5e1;
+
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+
+            --shadow-card: 0 16px 40px -8px rgba(0,0,0,0.08);
+            --shadow-card-hover: 0 24px 50px -6px rgba(0,0,0,0.12);
+            --shadow-badge: 0 2px 5px rgba(0,0,0,0.2);
+
+            --transition-fast: 0.18s ease;
+            --transition-base: 0.28s ease;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--light-blue);
+            background: radial-gradient(circle at 20% 20%, #ffffff 0%, #eef2ff 40%, #e0e7ff 100%);
             color: var(--text-dark);
-            line-height: 1.6;
-            font-size: 16px;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.5;
         }
+
         .dashboard-container {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            background: var(--light-blue);
+            background: transparent;
         }
+
+        /* HEADER / APP BAR */
         .header {
-            background: linear-gradient(100deg, var(--primary-blue), var(--secondary-blue));
-            color: var(--white);
-            padding: 15px 30px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             position: sticky;
             top: 0;
             z-index: 100;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            background: radial-gradient(circle at 0% 0%, var(--primary-blue) 0%, var(--secondary-blue) 60%);
+            padding: 14px 24px;
+            box-shadow: 0 16px 32px rgba(0,0,0,0.22);
+            border-bottom: 1px solid rgba(255,255,255,0.15);
         }
-        .header img {height: 60px; width: auto; max-height: 100%; object-fit: contain;}
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.15);
-            color: var(--white);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 8px 22px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            transition: var(--transition);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
         }
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            border-color: rgba(255, 255, 255, 0.5);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-        .main-content {
-            flex: 1;
-            padding: 20px;
-            gap: 15px;
-            max-width: 1500px;
-            margin: 0 auto;
-            width: 100%;
+
+        .app-brand {
             display: flex;
             flex-direction: column;
+            color: #fff;
+            line-height: 1.2;
         }
-        /* New Date Selector Styles */
+
+        .app-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.9);
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .app-subtitle {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.6);
+            font-weight: 500;
+        }
+
+        .header img {
+            height: 50px;
+            width: auto;
+            max-height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            line-height: 1.2;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            min-width: max-content;
+        }
+
+        .logout-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.22);
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 16px 32px rgba(0,0,0,0.55);
+            transform: translateY(-1px);
+        }
+
+        /* MAIN LAYOUT */
+        .main-content {
+            flex: 1;
+            width: 100%;
+            max-width: 1500px;
+            margin: 20px auto 40px auto;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* DATE SELECTOR CARD */
         .date-selector-container {
-            background-color: var(--white);
-            padding: 15px 20px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
+            background-color: var(--surface-card);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-card);
+            padding: 16px 20px;
             display: flex;
             justify-content: center;
+            flex-wrap: wrap;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 5px; /* Spacing below the date picker */
+            gap: 16px;
         }
+
         .date-selector-container label {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
+
         #date-picker {
-            border: 2px solid #cbd5e1;
-            border-radius: 8px;
+            border: 2px solid var(--border-card);
+            border-radius: var(--radius-sm);
             padding: 8px 12px;
-            font-size: 15px;
+            font-size: 14px;
             font-family: inherit;
             color: var(--text-dark);
-            background-color: #f8fafc;
+            background-color: var(--light-surface);
             cursor: pointer;
-            transition: var(--transition);
+            line-height: 1.2;
+            min-height: 38px;
+            transition: var(--transition-fast);
         }
+
         #date-picker:focus {
             outline: none;
             border-color: var(--secondary-blue);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.3);
+            background-color: #fff;
         }
 
+        /* DASHBOARD SECTIONS */
         .content-section {
-            background-color: rgba(255, 255, 255, 0.6);
-            border-radius: var(--border-radius);
-            padding: 15px;
-            box-shadow: var(--box-shadow);
+            background-color: var(--surface-card);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-card);
             display: flex;
             flex-direction: column;
-            gap: 2px;
-            transition: var(--transition);
             position: relative;
+            transition: var(--transition-base);
+            overflow: hidden;
         }
-        .content-section:hover { box-shadow: var(--box-shadow-hover); }
+
+        .content-section:hover {
+            box-shadow: var(--shadow-card-hover);
+        }
+
+        .section-header-row {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            background: var(--accent-blue-soft);
+            border-bottom: 1px solid var(--border-card);
+            padding: 16px 20px 14px 20px;
+        }
+
         .section-title {
-            color: var(--primary-blue);
-            font-size: 22px;
+            font-size: 18px;
+            line-height: 1.3;
             font-weight: 600;
-            padding-bottom: 1px;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #e2e8f0;
+            color: var(--primary-blue);
             position: relative;
-            text-align: left;
-             padding-right: 5px;
+            padding-bottom: 4px;
         }
+
         .section-title::after {
             content: '';
             position: absolute;
             left: 0;
-            bottom: -1px;
+            bottom: -2px;
             width: 60px;
             height: 3px;
+            border-radius: 999px;
             background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
-            border-radius: 3px;
         }
-        .positioned-top-right {
-             position: absolute;
-             top: 15px;
-             right: 15px;
-             padding: 10px 20px;
-             font-size: 14px;
-             z-index: 10;
-        }
-        #current-visitor-section > #completed-meeting-btn {
-            margin-top: 20px;
-            align-self: center;
-            width: auto;
-            min-width: 200px;
+
+        /* Horizontal list container */
+        .horizontal-scroll-outer {
+            background: var(--surface-card);
+            padding: 16px 20px 20px 20px;
         }
 
         .horizontal-scroll-container {
             display: flex;
             overflow-x: auto;
-            padding: 10px 0 15px 0;
-            gap: 15px;
             scrollbar-width: thin;
-            scrollbar-color: var(--secondary-blue) var(--light-blue);
-            min-height: 200px; /* Adjusted min-height */
+            scrollbar-color: var(--secondary-blue) var(--surface-scroll-bg);
+            gap: 16px;
+            padding: 4px 0 10px 0;
+            min-height: 190px;
             -webkit-overflow-scrolling: touch;
         }
-        .horizontal-scroll-container::-webkit-scrollbar { height: 8px; }
-        .horizontal-scroll-container::-webkit-scrollbar-track { background: #edf2f7; border-radius: 10px; }
-        .horizontal-scroll-container::-webkit-scrollbar-thumb { background-color: var(--secondary-blue); border-radius: 10px; border: 2px solid #edf2f7; }
-        .horizontal-scroll-container::-webkit-scrollbar-thumb:hover { background-color: var(--primary-blue); }
 
+        .horizontal-scroll-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-track {
+            background: var(--surface-scroll-bg);
+            border-radius: 999px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-thumb {
+            background-color: var(--secondary-blue);
+            border-radius: 999px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-thumb:hover {
+            background-color: var(--primary-blue);
+        }
+
+        /* Visitor Card (list items) */
         .visitor-card-horizontal {
+            flex-shrink: 0;
+            width: 160px;
+            background-color: var(--surface-muted);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-card);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+            padding: 14px;
+            text-align: center;
+            gap: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-color: var(--light-blue);
-            border-radius: var(--border-radius);
-            padding: 15px;
-            width: 160px;
-            flex-shrink: 0;
-            text-align: center;
-            transition: var(--transition);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.06);
-            border: 1px solid #e2e8f0;
-            gap: 8px;
-            position: relative; /* Needed for status badge */
+            position: relative;
+            transition: var(--transition-base);
         }
+
         .visitor-card-horizontal:hover {
-            transform: var(--card-hover-transform);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
             border-color: var(--secondary-blue);
+            background-color: #e0e7ff;
         }
+
         .visitor-card-horizontal.selectable-visitor {
             cursor: pointer;
         }
-        .visitor-card-horizontal.selectable-visitor:hover {
-            border-color: var(--primary-blue);
-            background-color: #dbeafe;
-        }
-        .visitor-card-horizontal .profile-image-container { width: 100px; height: 100px; position: relative; margin-bottom: 5px; }
-        .visitor-card-horizontal .profile-image,
-        .visitor-card-horizontal .profile-placeholder {
-            width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
-            border: 2px solid var(--white); box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .visitor-card-horizontal .profile-placeholder {
-            background-color: var(--placeholder-bg); color: var(--placeholder-text);
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 2.0rem;
-        }
-        .visitor-card-horizontal strong {
-            font-size: 14px; color: var(--primary-blue); font-weight: 600;
-            line-height: 1.3; width: 100%; overflow: hidden; text-overflow: ellipsis;
-            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-            margin-top: 5px; /* Adjust spacing */
-        }
-        .visitor-card-horizontal .visitor-badge-small {
-            padding: 3px 10px; border-radius: 15px; font-size: 0.7rem;
-            font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;
-            margin-top: auto; /* Pushes badge down if space allows */
-        }
-        .visitor-badge-small.new-visitor { background-color: var(--new-visitor-green); color: white; }
-        .visitor-badge-small.returning-visitor { background-color: var(--returning-visitor-blue); color: white; }
 
-        .visitor-status-badge { /* New badge for pending/completed status on cards */
+        .visitor-card-horizontal.active-selected {
+            border: 2px solid var(--primary-blue);
+            background-color: #dbeafe;
+            box-shadow: var(--shadow-card-hover);
+        }
+
+        .visitor-status-badge {
             position: absolute;
             top: 8px;
             right: 8px;
             padding: 3px 8px;
-            border-radius: 12px;
+            border-radius: 999px;
             font-size: 0.65rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.4px;
-            color: white;
+            color: #fff;
             z-index: 5;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+            box-shadow: var(--shadow-badge);
+            line-height: 1.2;
         }
-        .visitor-status-badge.pending { background: linear-gradient(100deg, var(--pending-action-orange-start), var(--pending-action-orange-end)); }
-        .visitor-status-badge.completed { background: linear-gradient(100deg, var(--complete-red-start), var(--complete-red-end)); }
 
+        .visitor-status-badge.pending {
+            background: linear-gradient(100deg, var(--pending-action-orange-start), var(--pending-action-orange-end));
+        }
 
-        .nav-btn {
-            background: linear-gradient(100deg, var(--primary-blue), var(--secondary-blue));
-            color: var(--white); border: none; padding: 12px 28px; border-radius: 50px;
-            cursor: pointer; font-weight: 600; font-size: 15px; letter-spacing: 0.5px;
-            transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px;
-            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
-        }
-        .nav-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
-        }
-        .nav-btn:disabled {
-            background: #e2e8f0; color: var(--text-gray); cursor: not-allowed;
-            transform: none; box-shadow: none;
-        }
-        .nav-btn.action-btn {
-            background: linear-gradient(100deg, var(--action-confirm-start), var(--action-confirm-end));
-            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
-        }
-         .nav-btn.complete-btn {
+        .visitor-status-badge.completed {
             background: linear-gradient(100deg, var(--complete-red-start), var(--complete-red-end));
-            box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
-         }
-        .nav-btn.action-btn:hover {
-            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4);
-            transform: translateY(-2px);
         }
-         .nav-btn.complete-btn:hover {
-             box-shadow: 0 6px 15px rgba(231, 76, 60, 0.4);
-             transform: translateY(-2px);
-         }
+
+        .visitor-card-horizontal .profile-image-container {
+            width: 88px;
+            height: 88px;
+            position: relative;
+        }
+
+        .profile-image,
+        .profile-placeholder {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+            background-color: #cbd5e1;
+            color: #475569;
+            font-size: 1.7rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .visitor-card-horizontal strong {
+            font-size: 14px;
+            color: var(--primary-blue);
+            font-weight: 600;
+            line-height: 1.4;
+            max-width: 100%;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .visitor-badge-small {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            line-height: 1.2;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .visitor-badge-small.new-visitor {
+            background-color: var(--new-visitor-green);
+            color: #fff;
+        }
+
+        .visitor-badge-small.returning-visitor {
+            background-color: var(--returning-visitor-blue);
+            color: #fff;
+        }
+
+        /* CURRENT VISITOR DETAILS PANEL */
+        #current-visitor-section {
+            overflow: hidden;
+        }
+
+        #completed-meeting-btn {
+            margin: 16px auto 20px auto;
+            min-width: 210px;
+        }
+
         .visitor-profile {
-            width: 100%; background-color: var(--white); border-radius: var(--border-radius);
-            padding: 0; display: flex; flex-direction: column; align-items: flex-start;
-            position: relative; overflow: hidden;
-            border: 1px solid #e2e8f0;
-            margin-top: 5px;
+            width: 100%;
+            background-color: var(--surface-card);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-card);
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
         }
+
         .visitor-header {
-            width: 100%; display: flex; align-items: center;
-            padding: 25px;
-            background: linear-gradient(to right, rgba(44, 62, 144, 0.05), rgba(52, 152, 219, 0.05));
-            border-bottom: 1px solid #e2e8f0; gap: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            gap: 24px;
+            background: radial-gradient(circle at 0% 0%, rgba(30,58,138,0.07) 0%, rgba(59,130,246,0.07) 60%);
+            padding: 24px 24px 20px 24px;
+            border-bottom: 1px solid var(--border-card);
+            position: relative;
         }
-        .visitor-header .main-profile-image-container {
-             width: 180px; height: 180px;
-             flex-shrink: 0; position: relative;
+
+        .main-profile-image-container {
+            width: 170px;
+            height: 170px;
+            position: relative;
+            flex-shrink: 0;
         }
-        .visitor-header .main-profile-image,
-        .visitor-header .main-profile-placeholder {
-            width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
-            border: 4px solid var(--white); box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+
+        .main-profile-image,
+        .main-profile-placeholder {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #fff;
+            box-shadow: 0 16px 32px rgba(0,0,0,0.25);
+            background-color: #cbd5e1;
+            color: #475569;
+            font-size: 3.2rem;
+            font-weight: 600;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .visitor-header .main-profile-placeholder {
-            background-color: var(--placeholder-bg); color: var(--placeholder-text);
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 4rem;
-        }
+
         .profile-dvn-badge {
             position: absolute;
-            top: 5px;
-            right: 5px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-            color: white;
-            width: 35px;
-            height: 35px;
+            top: 6px;
+            right: 6px;
+            background: radial-gradient(circle at 0% 0%, var(--primary-blue) 0%, var(--secondary-blue) 70%);
+            color: #fff;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
+            box-shadow: var(--shadow-badge);
+            border: 2px solid #fff;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 14px;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            border: 2px solid var(--white);
-            z-index: 10;
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1;
         }
+
         .visitor-name-type {
-            display: flex; flex-direction: column; align-items: flex-start;
-            flex-grow: 1; gap: 8px; /* Adjusted gap */
-        }
-        /* Wrapper for ID and PDF Button */
-        .visitor-header-top-row {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            gap: 15px; /* Space between ID and button */
-            margin-bottom: 5px; /* Space below this row */
+            flex-direction: column;
+            flex: 1;
+            min-width: 250px;
+            gap: 10px;
         }
-         .visitor-id-header {
-            font-size: 0.9rem;
+
+        .visitor-header-top-row {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .visitor-id-header {
+            font-size: 0.8rem;
             font-weight: 500;
             color: var(--text-gray);
-            margin-bottom: 0; /* Removed bottom margin */
         }
-        /* Style for the new PDF button */
+
         .view-pdf-button {
-            background: linear-gradient(100deg, var(--primary-blue), var(--secondary-blue)); /* Keep consistent blue */
-            color: var(--white);
+            background: linear-gradient(100deg, var(--primary-blue), var(--secondary-blue));
+            color: #fff;
             border: none;
-            padding: 8px 18px; /* Smaller padding */
-            font-size: 13px; /* Smaller font size */
+            border-radius: var(--radius-md);
+            padding: 8px 14px;
+            font-size: 12px;
             font-weight: 600;
-            border-radius: 50px;
-            box-shadow: 0 3px 8px rgba(52, 152, 219, 0.25);
-            margin-left: auto; /* Push to the right */
-            flex-shrink: 0; /* Prevent shrinking */
-            white-space: nowrap; /* Prevent text wrapping */
+            line-height: 1.2;
             cursor: pointer;
-            transition: var(--transition);
-            display: inline-flex; /* Align icon and text */
+            box-shadow: 0 10px 24px rgba(30,58,138,0.3);
+            display: inline-flex;
             align-items: center;
+            gap: 6px;
+            min-height: 34px;
+            white-space: nowrap;
+            transition: var(--transition-fast);
         }
+
         .view-pdf-button:hover {
-            box-shadow: 0 5px 12px rgba(52, 152, 219, 0.35);
+            box-shadow: 0 16px 32px rgba(30,58,138,0.45);
             transform: translateY(-1px);
         }
+
         .view-pdf-button svg {
-            margin-right: 6px;
-            fill: currentColor; /* Use button's text color */
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
         }
 
         .visitor-header h2 {
-            color: var(--primary-blue); font-size: 28px; letter-spacing: 0.5px;
-            font-weight: 600; line-height: 1.3;
-            margin-bottom: 2px;
-        }
-        .visitor-phone-header, .visitor-address-header, .visitor-tahasil-header { /* Added address and tahasil classes */
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--text-dark);
-            opacity: 0.9;
-            margin-bottom: 5px;
-        }
-        .visitor-address-header strong, .visitor-tahasil-header strong { /* Style for labels */
-            font-weight: 600;
             color: var(--primary-blue);
-            margin-right: 5px;
-            opacity: 1;
+            font-weight: 600;
+            font-size: 24px;
+            line-height: 1.3;
+            letter-spacing: 0.03em;
         }
-        .visitor-type {
-            padding: 6px 18px; border-radius: 50px; font-weight: 600; font-size: 0.8rem;
-            display: inline-block; text-transform: uppercase; letter-spacing: 0.5px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            margin-top: 5px;
-        }
-        .visitor-type.new-visitor { background-color: var(--new-visitor-green); color: white; }
-        .visitor-type.returning-visitor { background-color: var(--returning-visitor-blue); color: white; }
 
+        .visitor-phone-header,
+        .visitor-address-header,
+        .visitor-tahasil-header {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .visitor-address-header strong,
+        .visitor-tahasil-header strong {
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-right: 6px;
+        }
+
+        .visitor-type {
+            background-color: var(--new-visitor-green);
+            color: #fff;
+            border-radius: 999px;
+            box-shadow: var(--shadow-badge);
+            padding: 6px 14px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            line-height: 1.2;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            max-width: max-content;
+        }
+
+        .visitor-type.returning-visitor {
+            background-color: var(--returning-visitor-blue);
+        }
+
+        /* VISIT SUMMARY GRID */
         .visit-summary {
-            width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            padding: 25px; gap: 25px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+            gap: 20px;
+            padding: 20px 24px 10px 24px;
         }
-        .current-visit-details, .previous-visit-details {
-            background-color: #f8fafc; padding: 25px;
-            border-radius: var(--border-radius);
-            border: 1px solid #e2e8f0;
-            transition: var(--transition);
+
+        .current-visit-details,
+        .previous-visit-details {
+            background-color: var(--light-surface);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-card);
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            transition: var(--transition-base);
         }
-        .current-visit-details:hover, .previous-visit-details:hover {
-            transform: var(--card-hover-transform);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+
+        .current-visit-details:hover,
+        .previous-visit-details:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-card);
             border-color: var(--secondary-blue);
         }
-        .current-visit-details h4, .previous-visit-details h4 {
-            color: var(--primary-blue); font-size: 18px; position: relative;
-            padding-bottom: 10px; margin-bottom: 20px; display: block;
-            border-bottom: 1px solid #e2e8f0; font-weight: 600;
+
+        .current-visit-details h4,
+        .previous-visit-details h4 {
+            color: var(--primary-blue);
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--border-card);
+            padding-bottom: 8px;
+            letter-spacing: .03em;
+            text-transform: uppercase;
         }
-         .visit-summary p {
-            margin-bottom: 18px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+
+        .visit-summary p {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
+
         .visit-summary strong {
-            color: var(--text-dark); font-size: 13px; text-transform: uppercase;
-            letter-spacing: 0.5px; opacity: 0.7; font-weight: 600;
+            color: var(--text-dim);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .05em;
         }
-        .visit-summary .detail-value {
-            text-align: left; color: var(--text-dark); width: 100%;
-            padding: 12px 15px; background-color: var(--white);
-            border-radius: 8px; font-size: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+
+        .detail-value {
+            background-color: var(--surface-card);
+            border-radius: var(--radius-sm);
             border-left: 3px solid var(--secondary-blue);
-            line-height: 1.5;
-        }
-
-         .additional-actions {
-             width: 100%;
-             padding: 0 25px 25px 25px;
-             display: flex;
-             flex-direction: column;
-             gap: 20px;
-         }
-
-         .form-group {
-             display: flex;
-             flex-direction: column;
-             gap: 5px;
-         }
-
-         .form-group label {
-             font-weight: 600;
-             font-size: 14px;
-             color: var(--text-dark);
-             opacity: 0.8;
-         }
-
-         .form-group textarea,
-         .form-group select {
-             width: 100%;
-             padding: 10px 12px;
-             border-radius: 8px;
-             border: 1px solid #cbd5e1;
-             font-size: 15px;
-             background-color: var(--white);
-             box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-             transition: border-color 0.2s ease;
-             color: var(--text-dark);
-         }
-         .form-group textarea::placeholder {
-             color: var(--text-gray);
-             opacity: 0.7;
-         }
-         .form-group select {
-             appearance: none;
-             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
-             background-position: right 0.5rem center;
-             background-repeat: no-repeat;
-             background-size: 1.5em 1.5em;
-             padding-right: 2.5rem;
-         }
-         .form-group textarea:focus,
-         .form-group select:focus {
-             outline: none;
-             border-color: var(--secondary-blue);
-             box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-         }
-         #save-details-btn {
-             margin-top: 10px;
-             align-self: center;
-             width: auto;
-             min-width: 200px;
-         }
-
-        .no-visitor-message, .no-items-message {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            width: 100%; padding: 30px 20px; text-align: center; color: var(--text-gray);
-            min-height: 120px; font-size: 16px; font-weight: 500;
-        }
-        /* General Popup Overlay */
-        .popup-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); display: flex; justify-content: center;
-            align-items: center; z-index: 1000; visibility: hidden; opacity: 0;
-            transition: opacity 0.3s ease, visibility 0s 0.3s linear; backdrop-filter: blur(3px);
-        }
-        .popup-overlay.active { visibility: visible; opacity: 1; transition: opacity 0.3s ease, visibility 0s linear; backdrop-filter: blur(3px);}
-        .popup-content {
-            background-color: var(--white); padding: 35px; border-radius: var(--border-radius);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2); text-align: center; max-width: 420px; width: 90%;
-            transform: translateY(-20px) scale(0.95); transition: transform 0.3s ease, opacity 0.3s ease; opacity: 0;
-        }
-        .popup-overlay.active .popup-content { transform: translateY(0) scale(1); opacity: 1; }
-        .popup-title { color: var(--primary-blue); margin-bottom: 15px; font-size: 22px; font-weight: 600; }
-        .popup-content p { margin-bottom: 25px; color: var(--text-dark); opacity: 0.9; }
-        .popup-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
-        .popup-btn { padding: 10px 30px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: var(--transition); font-size: 14px; }
-        .popup-btn-confirm { background: linear-gradient(100deg, var(--primary-blue), var(--secondary-blue)); color: var(--white); border: none; box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3); }
-        .popup-btn-cancel { background-color: #e2e8f0; color: var(--text-dark); border: none; }
-        .popup-btn:hover { transform: translateY(-2px); }
-        .popup-btn-confirm:hover { box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4); }
-        .popup-btn-confirm.complete-confirm { background: linear-gradient(100deg, var(--complete-red-start), var(--complete-red-end)); box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3); }
-        .popup-btn-confirm.complete-confirm:hover { box-shadow: 0 6px 15px rgba(231, 76, 60, 0.4); }
-        .popup-btn-confirm.action-confirm { background: linear-gradient(100deg, var(--action-confirm-start), var(--action-confirm-end)); box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
-        .popup-btn-confirm.action-confirm:hover { box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4); }
-
-        #action-confirm-summary {
-            text-align: left;
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #f8fafc;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            padding: 11px 12px;
             font-size: 14px;
+            line-height: 1.4;
+            color: var(--text-dark);
         }
-         #action-confirm-summary p {
-             margin-bottom: 8px;
-             color: var(--text-dark);
-             opacity: 1.0;
-             line-height: 1.5;
-         }
-         #action-confirm-summary strong {
-             color: var(--primary-blue);
-             margin-right: 5px;
-             font-weight: 600;
-         }
-         #action-confirm-summary span {
-             word-break: break-word;
-         }
 
-        /* PDF Popup Styles */
-        .pdf-popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
+        /* ACTION FORWARD + REMARK */
+        .additional-actions {
+            padding: 10px 24px 24px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.3;
+            color: var(--text-dark);
+        }
+
+        .form-group textarea,
+        .form-group select {
             width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
+            font-size: 14px;
+            line-height: 1.4;
+            color: var(--text-dark);
+            background-color: var(--surface-card);
+            border: 1px solid var(--border-card-strong);
+            border-radius: var(--radius-sm);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.03);
+            padding: 10px 12px;
+            transition: var(--transition-fast);
+        }
+
+        .form-group textarea::placeholder {
+            color: var(--text-gray);
+        }
+
+        .form-group select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
+            background-position: right 0.6rem center;
+            background-repeat: no-repeat;
+            background-size: 1.2em 1.2em;
+            padding-right: 2rem;
+        }
+
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.25);
+            background-color: #fff;
+        }
+
+        #save-details-btn {
+            width: auto;
+            min-width: 220px;
+            align-self: center;
+        }
+
+        /* BUTTONS (Primary actions, complete, etc.) */
+        .nav-btn {
+            border: none;
+            cursor: pointer;
+            border-radius: var(--radius-md);
+            min-height: 40px;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: .03em;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 20px;
+            transition: var(--transition-fast);
+            color: #fff;
+            box-shadow: 0 14px 32px rgba(0,0,0,0.15);
+            background: linear-gradient(100deg, var(--primary-blue), var(--secondary-blue));
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        }
+
+        .nav-btn:disabled {
+            background: #e2e8f0;
+            color: var(--text-gray);
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .nav-btn.action-btn {
+            background: linear-gradient(100deg, var(--action-confirm-start), var(--action-confirm-end));
+            box-shadow: 0 14px 32px rgba(16,185,129,0.35);
+        }
+
+        .nav-btn.action-btn:hover {
+            box-shadow: 0 20px 40px rgba(16,185,129,0.5);
+        }
+
+        .nav-btn.complete-btn {
+            background: linear-gradient(100deg, var(--complete-red-start), var(--complete-red-end));
+            box-shadow: 0 14px 32px rgba(220,38,38,0.35);
+        }
+
+        .nav-btn.complete-btn:hover {
+            box-shadow: 0 20px 40px rgba(220,38,38,0.5);
+        }
+
+        /* EMPTY STATES */
+        .no-visitor-message,
+        .no-items-message {
+            min-height: 120px;
+            width: 100%;
+            padding: 30px 20px;
+            text-align: center;
+            color: var(--text-gray);
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* GENERIC POPUP OVERLAY */
+        .popup-overlay {
+            position: fixed;
+            z-index: 1000;
+            inset: 0;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(3px);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1100; /* Higher than other popups */
             visibility: hidden;
             opacity: 0;
-            transition: opacity 0.3s ease, visibility 0s 0.3s linear;
+            transition: opacity var(--transition-base), visibility 0s 0.3s linear;
         }
+
+        .popup-overlay.active {
+            visibility: visible;
+            opacity: 1;
+            transition: opacity var(--transition-base), visibility 0s linear;
+        }
+
+        .popup-content {
+            background-color: var(--surface-card);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-card);
+            box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+            text-align: center;
+            width: 90%;
+            max-width: 420px;
+            padding: 28px 28px 24px 28px;
+            transform: translateY(-12px) scale(.96);
+            transition: var(--transition-base);
+        }
+
+        .popup-overlay.active .popup-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .popup-title {
+            color: var(--primary-blue);
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 14px;
+        }
+
+        .popup-content p {
+            color: var(--text-dark);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .popup-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .popup-btn {
+            min-width: 120px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 13px;
+            line-height: 1.2;
+            cursor: pointer;
+            padding: 10px 16px;
+            border: none;
+            transition: var(--transition-fast);
+        }
+
+        .popup-btn-cancel {
+            background-color: #e2e8f0;
+            color: var(--text-dark);
+        }
+
+        .popup-btn-cancel:hover {
+            background-color: #cbd5e1;
+        }
+
+        .popup-btn-confirm {
+            background: linear-gradient(100deg, var(--primary-blue), var(--secondary-blue));
+            color: #fff;
+            box-shadow: 0 14px 32px rgba(59,130,246,0.35);
+        }
+
+        .popup-btn-confirm:hover {
+            box-shadow: 0 20px 40px rgba(59,130,246,0.5);
+            transform: translateY(-1px);
+        }
+
+        .popup-btn-confirm.complete-confirm {
+            background: linear-gradient(100deg, var(--complete-red-start), var(--complete-red-end));
+            box-shadow: 0 14px 32px rgba(220,38,38,0.35);
+        }
+
+        .popup-btn-confirm.complete-confirm:hover {
+            box-shadow: 0 20px 40px rgba(220,38,38,0.5);
+        }
+
+        .popup-btn-confirm.action-confirm {
+            background: linear-gradient(100deg, var(--action-confirm-start), var(--action-confirm-end));
+            box-shadow: 0 14px 32px rgba(16,185,129,0.35);
+        }
+
+        .popup-btn-confirm.action-confirm:hover {
+            box-shadow: 0 20px 40px rgba(16,185,129,0.5);
+            transform: translateY(-1px);
+        }
+
+        #action-confirm-summary {
+            text-align: left;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-dark);
+            background-color: var(--light-surface);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-sm);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 14px 16px;
+            margin-bottom: 18px;
+        }
+
+        #action-confirm-summary p {
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        #action-confirm-summary strong {
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        #action-confirm-summary span {
+            word-break: break-word;
+        }
+
+        /* PDF POPUP */
+        .pdf-popup-overlay {
+            position: fixed;
+            z-index: 1100;
+            inset: 0;
+            background-color: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity var(--transition-base), visibility 0s 0.3s linear;
+        }
+
         .pdf-popup-overlay.active {
             visibility: visible;
             opacity: 1;
-            transition: opacity 0.3s ease, visibility 0s linear;
+            transition: opacity var(--transition-base), visibility 0s linear;
         }
+
         .pdf-popup-content {
             position: relative;
             width: 95%;
             height: 95%;
-            background-color: #333; /* Dark background for iframe contrast */
-            border-radius: 5px;
-            overflow: hidden; /* Prevents iframe bleed */
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            background-color: #1e293b;
+            border-radius: var(--radius-sm);
+            box-shadow: 0 40px 120px rgba(0,0,0,0.8);
+            overflow: hidden;
+            border: 1px solid #475569;
         }
+
         .pdf-close-btn {
             position: absolute;
-            top: 5px;
+            top: 8px;
             right: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
-            font-size: 24px;
-            line-height: 35px;
+            background: rgba(15,23,42,0.6);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            width: 34px;
+            height: 34px;
+            border-radius: 999px;
+            font-size: 20px;
+            line-height: 32px;
             text-align: center;
             cursor: pointer;
-            z-index: 1101;
-            transition: background-color 0.2s ease;
+            z-index: 1102;
+            box-shadow: 0 16px 32px rgba(0,0,0,0.6);
+            transition: var(--transition-fast);
         }
+
         .pdf-close-btn:hover {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(15,23,42,0.8);
         }
+
         #pdf-iframe {
+            position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
-            border: none;
+            border: 0;
+            background-color: #fff;
         }
 
+        /* RESPONSIVE */
+        @media (max-width: 1080px) {
+            .main-profile-image-container {
+                width: 140px;
+                height: 140px;
+            }
+        }
 
         @media (max-width: 992px) {
-             .visit-summary { grid-template-columns: 1fr; }
-             .visitor-header { flex-direction: column; align-items: center; text-align: center; }
-             .visitor-name-type { align-items: center; }
-             .section-title { padding-right: 5px; }
-             .visitor-id-header, .visitor-phone-header, .visitor-address-header, .visitor-tahasil-header { text-align: center; }
-             .additional-actions { padding: 0 20px 20px 20px; }
-             #current-visitor-section > #completed-meeting-btn {
-                 min-width: 180px;
-                 padding: 11px 24px;
-             }
-             .horizontal-scroll-container { min-height: 180px; } /* Adjust */
-             .visitor-card-horizontal { width: 150px; }
-             .visitor-card-horizontal .profile-image-container { width: 90px; height: 90px; }
-             .visitor-header-top-row { justify-content: center; } /* Center items when header stacks */
-             .view-pdf-button { margin-left: 15px; } /* Add some space when centered */
-        }
-        @media (max-width: 768px) {
-            .header { padding: 12px 20px; }
-            .header img {height: 60px; width: auto; max-height: 100%; object-fit: contain;}
-            .logout-btn { padding: 7px 18px; font-size: 13px; }
-            .main-content { padding: 20px; gap: 20px; }
-            .date-selector-container { flex-direction: column; gap: 8px; padding: 12px; }
-            .content-section { padding: 10px; }
-            .section-title { font-size: 20px; margin-bottom: 10px; }
-            .visitor-header { padding: 20px; gap: 20px; }
-            .visitor-header .main-profile-image-container { width: 120px; height: 120px; }
-            .visitor-header .main-profile-placeholder { font-size: 3.5rem; }
-            .profile-dvn-badge { width: 30px; height: 30px; font-size: 12px; top: 3px; right: 3px; border-width: 1px;}
-             .visitor-header h2 { font-size: 24px; }
-             .visitor-id-header { font-size: 0.85rem; }
-             .visitor-phone-header, .visitor-address-header, .visitor-tahasil-header { font-size: 0.95rem; }
-            .visit-summary { padding: 20px; gap: 20px; }
+            .visitor-header {
+                text-align: center;
+                justify-content: center;
+            }
+            .visitor-name-type {
+                align-items: center;
+            }
+            .visitor-header-top-row {
+                justify-content: center;
+                text-align: center;
+            }
+            .visitor-id-header {
+                text-align: center;
+                width: 100%;
+            }
+            .visitor-phone-header,
+            .visitor-address-header,
+            .visitor-tahasil-header {
+                text-align: center;
+            }
 
-            .nav-btn { padding: 11px 24px; font-size: 14px; }
-            .visitor-card-horizontal { width: 135px; padding: 12px; gap: 6px;}
-            .visitor-card-horizontal .profile-image-container { width: 80px; height: 80px; }
-            .visitor-card-horizontal .profile-placeholder { font-size: 1.8rem; }
-             .visitor-card-horizontal strong { font-size: 13px; }
-            .additional-actions { padding: 0 15px 15px 15px; gap: 15px; }
-             #current-visitor-section > #completed-meeting-btn,
-             #save-details-btn {
-                width: 90%;
-                max-width: 300px;
-             }
-             .horizontal-scroll-container { min-height: 170px; }
-             .view-pdf-button {
-                padding: 7px 15px;
-                font-size: 12px;
-                margin-left: 0; /* Reset margin */
-                align-self: center; /* Center button below ID */
+            .visit-summary {
+                grid-template-columns: 1fr;
             }
-             .visitor-header-top-row {
-                flex-direction: column; /* Stack ID and button */
-                align-items: center; /* Align items center */
-                gap: 8px;
-            }
-            .pdf-close-btn {
-                width: 30px;
-                height: 30px;
-                font-size: 20px;
-                line-height: 30px;
-                top: 3px;
-                right: 5px;
-            }
-        }
-        @media (max-width: 480px) {
-            .header { padding: 10px 15px; }
-            .header h1 { font-size: 19px; }
-            .main-content { padding: 15px; gap: 15px; }
-            .content-section { padding: 10px; }
-            .section-title { font-size: 18px; }
-            .visitor-header { padding: 15px; gap: 15px; }
-            .visitor-header .main-profile-image-container { width: 100px; height: 100px; }
-            .visitor-header .main-profile-placeholder { font-size: 3rem; }
-            .profile-dvn-badge { width: 28px; height: 28px; font-size: 11px; top: 2px; right: 2px;}
-            .visitor-header h2 { font-size: 21px; }
-             .visitor-id-header { font-size: 0.8rem; }
-             .visitor-phone-header, .visitor-address-header, .visitor-tahasil-header { font-size: 0.9rem; }
-            .visit-summary { padding: 15px; gap: 15px; }
-            .current-visit-details, .previous-visit-details { padding: 20px; }
-             .visit-summary .detail-value { padding: 10px 12px; font-size: 14px; }
 
-            .nav-btn { width: 100%; justify-content: center; }
-             #current-visitor-section > #completed-meeting-btn,
-             #save-details-btn {
-                 width: 100%;
-                 min-width: unset;
-                 padding: 10px 20px;
-                 font-size: 13px;
-             }
-            .visitor-card-horizontal { width: 120px; padding: 10px;}
-            .visitor-card-horizontal .profile-image-container { width: 70px; height: 70px; }
-            .visitor-card-horizontal .profile-placeholder { font-size: 1.6rem; }
-            .visitor-card-horizontal strong { font-size: 12px; }
-            .additional-actions { padding: 0 10px 10px 10px; gap: 15px; }
-            .popup-content { padding: 25px; }
-            #action-confirm-summary { padding: 10px; font-size: 13px; }
-            .horizontal-scroll-container { min-height: 160px; }
-            .visitor-status-badge { font-size: 0.6rem; padding: 2px 6px; top: 5px; right: 5px;}
+            #completed-meeting-btn {
+                min-width: 190px;
+                padding: 10px 18px;
+            }
+
+            .horizontal-scroll-container {
+                min-height: 180px;
+            }
+
+            .visitor-card-horizontal {
+                width: 150px;
+            }
+
+            .visitor-card-horizontal .profile-image-container {
+                width: 80px;
+                height: 80px;
+            }
+
             .view-pdf-button {
-                padding: 6px 12px;
-                font-size: 11px;
-                width: auto; /* Don't force full width */
+                margin-left: 0;
                 align-self: center;
             }
-             .visitor-header-top-row {
-                 align-items: center; /* Keep centered */
-             }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 12px 16px;
+            }
+
+            .header img {
+                height: 46px;
+            }
+
+            .logout-btn {
+                padding: 7px 14px;
+                font-size: 12px;
+            }
+
+            .main-content {
+                padding: 0 15px;
+                gap: 16px;
+            }
+
+            .date-selector-container {
+                gap: 10px;
+                padding: 14px;
+            }
+
+            .section-header-row {
+                padding: 14px 16px;
+            }
+
+            .section-title {
+                font-size: 16px;
+            }
+
+            .visitor-header {
+                gap: 20px;
+                padding: 20px 16px 16px 16px;
+            }
+
+            .main-profile-image-container {
+                width: 120px;
+                height: 120px;
+            }
+
+            .main-profile-placeholder {
+                font-size: 2.6rem;
+            }
+
+            .profile-dvn-badge {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+
+            .visitor-header h2 {
+                font-size: 22px;
+            }
+
+            .visitor-id-header {
+                font-size: 0.8rem;
+            }
+
+            .visitor-phone-header,
+            .visitor-address-header,
+            .visitor-tahasil-header {
+                font-size: 0.9rem;
+            }
+
+            .visit-summary {
+                padding: 20px 16px 10px 16px;
+                gap: 16px;
+            }
+
+            .current-visit-details,
+            .previous-visit-details {
+                padding: 16px;
+            }
+
+            .detail-value {
+                font-size: 13px;
+                padding: 10px 12px;
+            }
+
+            .additional-actions {
+                padding: 10px 16px 20px 16px;
+                gap: 16px;
+            }
+
+            .nav-btn {
+                width: 90%;
+                max-width: 320px;
+            }
+
+            #completed-meeting-btn,
+            #save-details-btn {
+                width: 90%;
+                max-width: 320px;
+            }
+
+            .horizontal-scroll-container {
+                min-height: 170px;
+            }
+
+            .visitor-card-horizontal {
+                width: 138px;
+                padding: 12px;
+            }
+
+            .visitor-card-horizontal .profile-image-container {
+                width: 74px;
+                height: 74px;
+            }
+
+            .visitor-card-horizontal strong {
+                font-size: 13px;
+            }
+
+            .pdf-close-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 18px;
+                line-height: 30px;
+                top: 6px;
+                right: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 0 12px 24px 12px;
+            }
+
+            .date-selector-container {
+                padding: 12px;
+            }
+
+            .section-header-row {
+                padding: 12px 14px;
+            }
+
+            .section-title {
+                font-size: 15px;
+            }
+
+            .visitor-header {
+                padding: 16px 14px;
+            }
+
+            .main-profile-image-container {
+                width: 100px;
+                height: 100px;
+            }
+
+            .main-profile-placeholder {
+                font-size: 2.4rem;
+            }
+
+            .profile-dvn-badge {
+                width: 28px;
+                height: 28px;
+                font-size: 11px;
+                top: 4px;
+                right: 4px;
+            }
+
+            .visitor-header h2 {
+                font-size: 20px;
+            }
+
+            .visit-summary {
+                padding: 16px 14px 8px 14px;
+                gap: 14px;
+            }
+
+            .current-visit-details,
+            .previous-visit-details {
+                padding: 16px;
+            }
+
+            .current-visit-details h4,
+            .previous-visit-details h4 {
+                font-size: 14px;
+            }
+
+            .detail-value {
+                font-size: 13px;
+            }
+
+            .nav-btn {
+                width: 100%;
+                max-width: none;
+                font-size: 13px;
+                min-height: 38px;
+                padding: 10px 16px;
+            }
+
+            #completed-meeting-btn,
+            #save-details-btn {
+                width: 100%;
+                min-width: unset;
+            }
+
+            .visitor-card-horizontal {
+                width: 120px;
+                padding: 10px;
+            }
+
+            .visitor-card-horizontal .profile-image-container {
+                width: 68px;
+                height: 68px;
+            }
+
+            .visitor-card-horizontal strong {
+                font-size: 12px;
+            }
+
+            .visitor-status-badge {
+                font-size: 0.6rem;
+                padding: 2px 6px;
+                top: 6px;
+                right: 6px;
+            }
+
+            .view-pdf-button {
+                font-size: 11px;
+                padding: 7px 12px;
+            }
+
+            .popup-content {
+                padding: 24px 20px 20px 20px;
+            }
+
+            #action-confirm-summary {
+                font-size: 12px;
+                padding: 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <header class="header">
-          <img src="{{ url_for('static', filename='assets/logo/svmslogo.png') }}" alt="Smart Visitor Management System Logo">
-          <button id="logout-btn" class="logout-btn">लॉगआऊट</button>
-        </header>
+<div class="dashboard-container">
 
-        <div id="logout-popup" class="popup-overlay">
-            <div class="popup-content">
-                <h3 class="popup-title">लॉगआऊटची पुष्टी करा</h3>
-                <p>तुम्हाला खात्री आहे की तुम्हाला लॉगआउट करायचे आहे?</p>
-                <div class="popup-buttons">
-                    <button id="logout-cancel" class="popup-btn popup-btn-cancel">रद्द करा</button>
-                    <button id="logout-confirm" class="popup-btn popup-btn-confirm">लॉगआऊट</button>
-                </div>
+    <header class="header">
+        <div class="header-left">
+            <img src="{{ url_for('static', filename='assets/logo/svmslogo.png') }}" alt="Smart Visitor Management System Logo">
+            <div class="app-brand">
+                <div class="app-title">Smart Visitor Management</div>
+                <div class="app-subtitle">इनऑफिस एसव्हीएमएस</div>
             </div>
         </div>
-         <div id="complete-visit-popup" class="popup-overlay">
-            <div class="popup-content">
-                <h3 class="popup-title">भेटीच्या समाप्तीची पुष्टी करा</h3>
-                <p>तुम्हाला खात्री आहे की ही भेट पूर्ण झाली म्हणून चिन्हांकित करायची आहे?</p>
-                <div class="popup-buttons">
-                    <button id="complete-visit-cancel" class="popup-btn popup-btn-cancel">रद्द करा</button>
-                    <button id="complete-visit-confirm" class="popup-btn popup-btn-confirm complete-confirm">भेट पूर्ण करा</button>
-                </div>
-            </div>
-        </div>
-         <div id="action-confirm-popup" class="popup-overlay">
-            <div class="popup-content">
-                <h3 class="popup-title">अभ्यागत कृतीची पुष्टी करा</h3>
-                <div id="action-confirm-summary"></div>
-                <p>तुम्हाला खात्री आहे की तुम्हाला हे तपशील कृतीसाठी पाठवायचे आहेत?</p>
-                <div class="popup-buttons">
-                    <button id="action-cancel-btn" class="popup-btn popup-btn-cancel">रद्द करा</button>
-                    <button id="action-confirm-btn" class="popup-btn popup-btn-confirm action-confirm">पुष्टी करा आणि पाठवा</button>
-                </div>
-            </div>
-        </div>
+        <button id="logout-btn" class="logout-btn" title="लॉगआऊट">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            <span>लॉगआऊट</span>
+        </button>
+    </header>
 
-        <div class="main-content">
-            <!-- New Date Selector Element -->
-            <div class="date-selector-container">
-                <label for="date-picker">अहवाल पाहण्यासाठी तारीख निवडा:</label>
-                <input type="date" id="date-picker">
-            </div>
-
-            <div class="content-section">
-                <h2 class="section-title">आगामी अभ्यागत</h2>
-                <div id="upcoming-visitors-container" class="horizontal-scroll-container">
-                    <div class="no-items-message"><p>DVN नियुक्त असलेले आगामी अभ्यागत नाहीत</p></div>
-                </div>
-            </div>
-
-            <div id="current-visitor-section" class="content-section">
-                <h2 class="section-title">सध्याच्या अभ्यागताचा तपशील</h2>
-                <div id="current-visitor-details-container">
-                    <div class="no-visitor-message"><p>सध्या कोणताही अभ्यागत निवडलेला नाही</p></div>
-                </div>
-                <button id="completed-meeting-btn" class="nav-btn complete-btn" disabled>अभ्यागताची भेट पूर्ण करा</button>
-            </div>
-
-            <div id="action-visitors-section" class="content-section">
-                <h2 class="section-title">अभ्यागत कृती प्रोफाइल</h2>
-                <div id="action-visitors-container" class="horizontal-scroll-container">
-                     <div class="no-items-message"><p>कृती प्रलंबित असलेले अभ्यागत नाहीत</p></div>
-                </div>
-            </div>
-
-            <div class="content-section">
-                <h2 class="section-title">पूर्ण झालेले अभ्यागत</h2>
-                <div id="completed-visitors-container" class="horizontal-scroll-container">
-                     <div class="no-items-message"><p>पूर्ण झालेले अभ्यागत नाहीत</p></div>
-                </div>
+    <!-- Logout popup -->
+    <div id="logout-popup" class="popup-overlay">
+        <div class="popup-content">
+            <h3 class="popup-title">लॉगआऊटची पुष्टी करा</h3>
+            <p>तुम्हाला खात्री आहे की तुम्हाला लॉगआउट करायचे आहे?</p>
+            <div class="popup-buttons">
+                <button id="logout-cancel" class="popup-btn popup-btn-cancel">रद्द करा</button>
+                <button id="logout-confirm" class="popup-btn popup-btn-confirm">लॉगआऊट</button>
             </div>
         </div>
     </div>
 
-     <!-- PDF Viewer Popup -->
-     <div id="pdf-popup-overlay" class="pdf-popup-overlay">
-         <div class="pdf-popup-content">
-             <button id="pdf-close-btn" class="pdf-close-btn">×</button>
-             <iframe id="pdf-iframe" src="" frameborder="0"></iframe>
-         </div>
-     </div>
+    <!-- Complete visit popup -->
+    <div id="complete-visit-popup" class="popup-overlay">
+        <div class="popup-content">
+            <h3 class="popup-title">भेटीच्या समाप्तीची पुष्टी करा</h3>
+            <p>तुम्हाला खात्री आहे की ही भेट पूर्ण झाली म्हणून चिन्हांकित करायची आहे?</p>
+            <div class="popup-buttons">
+                <button id="complete-visit-cancel" class="popup-btn popup-btn-cancel">रद्द करा</button>
+                <button id="complete-visit-confirm" class="popup-btn popup-btn-confirm complete-confirm">भेट पूर्ण करा</button>
+            </div>
+        </div>
+    </div>
 
-    <script>
-       document.addEventListener('DOMContentLoaded', function() {
-            let globalVisitorsList = [];
-            let actionVisitorsList = [];
-            let completedVisitorsList = [];
-            let departmentList = [];
-            let currentVisitorIndex = -1;
-            let currentSelectedVisitId = null;
-            let visitorDetailsCache = {};
-            const MAX_UPCOMING_VISITORS = 30;
-            const MAX_ACTION_VISITORS_DISPLAY = 15;
-            const MAX_COMPLETED_VISITORS_DISPLAY = 10;
-            const POLLING_INTERVAL = 15000;
-            let pollingIntervalId = null;
-            let isFetching = false;
+    <!-- Forward/action popup -->
+    <div id="action-confirm-popup" class="popup-overlay">
+        <div class="popup-content">
+            <h3 class="popup-title">अभ्यागत कृतीची पुष्टी करा</h3>
+            <div id="action-confirm-summary"></div>
+            <p>तुम्हाला खात्री आहे की तुम्हाला हे तपशील कृतीसाठी पाठवायचे आहेत?</p>
+            <div class="popup-buttons">
+                <button id="action-cancel-btn" class="popup-btn popup-btn-cancel">रद्द करा</button>
+                <button id="action-confirm-btn" class="popup-btn popup-btn-confirm action-confirm">पुष्टी करा आणि पाठवा</button>
+            </div>
+        </div>
+    </div>
 
-            const datePicker = document.getElementById('date-picker');
-            const completedMeetingBtn = document.getElementById('completed-meeting-btn');
-            let saveDetailsBtn = null; // Will be assigned after render
-            const logoutBtn = document.getElementById('logout-btn');
-            const logoutPopup = document.getElementById('logout-popup');
-            const logoutCancel = document.getElementById('logout-cancel');
-            const logoutConfirm = document.getElementById('logout-confirm');
-            const completeVisitPopup = document.getElementById('complete-visit-popup');
-            const completeVisitCancel = document.getElementById('complete-visit-cancel');
-            const completeVisitConfirm = document.getElementById('complete-visit-confirm');
-            const actionConfirmPopup = document.getElementById('action-confirm-popup');
-            const actionConfirmSummary = document.getElementById('action-confirm-summary');
-            const actionConfirmBtn = document.getElementById('action-confirm-btn');
-            const actionCancelBtn = document.getElementById('action-cancel-btn');
-            const upcomingVisitorsContainer = document.getElementById('upcoming-visitors-container');
-            const currentVisitorDetailsContainer = document.getElementById('current-visitor-details-container');
-            const actionVisitorsContainer = document.getElementById('action-visitors-container');
-            const completedVisitorsContainer = document.getElementById('completed-visitors-container');
-            const pdfPopupOverlay = document.getElementById('pdf-popup-overlay');
-            const pdfCloseBtn = document.getElementById('pdf-close-btn');
-            const pdfIframe = document.getElementById('pdf-iframe');
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- Date picker -->
+        <div class="date-selector-container">
+            <label for="date-picker">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" stroke="currentColor" fill="none" stroke-width="1.6" viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span>अहवाल पाहण्यासाठी तारीख निवडा:</span>
+            </label>
+            <input type="date" id="date-picker">
+        </div>
 
-            let lastTapTime = 0;
-            let lastTapTarget = null;
-            const doubleTapDelay = 300;
-            let currentActionData = null;
+        <!-- Upcoming visitors -->
+        <div class="content-section">
+            <div class="section-header-row">
+                <h2 class="section-title">आगामी अभ्यागत</h2>
+            </div>
+            <div class="horizontal-scroll-outer">
+                <div id="upcoming-visitors-container" class="horizontal-scroll-container">
+                    <div class="no-items-message"><p>DVN नियुक्त असलेले आगामी अभ्यागत नाहीत</p></div>
+                </div>
+            </div>
+        </div>
 
-            // Event Listeners for fixed elements
-            logoutBtn.addEventListener('click', () => logoutPopup.classList.add('active'));
-            logoutCancel.addEventListener('click', () => logoutPopup.classList.remove('active'));
-            logoutConfirm.addEventListener('click', logout);
-            completedMeetingBtn.addEventListener('click', showCompleteVisitPopup);
-            completeVisitCancel.addEventListener('click', () => completeVisitPopup.classList.remove('active'));
-            completeVisitConfirm.addEventListener('click', executeVisitCompletion);
-            datePicker.addEventListener('change', handleDateChange);
+        <!-- Current visitor -->
+        <div id="current-visitor-section" class="content-section">
+            <div class="section-header-row">
+                <h2 class="section-title">सध्याच्या अभ्यागताचा तपशील</h2>
+            </div>
+            <div class="horizontal-scroll-outer" style="padding-bottom:0;">
+                <div id="current-visitor-details-container">
+                    <div class="no-visitor-message"><p>सध्या कोणताही अभ्यागत निवडलेला नाही</p></div>
+                </div>
+            </div>
+            <button id="completed-meeting-btn" class="nav-btn complete-btn" disabled>अभ्यागताची भेट पूर्ण करा</button>
+        </div>
 
-            actionCancelBtn.addEventListener('click', () => {
-                actionConfirmPopup.classList.remove('active');
-                if (saveDetailsBtn) {
-                    saveDetailsBtn.disabled = false;
-                    saveDetailsBtn.textContent = 'संबंधित विभागाला कृतीसाठी पाठवा';
+        <!-- Pending action visitors -->
+        <div id="action-visitors-section" class="content-section">
+            <div class="section-header-row">
+                <h2 class="section-title">अभ्यागत कृती प्रोफाइल</h2>
+            </div>
+            <div class="horizontal-scroll-outer">
+                <div id="action-visitors-container" class="horizontal-scroll-container">
+                    <div class="no-items-message"><p>कृती प्रलंबित असलेले अभ्यागत नाहीत</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completed visitors -->
+        <div class="content-section">
+            <div class="section-header-row">
+                <h2 class="section-title">पूर्ण झालेले अभ्यागत</h2>
+            </div>
+            <div class="horizontal-scroll-outer">
+                <div id="completed-visitors-container" class="horizontal-scroll-container">
+                    <div class="no-items-message"><p>पूर्ण झालेले अभ्यागत नाहीत</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PDF Viewer Popup -->
+<div id="pdf-popup-overlay" class="pdf-popup-overlay">
+    <div class="pdf-popup-content">
+        <button id="pdf-close-btn" class="pdf-close-btn" title="बंद करा">×</button>
+        <iframe id="pdf-iframe" src="" frameborder="0"></iframe>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    let globalVisitorsList = [];
+    let actionVisitorsList = [];
+    let completedVisitorsList = [];
+    let departmentList = [];
+
+    let currentVisitorIndex = -1;
+    let currentSelectedVisitId = null;
+
+    let visitorDetailsCache = {};
+    const MAX_UPCOMING_VISITORS = 30;
+    const MAX_ACTION_VISITORS_DISPLAY = 15;
+    const MAX_COMPLETED_VISITORS_DISPLAY = 10;
+    const POLLING_INTERVAL = 15000;
+
+    let pollingIntervalId = null;
+    let isFetching = false;
+
+    const datePicker = document.getElementById('date-picker');
+
+    const completedMeetingBtn = document.getElementById('completed-meeting-btn');
+    let saveDetailsBtn = null;
+
+    const logoutBtn = document.getElementById('logout-btn');
+    const logoutPopup = document.getElementById('logout-popup');
+    const logoutCancel = document.getElementById('logout-cancel');
+    const logoutConfirm = document.getElementById('logout-confirm');
+
+    const completeVisitPopup = document.getElementById('complete-visit-popup');
+    const completeVisitCancel = document.getElementById('complete-visit-cancel');
+    const completeVisitConfirm = document.getElementById('complete-visit-confirm');
+
+    const actionConfirmPopup = document.getElementById('action-confirm-popup');
+    const actionConfirmSummary = document.getElementById('action-confirm-summary');
+    let actionConfirmBtn = document.getElementById('action-confirm-btn');
+    const actionCancelBtn = document.getElementById('action-cancel-btn');
+
+    const upcomingVisitorsContainer = document.getElementById('upcoming-visitors-container');
+    const currentVisitorDetailsContainer = document.getElementById('current-visitor-details-container');
+    const actionVisitorsContainer = document.getElementById('action-visitors-container');
+    const completedVisitorsContainer = document.getElementById('completed-visitors-container');
+
+    const pdfPopupOverlay = document.getElementById('pdf-popup-overlay');
+    const pdfCloseBtn = document.getElementById('pdf-close-btn');
+    const pdfIframe = document.getElementById('pdf-iframe');
+
+    let lastTapTime = 0;
+    let lastTapTarget = null;
+    const doubleTapDelay = 300;
+
+    let currentActionData = null;
+
+    /* ---------- EVENT LISTENERS (STATIC UI) ---------- */
+    logoutBtn.addEventListener('click', () => {
+        logoutPopup.classList.add('active');
+    });
+    logoutCancel.addEventListener('click', () => {
+        logoutPopup.classList.remove('active');
+    });
+    logoutConfirm.addEventListener('click', logout);
+
+    completedMeetingBtn.addEventListener('click', showCompleteVisitPopup);
+    completeVisitCancel.addEventListener('click', () => {
+        completeVisitPopup.classList.remove('active');
+    });
+    completeVisitConfirm.addEventListener('click', executeVisitCompletion);
+
+    datePicker.addEventListener('change', handleDateChange);
+
+    actionCancelBtn.addEventListener('click', () => {
+        actionConfirmPopup.classList.remove('active');
+        if (saveDetailsBtn) {
+            saveDetailsBtn.disabled = false;
+            saveDetailsBtn.textContent = 'संबंधित विभागाला कृतीसाठी पाठवा';
+        }
+
+        const currentActionConfirmBtn = document.getElementById('action-confirm-btn');
+        if (currentActionConfirmBtn) {
+            currentActionConfirmBtn.disabled = false;
+            currentActionConfirmBtn.textContent = 'पुष्टी करा आणि पाठवा';
+        }
+
+        currentActionData = null;
+        updateButtonStates();
+    });
+
+    if (pdfCloseBtn) {
+        pdfCloseBtn.addEventListener('click', hidePdfPopup);
+    }
+    if (pdfPopupOverlay) {
+        pdfPopupOverlay.addEventListener('click', (e) => {
+            if (e.target === pdfPopupOverlay) hidePdfPopup();
+        });
+    }
+
+    /* ---------- LOGOUT ---------- */
+    function logout() {
+        if (pollingIntervalId) clearInterval(pollingIntervalId);
+        window.location.href = "/logout";
+    }
+
+    /* ---------- DATE CHANGE ---------- */
+    function handleDateChange() {
+        currentSelectedVisitId = null;
+        currentVisitorIndex = -1;
+        visitorDetailsCache = {};
+        fetchAndProcessVisitors(true);
+    }
+
+    /* ---------- FETCH DEPARTMENTS ---------- */
+    async function fetchDepartments() {
+        try {
+            const response = await fetch('/departments');
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            const data = await response.json();
+            departmentList = data.departments || [];
+        } catch (error) {
+            console.error('Error fetching departments:', error);
+            departmentList = [];
+        }
+    }
+
+    /* ---------- HELPERS ---------- */
+    function isValidDvn(dvn) {
+        const dvnString = String(dvn ?? '').trim();
+        return dvnString !== '' && !isNaN(parseInt(dvnString, 10));
+    }
+
+    function areArraysEqual(arr1, arr2, key) {
+        if (!arr1 || !arr2 || arr1.length !== arr2.length) return false;
+        const ids1 = new Set(arr1.map(item => item[key]));
+        return arr2.every(item => ids1.has(item[key]));
+    }
+
+    /* ---------- MAIN FETCH ---------- */
+    async function fetchAndProcessVisitors(isInitialLoad = false) {
+        if (isFetching) return;
+        isFetching = true;
+
+        const selectedDate = datePicker.value;
+        if (!selectedDate) {
+            console.error("No date selected.");
+            isFetching = false;
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/admin/visitors?date=${selectedDate}`);
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            const data = await response.json();
+
+            const allVisitsForDay = data.visitors || [];
+
+            let newUpcomingVisitorsWithDvn = [];
+            let newActionVisitors = [];
+            let newCompletedVisitors = [];
+
+            allVisitsForDay.forEach(visit => {
+                if (visit.status === 'completed') {
+                    newCompletedVisitors.push(visit);
+                } else if (visit.status === 'pending') {
+                    newActionVisitors.push(visit);
+                } else if (isValidDvn(visit.dvn)) {
+                    newUpcomingVisitorsWithDvn.push(visit);
                 }
-                const currentActionConfirmBtn = document.getElementById('action-confirm-btn');
-                if(currentActionConfirmBtn){
-                    currentActionConfirmBtn.disabled = false;
-                    currentActionConfirmBtn.textContent = 'पुष्टी करा आणि पाठवा';
-                }
-                currentActionData = null;
-                updateButtonStates();
             });
 
-             if (pdfCloseBtn) pdfCloseBtn.addEventListener('click', hidePdfPopup);
-             if (pdfPopupOverlay) pdfPopupOverlay.addEventListener('click', (e) => { if (e.target === pdfPopupOverlay) hidePdfPopup(); });
+            // Sort lists
+            newUpcomingVisitorsWithDvn.sort((a, b) =>
+                (parseInt(String(a.dvn).trim(), 10) || 0) - (parseInt(String(b.dvn).trim(), 10) || 0)
+            );
+            newActionVisitors.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
+            newCompletedVisitors.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
 
-            function logout() {
-                if (pollingIntervalId) clearInterval(pollingIntervalId);
-                window.location.href = "/logout";
+            const upcomingChanged = !areArraysEqual(globalVisitorsList, newUpcomingVisitorsWithDvn, 'visit_id');
+            const actionChanged = !areArraysEqual(actionVisitorsList, newActionVisitors, 'visit_id');
+            const completedChanged = !areArraysEqual(completedVisitorsList, newCompletedVisitors, 'visit_id');
+
+            globalVisitorsList = newUpcomingVisitorsWithDvn;
+            actionVisitorsList = newActionVisitors;
+            completedVisitorsList = newCompletedVisitors;
+
+            let needsCurrentVisitorRender = false;
+
+            if (currentSelectedVisitId) {
+                currentVisitorIndex = globalVisitorsList.findIndex(v => v.visit_id === currentSelectedVisitId);
+                if (currentVisitorIndex === -1) {
+                    currentSelectedVisitId = null;
+                    needsCurrentVisitorRender = true;
+                }
             }
 
-            function handleDateChange() {
-                console.log(`Date changed to: ${datePicker.value}. Triggering full refresh.`);
-                // Reset state completely before fetching new date's data
-                currentSelectedVisitId = null;
+            if (!currentSelectedVisitId && globalVisitorsList.length > 0) {
+                currentVisitorIndex = 0;
+                currentSelectedVisitId = globalVisitorsList[0].visit_id;
+                needsCurrentVisitorRender = true;
+            } else if (globalVisitorsList.length === 0) {
                 currentVisitorIndex = -1;
-                visitorDetailsCache = {}; // Clear cache for the new day
-                fetchAndProcessVisitors(true); // Treat as initial load for the new date
+                currentSelectedVisitId = null;
+                needsCurrentVisitorRender = true;
             }
 
-            async function fetchDepartments() {
-                 try {
-                     const response = await fetch('/departments');
-                     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-                     const data = await response.json();
-                     departmentList = data.departments || [];
-                 } catch (error) {
-                     console.error('Error fetching departments:', error);
-                     departmentList = [];
-                 }
+            if (isInitialLoad || upcomingChanged) {
+                await renderHorizontalVisitors(
+                    upcomingVisitorsContainer,
+                    globalVisitorsList.slice(0, MAX_UPCOMING_VISITORS),
+                    'DVN नियुक्त असलेले आगामी अभ्यागत नाहीत',
+                    true
+                );
             }
 
-            function isValidDvn(dvn) {
-                 const dvnString = String(dvn).trim();
-                 return dvn != null && dvnString !== '' && !isNaN(parseInt(dvnString, 10));
+            if (isInitialLoad || actionChanged) {
+                await renderHorizontalVisitors(
+                    actionVisitorsContainer,
+                    actionVisitorsList.slice(0, MAX_ACTION_VISITORS_DISPLAY),
+                    'कृती प्रलंबित असलेले अभ्यागत नाहीत',
+                    false
+                );
             }
 
-            async function fetchAndProcessVisitors(isInitialLoad = false) {
-                if (isFetching) return;
-                isFetching = true;
-                console.log("Fetching visitor data...");
-                const selectedDate = datePicker.value;
-                if (!selectedDate) {
-                    console.error("No date selected.");
-                    isFetching = false;
-                    return;
-                }
-
-                try {
-                    // Use the admin endpoint that accepts a date parameter
-                    const response = await fetch(`/api/admin/visitors?date=${selectedDate}`);
-                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-                    const data = await response.json();
-
-                    const allVisitsForDay = data.visitors || [];
-
-                    let newUpcomingVisitorsWithDvn = [];
-                    let newActionVisitors = [];
-                    let newCompletedVisitors = [];
-
-                    allVisitsForDay.forEach(visit => {
-                        if (visit.status === 'completed') {
-                            newCompletedVisitors.push(visit);
-                        } else if (visit.status === 'pending') {
-                            newActionVisitors.push(visit);
-                        } else if (isValidDvn(visit.dvn)) {
-                            // Only visitors with a valid DVN go into the upcoming list
-                            newUpcomingVisitorsWithDvn.push(visit);
-                        }
-                    });
-
-                    // Sorting
-                    newUpcomingVisitorsWithDvn.sort((a, b) => (parseInt(String(a.dvn).trim(), 10) || 0) - (parseInt(String(b.dvn).trim(), 10) || 0));
-                    newActionVisitors.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
-                    newCompletedVisitors.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
-
-                    const upcomingChanged = !areArraysEqual(globalVisitorsList, newUpcomingVisitorsWithDvn, 'visit_id');
-                    const actionChanged = !areArraysEqual(actionVisitorsList, newActionVisitors, 'visit_id');
-                    const completedChanged = !areArraysEqual(completedVisitorsList, newCompletedVisitors, 'visit_id');
-
-                    globalVisitorsList = newUpcomingVisitorsWithDvn;
-                    actionVisitorsList = newActionVisitors;
-                    completedVisitorsList = newCompletedVisitors;
-
-                    let needsCurrentVisitorRender = false;
-
-                    if (currentSelectedVisitId) {
-                        currentVisitorIndex = globalVisitorsList.findIndex(v => v.visit_id === currentSelectedVisitId);
-                        if (currentVisitorIndex === -1) { // Selected visitor is no longer in the list
-                            currentSelectedVisitId = null;
-                            needsCurrentVisitorRender = true;
-                        }
-                    }
-
-                    if (!currentSelectedVisitId && globalVisitorsList.length > 0) {
-                        currentVisitorIndex = 0;
-                        currentSelectedVisitId = globalVisitorsList[0].visit_id;
-                        needsCurrentVisitorRender = true;
-                    } else if (globalVisitorsList.length === 0) {
-                        currentVisitorIndex = -1;
-                        currentSelectedVisitId = null;
-                        needsCurrentVisitorRender = true;
-                    }
-
-                    if (isInitialLoad || upcomingChanged) await renderHorizontalVisitors(upcomingVisitorsContainer, globalVisitorsList.slice(0, MAX_UPCOMING_VISITORS), 'DVN नियुक्त असलेले आगामी अभ्यागत नाहीत', true);
-                    if (isInitialLoad || actionChanged) await renderHorizontalVisitors(actionVisitorsContainer, actionVisitorsList.slice(0, MAX_ACTION_VISITORS_DISPLAY), 'कृती प्रलंबित असलेले अभ्यागत नाहीत', false, 'pending');
-                    if (isInitialLoad || completedChanged) await renderHorizontalVisitors(completedVisitorsContainer, completedVisitorsList.slice(0, MAX_COMPLETED_VISITORS_DISPLAY), 'पूर्ण झालेले अभ्यागत नाहीत', false, 'completed');
-
-                    if (isInitialLoad || needsCurrentVisitorRender || upcomingChanged) {
-                        await renderCurrentVisitor();
-                    } else {
-                        updateButtonStates();
-                    }
-
-                } catch (error) {
-                    console.error('Error fetching or processing visitors:', error);
-                     if (isInitialLoad) {
-                         upcomingVisitorsContainer.innerHTML = `<div class="no-items-message"><p>आगामी अभ्यागत लोड करताना त्रुटी.</p></div>`;
-                         actionVisitorsContainer.innerHTML = `<div class="no-items-message"><p>कृती अभ्यागत लोड करताना त्रुटी.</p></div>`;
-                         currentVisitorDetailsContainer.innerHTML = `<div class="no-visitor-message"><p>डेटा लोड करताना त्रुटी.</p></div>`;
-                         completedVisitorsContainer.innerHTML = `<div class="no-items-message"><p>पूर्ण झालेले अभ्यागत लोड करताना त्रुटी.</p></div>`;
-                     }
-                     updateButtonStates();
-                } finally {
-                     isFetching = false;
-                }
+            if (isInitialLoad || completedChanged) {
+                await renderHorizontalVisitors(
+                    completedVisitorsContainer,
+                    completedVisitorsList.slice(0, MAX_COMPLETED_VISITORS_DISPLAY),
+                    'पूर्ण झालेले अभ्यागत नाहीत',
+                    false
+                );
             }
 
-            function areArraysEqual(arr1, arr2, key) {
-                if (!arr1 || !arr2 || arr1.length !== arr2.length) return false;
-                const ids1 = new Set(arr1.map(item => item[key]));
-                return arr2.every(item => ids1.has(item[key]));
+            if (isInitialLoad || needsCurrentVisitorRender || upcomingChanged) {
+                await renderCurrentVisitor();
+            } else {
+                updateButtonStates();
             }
 
-            async function getVisitorDetails(uid) {
-                if (visitorDetailsCache[uid]) return visitorDetailsCache[uid];
-                try {
-                    const response = await fetch(`/get_visitor_details?uid=${uid}`);
-                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-                    const data = await response.json();
-                    if (data.success && data.visitor_data) {
-                        visitorDetailsCache[uid] = data.visitor_data;
-                        return data.visitor_data;
-                    }
-                    return null;
-                } catch (error) {
-                    console.error(`Error fetching details for UID: ${uid}`, error);
-                    return null;
-                }
+        } catch (error) {
+            console.error('Error fetching or processing visitors:', error);
+
+            if (isInitialLoad) {
+                upcomingVisitorsContainer.innerHTML =
+                    `<div class="no-items-message"><p>आगामी अभ्यागत लोड करताना त्रुटी.</p></div>`;
+                actionVisitorsContainer.innerHTML =
+                    `<div class="no-items-message"><p>कृती अभ्यागत लोड करताना त्रुटी.</p></div>`;
+                currentVisitorDetailsContainer.innerHTML =
+                    `<div class="no-visitor-message"><p>डेटा लोड करताना त्रुटी.</p></div>`;
+                completedVisitorsContainer.innerHTML =
+                    `<div class="no-items-message"><p>पूर्ण झालेले अभ्यागत लोड करताना त्रुटी.</p></div>`;
             }
-            function getProfileImageHtml(visitorData, visitInfo, cssClassPrefix = 'profile') {
-                const imageUrl = (visitorData.profile_img && visitorData.profile_img.length > 0) ? visitorData.profile_img[0] : ((visitorData.images && visitorData.images.length > 0) ? visitorData.images[0] : null);
-                const finalImageUrl = imageUrl ? `${imageUrl}?t=${Date.now()}` : null;
-                const initials = visitorData.name?.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || '?';
-                const altText = visitorData.name || 'अभ्यागत';
-                const imageHtml = finalImageUrl ? `<img src="${finalImageUrl}" alt="${altText}" class="${cssClassPrefix}-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` : '';
-                const dvnBadgeHtml = cssClassPrefix === 'main-profile' && visitInfo && isValidDvn(visitInfo.dvn) ? `<div class="profile-dvn-badge">${visitInfo.dvn}</div>` : '';
-                return `<div class="${cssClassPrefix}-image-container">
-                            ${imageHtml}
-                            <div class="${cssClassPrefix}-placeholder" style="${imageHtml ? 'display: none;' : 'display: flex;'}">${initials}</div>
-                            ${dvnBadgeHtml}
-                         </div>`;
+            updateButtonStates();
+        } finally {
+            isFetching = false;
+            highlightSelectedCard();
+        }
+    }
+
+    /* ---------- VISITOR DETAILS FETCH (CACHE) ---------- */
+    async function getVisitorDetails(uid) {
+        if (visitorDetailsCache[uid]) return visitorDetailsCache[uid];
+        try {
+            const response = await fetch(`/get_visitor_details?uid=${uid}`);
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            const data = await response.json();
+            if (data.success && data.visitor_data) {
+                visitorDetailsCache[uid] = data.visitor_data;
+                return data.visitor_data;
             }
+            return null;
+        } catch (error) {
+            console.error(`Error fetching details for UID: ${uid}`, error);
+            return null;
+        }
+    }
 
-            function isReturningVisitorCheck(visitorData) {
-                 return visitorData && Array.isArray(visitorData.visitor) && visitorData.visitor.length > 1;
+   function buildProfileUrl(uid, rawPathOrFile) {
+    if (!rawPathOrFile || !uid) return null;
+
+    // If backend already gave us a full/absolute URL or a direct /data/... path, just return it.
+    if (
+        rawPathOrFile.startsWith('http://') ||
+        rawPathOrFile.startsWith('https://') ||
+        rawPathOrFile.startsWith('/data/')
+    ) {
+        return rawPathOrFile;
+    }
+
+    // Example rawPathOrFile values we see:
+    // "profiles/UID1761755583/UID1761755583_img1.jpg"
+    // "facedata/UID1761755583/UID1761755583_img1.jpg"
+    //
+    // We only actually need the last segment ("UID1761755583_img1.jpg")
+    // and whether it's from profiles or facedata.
+
+    const parts = rawPathOrFile.split('/');
+    const filename = parts[parts.length - 1] || '';
+
+    // decide which base route to hit on Flask
+    // default -> profiles
+    let baseRoute = '/data/profiles';
+    if (rawPathOrFile.includes('facedata')) {
+        baseRoute = '/data/facedata';
+    }
+
+    // final URL shape matches Flask route:
+    // /data/<profiles|facedata>/<uid>/<filename>
+    return `${baseRoute}/${encodeURIComponent(uid)}/${encodeURIComponent(filename)}`;
+}
+
+    /* ---------- PROFILE IMG HTML (uses fixed URL logic) ---------- */
+    function getProfileImageHtml(visitorData, visitInfo, cssClassPrefix = 'profile') {
+        // try profile_img[0] first; fallback to images[0]
+        let chosenImg = null;
+        if (Array.isArray(visitorData.profile_img) && visitorData.profile_img.length > 0) {
+            chosenImg = visitorData.profile_img[0];
+        } else if (Array.isArray(visitorData.images) && visitorData.images.length > 0) {
+            chosenImg = visitorData.images[0];
+        }
+
+        // UID for routing
+        const uidForImg = visitorData.uid || visitInfo.uid || '';
+
+        let imgUrl = null;
+        if (chosenImg && uidForImg) {
+            imgUrl = buildProfileUrl(uidForImg, chosenImg);
+            if (imgUrl) {
+                // cache-bust to always pull latest
+                imgUrl = imgUrl + `?t=${Date.now()}`;
             }
+        }
 
-            function updateButtonStates() {
-                const isValidSelection = currentVisitorIndex >= 0 && currentVisitorIndex < globalVisitorsList.length;
-                completedMeetingBtn.disabled = !isValidSelection;
-                saveDetailsBtn = document.getElementById('save-details-btn');
-                if (saveDetailsBtn) {
-                    saveDetailsBtn.disabled = !isValidSelection || saveDetailsBtn.textContent === 'पाठवत आहे...';
-                }
-            }
+        const initials = (visitorData.name || 'अभ्यागत')
+            .split(' ')
+            .map(n => n[0])
+            .join('')
+            .substring(0, 2)
+            .toUpperCase() || '?';
 
-            async function renderHorizontalVisitors(container, visitorsToShow, emptyMessage, isSelectable = false, status = null) {
-                if (!container) return;
-                if (!visitorsToShow || visitorsToShow.length === 0) {
-                    container.innerHTML = `<div class="no-items-message"><p>${emptyMessage}</p></div>`;
-                    return;
-                }
-                // The data from /api/admin/visitors is already enriched, so we don't need to fetch details again.
-                const cardsHtml = visitorsToShow.map(visitInfo => createHorizontalVisitorCard(visitInfo, visitInfo, isSelectable)).join('');
-                container.innerHTML = cardsHtml;
-            }
+        const altText = visitorData.name || 'अभ्यागत';
 
+        const dvnBadgeHtml =
+            (cssClassPrefix === 'main-profile' && visitInfo && isValidDvn(visitInfo.dvn))
+                ? `<div class="profile-dvn-badge">${visitInfo.dvn}</div>`
+                : '';
 
-            function createHorizontalVisitorCard(visitInfo, visitorData, selectable = false) {
-                 const isReturning = visitInfo.status === 'पुनरावृत्ती अभ्यागत' || (visitorData.visitor && visitorData.visitor.length > 1);
-                 const typeBadgeClass = isReturning ? 'returning-visitor' : 'new-visitor';
-                 const typeBadgeText = isReturning ? 'परत आलेले' : 'नवीन';
-                 const profileImageHtml = getProfileImageHtml(visitorData, null, 'profile');
-                 const displayName = visitorData.name || 'अज्ञात अभ्यागत';
-                 const selectableClass = selectable ? ' selectable-visitor' : '';
-                 const dataAttributes = selectable ? `data-uid="${visitInfo.uid}" data-visit-id="${visitInfo.visit_id}"` : '';
+        return `
+            <div class="${cssClassPrefix}-image-container">
+                ${imgUrl
+                    ? `<img src="${imgUrl}" alt="${altText}"
+                           class="${cssClassPrefix}-image"
+                           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">`
+                    : ''}
+                <div class="${cssClassPrefix}-placeholder" style="${imgUrl ? 'display:none;' : 'display:flex;'}">
+                    ${initials}
+                </div>
+                ${dvnBadgeHtml}
+            </div>`;
+    }
 
-                 const statusMap = { 'pending': 'प्रलंबित', 'completed': 'पूर्ण' };
-                 let statusBadgeHtml = '';
-                 if (visitInfo.status === 'pending' || visitInfo.status === 'completed') {
-                     statusBadgeHtml = `<span class="visitor-status-badge ${visitInfo.status}">${statusMap[visitInfo.status]}</span>`;
-                 }
+    /* ---------- CHECK RETURNING ---------- */
+    function isReturningVisitorCheck(visitorData) {
+        return visitorData && Array.isArray(visitorData.visitor) && visitorData.visitor.length > 1;
+    }
 
-                return `<div class="visitor-card-horizontal${selectableClass}" ${dataAttributes}>
-                            ${statusBadgeHtml}
-                            ${profileImageHtml}
-                            <strong>${displayName}</strong>
-                            <span class="visitor-badge-small ${typeBadgeClass}">${typeBadgeText}</span>
-                        </div>`;
-            }
+    /* ---------- UPDATE BUTTON STATES ---------- */
+    function updateButtonStates() {
+        const valid = currentVisitorIndex >= 0 && currentVisitorIndex < globalVisitorsList.length;
+        completedMeetingBtn.disabled = !valid;
 
-
-            async function renderCurrentVisitor() {
-                 const oldSaveBtn = document.getElementById('save-details-btn');
-                 if (oldSaveBtn) oldSaveBtn.removeEventListener('click', showActionConfirmPopup);
-                 saveDetailsBtn = null;
-
-                 if (currentVisitorIndex < 0 || currentVisitorIndex >= globalVisitorsList.length) {
-                    currentVisitorDetailsContainer.innerHTML = `<div class="no-visitor-message"><p>सध्या कोणताही अभ्यागत निवडलेला नाही</p></div>`;
-                    updateButtonStates();
-                    return;
-                 }
-
-                const currentVisitInfo = globalVisitorsList[currentVisitorIndex];
-                currentSelectedVisitId = currentVisitInfo.visit_id;
-
-                const currentVisitorData = await getVisitorDetails(currentVisitInfo.uid);
-                if (!currentVisitorData) {
-                    currentVisitorDetailsContainer.innerHTML = `<div class="no-visitor-message"><p>अभ्यागताचे तपशील लोड करताना त्रुटी.</p></div>`;
-                    updateButtonStates();
-                    return;
-                }
-
-                const isReturning = isReturningVisitorCheck(currentVisitorData);
-                const allVisits = [...(currentVisitorData.visitor || [])].sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
-                const profileImageHtml = getProfileImageHtml(currentVisitorData, currentVisitInfo, 'main-profile');
-                const pdfPath = currentVisitInfo.document_pdf;
-                let pdfButtonHtml = '';
-                if (pdfPath) {
-                    const pdfUrl = `/api/get-visitor-document/${currentVisitInfo.visit_id}`;
-                    pdfButtonHtml = `<button id="view-pdf-btn" class="view-pdf-button" data-pdf-url="${pdfUrl}"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512" fill="currentColor"><path d="M0 64C0 28.7 28.7 0 64 0H224V128c0 17.7 14.3 32 32 32H384V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0L384 64z"/></svg> दस्तऐवज पहा</button>`;
-                }
-
-                const previousVisits = allVisits.filter(v => v.visit_id !== currentVisitInfo.visit_id);
-                const actualPreviousVisit = previousVisits[0] || null;
-                const statusMap = { 'pending': 'प्रलंबित', 'completed': 'पूर्ण' };
-                const previousStatusDisplay = statusMap[actualPreviousVisit?.status] || actualPreviousVisit?.status || 'N/A';
-                const currentStatusDisplay = statusMap[currentVisitInfo?.status] || currentVisitInfo?.status || 'N/A';
-
-                let previousVisitHtml = '';
-                if (actualPreviousVisit) {
-                    previousVisitHtml = `<div class="previous-visit-details">
-                                            <h4>मागील भेटीची माहिती</h4>
-                                            <p><strong>मागील भेटीची तारीख</strong><span class="detail-value">${new Date(actualPreviousVisit.datetime).toLocaleString('mr-IN')}</span></p>
-                                            <p><strong>मागील उद्देश</strong><span class="detail-value">${actualPreviousVisit.purpose || 'N/A'}</span></p>
-                                            <p><strong>मागील स्थिती</strong><span class="detail-value">${previousStatusDisplay}</span></p>
-                                        </div>`;
-                }
-
-                let departmentOptionsHtml = '<option value="">-- विभाग निवडा --</option>' + departmentList.map(d => `<option value="${d.name}">${d.name}</option>`).join('');
-
-                currentVisitorDetailsContainer.innerHTML = `
-                    <div class="visitor-profile">
-                        <div class="visitor-header">
-                            ${profileImageHtml}
-                            <div class="visitor-name-type">
-                                 <div class="visitor-header-top-row">
-                                     <div class="visitor-id-header">भेट आयडी: ${currentVisitInfo.visit_id || 'N/A'}</div>
-                                     ${pdfButtonHtml}
-                                 </div>
-                                <h2>${currentVisitorData.name || 'N/A'}</h2>
-                                <div class="visitor-phone-header"><strong>फोन:</strong> ${currentVisitorData.phone || 'N/A'}</div>
-                                <div class="visitor-address-header"><strong>पत्ता:</strong> ${currentVisitorData.address || 'N/A'}</div>
-                                <div class="visitor-tahasil-header"><strong>तहसील:</strong> ${currentVisitorData.tahasil || 'N/A'}</div>
-                                <span class="visitor-type ${isReturning ? 'returning-visitor' : 'new-visitor'}">${isReturning ? 'परत आलेले अभ्यागत' : 'नवीन अभ्यागत'}</span>
-                            </div>
-                        </div>
-                        <div class="visit-summary">
-                            <div class="current-visit-details">
-                                <h4>सध्याच्या भेटीचा तपशील</h4>
-                                <p><strong>भेटीची वेळ</strong><span class="detail-value">${new Date(currentVisitInfo.datetime).toLocaleString('mr-IN')}</span></p>
-                                <p><strong>भेटीचा उद्देश</strong><span class="detail-value">${currentVisitInfo.purpose || 'N/A'}</span></p>
-                                <p><strong>सध्याची स्थिती</strong><span class="detail-value">${currentStatusDisplay}</span></p>
-                            </div>
-                            ${previousVisitHtml}
-                        </div>
-                         <div class="additional-actions">
-                            <div class="form-group"><label for="remark-input">शेरा (ऐच्छिक)</label><textarea id="remark-input" rows="3" placeholder="काही शेरा लिहा..."></textarea></div>
-                            <div class="form-group"><label for="forward-dept-select">यांना फॉरवर्ड करा</label><select id="forward-dept-select">${departmentOptionsHtml}</select></div>
-                            <button id="save-details-btn" class="nav-btn action-btn">संबंधित विभागाला कृतीसाठी पाठवा</button>
-                        </div>
-                    </div>`;
-
-                 const viewPdfBtn = document.getElementById('view-pdf-btn');
-                 if (viewPdfBtn) viewPdfBtn.addEventListener('click', showPdfPopup);
-                 saveDetailsBtn = document.getElementById('save-details-btn');
-                 if (saveDetailsBtn) saveDetailsBtn.addEventListener('click', showActionConfirmPopup);
-                 updateButtonStates();
-            }
-
-            function showCompleteVisitPopup() {
-                 if (currentVisitorIndex < 0 || currentVisitorIndex >= globalVisitorsList.length) return;
-                 completeVisitPopup.classList.add('active');
-            }
-
-            async function executeVisitCompletion() {
-                if (currentVisitorIndex < 0 || currentVisitorIndex >= globalVisitorsList.length) return;
-                const currentVisitInfo = globalVisitorsList[currentVisitorIndex];
-                completedMeetingBtn.disabled = true;
-                completedMeetingBtn.textContent = 'पूर्ण होत आहे...';
-                completeVisitPopup.classList.remove('active');
-                try {
-                    const response = await fetch(`/complete_meeting?visit_id=${currentVisitInfo.visit_id}&uid=${currentVisitInfo.uid}`, { method: 'POST' });
-                    const data = await response.json();
-                    if (!response.ok || !data.success) throw new Error(data.message || 'Failed to complete visit');
-                    delete visitorDetailsCache[currentVisitInfo.uid];
-                    currentSelectedVisitId = null;
-                    await fetchAndProcessVisitors();
-                } catch (error) {
-                    console.error('Error completing visit:', error);
-                    alert('भेट पूर्ण करताना त्रुटी: ' + error.message);
-                } finally {
-                    completedMeetingBtn.textContent = 'अभ्यागताची भेट पूर्ण करा';
-                    updateButtonStates();
-                }
-            }
-
-            async function showActionConfirmPopup() {
-                if (currentVisitorIndex < 0 || currentVisitorIndex >= globalVisitorsList.length) return;
-                const forwardDeptSelect = document.getElementById('forward-dept-select');
-                if (!forwardDeptSelect.value) {
-                    alert('कृपया फॉरवर्ड करण्यासाठी विभाग निवडा.');
-                    return;
-                }
-                const currentVisitInfo = globalVisitorsList[currentVisitorIndex];
-                const visitorName = (await getVisitorDetails(currentVisitInfo.uid))?.name || 'N/A';
-                const remark = document.getElementById('remark-input').value.trim();
-                currentActionData = { visitInfo: currentVisitInfo, remark, forwardingDepartment: forwardDeptSelect.value };
-                actionConfirmSummary.innerHTML = `<p><strong>अभ्यागत:</strong> <span>${visitorName}</span></p><p><strong>यांना फॉरवर्ड करा:</strong> <span>${forwardDeptSelect.value}</span></p><p><strong>शेरा:</strong> <span>${remark || 'काही नाही'}</span></p>`;
+        saveDetailsBtn = document.getElementById('save-details-btn');
+        if (saveDetailsBtn) {
+            if (saveDetailsBtn.textContent === 'पाठवत आहे...') {
                 saveDetailsBtn.disabled = true;
-                saveDetailsBtn.textContent = 'पाठवत आहे...';
-                actionConfirmPopup.classList.add('active');
-                const newConfirmBtn = actionConfirmBtn.cloneNode(true);
-                actionConfirmBtn.parentNode.replaceChild(newConfirmBtn, actionConfirmBtn);
-                newConfirmBtn.addEventListener('click', executeActionSubmission);
+            } else {
+                saveDetailsBtn.disabled = !valid;
             }
+        }
+    }
 
-            async function executeActionSubmission() {
-                if (!currentActionData) return;
-                const { visitInfo, remark, forwardingDepartment } = currentActionData;
-                const btn = document.getElementById('action-confirm-btn');
-                btn.disabled = true;
-                btn.textContent = 'पाठवत आहे...';
-                try {
-                    const response = await fetch(`/visitor_action`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ visit_id: visitInfo.visit_id, uid: visitInfo.uid, remark, forwarding_department: forwardingDepartment })
-                    });
-                    const data = await response.json();
-                    if (!response.ok || !data.success) throw new Error(data.message || 'Failed to send action');
-                    delete visitorDetailsCache[visitInfo.uid];
-                    currentSelectedVisitId = null;
-                    actionConfirmPopup.classList.remove('active');
-                    await fetchAndProcessVisitors();
-                } catch (error) {
-                    console.error('Error sending visitor action:', error);
-                    alert('कृती पाठवताना त्रुटी: ' + error.message);
-                    actionConfirmPopup.classList.remove('active');
-                } finally {
-                    btn.disabled = false;
-                    btn.textContent = 'पुष्टी करा आणि पाठवा';
-                    updateButtonStates();
-                    currentActionData = null;
-                }
+    /* ---------- RENDER: SMALL HORIZONTAL CARDS ---------- */
+    async function renderHorizontalVisitors(container, visitorsToShow, emptyMessage, isSelectable = false) {
+        if (!container) return;
+
+        if (!visitorsToShow || visitorsToShow.length === 0) {
+            container.innerHTML = `<div class="no-items-message"><p>${emptyMessage}</p></div>`;
+            return;
+        }
+
+        const cardsHtml = visitorsToShow.map(visitInfo => {
+            return createHorizontalVisitorCard(visitInfo, visitInfo, isSelectable);
+        }).join('');
+
+        container.innerHTML = cardsHtml;
+
+        if (isSelectable) {
+            container.querySelectorAll('.selectable-visitor').forEach(card => {
+                card.addEventListener('dblclick', handleDoubleClickSelection);
+                card.addEventListener('touchend', handleDoubleTapSelection, { passive: false });
+            });
+        }
+
+        highlightSelectedCard();
+    }
+
+    function createHorizontalVisitorCard(visitInfo, visitorData, selectable = false) {
+        const isReturning = (
+            visitInfo.status === 'पुनरावृत्ती अभ्यागत' ||
+            (visitorData.visitor && visitorData.visitor.length > 1)
+        );
+
+        const badgeClass = isReturning ? 'returning-visitor' : 'new-visitor';
+        const badgeText = isReturning ? 'परत आलेले' : 'नवीन';
+
+        const profileImageHtml = getProfileImageHtml(visitorData, visitInfo, 'profile');
+        const displayName = visitorData.name || 'अज्ञात अभ्यागत';
+
+        const selectableClass = selectable ? ' selectable-visitor' : '';
+        const dataAttributes = selectable
+            ? `data-uid="${visitInfo.uid}" data-visit-id="${visitInfo.visit_id}"`
+            : '';
+
+        const statusMap = {
+            'pending': 'प्रलंबित',
+            'completed': 'पूर्ण'
+        };
+
+        let statusBadgeHtml = '';
+        if (visitInfo.status === 'pending' || visitInfo.status === 'completed') {
+            const statusClass = visitInfo.status;
+            const statusText = statusMap[visitInfo.status] || visitInfo.status;
+            statusBadgeHtml = `<span class="visitor-status-badge ${statusClass}">${statusText}</span>`;
+        }
+
+        const activeClass =
+            (visitInfo.visit_id === currentSelectedVisitId) ? ' active-selected' : '';
+
+        return `
+            <div class="visitor-card-horizontal${selectableClass}${activeClass}" ${dataAttributes}>
+                ${statusBadgeHtml}
+                ${profileImageHtml}
+                <strong>${displayName}</strong>
+                <span class="visitor-badge-small ${badgeClass}">${badgeText}</span>
+            </div>`;
+    }
+
+    function highlightSelectedCard() {
+        const cards = document.querySelectorAll('.visitor-card-horizontal.selectable-visitor');
+        cards.forEach(card => {
+            if (card.dataset.visitId === currentSelectedVisitId) {
+                card.classList.add('active-selected');
+            } else {
+                card.classList.remove('active-selected');
             }
-
-            function selectVisitor(card) {
-                if (!card) return;
-                const visitId = card.dataset.visitId;
-                if (visitId === currentSelectedVisitId) return;
-                const newIndex = globalVisitorsList.findIndex(v => v.visit_id === visitId);
-                if (newIndex !== -1) {
-                    currentVisitorIndex = newIndex;
-                    currentSelectedVisitId = visitId;
-                    renderCurrentVisitor();
-                }
-            }
-
-            function handleDoubleClickSelection(event) {
-                const card = event.target.closest('.selectable-visitor');
-                if (card) selectVisitor(card);
-            }
-            function handleDoubleTapSelection(event) {
-                const card = event.target.closest('.selectable-visitor');
-                if (!card) return;
-                const currentTime = new Date().getTime();
-                if (currentTime - lastTapTime < doubleTapDelay && card === lastTapTarget) {
-                    event.preventDefault();
-                    selectVisitor(card);
-                    lastTapTime = 0;
-                } else {
-                    lastTapTime = currentTime;
-                    lastTapTarget = card;
-                }
-            }
-
-            function showPdfPopup(event) {
-                const pdfUrl = event.currentTarget.dataset.pdfUrl;
-                if (pdfUrl && pdfPopupOverlay && pdfIframe) {
-                    pdfIframe.src = pdfUrl;
-                    pdfPopupOverlay.classList.add('active');
-                }
-            }
-            function hidePdfPopup() {
-                if (pdfPopupOverlay && pdfIframe) {
-                    pdfPopupOverlay.classList.remove('active');
-                    pdfIframe.src = '';
-                }
-            }
-
-            function startPolling() {
-                if (pollingIntervalId) clearInterval(pollingIntervalId);
-                pollingIntervalId = setInterval(() => {
-                    if (!isFetching && !document.querySelector('.popup-overlay.active')) {
-                       fetchAndProcessVisitors(false);
-                    }
-                }, POLLING_INTERVAL);
-            }
-
-            async function initializeApp() {
-                 datePicker.value = new Date().toISOString().split('T')[0];
-                 upcomingVisitorsContainer.innerHTML = `<div class="no-items-message"><p>लोड होत आहे...</p></div>`;
-                 actionVisitorsContainer.innerHTML = `<div class="no-items-message"><p>लोड होत आहे...</p></div>`;
-                 currentVisitorDetailsContainer.innerHTML = `<div class="no-visitor-message"><p>लोड होत आहे...</p></div>`;
-                 completedVisitorsContainer.innerHTML = `<div class="no-items-message"><p>लोड होत आहे...</p></div>`;
-
-                 await fetchDepartments();
-                 await fetchAndProcessVisitors(true);
-
-                 upcomingVisitorsContainer.addEventListener('dblclick', handleDoubleClickSelection);
-                 upcomingVisitorsContainer.addEventListener('touchend', handleDoubleTapSelection, {passive: false});
-
-                 startPolling();
-            }
-
-            initializeApp();
         });
-    </script>
+    }
+
+    /* ---------- RENDER: CURRENT VISITOR PANEL ---------- */
+    async function renderCurrentVisitor() {
+        // detach old listener for saveDetailsBtn if any
+        const oldSaveBtn = document.getElementById('save-details-btn');
+        if (oldSaveBtn) {
+            oldSaveBtn.removeEventListener('click', showActionConfirmPopup);
+        }
+        saveDetailsBtn = null;
+
+        if (currentVisitorIndex < 0 || currentVisitorIndex >= globalVisitorsList.length) {
+            currentVisitorDetailsContainer.innerHTML =
+                `<div class="no-visitor-message"><p>सध्या कोणताही अभ्यागत निवडलेला नाही</p></div>`;
+            updateButtonStates();
+            highlightSelectedCard();
+            return;
+        }
+
+        const currentVisitInfo = globalVisitorsList[currentVisitorIndex];
+        currentSelectedVisitId = currentVisitInfo.visit_id;
+
+        const currentVisitorData = await getVisitorDetails(currentVisitInfo.uid);
+        if (!currentVisitorData) {
+            currentVisitorDetailsContainer.innerHTML =
+                `<div class="no-visitor-message"><p>अभ्यागताचे तपशील लोड करताना त्रुटी.</p></div>`;
+            updateButtonStates();
+            highlightSelectedCard();
+            return;
+        }
+
+        const isReturning = isReturningVisitorCheck(currentVisitorData);
+
+        const allVisits = [...(currentVisitorData.visitor || [])]
+            .sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
+
+        const profileImageHtml = getProfileImageHtml(currentVisitorData, currentVisitInfo, 'main-profile');
+
+        const pdfPath = currentVisitInfo.document_pdf;
+        let pdfButtonHtml = '';
+        if (pdfPath) {
+            const pdfUrl = `/api/get-visitor-document/${currentVisitInfo.visit_id}`;
+            pdfButtonHtml = `
+                <button id="view-pdf-btn"
+                        class="view-pdf-button"
+                        data-pdf-url="${pdfUrl}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                        <path d="M0 64C0 28.7 28.7 0 64 0H224V128c0 17.7 14.3 32 32 32H384V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0L384 64z"/>
+                    </svg>
+                    <span>दस्तऐवज पहा</span>
+                </button>`;
+        }
+
+        const previousVisits = allVisits.filter(v => v.visit_id !== currentVisitInfo.visit_id);
+        const actualPreviousVisit = previousVisits[0] || null;
+
+        const statusMap = { 'pending': 'प्रलंबित', 'completed': 'पूर्ण' };
+        const previousStatusDisplay = actualPreviousVisit
+            ? (statusMap[actualPreviousVisit.status] || actualPreviousVisit.status || 'N/A')
+            : 'N/A';
+
+        const currentStatusDisplay =
+            statusMap[currentVisitInfo.status] || currentVisitInfo.status || 'N/A';
+
+        let previousVisitHtml = '';
+        if (actualPreviousVisit) {
+            previousVisitHtml = `
+                <div class="previous-visit-details">
+                    <h4>मागील भेटीची माहिती</h4>
+                    <p>
+                        <strong>मागील भेटीची तारीख</strong>
+                        <span class="detail-value">
+                            ${new Date(actualPreviousVisit.datetime).toLocaleString('mr-IN')}
+                        </span>
+                    </p>
+                    <p>
+                        <strong>मागील उद्देश</strong>
+                        <span class="detail-value">${actualPreviousVisit.purpose || 'N/A'}</span>
+                    </p>
+                    <p>
+                        <strong>मागील स्थिती</strong>
+                        <span class="detail-value">${previousStatusDisplay}</span>
+                    </p>
+                </div>`;
+        }
+
+        const departmentOptionsHtml = [
+            '<option value="">-- विभाग निवडा --</option>',
+            ...departmentList.map(d => `<option value="${d.name}">${d.name}</option>`)
+        ].join('');
+
+        currentVisitorDetailsContainer.innerHTML = `
+            <div class="visitor-profile">
+                <div class="visitor-header">
+                    ${profileImageHtml}
+                    <div class="visitor-name-type">
+                        <div class="visitor-header-top-row">
+                            <div class="visitor-id-header">
+                                भेट आयडी: ${currentVisitInfo.visit_id || 'N/A'}
+                            </div>
+                            ${pdfButtonHtml}
+                        </div>
+
+                        <h2>${currentVisitorData.name || 'N/A'}</h2>
+
+                        <div class="visitor-phone-header">
+                            <strong>फोन:</strong> ${currentVisitorData.phone || 'N/A'}
+                        </div>
+
+                        <div class="visitor-address-header">
+                            <strong>पत्ता:</strong> ${currentVisitorData.address || 'N/A'}
+                        </div>
+
+                        <div class="visitor-tahasil-header">
+                            <strong>तहसील:</strong> ${currentVisitorData.tahasil || 'N/A'}
+                        </div>
+
+                        <span class="visitor-type ${isReturning ? 'returning-visitor' : 'new-visitor'}">
+                            ${isReturning ? 'परत आलेले अभ्यागत' : 'नवीन अभ्यागत'}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="visit-summary">
+                    <div class="current-visit-details">
+                        <h4>सध्याच्या भेटीचा तपशील</h4>
+                        <p>
+                            <strong>भेटीची वेळ</strong>
+                            <span class="detail-value">
+                                ${new Date(currentVisitInfo.datetime).toLocaleString('mr-IN')}
+                            </span>
+                        </p>
+                        <p>
+                            <strong>भेटीचा उद्देश</strong>
+                            <span class="detail-value">${currentVisitInfo.purpose || 'N/A'}</span>
+                        </p>
+                        <p>
+                            <strong>सध्याची स्थिती</strong>
+                            <span class="detail-value">${currentStatusDisplay}</span>
+                        </p>
+                    </div>
+                    ${previousVisitHtml}
+                </div>
+
+                <div class="additional-actions">
+                    <div class="form-group">
+                        <label for="remark-input">शेरा (ऐच्छिक)</label>
+                        <textarea id="remark-input" rows="3" placeholder="काही शेरा लिहा..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="forward-dept-select">यांना फॉरवर्ड करा</label>
+                        <select id="forward-dept-select">${departmentOptionsHtml}</select>
+                    </div>
+
+                    <button id="save-details-btn" class="nav-btn action-btn">
+                        संबंधित विभागाला कृतीसाठी पाठवा
+                    </button>
+                </div>
+            </div>
+        `;
+
+        const viewPdfBtn = document.getElementById('view-pdf-btn');
+        if (viewPdfBtn) {
+            viewPdfBtn.addEventListener('click', showPdfPopup);
+        }
+
+        saveDetailsBtn = document.getElementById('save-details-btn');
+        if (saveDetailsBtn) {
+            saveDetailsBtn.addEventListener('click', showActionConfirmPopup);
+        }
+
+        updateButtonStates();
+        highlightSelectedCard();
+    }
+
+    /* ---------- COMPLETE VISIT FLOW ---------- */
+    function showCompleteVisitPopup() {
+        if (currentVisitorIndex < 0 || currentVisitorIndex >= globalVisitorsList.length) return;
+        completeVisitPopup.classList.add('active');
+    }
+
+    async function executeVisitCompletion() {
+        if (currentVisitorIndex < 0 || currentVisitorIndex >= globalVisitorsList.length) return;
+
+        const currentVisitInfo = globalVisitorsList[currentVisitorIndex];
+
+        completedMeetingBtn.disabled = true;
+        completedMeetingBtn.textContent = 'पूर्ण होत आहे...';
+        completeVisitPopup.classList.remove('active');
+
+        try {
+            const response = await fetch(
+                `/complete_meeting?visit_id=${currentVisitInfo.visit_id}&uid=${currentVisitInfo.uid}`,
+                { method: 'POST' }
+            );
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || 'Failed to complete visit');
+            }
+
+            delete visitorDetailsCache[currentVisitInfo.uid];
+            currentSelectedVisitId = null;
+            await fetchAndProcessVisitors();
+        } catch (error) {
+            console.error('Error completing visit:', error);
+            alert('भेट पूर्ण करताना त्रुटी: ' + error.message);
+        } finally {
+            completedMeetingBtn.textContent = 'अभ्यागताची भेट पूर्ण करा';
+            updateButtonStates();
+        }
+    }
+
+    /* ---------- FORWARD / ACTION FLOW ---------- */
+    async function showActionConfirmPopup() {
+        if (currentVisitorIndex < 0 || currentVisitorIndex >= globalVisitorsList.length) return;
+
+        const forwardDeptSelect = document.getElementById('forward-dept-select');
+        if (!forwardDeptSelect.value) {
+            alert('कृपया फॉरवर्ड करण्यासाठी विभाग निवडा.');
+            return;
+        }
+
+        const currentVisitInfo = globalVisitorsList[currentVisitorIndex];
+        const visitorDetails = await getVisitorDetails(currentVisitInfo.uid);
+        const visitorName = visitorDetails?.name || 'N/A';
+
+        const remark = document.getElementById('remark-input').value.trim();
+
+        currentActionData = {
+            visitInfo: currentVisitInfo,
+            remark,
+            forwardingDepartment: forwardDeptSelect.value
+        };
+
+        actionConfirmSummary.innerHTML = `
+            <p><strong>अभ्यागत:</strong> <span>${visitorName}</span></p>
+            <p><strong>यांना फॉरवर्ड करा:</strong> <span>${forwardDeptSelect.value}</span></p>
+            <p><strong>शेरा:</strong> <span>${remark || 'काही नाही'}</span></p>
+        `;
+
+        saveDetailsBtn.disabled = true;
+        saveDetailsBtn.textContent = 'पाठवत आहे...';
+
+        actionConfirmPopup.classList.add('active');
+
+        actionConfirmBtn = document.getElementById('action-confirm-btn');
+        const newConfirmBtn = actionConfirmBtn.cloneNode(true);
+        actionConfirmBtn.parentNode.replaceChild(newConfirmBtn, actionConfirmBtn);
+        actionConfirmBtn = newConfirmBtn;
+        actionConfirmBtn.addEventListener('click', executeActionSubmission);
+    }
+
+    async function executeActionSubmission() {
+        if (!currentActionData) return;
+
+        const { visitInfo, remark, forwardingDepartment } = currentActionData;
+
+        const btn = document.getElementById('action-confirm-btn');
+        btn.disabled = true;
+        btn.textContent = 'पाठवत आहे...';
+
+        try {
+            const response = await fetch(`/visitor_action`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    visit_id: visitInfo.visit_id,
+                    uid: visitInfo.uid,
+                    remark,
+                    forwarding_department: forwardingDepartment
+                })
+            });
+
+            const data = await response.json();
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || 'Failed to send action');
+            }
+
+            delete visitorDetailsCache[visitInfo.uid];
+            currentSelectedVisitId = null;
+
+            actionConfirmPopup.classList.remove('active');
+            await fetchAndProcessVisitors();
+        } catch (error) {
+            console.error('Error sending visitor action:', error);
+            alert('कृती पाठवताना त्रुटी: ' + error.message);
+            actionConfirmPopup.classList.remove('active');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'पुष्टी करा आणि पाठवा';
+            updateButtonStates();
+            currentActionData = null;
+        }
+    }
+
+    /* ---------- CARD SELECTION (dblclick / double-tap) ---------- */
+    function selectVisitor(card) {
+        if (!card) return;
+
+        const visitId = card.dataset.visitId;
+        if (visitId === currentSelectedVisitId) return;
+
+        const newIndex = globalVisitorsList.findIndex(v => v.visit_id === visitId);
+        if (newIndex !== -1) {
+            currentVisitorIndex = newIndex;
+            currentSelectedVisitId = visitId;
+            renderCurrentVisitor();
+        }
+    }
+
+    function handleDoubleClickSelection(event) {
+        const card = event.target.closest('.selectable-visitor');
+        if (card) selectVisitor(card);
+    }
+
+    function handleDoubleTapSelection(event) {
+        const card = event.target.closest('.selectable-visitor');
+        if (!card) return;
+
+        const now = Date.now();
+        if (now - lastTapTime < doubleTapDelay && card === lastTapTarget) {
+            event.preventDefault();
+            selectVisitor(card);
+            lastTapTime = 0;
+        } else {
+            lastTapTime = now;
+            lastTapTarget = card;
+        }
+    }
+
+    /* ---------- PDF VIEWER ---------- */
+    function showPdfPopup(event) {
+        const pdfUrl = event.currentTarget.dataset.pdfUrl;
+        if (pdfUrl && pdfPopupOverlay && pdfIframe) {
+            pdfIframe.src = pdfUrl;
+            pdfPopupOverlay.classList.add('active');
+        }
+    }
+
+    function hidePdfPopup() {
+        if (pdfPopupOverlay && pdfIframe) {
+            pdfPopupOverlay.classList.remove('active');
+            pdfIframe.src = '';
+        }
+    }
+
+    /* ---------- POLLING ---------- */
+    function startPolling() {
+        if (pollingIntervalId) clearInterval(pollingIntervalId);
+        pollingIntervalId = setInterval(() => {
+            if (!isFetching && !document.querySelector('.popup-overlay.active')) {
+                fetchAndProcessVisitors(false);
+            }
+        }, POLLING_INTERVAL);
+    }
+
+    /* ---------- INIT ---------- */
+    async function initializeApp() {
+        datePicker.value = new Date().toISOString().split('T')[0];
+
+        upcomingVisitorsContainer.innerHTML =
+            `<div class="no-items-message"><p>लोड होत आहे...</p></div>`;
+        actionVisitorsContainer.innerHTML =
+            `<div class="no-items-message"><p>लोड होत आहे...</p></div>`;
+        currentVisitorDetailsContainer.innerHTML =
+            `<div class="no-visitor-message"><p>लोड होत आहे...</p></div>`;
+        completedVisitorsContainer.innerHTML =
+            `<div class="no-items-message"><p>लोड होत आहे...</p></div>`;
+
+        await fetchDepartments();
+        await fetchAndProcessVisitors(true);
+
+        upcomingVisitorsContainer.addEventListener('dblclick', handleDoubleClickSelection);
+        upcomingVisitorsContainer.addEventListener('touchend', handleDoubleTapSelection, { passive: false });
+
+        startPolling();
+    }
+
+    initializeApp();
+});
+</script>
 </body>
 </html>
